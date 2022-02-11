@@ -1,6 +1,6 @@
 module.exports = {
   content: [
-    "./resources/**/*.{js,vue}"
+    "./resources/**/*.{js,vue,edge}"
   ],
   theme: {
     extend: {
