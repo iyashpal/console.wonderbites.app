@@ -1,4 +1,8 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', ({ view }) => view.render('welcome'))
+Route.group(() => {
+
+    Route.get('/', ({ view }) => view.render('welcome'))
+
+}).middleware('auth')

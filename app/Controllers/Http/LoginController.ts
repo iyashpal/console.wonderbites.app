@@ -9,14 +9,28 @@ export default class LoginController {
     }
 
 
-    public async login({ auth, request }) {
+    public async login({ auth, request, response, session }: HttpContextContract) {
 
-        const email = request.input('email')
+        const { email, password } = request.all()
 
-        const password = request.input('password')
 
-        await auth.use('web').attempt(email, password)
+        try {
+            await auth.use('web').attempt(email, password)
+    
+            return response.redirect('/')
+        } catch (error) {
+            session.flash('status', 'failed')
+
+            return response.redirect('back')
+        }
+
     }
 
+    public async logout({ auth, response }: HttpContextContract) {
 
+        await auth.logout()
+
+
+        return response.redirect('/')
+    }
 }
