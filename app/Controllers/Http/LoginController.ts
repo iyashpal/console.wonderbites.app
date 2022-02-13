@@ -1,15 +1,11 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
-import View from "@ioc:Adonis/Core/View";
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class LoginController {
 
 
-    public async show() {
+    public async show({ view }: HttpContextContract) {
 
-        const html = await View.render('auth/login.edge');
-
-        return html;
+        return await view.render('auth/login');
     }
 
 
@@ -19,10 +15,7 @@ export default class LoginController {
 
         const password = request.input('password')
 
-
-        console.log(email, password);
-
-        // await auth.use('web').attempt(email, password)
+        await auth.use('web').attempt(email, password)
     }
 
 

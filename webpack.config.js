@@ -183,7 +183,7 @@ Encore.enablePostCssLoader()
 */
 Encore.enableVueLoader(() => { }, {
   version: 3,
-  runtimeCompilerBuild: false,
+  runtimeCompilerBuild: true,
   useJsx: false
 })
 
