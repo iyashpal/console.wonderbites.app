@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title || 'Home' }} - Wonderbites</title>
+
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+        @entryPointStyles('app')
+    </head>
+
+    <body>
+        <div id="app" class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-md">
+                <img class="mx-auto h-12 w-auto" src="/images/logo.png" alt="Wonderbites">
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+            </div>
+
+            @!section('content')
+
+        </div>
+
+        @entryPointScripts('app')
+    </body>
+
+</html>

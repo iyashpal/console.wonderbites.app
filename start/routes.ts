@@ -18,7 +18,6 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
 
 /*
 |-------------------------------------------------------------------------
@@ -33,6 +32,17 @@ import './routes/auth'
 
 /*
 |-------------------------------------------------------------------------
+| Web Routes
+|-------------------------------------------------------------------------
+| Below routes are used for Web Application and for authenticated users.
+| 
+*/
+import './routes/web'
+
+
+
+/*
+|-------------------------------------------------------------------------
 | API Routes
 |-------------------------------------------------------------------------
 | This file is dedicated for defining API routes. which we will use for
@@ -40,19 +50,3 @@ import './routes/auth'
 |
 */
 import './routes/api'
-
-/*
-|-------------------------------------------------------------------------
-| SPA Routes
-|-------------------------------------------------------------------------
-| Below routes are used for Single Page Application and for authenticated
-| users.
-*/
-Route.on('/app/*').render('layouts/spa');
-    
-//     .middleware(async ({ response }, next) => {
-
-//     response.unauthorized({ error: "Must be logged in." })
-
-//     await next();
-// });
