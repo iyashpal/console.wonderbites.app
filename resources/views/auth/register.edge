@@ -9,13 +9,21 @@
             {{ csrfField() }}
 
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700"> Name </label>
+                <label for="first_name" class="block text-sm font-medium text-gray-700"> First Name </label>
                 <div class="mt-1">
-                    <input id="name" name="name" type="text" value="{{ flashMessages.get('name') || '' }}" autocomplete="name" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    @if(flashMessages.has('errors.name'))
-                    <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.name') }}</p>
+                    <input id="first_name" name="first_name" type="text" value="{{ flashMessages.get('first_name') || '' }}" autocomplete="first_name" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    @if(flashMessages.has('errors.first_name'))
+                    <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.first_name') }}</p>
                     @endif
-
+                </div>
+            </div>
+             <div>
+                <label for="last_name" class="block text-sm font-medium text-gray-700"> Last Name </label>
+                <div class="mt-1">
+                    <input id="last_name" name="last_name" type="text" value="{{ flashMessages.get('last_name') || '' }}" autocomplete="last_name" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    @if(flashMessages.has('errors.last_name'))
+                    <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.last_name') }}</p>
+                    @endif
                 </div>
             </div>
 

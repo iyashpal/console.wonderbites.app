@@ -15,10 +15,13 @@ export default class RegistersController {
         const validated = await request.validate({
             schema: schema.create({
 
-                name: schema.string({ trim: true }),
+                first_name: schema.string({ trim: true }),
+                
+                last_name: schema.string({ trim: true }),
 
                 mobile: schema.string({ trim: true }, [
-                    rules.mobile()
+                    rules.mobile(),
+                    rules.unique({ table: 'users', column: "mobile" })
                 ]),
 
                 email: schema.string({ trim: true }, [

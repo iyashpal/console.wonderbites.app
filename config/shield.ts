@@ -86,14 +86,20 @@ export const csrf: ShieldConfig['csrf'] = {
   | slash. Example:
   |
   | `/foo/bar`
-	|
-	| Also you can define a function that is evaluated on every HTTP Request.
-	| ```
-	|  exceptRoutes: ({ request }) => request.url().includes('/api')
-	| ```
+  |
+  | Also you can define a function that is evaluated on every HTTP Request.
+  | ```
+  |  exceptRoutes: ({ request }) => request.url().includes('/api')
+  | ```
   |
   */
-  exceptRoutes: [],
+  exceptRoutes: ({ request }) => {
+    
+    // Check if the route is api
+    if (request.url().includes('/api')) return true
+
+    return false
+  },
 
   /*
   |--------------------------------------------------------------------------
