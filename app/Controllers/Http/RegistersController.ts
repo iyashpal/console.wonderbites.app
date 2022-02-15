@@ -16,10 +16,12 @@ export default class RegistersController {
             schema: schema.create({
 
                 first_name: schema.string({ trim: true }),
+                
                 last_name: schema.string({ trim: true }),
 
                 mobile: schema.string({ trim: true }, [
-                    rules.mobile()
+                    rules.mobile(),
+                    rules.unique({ table: 'users', column: "mobile" })
                 ]),
 
                 email: schema.string({ trim: true }, [
