@@ -26,4 +26,17 @@ export default class LoginController {
 
     }
 
+    public async logout({ auth, response }: HttpContextContract) {
+
+        try {
+            await auth.use('api').authenticate()
+            await auth.use('api').revoke()
+            response.status(200).json({ message: "User logout" });
+        } catch (error) {
+            response.unauthorized({ message: "Unauthenticated" })
+
+        }
+
+    }
+
 }
