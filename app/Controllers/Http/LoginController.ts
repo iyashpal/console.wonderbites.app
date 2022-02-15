@@ -30,7 +30,6 @@ export default class LoginController {
 
         await auth.logout()
 
-
         return response.redirect('/')
     }
 }
