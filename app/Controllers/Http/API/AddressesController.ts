@@ -3,7 +3,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class AddressesController {
-  public async index({ auth, response, request }: HttpContextContract) {
+  public async index({ auth, response }: HttpContextContract) {
 
     console.log("sasd")
     try {
@@ -25,33 +25,42 @@ export default class AddressesController {
   public async store({ auth, request, response }: HttpContextContract) {
     try {
 
-      await auth.use('api').authenticate()
+      const user = await auth.use('api').authenticate()
 
       try {
         const validated = await request.validate({
+
           schema: schema.create({
-            user_id: schema.number(),
+
             first_name: schema.string({ trim: true }, [
               rules.maxLength(255),
             ]),
+
             last_name: schema.string({ trim: true }, [
               rules.maxLength(255),
             ]),
+
             street: schema.string({ trim: true }, [
               rules.maxLength(255),
             ]),
+
             city: schema.string({ trim: true }, [
               rules.maxLength(255),
             ]),
+
             phone: schema.string({ trim: true }),
-            default_address: schema.boolean(),
-            type_id: schema.number(),
-            status_id: schema.boolean()
+
+            type: schema.string(),
+
+            status: schema.number.optional()
+
           }),
         })
 
-        const address = await Address.create(validated)
+        const address = await Address.create({ userId: user.id, ...validated })
+
         response.status(200).json(address)
+
       } catch (error) {
 
         response.badRequest(error.message)
@@ -65,7 +74,7 @@ export default class AddressesController {
   }
 
 
-  public async show({ auth, response, request }: HttpContextContract) {
+  public async show({ auth, response }: HttpContextContract) {
     try {
 
       await auth.use('api').authenticate()

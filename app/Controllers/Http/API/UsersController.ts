@@ -8,6 +8,11 @@ export default class UsersController {
             
             await auth.use('api').authenticate()
 
+            const user = auth.use('api').user!
+
+
+            await user.load('addresses')
+
             response.status(200).json(auth.use('api').user!);
 
         } catch (error) {

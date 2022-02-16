@@ -26,13 +26,25 @@ export default class LoginController {
 
     }
 
+    /**
+     * Revoke API token of logged in user.
+     * 
+     * @param param0 HttpContextContract
+     * 
+     * @return {JSON}
+     */
     public async logout({ auth, response }: HttpContextContract) {
 
         try {
+
             await auth.use('api').authenticate()
+
             await auth.use('api').revoke()
-            response.status(200).json({ message: "User logout" });
+
+            response.status(200).json({ revoked: true });
+
         } catch (error) {
+
             response.unauthorized({ message: "Unauthenticated" })
 
         }

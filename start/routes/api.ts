@@ -16,6 +16,6 @@ Route.group(() => {
 
     Route.resource('testimonials', 'TestimonialsController');
 
-    Route.resource('address', 'API/AddressesController');
+    Route.resource('addresses', 'API/AddressesController');
 
 }).prefix('/api').as('api')
