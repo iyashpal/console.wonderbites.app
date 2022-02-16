@@ -12,13 +12,19 @@
     </head>
 
     <body>
-        <div id="app" class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div class="sm:mx-auto sm:w-full sm:max-w-md">
-                <img class="mx-auto h-12 w-auto" src="/images/logo.png" alt="Wonderbites">
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
-            </div>
+        <div id="app">
 
-            @!section('content')
+            <v-authentication-card>
+
+                <template #logo>
+
+                    <img src="/images/logo.png" class="h-16" alt="Wonderbites">
+
+                </template>
+
+                @!section('content')
+
+            </v-authentication-card>
 
         </div>
 

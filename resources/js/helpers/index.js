@@ -1,10 +1,10 @@
-export function resolveComponents(components, instance) {
+export function resolveComponents(components, instance, prefix = 'V') {
 
     components.keys().map(key => {
 
         let componentName = key.split('/').pop().split('.')[0];
 
-        instance.component(componentName, components(key).default)
+        instance.component(prefix + componentName, components(key).default)
 
     })
 
