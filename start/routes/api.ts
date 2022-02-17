@@ -14,8 +14,6 @@ Route.group(() => {
 
     Route.get('/user', "API/UsersController.show").as('user')
 
-    Route.resource('testimonials', 'TestimonialsController');
-
     Route.resource('addresses', 'API/AddressesController');
 
 }).prefix('/api').as('api')
