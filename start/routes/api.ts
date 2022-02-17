@@ -14,6 +14,6 @@ Route.group(() => {
 
     Route.get('/user', "API/UsersController.show").as('user')
 
-    Route.resource('addresses', 'API/AddressesController');
+    Route.resource('addresses', 'API/Profile/AddressesController');
 
 }).prefix('/api').as('api')
