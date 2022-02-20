@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Address from './Address'
+import Product from './Product'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -45,5 +46,6 @@ export default class User extends BaseModel {
   @hasMany(() => Address)
   public addresses: HasMany<typeof Address>
 
-  
+  @hasMany(() => Product)
+  public products: HasMany<typeof Product>
 }
