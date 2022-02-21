@@ -20,6 +20,9 @@ export default class User extends BaseModel {
   @column()
   public mobile: string
 
+  @column()
+  public image_path: string
+
   @column({ serializeAs: null })
   public password: string
 

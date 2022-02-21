@@ -5,6 +5,7 @@ export default class Cuisines extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
+
       table.increments('id')
 
       table.string('name').notNullable()
@@ -14,6 +15,7 @@ export default class Cuisines extends BaseSchema {
       table.text('image_path').nullable()
 
       table.integer('status').defaultTo(1)
+      
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

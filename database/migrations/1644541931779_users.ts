@@ -16,7 +16,7 @@ export default class UsersSchema extends BaseSchema {
       
       table.string('password', 180).notNullable()
       
-      table.text('image').nullable()
+      table.text('image_path').nullable()
       
       table.integer('address_id').unsigned().nullable()
       

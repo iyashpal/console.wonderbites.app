@@ -1274,6 +1274,11 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@materialicons/vue@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@materialicons/vue/-/vue-1.0.1.tgz#969297dc813849d1a64046dbfbdd00b208e53192"
+  integrity sha512-TphMUZLxu0ixtkRGQkbF5m0JmfKFCSGq0xsKBqE1vsYD+z3qU6FMLtWtcC4ISGxtBWDjKRj1mPT/eTgdwQO2AA==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
