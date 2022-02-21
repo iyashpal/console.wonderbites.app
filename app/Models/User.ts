@@ -49,6 +49,4 @@ export default class User extends BaseModel {
   @hasMany(() => Address)
   public addresses: HasMany<typeof Address>
 
-  @hasMany(() => Product)
-  public products: HasMany<typeof Product>
 }

@@ -7,11 +7,13 @@ export default class CuisineCategory extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
 
-      table.increments('id')
+      table.integer('cuisine_id').unsigned().index("cuisine_id")
 
-      table.integer('cuisine_id').unsigned().references('cuisines.id').onDelete('CASCADE')
+      table.integer('category_id').unsigned().index("category_id")
 
-      table.integer('category_id').unsigned().references('cateogries.id').onDelete('CASCADE')
+      table.foreign('cuisine_id').references('cuisines.id').onDelete('CASCADE')
+
+      table.foreign('category_id').references('cateogries.id').onDelete('CASCADE')
 
       table.unique(['cuisine_id', 'category_id'])
 

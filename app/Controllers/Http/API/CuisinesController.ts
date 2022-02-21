@@ -6,7 +6,7 @@ export default class CuisinesController {
   public async index({ response }: HttpContextContract) {
     try {
       const cuisines = await Cuisine.all()
-      console.log(cuisines)
+      // console.log(cuisines)
       response.status(200).json(cuisines)
 
     } catch (error) {
@@ -32,6 +32,8 @@ export default class CuisinesController {
         })
       })
       const cuisine = await Cuisine.create(validate)
+
+
       response.status(200).json(cuisine)
 
     } catch (error) {

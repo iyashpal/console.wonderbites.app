@@ -20,4 +20,6 @@ Route.group(() => {
 
     Route.resource('category', 'API/CateogriesController');
 
+    Route.resource('product', 'API/ProductsController');
+
 }).prefix('/api').as('api')
