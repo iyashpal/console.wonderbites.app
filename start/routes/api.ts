@@ -16,4 +16,8 @@ Route.group(() => {
 
     Route.resource('addresses', 'API/Profile/AddressesController');
 
+    Route.resource('cuisine', 'API/CuisinesController');
+
+    Route.resource('category', 'API/CateogriesController');
+
 }).prefix('/api').as('api')

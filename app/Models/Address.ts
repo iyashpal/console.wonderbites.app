@@ -25,10 +25,10 @@ export default class Address extends BaseModel {
   public phone: string
 
   @column()
-  public type: String
+  public type: string
 
   @column()
-  public status: Number
+  public status: number
 
 
   @column.dateTime({ autoCreate: true })

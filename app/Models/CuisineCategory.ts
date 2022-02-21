@@ -5,6 +5,12 @@ export default class CuisineCategory extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
+  @column()
+  public cuisine_id: number
+
+  @column()
+  public category_id: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
