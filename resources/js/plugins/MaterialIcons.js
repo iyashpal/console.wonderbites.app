@@ -1,8 +1,9 @@
 import {
-    CloseIcon,
+    CommentIcon, CloseIcon,
     MenuIcon,
     NotificationsIcon,
     SpaceDashboardIcon,
+
 
 } from '@materialicons/vue/round'
 import MaterialIcons from '@materialicons/vue'
@@ -14,7 +15,7 @@ export default {
         app.use(MaterialIcons, {
             icons: {
                 Round: {
-                    CloseIcon,
+                    CommentIcon, CloseIcon,
                     MenuIcon,
                     NotificationsIcon,
                     SpaceDashboardIcon,

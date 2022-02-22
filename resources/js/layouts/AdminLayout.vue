@@ -2,19 +2,17 @@
   <div>
     <Sidebar />
     <div class="md:pl-64 flex flex-col">
-     <TopNavigation />
+      <TopNavigation />
 
       <main class="flex-1">
         <div class="py-6">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8" v-if="$slots.title">
+            <h1 class="text-2xl font-semibold text-gray-900">
+              <slot name="title" />
+            </h1>
           </div>
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-            <!-- Replace with your content -->
-            <div class="py-4">
-              <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-            </div>
-            <!-- /End replace -->
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-4">
+            <slot name="content"/>
           </div>
         </div>
       </main>

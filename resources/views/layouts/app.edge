@@ -16,9 +16,18 @@
   <body class="h-full">
     <div id="app">
       <v-admin-layout>
-        @!section('content')
+
+        <template #title>{{ title || 'Page Title' }}</template>
+
+        <template #content>
+          @!section('content')
+        </template>
+
       </v-admin-layout>
     </div>
+
+
+    <form id="logout-form" action="{{ route('logout') }}" method="post">{{ csrfField() }}</form>
 
     @entryPointScripts('app')
   </body>

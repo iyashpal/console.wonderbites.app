@@ -1,50 +1,42 @@
-@layout('layouts/app')
+@layout('layouts/auth')
 @set('title', "Login")
 
 @section('content')
 
-<v-authentication-card>
-
-  <template #logo>
-    <img src="/images/logo.png" class="h-7" alt="Wonderbites">
-  </template>
-
-  <form action="{{ route('login') }}" method="POST">
-
+<form action="{{ route('login') }}" method="POST">
+  
     {{ csrfField() }}
-
+  
     <div>
       <v-label for="email">Email</v-label>
-
+  
       <v-input id="email" name="email" type="email" class="mt-1 block w-full" required autofocus />
     </div>
-
+  
     <div class="mt-4">
       <v-label for="password">Password</v-label>
-
+  
       <v-input id="password" name="password" type="password" class="mt-1 block w-full" required autocomplete="password" />
     </div>
-
+  
     <div class="block mt-4">
       <label class="flex items-center">
-
+  
         <v-checkbox name="remember"></v-checkbox>
-
+  
         <span class="ml-2 text-sm text-gray-600">Remember me</span>
-
+  
       </label>
     </div>
-
+  
     <div class="flex items-center justify-end mt-4">
-
+  
       <a href="/forgot-password" class="underline text-sm text-gray-600 hover:text-gray-900">Forgot your password?</a>
-
+  
       <button type="submit" class="tw:btn tw:btn-secondary ml-4">Log in</button>
-
+  
     </div>
-
+  
   </form>
-
-</v-authentication-card>
 
 @endsection

@@ -24,6 +24,6 @@ export default class Cuisine extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => Cateogry)
+  @manyToMany(() => Cateogry, { pivotTable: 'category_cuisine' })
   public categories: ManyToMany<typeof Cateogry>
 }

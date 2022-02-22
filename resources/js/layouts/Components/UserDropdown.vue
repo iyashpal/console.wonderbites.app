@@ -35,7 +35,7 @@
             >
                 <!-- Active: "bg-gray-100", Not Active: "" -->
                 <a
-                    href="#"
+                    href="javascript:void(0);"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabindex="-1"
@@ -43,7 +43,7 @@
                 >Your Profile</a>
 
                 <a
-                    href="#"
+                    href="javascript:void(0);"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabindex="-1"
@@ -51,7 +51,8 @@
                 >Settings</a>
 
                 <a
-                    href="#"
+                    href="javascript:void(0)"
+                    onclick="document.getElementById('logout-form').submit()"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabindex="-1"

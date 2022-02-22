@@ -7,14 +7,14 @@ Route.group(() => {
     /*************************************************************************************
      * User register Routes.
      *************************************************************************************/
-    Route.get('/register', 'RegistersController.show').as('register')
-    Route.post('/register', 'RegistersController.register')
+    Route.get('/register', 'Auth/RegistersController.show').as('register')
+    Route.post('/register', 'Auth/RegistersController.register')
 
     /************************************************************************************
      * User login Routes.
      ************************************************************************************/
-    Route.get('/login', 'LoginController.show').as('login').middleware('guest');
-    Route.post('/login', 'LoginController.login').middleware('guest')
+    Route.get('/login', 'Auth/LoginController.show').as('login').middleware('guest');
+    Route.post('/login', 'Auth/LoginController.login').middleware('guest')
 
 }).middleware('guest')
 
@@ -22,6 +22,6 @@ Route.group(() => {
 
 Route.group(() => {
 
-    Route.post('/logout', 'LoginController.logout').as('logout')
+    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
 
 }).middleware('auth')

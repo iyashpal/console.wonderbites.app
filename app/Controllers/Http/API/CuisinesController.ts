@@ -6,7 +6,20 @@ export default class CuisinesController {
   public async index({ response }: HttpContextContract) {
     try {
       const cuisines = await Cuisine.all()
-      // console.log(cuisines)
+
+      
+      cuisines.forEach(async (cuisines) => {
+
+        try {
+          await cuisines.load('categories')  
+        } catch (error) {
+          console.log(error)
+        }
+        
+
+      });
+
+      
       response.status(200).json(cuisines)
 
     } catch (error) {
@@ -19,6 +32,7 @@ export default class CuisinesController {
   public async store({ request, response }: HttpContextContract) {
     try {
       const validate = await request.validate({
+
         schema: schema.create({
 
           name: schema.string({ trim: true }, [rules.maxLength(255)]),

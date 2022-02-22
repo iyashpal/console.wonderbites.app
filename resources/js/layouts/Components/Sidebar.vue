@@ -58,13 +58,9 @@
                     </div>
                     <div class="mt-5 flex-1 h-0 overflow-y-auto">
                         <nav class="px-2 space-y-1">
-                            <!--
-                                Heroicon name: outline/home
-
-                                Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
-                            -->
+                            <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" -->
                             <a
-                                href="#"
+                                href="/"
                                 class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                             >
                                 <Icon
@@ -94,16 +90,25 @@
                 <nav class="flex-1 px-2 py-4 space-y-1">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     <a
-                        href="#"
+                        href="/"
                         class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                     >
-                        <!--
-              Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
-                        -->
+                        <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
                         <Icon
                             name="space-dashboard"
                             class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
                         />Dashboard
+                    </a>
+
+                    <a
+                        href="/testimonials"
+                        class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    >
+                        <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
+                        <Icon
+                            name="comment"
+                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
+                        />Testimonials
                     </a>
                 </nav>
             </div>

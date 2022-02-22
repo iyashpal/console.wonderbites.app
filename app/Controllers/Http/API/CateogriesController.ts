@@ -19,7 +19,9 @@ export default class CateogriesController {
 
   public async store({ request, response }: HttpContextContract) {
     try {
+
       const validate = await request.validate({
+
         schema: schema.create({
 
           parent: schema.number.optional(),
@@ -34,9 +36,8 @@ export default class CateogriesController {
 
         })
       })
+      
       const category = await Cateogry.create(validate)
-
-      await category.load('cuisines')
 
       response.status(200).json(category)
 
