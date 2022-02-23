@@ -16,9 +16,11 @@ Route.group(() => {
     Route.resource('addresses', 'API/Profile/AddressesController');
 
     Route.resource('cuisines', 'API/CuisinesController');
-
+   
     Route.resource('categories', 'API/CateogriesController');
 
     Route.resource('products', 'API/ProductsController');
-
+    Route.resource('productimages', 'API/ProductImagesController');
+    //Route.get('/product/{id}', "API/UsersController.show");
+    
 }).prefix('/api').as('api')
