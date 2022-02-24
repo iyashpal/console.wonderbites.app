@@ -1,7 +1,7 @@
 @layout('layouts/app')
 @set('title', "Edit Testimonial")
 @section('content')
-<form action="{{ route('testimonials.update', {id: testimonial.id}) }}?_method=put" method="POST" enctype="multipart/form-data">
+<form action="{{ route('testimonials.update', {id: testimonial.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
     <div class="space-y-6">
         <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
