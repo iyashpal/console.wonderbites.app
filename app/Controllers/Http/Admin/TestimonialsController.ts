@@ -1,7 +1,6 @@
 import Testimonial from 'App/Models/Testimonial'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Application from '@ioc:Adonis/Core/Application'
 
 
 export default class TestimonialsController {
@@ -18,31 +17,31 @@ export default class TestimonialsController {
   }
 
   public async store({ request, response }: HttpContextContract) {
-    const payload = await request.validate({
+    await request.validate({
       schema: schema.create({
         name: schema.string({ trim: true }),
         title: schema.string({ trim: true }),
         body: schema.string({ trim: true }),
         image_path: schema.file({
           size: '1mb',
-          extnames: ['jpg', 'png']
+          extnames: ['jpg', 'png', 'avif']
         }),
         status: schema.number()
       })
     })
 
-    const file_url = await payload.image_path.move(Application.tmpPath('uploads'))
-
-
+    const coverImage = request.file('image_path')
+    if (coverImage) {
+      await coverImage.moveToDisk('./')
+    }
 
     await Testimonial.create({
       name: request.input('name'),
       title: request.input('title'),
       body: request.input('body'),
-      image_path: request.input('image_path'),
+      image_path: coverImage.fileName,
       status: request.input('status'),
     });
-
     response.redirect().toRoute('testimonials.index')
   }
 
@@ -64,10 +63,10 @@ export default class TestimonialsController {
         name: schema.string({ trim: true }),
         title: schema.string({ trim: true }),
         body: schema.string({ trim: true }),
-        image_path: schema.file({
-          size: '1mb',
-          extnames: ['jpg', 'png']
-        }),
+        // image_path: schema.file({
+        //   size: '1mb',
+        //   extnames: ['jpg', 'png']
+        // }),
         status: schema.number()
       })
     })
@@ -77,12 +76,14 @@ export default class TestimonialsController {
       name: payload.name,
       title: payload.title,
       body: payload.body,
-      image_path: "",
+      // image_path: "",
       status: payload.status
     }).save()
 
-    response.redirect().back();
+    response.redirect().toRoute('testimonials.index')
   }
 
-  public async destroy({ }: HttpContextContract) { }
+  public async destroy({ }: HttpContextContract) {
+
+  }
 }
