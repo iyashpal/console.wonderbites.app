@@ -6,6 +6,9 @@
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands"
   ],
+  "commandsAliases": {
+    "migrate": "migration:run"
+  },
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
     "App": "app",
