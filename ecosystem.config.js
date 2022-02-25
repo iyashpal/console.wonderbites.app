@@ -11,6 +11,7 @@ module.exports = {
       instances: 1,
       exec_mode: "cluster",
       kill_timeout: 3000,
+      ignore_watch: ["node_modules"],
       cwd: "/home/ubuntu/sites/wonderbites.com/",
       post_update: ['yarn install', 'yarn build', 'cd ./build && yarn install --production'],
       env: { NODE_ENV: "production", ENV_PATH: "/home/ubuntu/sites/wonderbites.com/.env", PORT: 8080 },
