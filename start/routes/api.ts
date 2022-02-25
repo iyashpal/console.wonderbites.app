@@ -20,7 +20,9 @@ Route.group(() => {
     Route.resource('categories', 'API/CateogriesController');
 
     Route.resource('products', 'API/ProductsController');
+    Route.resource('cart', 'API/CartsController');  
     Route.resource('productimages', 'API/ProductImagesController');
     //Route.get('/product/{id}', "API/UsersController.show");
-    
+    //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
+  
 }).prefix('/api').as('api')
