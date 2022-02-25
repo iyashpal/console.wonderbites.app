@@ -7,3 +7,4 @@ coverage
 tmp
 public/assets/*
 package-lock.json
+.logs

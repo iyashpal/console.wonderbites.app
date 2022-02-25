@@ -22,11 +22,15 @@ module.exports = {
 
       watch: ['build'],
 
-      merge_logs: true,
-
       ignore_watch: ["node_modules"],
 
       cwd: "/home/ubuntu/sites/wonderbites.com/",
+      
+      pid_file: "/home/ubuntu/sites/wonderbites.com/.logs/pid.log",
+
+      out_file: "/home/ubuntu/sites/wonderbites.com/.logs/output.log",
+
+      error_file: "/home/ubuntu/sites/wonderbites.com/.logs/error.log",
 
       post_update: ['yarn install', 'yarn build', 'cd ./build && yarn install --production'],
 
