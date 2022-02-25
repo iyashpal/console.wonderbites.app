@@ -39,7 +39,7 @@ export default class TestimonialsController {
       name: request.input('name'),
       title: request.input('title'),
       body: request.input('body'),
-      image_path: coverImage.fileName,
+      image_path: coverImage!.fileName,
       status: request.input('status'),
     });
     response.redirect().toRoute('testimonials.index')
