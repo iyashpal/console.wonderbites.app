@@ -4,10 +4,9 @@ import Product from 'App/Models/Product'
 import ProductImages from 'App/Models/ProductImage'
 
 export default class ProductsController {
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ response }: HttpContextContract) {
     try {
       
-      const id = request.input('id');
       const products = await Product.all()
       response.status(200).json(products)
 
