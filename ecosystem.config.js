@@ -11,8 +11,8 @@ module.exports = {
       instances: 1,
       exec_mode: "cluster",
       kill_timeout: 3000,
-      cwd: "/home/ubuntu/sites/wonderbites.com/",
-      env: { NODE_ENV: "production", PORT: 8080 },
+      cwd: "~/sites/wonderbites.com/",
+      env: { NODE_ENV: "production", ENV_PATH: "~/sites/wonderbites.com/.env", PORT: 8080 },
       post_update: ['yarn install', 'yarn build', 'cd ./build && yarn install --production'],
     }
   ]
