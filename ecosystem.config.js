@@ -20,7 +20,7 @@ module.exports = {
 
       kill_timeout: 3000,
 
-      watch: ['./', 'build'],
+      watch: true,
 
       ignore_watch: ["node_modules"],
 
