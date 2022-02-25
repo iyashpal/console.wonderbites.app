@@ -22,6 +22,8 @@ module.exports = {
 
       watch: ['build'],
 
+      merge_logs: true,
+
       ignore_watch: ["node_modules"],
 
       cwd: "/home/ubuntu/sites/wonderbites.com/",
