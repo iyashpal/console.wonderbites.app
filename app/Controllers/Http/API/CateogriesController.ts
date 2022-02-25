@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import Cateogry from 'App/Models/Cateogry'
+import Product from 'App/Models/Product'
 
 export default class CateogriesController {
   public async index({ response }: HttpContextContract) {
@@ -47,10 +48,23 @@ export default class CateogriesController {
 
     }
   }
+  public async show({ response, params }: HttpContextContract) {
+    try{ 
+    const category_id = params.id;
+    await Cateogry.findOrFail(category_id)
+    const products = await Product
+    .query() 
+     .where('category_id', category_id);
 
+    response.status(200).json(products)
 
-  public async show({ }: HttpContextContract) { }
+  } catch (error) {
 
+    response.notFound({ message: "Category Not Found" });
+
+  
+  }
+}
   public async edit({ }: HttpContextContract) { }
 
   public async update({ }: HttpContextContract) { }
