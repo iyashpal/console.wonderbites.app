@@ -1,5 +1,5 @@
 import {
-    CommentIcon, CloseIcon,
+    CheckCircleIcon, CancelIcon, CommentIcon, CloseIcon,
     MenuIcon,
     NotificationsIcon,
     SpaceDashboardIcon,
@@ -15,7 +15,7 @@ export default {
         app.use(MaterialIcons, {
             icons: {
                 Round: {
-                    CommentIcon, CloseIcon,
+                    CancelIcon, CheckCircleIcon, CommentIcon, CloseIcon,
                     MenuIcon,
                     NotificationsIcon,
                     SpaceDashboardIcon,

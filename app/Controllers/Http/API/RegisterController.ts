@@ -1,6 +1,6 @@
 import User from 'App/Models/User'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
 
 export default class RegisterController {
 
@@ -15,30 +15,7 @@ export default class RegisterController {
 
         try {
 
-            const validated = await request.validate({
-
-                schema: schema.create({
-
-                    first_name: schema.string({ trim: true }),
-
-                    last_name: schema.string({ trim: true }),
-
-                    mobile: schema.string({ trim: true }, [
-                        rules.mobile(),
-                        rules.unique({ table: 'users', column: "mobile" })
-                    ]),
-
-                    email: schema.string({ trim: true }, [
-                        rules.email(),
-                        rules.maxLength(255),
-                        rules.unique({ table: 'users', column: "email" })
-                    ]),
-
-                    password: schema.string({ trim: true }, [
-                        rules.confirmed()
-                    ])
-                })
-            })
+            const validated = await request.validate(RegisterUserValidator)
 
             const user = await User.create(validated)
 
@@ -47,7 +24,7 @@ export default class RegisterController {
         } catch (error) {
 
             response.badRequest(error.messages)
-            
+
         }
 
     }

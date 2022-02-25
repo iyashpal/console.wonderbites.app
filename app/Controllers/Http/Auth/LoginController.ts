@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
+import LoginUserValidator from 'App/Validators/LoginUserValidator';
 export default class LoginController {
 
 
@@ -11,12 +11,11 @@ export default class LoginController {
 
     public async login({ auth, request, response, session }: HttpContextContract) {
 
-        const { email, password } = request.all()
-
+        const { email, password } = await request.validate(LoginUserValidator)
 
         try {
             await auth.use('web').attempt(email, password)
-    
+
             return response.redirect('/')
         } catch (error) {
             session.flash('status', 'failed')

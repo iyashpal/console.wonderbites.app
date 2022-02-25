@@ -1,0 +1,36 @@
+@if(show)
+<div {{ $props.serializeExcept(['show', 'icon', 'title', 'description', 'message', 'dismissable'], {class: "rounded-md bg-red-50 p-4"})}}>
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <icon name="{{ icon }}" class="h-5 w-5 text-red-400"></icon>
+        </div>
+        <div class="ml-3">
+            @if(title)
+            <h3 class="text-sm font-medium text-red-800">{{ title }}</h3>
+            @end
+
+            @if(description)
+            <div class="mt-2 text-sm text-red-700">
+                <p>{{ description }}</p>
+            </div>
+            @end
+
+            @if(message)
+            <p class="text-sm font-medium text-red-800">{{ message }}</p>
+            @end
+
+            {{{ await $slots.main() }}}
+        </div>
+        @if(dismissable)
+        <div class="ml-auto pl-3">
+            <div class="-mx-1.5 -my-1.5">
+                <button type="button" class="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600">
+                    <span class="sr-only">Dismiss</span>
+                    <icon name="close" class="h-5 w-5"></icon>
+                </button>
+            </div>
+        </div>
+        @end
+    </div>
+</div>
+@end
