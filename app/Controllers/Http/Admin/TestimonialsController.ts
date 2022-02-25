@@ -1,5 +1,5 @@
 import Testimonial from 'App/Models/Testimonial'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 
