@@ -1,7 +1,7 @@
 @layout('layouts/auth')
 
 @section('content')
-
+{{ inspect(flashMessages) }}
 <form action="{{ route('register') }}" method="POST">
 
     {{ csrfField() }}
