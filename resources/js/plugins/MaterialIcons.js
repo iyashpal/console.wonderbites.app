@@ -1,7 +1,10 @@
 import {
+    AddCircleIcon, ArrowLeftIcon,
     CheckCircleIcon, CancelIcon, CommentIcon, CloseIcon,
+    DeleteIcon,
+    EditIcon,
     MenuIcon,
-    NotificationsIcon,
+    NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
     SpaceDashboardIcon,
 
 
@@ -15,9 +18,12 @@ export default {
         app.use(MaterialIcons, {
             icons: {
                 Round: {
+                    AddCircleIcon, ArrowLeftIcon,
                     CancelIcon, CheckCircleIcon, CommentIcon, CloseIcon,
+                    DeleteIcon,
+                    EditIcon,
                     MenuIcon,
-                    NotificationsIcon,
+                    NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
                     SpaceDashboardIcon,
                 }
             }
