@@ -2,6 +2,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import Cart from 'App/Models/Cart'
+import CartItem from 'App/Models/CartItem'
+import Product from 'App/Models/Product'
+
 //import ProductImages from 'App/Models/ProductImage'
 export default class CartsController {
     public async index({response }: HttpContextContract) {
@@ -52,7 +55,45 @@ export default class CartsController {
       }
     
       public async show({}: HttpContextContract) {
-       
+         
+      }
+      public async getcart({request,response}: HttpContextContract) {
+        try {
+          const device_token = request.input('device_token');
+          const cart = await Cart.findBy('device_token', device_token)
+          if(cart){
+            const cart_id = cart['id'];
+            const cart_items = await CartItem
+         .query() 
+         .where('cart_id', cart_id);
+         const product_ids = [];
+         cart_items.forEach((cartitem,index) => {
+          product_ids.push(cartitem.product_id)
+           
+        })
+
+        const products = await Product
+         .query() 
+         .whereIn('id', product_ids);
+        
+        const cart_data = { id: cart['id'],user_id : cart['user_id'],device_token : cart['device_token'],qty: cart['qty'],product:products,status:cart['status'], created_at: cart['created_at'], updated_at: cart['updated_at']}
+
+        response.status(200).json(cart_data)
+         
+          
+          } else{
+            response.status(201).json('No cart found')
+
+          }
+
+
+          
+        }catch (error) {
+          
+          response.badRequest(error.messages)
+    
+        }
+      
       }
     
       public async edit({}: HttpContextContract) {}
