@@ -1,8 +1,9 @@
 import {
     AddCircleIcon, ArrowLeftIcon,
-    CheckCircleIcon, CancelIcon, CommentIcon, CloseIcon,
-    DeleteIcon,
+    CheckCircleIcon, CancelIcon, CategoryIcon, CommentIcon, CloseIcon,
+    DeleteIcon, DinnerDiningIcon,
     EditIcon,
+    GroupIcon,
     MenuIcon,
     NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
     SpaceDashboardIcon,
@@ -19,9 +20,10 @@ export default {
             icons: {
                 Round: {
                     AddCircleIcon, ArrowLeftIcon,
-                    CancelIcon, CheckCircleIcon, CommentIcon, CloseIcon,
-                    DeleteIcon,
+                    CancelIcon, CheckCircleIcon, CategoryIcon, CommentIcon, CloseIcon,
+                    DeleteIcon, DinnerDiningIcon,
                     EditIcon,
+                    GroupIcon,
                     MenuIcon,
                     NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
                     SpaceDashboardIcon,

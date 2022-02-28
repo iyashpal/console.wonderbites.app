@@ -99,6 +99,20 @@
                             class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
                         />Dashboard
                     </a>
+                    
+                    <a href="/categories" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                     <Icon
+                            name="category"
+                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
+                        />Categories
+                    </a>
+                    
+                    <a href="/cuisines" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                     <Icon
+                            name="dinner-dining"
+                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
+                        />Cuisines
+                    </a>
 
                     <a
                         href="/testimonials"
@@ -110,6 +124,18 @@
                             class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
                         />Testimonials
                     </a>
+                     <a
+                        href="/users"
+                        class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    >
+                        <Icon
+                            name="group"
+                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
+                        />Users
+                    </a>
+
+                    
+                     
                 </nav>
             </div>
         </div>
