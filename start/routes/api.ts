@@ -12,6 +12,7 @@ Route.group(() => {
     Route.post('/register', 'API/RegisterController.register').as('register')
 
     Route.get('/users', "API/UsersController.show").as('user')
+    Route.put('/users', "API/UsersController.update").as('userUpdate')
 
     Route.resource('addresses', 'API/Profile/AddressesController');
 
@@ -20,8 +21,9 @@ Route.group(() => {
     Route.resource('categories', 'API/CateogriesController');
 
     Route.resource('products', 'API/ProductsController');
-    Route.resource('cart', 'API/CartsController');  
+    //Route.resource('cart', 'API/CartsController');  
     Route.resource('productimages', 'API/ProductImagesController');
+    Route.get('getcart', "API/CartsController.getcart").as('getcart')
     //Route.get('/product/{id}', "API/UsersController.show");
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   
