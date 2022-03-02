@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'App/Models/User'
-import { schema } from '@ioc:Adonis/Core/Validator'
+//import User from 'App/Models/User'
+//import { schema } from '@ioc:Adonis/Core/Validator'
 //import { schema } from '@ioc:Adonis/Core/Validator'
 //import Application from '@ioc:Adonis/Core/Application'
 export default class UsersController {
@@ -25,8 +25,8 @@ export default class UsersController {
         }
 
     }
-    // Update Profile
-    public async update({auth, request, response}: HttpContextContract) {
+    // Update Profile Code
+    /*public async update({auth, request, response}: HttpContextContract) {
         try {
             
             await auth.use('api').authenticate()
@@ -42,7 +42,7 @@ export default class UsersController {
                 await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
                
             } else{
-                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name')})
+                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
             }
             
            const user_details = await User.find(user_id)
@@ -55,6 +55,6 @@ export default class UsersController {
 
         }
 
-    }
+    }*/ 
 
 }
