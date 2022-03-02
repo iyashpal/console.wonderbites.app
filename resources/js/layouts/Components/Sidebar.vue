@@ -54,20 +54,14 @@
                     </transition>
 
                     <div class="flex-shrink-0 flex items-center px-4">
-                        <img class="h-8 w-auto" src="/images/logo.png" alt="Wonderbites" />
+                        <img class="h-7 w-auto" src="/images/logo.png" alt="Wonderbites" />
                     </div>
                     <div class="mt-5 flex-1 h-0 overflow-y-auto">
                         <nav class="px-2 space-y-1">
-                            <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" -->
-                            <a
-                                href="/"
-                                class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                            >
-                                <Icon
-                                    name="space-dashboard"
-                                    class="text-gray-500 mr-4 flex-shrink-0 h-6 w-6"
-                                />Dashboard
-                            </a>
+                            <SidebarLink
+                                v-bind="{ link, key }"
+                                v-for="(link, key) in SidebarLinks"
+                            />
                         </nav>
                     </div>
                 </div>
@@ -82,69 +76,23 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
-        <div class="flex-1 flex flex-col min-h-0 bg-white">
-            <div class="flex items-center h-16 flex-shrink-0 px-4 bg-white">
-                <img class="h-8 w-auto" src="/images/logo.png" alt="Wonderbites" />
+        <div class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto">
+            <div class="flex items-center flex-shrink-0 px-4">
+                <img class="h-7 w-auto" src="/images/logo.png" alt="Wonderbites" />
             </div>
-            <div class="flex-1 flex flex-col overflow-y-auto">
-                <nav class="flex-1 px-2 py-4 space-y-1">
-                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a
-                        href="/"
-                        class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                    >
-                        <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
-                        <Icon
-                            name="space-dashboard"
-                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                        />Dashboard
-                    </a>
-                    
-                    <a href="/categories" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                     <Icon
-                            name="category"
-                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                        />Categories
-                    </a>
-                    
-                    <a href="/cuisines" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                     <Icon
-                            name="dinner-dining"
-                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                        />Cuisines
-                    </a>
-
-                    <a
-                        href="/testimonials"
-                        class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                    >
-                        <!-- Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300" -->
-                        <Icon
-                            name="comment"
-                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                        />Testimonials
-                    </a>
-                     <a
-                        href="/users"
-                        class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                    >
-                        <Icon
-                            name="group"
-                            class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                        />Users
-                    </a>
-
-                    
-                     
+            <div class="mt-5 flex-grow flex flex-col">
+                <nav class="flex-1 px-2 pb-4 space-y-1">
+                    <SidebarLink v-bind="{ link, key }" v-for="(link, key) in SidebarLinks" />
                 </nav>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import SidebarLinks from './SidebarLinks'
+import SidebarLink from './SidebarLink.vue'
 
 const Store = useStore()
 const isToggled = computed(() => Store.getters['layout/isSidebarEnabled'])

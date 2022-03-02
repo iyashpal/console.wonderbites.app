@@ -1,5 +1,4 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-//import User from 'App/Models/User'
 //import { schema } from '@ioc:Adonis/Core/Validator'
 //import { schema } from '@ioc:Adonis/Core/Validator'
 //import Application from '@ioc:Adonis/Core/Application'
@@ -26,6 +25,7 @@ export default class UsersController {
 
     }
     // Update Profile Code
+
     /*public async update({auth, request, response}: HttpContextContract) {
         try {
             

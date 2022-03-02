@@ -4,12 +4,13 @@ import UpdateValidator from 'App/Validators/Cuisine/UpdateValidator'
 import Cuisine from 'App/Models/Cuisine'
 
 export default class CuisinesController {
-  public async index({ view, request }: HttpContextContract) {
+
+  public async index({ view, request, auth }: HttpContextContract) {
 
     let cuisines = await Cuisine.query().paginate(request.input('page', 1), 2)
 
     cuisines.baseUrl(request.url())
-
+  
     return view.render('app/cuisines/index', { cuisines })
   }
 
@@ -63,11 +64,13 @@ export default class CuisinesController {
 
 
   public async destroy({ params, response, session }: HttpContextContract) {
+
     const cuisine = await Cuisine.findOrFail(params.id)
 
     await cuisine.delete().then(() => {
       session.flash('cuisine_deleted', true)
     })
+
     response.redirect().toRoute('cuisines.index')
   }
 }
