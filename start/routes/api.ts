@@ -32,23 +32,23 @@ Route.group(() => {
 
         Route.get('getcart', "API/CartsController.getcart").as('getcart')
 
-        Route.get('about', "API/HomeController.about").as('about')
-
-        Route.get('terms', "API/HomeController.terms").as('terms')
-
-        Route.get('privacy_policy', "API/HomeController.privacy_policy").as('privacy_policy')
-
-        Route.get('content_policy', "API/HomeController.content_policy").as('content_policy')
-
-        Route.get('settings', "API/HomeController.settings").as('settings')
-
-        Route.get('my_subscriptions', "API/HomeController.my_subscriptions").as('my_subscriptions')
-
         //Route.resource('cart', 'API/CartsController');  
         //Route.get('/product/{id}', "API/UsersController.show");
         //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
 
     }).middleware('auth:web')
+
+    Route.get('about', "API/HomeController.about").as('about')
+
+    Route.get('terms', "API/HomeController.terms").as('terms')
+
+    Route.get('privacy_policy', "API/HomeController.privacy_policy").as('privacy_policy')
+
+    Route.get('content_policy', "API/HomeController.content_policy").as('content_policy')
+
+    Route.get('settings', "API/HomeController.settings").as('settings')
+
+    Route.get('my_subscriptions', "API/HomeController.my_subscriptions").as('my_subscriptions')
 
 
 }).prefix('/api').as('api')
