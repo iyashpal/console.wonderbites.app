@@ -24,10 +24,10 @@ export default class UsersController {
 
         }
 
-    }
+    }  
     // Update Profile
     /*public async update({auth, request, response}: HttpContextContract) {
-        try {
+        try { 
             
             await auth.use('api').authenticate()
 
@@ -55,6 +55,6 @@ export default class UsersController {
 
         }
 
-    }*/ 
+    }*/  
 
 }
