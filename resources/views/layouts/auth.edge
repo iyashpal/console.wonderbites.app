@@ -10,16 +10,17 @@
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
         @entryPointStyles('app')
+        @entryPointScripts('app')
     </head>
 
     <body>
         <div id="app">
 
-            <v-authentication-card>
+            <v-authentication-card container="{{container || 'sm:max-w-md'}} ">
 
                 <template #logo>
 
-                    <img src="/images/logo.png" class="h-16" alt="Wonderbites">
+                    <img src="/images/logo.png" class="h-6" alt="Wonderbites">
 
                 </template>
 
@@ -29,7 +30,7 @@
 
         </div>
 
-        @entryPointScripts('app')
+
     </body>
 
 </html>

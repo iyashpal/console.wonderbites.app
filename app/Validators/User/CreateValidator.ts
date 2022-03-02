@@ -1,7 +1,7 @@
-import { rules, schema } from '@ioc:Adonis/Core/Validator';
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CreateUserValidator {
+export default class CreateValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   /*
@@ -25,35 +25,28 @@ export default class CreateUserValidator {
    */
   public schema = schema.create({
 
-    first_name: schema.string({ trim: true },
-      [
-        rules.required
-      ]),
+    first_name: schema.string({ trim: true }),
 
-    last_name: schema.string({ trim: true }, [
-      rules.required
+    last_name: schema.string({ trim: true }),
+
+    mobile: schema.string({ trim: true }, [
+      rules.mobile(),
+      rules.unique({ table: 'users', column: "mobile" })
     ]),
 
-    mobile: schema.string({ trim: true },
-      [
-        rules.mobile(),
-        rules.required,
-        rules.unique({ table: 'users', column: "mobile" })
-      ]),
-
-    email: schema.string({ trim: true },
-      [
-        rules.required,
-        rules.email(),
-        rules.maxLength(255),
-        rules.unique({ table: 'users', column: "email" })
-      ]),
-
-    password: schema.string({ trim: true },
-      [
-        rules.required,
-        rules.confirmed()
-      ])
+    email: schema.string({ trim: true }, [
+      rules.email(),
+      rules.maxLength(255),
+      rules.unique({ table: 'users', column: "email" })
+    ]),
+    image_path: schema.file.optional({
+      size: '1mb',
+      extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', "GIF"]
+    }),
+    password: schema.string({ trim: true }),
+    address_id: schema.number(),
+    remember_me_token: schema.string({ trim: true }),
+    status: schema.number()
   })
 
   /**
@@ -67,12 +60,5 @@ export default class CreateUserValidator {
    * }
    *
    */
-  public messages = {
-
-    'user.first_name.required': 'First Name is required',
-    // 'tags.*.number': 'Tags must be an array of numbers',
-    // 'products.*.title.required': 'Each product must have a title'
-
-  }
-
+  public messages = {}
 }

@@ -31,6 +31,9 @@ export default class User extends BaseModel {
   @column()
   public rememberMeToken?: string
 
+  @column()
+  public status: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -47,5 +50,12 @@ export default class User extends BaseModel {
 
   @hasMany(() => Address)
   public addresses: HasMany<typeof Address>
+
+
+  public static url() {
+    let name = this.$getColumn('email') ? this.$getColumn('email') : this.$getColumn('first_name') + ' ' + this.$getColumn('last_name');
+
+    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`;
+  }
 
 }

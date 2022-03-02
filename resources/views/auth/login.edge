@@ -4,39 +4,47 @@
 @section('content')
 
 <form action="{{ route('login') }}" method="POST">
-  
-    {{ csrfField() }}
-  
-    <div>
-      <v-label for="email">Email</v-label>
-  
-      <v-input id="email" name="email" type="email" class="mt-1 block w-full" required autofocus />
-    </div>
-  
-    <div class="mt-4">
-      <v-label for="password">Password</v-label>
-  
-      <v-input id="password" name="password" type="password" class="mt-1 block w-full" required autocomplete="password" />
-    </div>
-  
-    <div class="block mt-4">
-      <label class="flex items-center">
-  
-        <v-checkbox name="remember"></v-checkbox>
-  
-        <span class="ml-2 text-sm text-gray-600">Remember me</span>
-  
-      </label>
-    </div>
-  
-    <div class="flex items-center justify-end mt-4">
-  
-      <a href="/forgot-password" class="underline text-sm text-gray-600 hover:text-gray-900">Forgot your password?</a>
-  
-      <button type="submit" class="tw:btn tw:btn-secondary ml-4">Log in</button>
-  
-    </div>
-  
-  </form>
+  <div class="px-4 py-4 sm:px-6 -mt-4 -mx-6 mb-4 border-b border-slate-100 bg-slate-50 ">
+    <h3 class="text-lg leading-6 font-bold font-sans text-slate-900 uppercase tracking-widest">
+      Login
+    </h3>
+  </div>
+
+  @!alerts.danger({show: flashMessages.get('status') === 'failed', icon: 'cancel', message:'Credentials not found.', className: "mb-4"})
+
+
+  {{ csrfField() }}
+
+  <div>
+    @!form.label({for:'email', label: "Email Address", required: true})
+    @!form.input({id: "email", value: flashMessages.get('email', '')|| '', name: "email", type: "email", autocomplete: "email", className: "mt-1 block w-full"})
+    @!form.inputError({error: 'errors.email'})
+  </div>
+
+  <div class="mt-4">
+    @!form.label({for:'password', label: "Password", required: true})
+    @!form.input({id: "password", name: "password", type: "password", autocomplete: "password", className: "mt-1 block w-full"})
+    @!form.inputError({error: 'errors.password'})
+  </div>
+
+  <div class="block mt-4">
+    <label class="flex items-center">
+
+      <v-checkbox name="remember"></v-checkbox>
+
+      <span class="ml-2 text-sm text-gray-600">Remember me</span>
+
+    </label>
+  </div>
+
+  <div class="flex items-center justify-end mt-4">
+
+    <a href="/forgot-password" class="underline text-sm text-gray-600 hover:text-gray-900">Forgot your password?</a>
+
+    <button type="submit" class="tw:btn tw:btn-secondary ml-4">Log in</button>
+
+  </div>
+
+</form>
 
 @endsection

@@ -26,7 +26,7 @@ export default class UsersController {
 
     }
     // Update Profile Code
-    public async update({auth, request, response}: HttpContextContract) {
+  public async update({auth, request, response}: HttpContextContract) {
         try {
             
             await auth.use('api').authenticate()

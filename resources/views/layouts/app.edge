@@ -14,10 +14,15 @@
   </head>
 
   <body class="h-full">
+
     <div id="app">
-      <v-admin-layout>
+      <v-admin-layout :user="{{ JSON.stringify(auth.user) }}">
 
         <template #title>{{ title || 'Page Title' }}</template>
+
+        <template #actions>
+          @!section('actions')
+        </template>
 
         <template #content>
           @!section('content')

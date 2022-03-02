@@ -1,65 +1,55 @@
 @layout('layouts/auth')
 
+@set('container', 'sm:max-w-3xl')
+
 @section('content')
 
 <form action="{{ route('register') }}" method="POST">
-
+    <div class="px-4 py-4 sm:px-6 -mt-4 -mx-6 mb-4 border-b border-slate-100 bg-slate-50 ">
+        <h3 class="text-lg leading-6 font-bold font-sans text-slate-900 uppercase tracking-widest">
+            Register
+        </h3>
+    </div>
     {{ csrfField() }}
-    <div>
-        <v-label for="first_name">First Name</v-label>
+    <div class="grid sm:grid-cols-2 gap-5">
 
-        <v-input id="first_name" name="first_name" autocomplete="first_name" type="text" class="mt-1 block w-full"  autofocus />
-        @if(flashMessages.has('errors.first_name'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.first_name') }}</p>
-        @endif
+        <div>
+            @!form.label({for:'first_name', label: "First Name", required: true})
+            @!form.input({id: "first_name", value: flashMessages.get('first_name', '') || '', name: "first_name", type: "text", autocomplete: "first_name", className: "mt-1 block w-full", autofocus: true})
+            @!form.inputError({error: 'errors.first_name'})
+        </div>
+
+        <div>
+            @!form.label({for:'last_name', label: "Last Name", required: true})
+            @!form.input({id: "last_name", value: flashMessages.get('last_name', '') || '', name: "last_name", type: "text", autocomplete: "last_name", className: "mt-1 block w-full"})
+            @!form.inputError({error: 'errors.last_name'})
+        </div>
+
+        <div>
+            @!form.label({for:'mobile', label: "Mobile No.", required: true})
+            @!form.input({id: "mobile", value: flashMessages.get('mobile', '')|| '', name: "mobile", type: "text", autocomplete: "mobile", className: "mt-1 block w-full"})
+            @!form.inputError({error: 'errors.mobile'})
+        </div>
+
+        <div>
+            @!form.label({for:'email', label: "Email Address", required: true})
+            @!form.input({id: "email", value: flashMessages.get('email', '')|| '', name: "email", type: "email", autocomplete: "email", className: "mt-1 block w-full"})
+            @!form.inputError({error: 'errors.email'})
+        </div>
+
+        <div>
+            @!form.label({for:'password', label: "Password", required: true})
+            @!form.input({id: "password", name: "password", type: "password", autocomplete: "password", className: "mt-1 block w-full"})
+            @!form.inputError({error: 'errors.password'})
+        </div>
+
+        <div>
+            @!form.label({for:'password_confirmation', label: "Confirm Password", required: true})
+            @!form.input({id: "password_confirmation", name: "password_confirmation", type: "password", autocomplete: "password", className: "mt-1 block w-full"})
+            @!form.inputError({error: 'errors.password_confirmation'})
+        </div>
+
     </div>
-
-    <div class="mt-4">
-        <v-label for="last_name">Last Name</v-label>
-
-        <v-input id="last_name" name="last_name" autocomplete="last_name" type="text" class="mt-1 block w-full"  />
-        @if(flashMessages.has('errors.last_name'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.last_name') }}</p>
-        @endif
-    </div>
-
-    <div class="mt-4">
-        <v-label for="mobile">Mobile No.</v-label>
-
-        <v-input id="mobile" name="mobile" autocomplete="mobile" type="text" class="mt-1 block w-full"  />
-        @if(flashMessages.has('errors.mobile'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.mobile') }}</p>
-        @endif
-    </div>
-
-    <div class="mt-4">
-        <v-label for="email">Email Address</v-label>
-
-        <v-input id="email" name="email" autocomplete="first_name" type="email" class="mt-1 block w-full"  />
-        @if(flashMessages.has('errors.email'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.email') }}</p>
-        @endif
-    </div>
-
-    <div class="mt-4">
-        <v-label for="password">Password</v-label>
-
-        <v-input id="password" name="password" type="password" class="mt-1 block w-full"  autocomplete="password" />
-        @if(flashMessages.has('errors.password'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.password') }}</p>
-        @endif
-    </div>
-
-    <div class="mt-4">
-        <v-label for="password_confirmation">Confirm Password</v-label>
-
-        <v-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full"  autocomplete="password" />
-        @if(flashMessages.has('errors.password_confirmation'))
-        <p class="mt-2 text-sm text-red-600">{{ flashMessages.get('errors.password_confirmation') }}</p>
-        @endif
-    </div>
-
-
     <div class="flex items-center justify-end mt-4">
 
         <a href="/login" class="underline text-sm text-gray-600 hover:text-gray-900">Already registered?</a>

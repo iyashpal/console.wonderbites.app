@@ -1,0 +1,8 @@
+<label {{ $props.serializeExcept(['label', 'required'], {class: 'block font-medium text-sm text-gray-700'}) }}>
+    @if(label)
+    <span>{{ label }}</span>
+    @end
+    @if(required)
+    <span class="text-red-500">*</span>
+    @end
+</label>

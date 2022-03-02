@@ -1,5 +1,5 @@
+import LoginUserValidator from 'App/Validators/LoginUserValidator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
 export default class LoginController {
 
     /**
@@ -10,7 +10,7 @@ export default class LoginController {
      */
     public async login({ auth, request, response }: HttpContextContract) {
 
-        const { email, password } = request.all();
+        const { email, password } = await request.validate(LoginUserValidator)
 
         try {
 

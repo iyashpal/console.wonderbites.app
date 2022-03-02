@@ -24,6 +24,7 @@ export default class UsersSchema extends BaseSchema {
       
       table.string('mobile').notNullable()
 
+      table.integer('status').defaultTo(1)
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
