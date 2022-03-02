@@ -24,10 +24,10 @@ export default class UsersController {
 
         }
 
-    }  
-    // Update Profile
-    /*public async update({auth, request, response}: HttpContextContract) {
-        try { 
+    }
+    // Update Profile Code
+    public async update({auth, request, response}: HttpContextContract) {
+        try {
             
             await auth.use('api').authenticate()
 
@@ -42,7 +42,7 @@ export default class UsersController {
                 await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
                
             } else{
-                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name')})
+                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
             }
             
            const user_details = await User.find(user_id)
@@ -55,6 +55,6 @@ export default class UsersController {
 
         }
 
-    }*/  
+    }
 
 }
