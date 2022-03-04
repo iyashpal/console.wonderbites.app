@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Cuisine from './Cuisine'
-import Cateogry from './Cateogry'
+import Category from './Category'
 
 export default class CategoryCuisine extends BaseModel {
 
@@ -24,7 +24,7 @@ export default class CategoryCuisine extends BaseModel {
   public cuisine: BelongsTo<typeof Cuisine>
 
 
-  @belongsTo(() => Cateogry)
-  public category: BelongsTo<typeof Cateogry>
+  @belongsTo(() => Category)
+  public category: BelongsTo<typeof Category>
 
 }

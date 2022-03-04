@@ -37,16 +37,14 @@ export default class LoginController {
 
         try {
 
-            await auth.use('api').authenticate()
-
             await auth.use('api').revoke()
 
             response.status(200).json({ revoked: true });
 
         } catch (error) {
 
-            response.unauthorized({ message: "Unauthenticated" })
-
+            response.badRequest(error.messages)
+            
         }
 
     }

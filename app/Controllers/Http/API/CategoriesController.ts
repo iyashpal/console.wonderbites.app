@@ -1,13 +1,15 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from "@ioc:Adonis/Core/Validator"
-import Cateogry from 'App/Models/Cateogry'
 import Product from 'App/Models/Product'
+import Category from 'App/Models/Category'
+import { schema, rules } from "@ioc:Adonis/Core/Validator"
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CateogriesController {
+export default class CategoriesController {
+  
   public async index({ response }: HttpContextContract) {
     try {
 
-      const category = await Cateogry.all()
+      const category = await Category.all()
+
       response.status(200).json(category)
 
     } catch (error) {
@@ -38,7 +40,7 @@ export default class CateogriesController {
         })
       })
       
-      const category = await Cateogry.create(validate)
+      const category = await Category.create(validate)
 
       response.status(200).json(category)
 
@@ -51,7 +53,7 @@ export default class CateogriesController {
   public async show({ response, params }: HttpContextContract) {
     try{ 
     const category_id = params.id;
-    await Cateogry.findOrFail(category_id)
+    await Category.findOrFail(category_id)
     const products = await Product
     .query() 
      .where('category_id', category_id);

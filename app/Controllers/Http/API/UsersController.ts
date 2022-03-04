@@ -1,59 +1,43 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-//import { schema } from '@ioc:Adonis/Core/Validator'
-//import { schema } from '@ioc:Adonis/Core/Validator'
-//import Application from '@ioc:Adonis/Core/Application'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class UsersController {
 
     public async show({ auth, response }: HttpContextContract) {
 
-        try {
-            
-            await auth.use('api').authenticate()
-
-            const user = auth.use('api').user!
+        const user = auth.use('api').user!
 
 
-            await user.load('addresses')
+        await user.load('addresses')
 
-            response.status(200).json(auth.use('api').user!);
-
-        } catch (error) {
-
-            response.unauthorized({message: "Unauthenticated"})
-
-        }
+        response.status(200).json(auth.use('api').user!);
 
     }
-    // Update Profile Code
-  public async update({auth, request, response}: HttpContextContract) {
-        try {
-            
-            await auth.use('api').authenticate()
 
-            const user = auth.use('api').user
 
-            const user_id = user['id'];
-            
-            const profileImage = request.file('image_path')
-            //const coverImage = request.file('image_path')
-            if(profileImage){
-                await profileImage.moveToDisk('./')
-                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
-               
-            } else{
-                await User.query().where('id', user_id).update({first_name : request.input('first_name'),last_name : request.input('last_name'),image_path: profileImage!.fileName})
-            }
-            
-           const user_details = await User.find(user_id)
-           
-           response.status(200).json(user_details);
-            
-        } catch (error) {
+    
+    public async update({ auth, request, response }: HttpContextContract) {
 
-            response.unauthorized({message: "Unauthenticated"})
+        const user = auth.use('api').user!
 
+        const user_id = user['id'];
+
+        const profileImage = request.file('image_path')
+        
+        if (profileImage) {
+
+            await profileImage.moveToDisk('./')
+
+            await User.query().where('id', user_id).update({ first_name: request.input('first_name'), last_name: request.input('last_name'), image_path: profileImage!.fileName })
+
+        } else {
+
+            await User.query().where('id', user_id).update({ first_name: request.input('first_name'), last_name: request.input('last_name'), image_path: profileImage!.fileName })
+            
         }
+
+        const user_details = await User.find(user_id)
+
+        response.status(200).json(user_details);
 
     }
 

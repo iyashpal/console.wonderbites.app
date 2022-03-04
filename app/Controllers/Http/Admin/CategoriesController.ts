@@ -1,12 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
-import Cateogry from 'App/Models/Cateogry'
+import Category from 'App/Models/Category'
 
 export default class CategoriesController {
   public async index({ view, request }: HttpContextContract) {
 
-    let categories = await Cateogry.query().paginate(request.input('page', 1), 2)
+    let categories = await Category.query().paginate(request.input('page', 1), 2)
 
     categories.baseUrl(request.url())
 
@@ -24,7 +24,7 @@ export default class CategoriesController {
     if (image_path)
       await image_path.moveToDisk('./')
 
-    const category = await Cateogry.create({ parent, name, description, image_path: image_path!.fileName, status })
+    const category = await Category.create({ parent, name, description, image_path: image_path!.fileName, status })
 
     if (category.id)
       session.flash('category_created', true)
@@ -34,21 +34,21 @@ export default class CategoriesController {
 
   public async show({ view, params: { id } }: HttpContextContract) {
 
-    const category = await Cateogry.findOrFail(id)
+    const category = await Category.findOrFail(id)
 
     return view.render('app/categories/show', { category })
 
   }
 
   public async edit({ view, params: { id } }: HttpContextContract) {
-    const category = await Cateogry.findOrFail(id)
+    const category = await Category.findOrFail(id)
 
     return view.render('app/categories/edit', { category })
   }
 
   public async update({ request, response, params, session }: HttpContextContract) {
 
-    const category = await Cateogry.findOrFail(params.id)
+    const category = await Category.findOrFail(params.id)
 
     const { parent, name, description, image_path, status } = await request.validate(UpdateValidator)
 
@@ -63,7 +63,7 @@ export default class CategoriesController {
 
 
   public async destroy({ params, response, session }: HttpContextContract) {
-    const category = await Cateogry.findOrFail(params.id)
+    const category = await Category.findOrFail(params.id)
 
     await category.delete().then(() => {
       session.flash('category_deleted', true)

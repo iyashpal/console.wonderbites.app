@@ -10,11 +10,11 @@ Route.group(() => {
 
         Route.post('/register', 'API/RegisterController.register').as('register')
 
-    }).middleware('guest')
+    }).middleware('guest_api')
 
 
     Route.group(() => {
-        
+
         Route.post('/logout', "API/LoginController.logout").as('logout')
 
         Route.get('/users', "API/UsersController.show").as('user')
@@ -24,7 +24,7 @@ Route.group(() => {
 
         Route.resource('cuisines', 'API/CuisinesController');
 
-        Route.resource('categories', 'API/CateogriesController');
+        Route.resource('categories', 'API/CategoriesController');
 
         Route.resource('products', 'API/ProductsController');
 
@@ -36,7 +36,7 @@ Route.group(() => {
         //Route.get('/product/{id}', "API/UsersController.show");
         //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
 
-    }).middleware('auth:web')
+    }).middleware('auth_api')
 
     Route.get('about', "API/HomeController.about").as('about')
 
