@@ -33,7 +33,7 @@ export default class UsersController {
 
         } else {
 
-            await User.query().where('id', user_id).update({ first_name: request.input('first_name'), last_name: request.input('last_name'), image_path: profileImage!.fileName })
+            await User.query().where('id', user_id).update({ first_name: request.input('first_name'), last_name: request.input('last_name') })
             
         }
 
