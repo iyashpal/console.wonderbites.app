@@ -1,6 +1,6 @@
 import Product from 'App/Models/Product'
 import Category from 'App/Models/Category'
-import { schema, rules } from "@ioc:Adonis/Core/Validator"
+//import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoriesController {

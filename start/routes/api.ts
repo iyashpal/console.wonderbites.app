@@ -21,20 +21,18 @@ Route.group(() => {
         Route.put('/users', "API/UsersController.update").as('user.update')
 
         Route.resource('addresses', 'API/Profile/AddressesController');
-
-
-
-        Route.get('getcart', "API/CartsController.getcart").as('getcart')
+        Route.resource('wishlists', 'API/WishlistsController');
 
         //Route.resource('cart', 'API/CartsController');  
         //Route.get('/product/{id}', "API/UsersController.show");
         //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
 
     }).middleware('auth_api')
-
+    Route.resource('cart', 'API/CartsController');
     Route.resource('cuisines', 'API/CuisinesController');
-
-    Route.resource('categories', 'API/CategoriesController');
+    Route.get('/getcart/:device_token', 'API/CartsController.getcart').as('getcart')
+   // Route.get('/getcart', "API/CartsController.getcart").as('getcart')
+   Route.resource('categories', 'API/CategoriesController');
 
     Route.resource('products', 'API/ProductsController');
 
