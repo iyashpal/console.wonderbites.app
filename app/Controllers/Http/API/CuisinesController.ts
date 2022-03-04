@@ -25,35 +25,35 @@ export default class CuisinesController {
 
   public async create({ }: HttpContextContract) { }
 
-  public async store({ request, response }: HttpContextContract) {
-    try {
-      
-      const validate = await request.validate({
+  // public async store({ request, response }: HttpContextContract) {
+  //   try {
 
-        schema: schema.create({
+  //     const validate = await request.validate({
 
-          name: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //       schema: schema.create({
 
-          description: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //         name: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //         description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          status: schema.number.optional()
+  //         image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-        })
-      })
+  //         status: schema.number.optional()
 
-      const cuisine = await Cuisine.create(validate)
+  //       })
+  //     })
+
+  //     const cuisine = await Cuisine.create(validate)
 
 
-      response.status(200).json(cuisine)
+  //     response.status(200).json(cuisine)
 
-    } catch (error) {
+  //   } catch (error) {
 
-      response.badRequest(error.messages)
+  //     response.badRequest(error.messages)
 
-    }
-  }
+  //   }
+  // }
 
   public async show({ }: HttpContextContract) { }
 

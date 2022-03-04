@@ -22,13 +22,7 @@ Route.group(() => {
 
         Route.resource('addresses', 'API/Profile/AddressesController');
 
-        Route.resource('cuisines', 'API/CuisinesController');
 
-        Route.resource('categories', 'API/CategoriesController');
-
-        Route.resource('products', 'API/ProductsController');
-
-        Route.resource('productimages', 'API/ProductImagesController');
 
         Route.get('getcart', "API/CartsController.getcart").as('getcart')
 
@@ -38,6 +32,14 @@ Route.group(() => {
 
     }).middleware('auth_api')
 
+    Route.resource('cuisines', 'API/CuisinesController');
+
+    Route.resource('categories', 'API/CategoriesController');
+
+    Route.resource('products', 'API/ProductsController');
+
+    Route.resource('productimages', 'API/ProductImagesController');
+
     Route.get('about', "API/HomeController.about").as('about')
 
     Route.get('terms', "API/HomeController.terms").as('terms')
@@ -46,7 +48,9 @@ Route.group(() => {
 
     Route.get('content_policy', "API/HomeController.content_policy").as('content_policy')
 
-    Route.get('settings', "API/HomeController.settings").as('settings')
+    Route.get('change_email', "API/HomeController.change_email").as('change_email')
+
+    Route.get('delete_account', "API/HomeController.delete_account").as('delete_account')
 
     Route.get('my_subscriptions', "API/HomeController.my_subscriptions").as('my_subscriptions')
 
