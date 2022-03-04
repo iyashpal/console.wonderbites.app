@@ -33,8 +33,6 @@ export default class CuisinesController {
 
           description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
-
           status: schema.number.optional(),
 
         }),
