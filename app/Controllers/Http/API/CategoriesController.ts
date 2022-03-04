@@ -20,36 +20,36 @@ export default class CategoriesController {
   public async create({ }: HttpContextContract) { }
 
 
-  public async store({ request, response }: HttpContextContract) {
-    try {
+  // public async store({ request, response }: HttpContextContract) {
+  //   try {
 
-      const validate = await request.validate({
+  //     const validate = await request.validate({
 
-        schema: schema.create({
+  //       schema: schema.create({
 
-          parent: schema.number.optional(),
+  //         parent: schema.number.optional(),
 
-          name: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //         name: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          description: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //         description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
+  //         image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          status: schema.number.optional()
+  //         status: schema.number.optional()
 
-        })
-      })
-      
-      const category = await Category.create(validate)
+  //       })
+  //     })
 
-      response.status(200).json(category)
+  //     const category = await Category.create(validate)
 
-    } catch (error) {
+  //     response.status(200).json(category)
 
-      response.badRequest(error.messages)
+  //   } catch (error) {
 
-    }
-  }
+  //     response.badRequest(error.messages)
+
+  //   }
+  // }
   public async show({ response, params }: HttpContextContract) {
     try{ 
     const category_id = params.id;
