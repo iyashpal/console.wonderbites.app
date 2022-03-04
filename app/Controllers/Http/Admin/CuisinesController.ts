@@ -5,7 +5,7 @@ import Cuisine from 'App/Models/Cuisine'
 
 export default class CuisinesController {
 
-  public async index({ view, request, auth }: HttpContextContract) {
+  public async index({ view, request }: HttpContextContract) {
 
     let cuisines = await Cuisine.query().paginate(request.input('page', 1), 2)
 

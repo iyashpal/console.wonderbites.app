@@ -31,7 +31,7 @@ export default class UsersController {
 
     if (image_path) await image_path.moveToDisk('./')
 
-    const user = await User.create({ first_name, last_name, email, password, image_path: image_path!.fileName, address_id, remember_me_token, mobile });
+    const user = await User.create({ first_name, last_name, email, password, image_path: image_path!.fileName, address_id, rememberMeToken: remember_me_token, mobile });
 
     if (user.id) {
       session.flash('user_created', true)
