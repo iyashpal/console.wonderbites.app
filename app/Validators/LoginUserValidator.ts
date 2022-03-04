@@ -2,8 +2,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class LoginUserValidator {
-
-  constructor(protected ctx: HttpContextContract) { }
+  constructor (protected ctx: HttpContextContract) { }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -27,9 +26,9 @@ export default class LoginUserValidator {
   public schema = schema.create({
     email: schema.string({ trim: true }, [
       rules.email(),
-      rules.exists({ table: 'users', column: 'email' })
+      rules.exists({ table: 'users', column: 'email' }),
     ]),
-    password: schema.string({ trim: true })
+    password: schema.string({ trim: true }),
   })
 
   /**
@@ -44,9 +43,9 @@ export default class LoginUserValidator {
    *
    */
   public messages = {
-    'email.required': "Email address is required to login.",
-    'email.email': "Enter a valid email address.",
-    'email.exists': "Email does not exists.",
-    'password.required': "Enter password to login."
+    'email.required': 'Email address is required to login.',
+    'email.email': 'Enter a valid email address.',
+    'email.exists': 'Email does not exists.',
+    'password.required': 'Enter password to login.',
   }
 }

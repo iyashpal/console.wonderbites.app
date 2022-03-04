@@ -2,8 +2,7 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CreateValidator {
-
-  constructor(protected ctx: HttpContextContract) { }
+  constructor (protected ctx: HttpContextContract) { }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -30,9 +29,9 @@ export default class CreateValidator {
     body: schema.string({ trim: true }),
     image_path: schema.file({
       size: '1mb',
-      extnames: ['jpg', 'jpeg', 'png', 'gif']
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
     }),
-    status: schema.number()
+    status: schema.number(),
   })
 
   /**
@@ -47,8 +46,8 @@ export default class CreateValidator {
    *
    */
   public messages = {
-    'name.required': "Name field is required.",
-    'title.required': "Title field is required.",
-    'body.required': 'Testimonial body is required.'
+    'name.required': 'Name field is required.',
+    'title.required': 'Title field is required.',
+    'body.required': 'Testimonial body is required.',
   }
 }

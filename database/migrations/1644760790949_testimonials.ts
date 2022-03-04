@@ -3,16 +3,16 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class Testimonials extends BaseSchema {
   protected tableName = 'testimonials'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
       table.string('name')
-      
+
       table.string('title')
-      
+
       table.text('body').nullable()
-      
+
       table.string('image_path').nullable()
 
       table.integer('status').defaultTo(1)
@@ -25,7 +25,7 @@ export default class Testimonials extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }

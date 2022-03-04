@@ -7,11 +7,13 @@ export default class CartItems extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
+      table.integer('cart_id').unsigned()
+
+      table.integer('product_id').unsigned()
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.integer('cart_id').unsigned()
-      table.integer('product_id').unsigned()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

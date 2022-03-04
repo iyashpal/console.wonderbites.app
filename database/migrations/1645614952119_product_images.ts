@@ -5,14 +5,18 @@ export default class ProductImages extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
+      table.increments('id')
+
+      table.integer('product_id').unsigned()
+        .references('products.id').onDelete('CASCADE')
+
+      table.text('image_path').nullable()
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-       table.increments('id')
-       table.integer('product_id').unsigned()
-        .references('products.id').onDelete('CASCADE')
-      table.text('image_path').nullable()
       table.timestamp('created_at', { useTz: true })
+
       table.timestamp('updated_at', { useTz: true })
     })
   }
