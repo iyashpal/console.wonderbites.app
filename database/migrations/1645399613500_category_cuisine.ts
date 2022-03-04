@@ -16,7 +16,7 @@ export default class CategoryCuisine extends BaseSchema {
 
       table.foreign('cuisine_id').references('cuisines.id').onDelete('CASCADE')
 
-      table.foreign('category_id').references('cateogries.id').onDelete('CASCADE')
+      table.foreign('category_id').references('categories.id').onDelete('CASCADE')
 
       table.unique(['cuisine_id', 'category_id'])
 

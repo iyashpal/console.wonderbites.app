@@ -6,6 +6,9 @@ export default class ProfilesController {
         try {
             const user = await auth.use('web').authenticate()
 
+            console.log(user)
+
+            response.json({})
             
         } catch (error) {
 

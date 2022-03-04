@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Cart from './cart'
+import Cart from './Cart'
 import Product from './Product'
 export default class CartItem extends BaseModel {
   @column({ isPrimary: true })

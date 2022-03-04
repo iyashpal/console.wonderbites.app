@@ -11,7 +11,7 @@ export default class Products extends BaseSchema {
       table.string('name').notNullable()
 
       table.integer('category_id').unsigned()
-        .references('cateogries.id').onDelete('CASCADE')
+        .references('categories.id').onDelete('CASCADE')
       
 
       table.text('short_description').nullable()

@@ -1,29 +1,25 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import Cuisine from 'App/Models/Cuisine'
+import { schema, rules } from "@ioc:Adonis/Core/Validator"
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CuisinesController {
+
+  /**
+   * List all cuisines.
+   * 
+   * @param param0 HttpContextContract 
+   */
   public async index({ response }: HttpContextContract) {
     try {
-      const cuisines = await Cuisine.all()
 
-      
-      cuisines.forEach(async (cuisines) => {
+      const cuisines = await Cuisine.query().preload('categories')
 
-        try {
-          await cuisines.load('categories')  
-        } catch (error) {
-          console.log(error)
-        }
-        
-
-      });
-
-      
       response.status(200).json(cuisines)
 
     } catch (error) {
+
       response.badRequest(error.messages)
+
     }
   }
 
@@ -31,6 +27,7 @@ export default class CuisinesController {
 
   public async store({ request, response }: HttpContextContract) {
     try {
+      
       const validate = await request.validate({
 
         schema: schema.create({
@@ -45,6 +42,7 @@ export default class CuisinesController {
 
         })
       })
+
       const cuisine = await Cuisine.create(validate)
 
 
