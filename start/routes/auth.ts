@@ -10,8 +10,10 @@ Route.group(() => {
   /************************************************************************************
    * User login Routes.
    ************************************************************************************/
-  Route.get('/login', 'Auth/LoginController.show').as('login').middleware('guest');
-  Route.post('/login', 'Auth/LoginController.login').middleware('guest')
+  Route.get('/login', 'Auth/LoginController.show').as('login')
+  Route.post('/login', 'Auth/LoginController.login')
+
+  Route.get('/forgot-password', 'Auth/PasswordResetLinksController.create').as('password.request')
 }).middleware('guest')
 
 Route.group(() => {
