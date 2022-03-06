@@ -1,15 +1,21 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Carts extends BaseSchema {
-  protected tableName = 'carts'
+export default class Notifications extends BaseSchema {
+  protected tableName = 'notifications'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('RESTRICT')
+      table.string('type').notNullable()
 
-      table.string('ip_address').nullable()
+      table.string('notifiable_type').notNullable()
+
+      table.bigInteger('notifiable_id').unsigned().notNullable()
+
+      table.jsonb('data').notNullable()
+
+      table.timestamp('read_at', { useTz: true }).nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

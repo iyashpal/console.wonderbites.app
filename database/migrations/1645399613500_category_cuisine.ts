@@ -7,13 +7,9 @@ export default class CategoryCuisine extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.integer('cuisine_id').unsigned().index("cuisine_id")
+      table.integer('cuisine_id').unsigned().index('cuisine_id').references('cuisines.id').onDelete('CASCADE')
 
-      table.integer('category_id').unsigned().index("category_id")
-
-      table.foreign('cuisine_id').references('cuisines.id').onDelete('CASCADE')
-
-      table.foreign('category_id').references('categories.id').onDelete('CASCADE')
+      table.integer('category_id').unsigned().index('category_id').references('categories.id').onDelete('CASCADE')
 
       table.unique(['cuisine_id', 'category_id'])
 

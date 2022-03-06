@@ -7,20 +7,19 @@ export default class Products extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
+
       table.string('name').notNullable()
-
-      table.integer('category_id').unsigned()
-        .references('categories.id').onDelete('CASCADE')
-
-      table.text('short_description').nullable()
 
       table.text('description').nullable()
 
+      table.text('short_description').nullable()
+
       table.string('calories').nullable()
 
-      table.string('price').notNullable()
-
       table.text('image_path').nullable()
+
+      table.string('price').notNullable().defaultTo(0)
 
       table.integer('status').defaultTo(1)
 
