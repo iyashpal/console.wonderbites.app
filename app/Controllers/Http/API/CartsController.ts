@@ -1,31 +1,27 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import Cart from 'App/Models/Cart'
-import CartItem from 'App/Models/CartItem'
 import Product from 'App/Models/Product'
+import CartItem from 'App/Models/CartItem'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 //import ProductImages from 'App/Models/ProductImage'
 export default class CartsController {
-  public async index({ response }: HttpContextContract) {
+  public async index ({ response }: HttpContextContract) {
     try {
-
       // const id = request.input('id');
       const cart = await Cart.all()
       response.status(200).json(cart)
-
     } catch (error) {
       response.badRequest(error.messages)
     }
   }
 
-  public async create({
+  public async create ({
 
   }: HttpContextContract) { }
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store ({ request, response }: HttpContextContract) {
     try {
-
       const validate = await request.validate({
 
         schema: schema.create({
@@ -60,11 +56,11 @@ export default class CartsController {
 
   }
 
-  public async show({ }: HttpContextContract) {
+  public async show ({ }: HttpContextContract) {
 
   }
-  
-  public async getcart({ params, response }: HttpContextContract) {
+
+  public async getcart ({params,response }: HttpContextContract) {
     try {
       const device_token = params.device_token;
       const cart = await Cart.findBy('device_token', device_token)
@@ -73,7 +69,7 @@ export default class CartsController {
         const cart_items = await CartItem
           .query()
           .where('cart_id', cart_id);
-        
+
         const product_ids: number[] = [];
 
         cart_items.forEach((cartitem) => {
@@ -105,11 +101,11 @@ export default class CartsController {
 
   }
 
-  public async edit({ }: HttpContextContract) { }
+  public async edit ({ }: HttpContextContract) { }
 
-  public async update({ }: HttpContextContract) { }
+  public async update ({ }: HttpContextContract) { }
 
-  public async destroy({ }: HttpContextContract) { }
+  public async destroy ({ }: HttpContextContract) { }
 
 
 

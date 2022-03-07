@@ -1,65 +1,56 @@
 import Cuisine from 'App/Models/Cuisine'
-//import { schema, rules } from "@ioc:Adonis/Core/Validator"
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CuisinesController {
-
   /**
-   * List all cuisines.
+   * Display a listing of the resource.
    * 
    * @param param0 HttpContextContract 
    */
-  public async index({ response }: HttpContextContract) {
+  public async index ({ response }: HttpContextContract) {
     try {
-
       const cuisines = await Cuisine.query().preload('categories')
 
       response.status(200).json(cuisines)
-
     } catch (error) {
-
       response.badRequest(error.messages)
-
     }
   }
 
-  public async create({ }: HttpContextContract) { }
+  /**
+   * Store a newly created resource in storage.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async store ({ request, response }: HttpContextContract) {
+    try {
+      const validate = await request.validate({
 
-  // public async store({ request, response }: HttpContextContract) {
-  //   try {
+        schema: schema.create({
 
-  //     const validate = await request.validate({
+          name: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-  //       schema: schema.create({
+          description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-  //         name: schema.string({ trim: true }, [rules.maxLength(255)]),
+          status: schema.number.optional(),
 
-  //         description: schema.string({ trim: true }, [rules.maxLength(255)]),
+        }),
+      })
 
-  //         image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
+      const cuisine = await Cuisine.create(validate)
 
-  //         status: schema.number.optional()
+      response.status(200).json(cuisine)
+    } catch (error) {
+      response.badRequest(error.messages)
+    }
+  }
 
-  //       })
-  //     })
+  public async show ({ }: HttpContextContract) { }
 
-  //     const cuisine = await Cuisine.create(validate)
+  public async edit ({ }: HttpContextContract) { }
 
+  public async update ({ }: HttpContextContract) { }
 
-  //     response.status(200).json(cuisine)
-
-  //   } catch (error) {
-
-  //     response.badRequest(error.messages)
-
-  //   }
-  // }
-
-  public async show({ }: HttpContextContract) { }
-
-  public async edit({ }: HttpContextContract) { }
-
-  public async update({ }: HttpContextContract) { }
-
-  public async destroy({ }: HttpContextContract) { }
+  public async destroy ({ }: HttpContextContract) { }
 }

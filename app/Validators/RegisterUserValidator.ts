@@ -2,7 +2,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class RegisterUserValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor (protected ctx: HttpContextContract) { }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -31,18 +31,18 @@ export default class RegisterUserValidator {
 
     mobile: schema.string({ trim: true }, [
       rules.mobile(),
-      rules.unique({ table: 'users', column: "mobile" })
+      rules.unique({ table: 'users', column: 'mobile' }),
     ]),
 
     email: schema.string({ trim: true }, [
       rules.email(),
       rules.maxLength(255),
-      rules.unique({ table: 'users', column: "email" })
+      rules.unique({ table: 'users', column: 'email' }),
     ]),
 
     password: schema.string({ trim: true }, [
-      rules.confirmed()
-    ])
+      rules.confirmed(),
+    ]),
 
   })
 
@@ -58,16 +58,16 @@ export default class RegisterUserValidator {
    *
    */
   public messages = {
-    "first_name.required": "First name is required.",
-    "last_name.required": "Last name is required.",
-    "mobile.required": "Mobile no. is required.",
-    "mobile.mobile": "Enter a correct mobile no.",
-    "mobile.unique": "The mobile no. already registered.",
-    "email.required": "Email address is required.",
-    "email.email": "Enter a valid email.",
-    "email.max_length": "Email field length shouldn't exceed 255 characters.",
-    "email.unique": "The email address already taken.",
-    "password.required": "Choose a password.",
-    "password.confirmed": "Password didn't match."
+    'first_name.required': 'First name is required.',
+    'last_name.required': 'Last name is required.',
+    'mobile.required': 'Mobile no. is required.',
+    'mobile.mobile': 'Enter a correct mobile no.',
+    'mobile.unique': 'The mobile no. already registered.',
+    'email.required': 'Email address is required.',
+    'email.email': 'Enter a valid email.',
+    'email.max_length': 'Email field length shouldn\'t exceed 255 characters.',
+    'email.unique': 'The email address already taken.',
+    'password.required': 'Choose a password.',
+    'password.confirmed': 'Password didn\'t match.',
   }
 }
