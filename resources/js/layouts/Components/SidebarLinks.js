@@ -24,4 +24,30 @@ export default [
         label: "Users",
         icon: "group"
     },
+    {
+        url: "/",
+        label: "Products",
+        icon: "message"
+    },
+    {
+        url: "/",
+        label: "Feedbacks",
+        icon: "thumb-up-alt"
+    },
+    {
+        url: "/",
+        label: "Reviews",
+        icon: "reviews"
+    },
+    {
+        url: "/",
+        label: "Orders",
+        icon: "menu-book"
+    },
+    {
+        url: "/",
+        label: "Coupons",
+        icon: "local-offer"
+    },
+
 ]
