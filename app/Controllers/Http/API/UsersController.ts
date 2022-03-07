@@ -33,8 +33,8 @@ export default class UsersController {
     }
 
     await user.merge({
-      first_name: request.input('first_name'),
-      last_name: request.input('last_name'),
+      first_name: request.input('first_name')? request.input('first_name') : user.first_name ,
+      last_name: request.input('last_name')? request.input('last_name') : user.last_name ,
       image_path: image ? image!.fileName : user.image_path,
     }).save().then((user) => response.status(200).json(user))
   }
