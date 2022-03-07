@@ -1,12 +1,10 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class Addresses extends BaseSchema {
-  
   protected tableName = 'addresses'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
-
       table.increments('id')
 
       table.integer('user_id').unsigned()
@@ -22,7 +20,7 @@ export default class Addresses extends BaseSchema {
 
       table.string('phone').notNullable()
 
-      table.string('type').notNullable().comment("Could be 'Home', 'Office', 'Other'")
+      table.string('type').notNullable().comment('Could be \'Home\', \'Office\', \'Other\'')
 
       table.integer('status').nullable().defaultTo(0)
 
@@ -34,7 +32,7 @@ export default class Addresses extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }

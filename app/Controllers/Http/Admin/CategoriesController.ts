@@ -1,11 +1,16 @@
+import Category from 'App/Models/Category'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
-import Category from 'App/Models/Category'
 
 export default class CategoriesController {
-  public async index({ view, request }: HttpContextContract) {
-
+  /**
+   * Display a listing of the resource.
+   * 
+   * @param param0 HttpContextContract
+   * @returns ViewRendererContract
+   */
+  public async index ({ view, request }: HttpContextContract) {
     let categories = await Category.query().paginate(request.input('page', 1), 2)
 
     categories.baseUrl(request.url())
@@ -13,61 +18,93 @@ export default class CategoriesController {
     return view.render('app/categories/index', { categories })
   }
 
-  public async create({ view }: HttpContextContract) {
-
+  /**
+   * Show the form for creating a new resource.
+   * 
+   * @param param0 HttpContextContract 
+   * @returns ViewRendererContract
+   */
+  public async create ({ view }: HttpContextContract) {
     return view.render('app/categories/create')
-
   }
 
-  public async store({ request, response, session }: HttpContextContract) {
-    const { parent, name, description, image_path, status } = await request.validate(CreateValidator)
-    if (image_path)
-      await image_path.moveToDisk('./')
+  /**
+   * Store a newly created resource in storage.
+   * 
+   * @param param0 HttpContextContract 
+   */
+  public async store ({ request, response, session }: HttpContextContract) {
+    const data = await request.validate(CreateValidator)
 
-    const category = await Category.create({ parent, name, description, image_path: image_path!.fileName, status })
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+    }
 
-    if (category.id)
-      session.flash('category_created', true)
+    const category = await Category.create({ ...data, image_path: data.image_path!.fileName })
+      .then((category) => {
+        session.flash('category_created', category.id)
+        return category
+      })
 
     response.redirect().toRoute('categories.show', { id: category.id })
   }
 
-  public async show({ view, params: { id } }: HttpContextContract) {
-
+  /**
+   * Display the specified resource.
+   * 
+   * @param param0 {HttpContextContract} 
+   * @returns ViewRendererContract
+   */
+  public async show ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
 
     return view.render('app/categories/show', { category })
-
   }
 
-  public async edit({ view, params: { id } }: HttpContextContract) {
+  /**
+   * Show the form for editing the specified resource.
+   * 
+   * @param param0 HttpContextContract 
+   * @returns ViewRendererContract
+   */
+  public async edit ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
 
     return view.render('app/categories/edit', { category })
   }
 
-  public async update({ request, response, params, session }: HttpContextContract) {
-
+  /**
+   * Update the specified resource in storage.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async update ({ request, response, params, session }: HttpContextContract) {
     const category = await Category.findOrFail(params.id)
 
-    const { parent, name, description, image_path, status } = await request.validate(UpdateValidator)
+    const data = await request.validate(UpdateValidator)
 
-    if (image_path)
-      await image_path.moveToDisk('./')
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+    }
 
-    await category.merge({ parent, name, description, image_path: image_path ? image_path.fileName : category.image_path, status }).save().then(() => {
-      session.flash('category_created', true)
-    })
+    await category.merge({ ...data, image_path: data.image_path ? data.image_path.fileName : category.image_path })
+      .save().then(() => session.flash('category_created', true))
+
     response.redirect().toRoute('categories.show', { id: category.id })
   }
 
-
-  public async destroy({ params, response, session }: HttpContextContract) {
+  /**
+   * Remove the specified resource from storage.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async destroy ({ params, response, session }: HttpContextContract) {
     const category = await Category.findOrFail(params.id)
 
     await category.delete().then(() => {
       session.flash('category_deleted', true)
+
+      response.redirect().toRoute('categories.index')
     })
-    response.redirect().toRoute('categories.index')
   }
 }

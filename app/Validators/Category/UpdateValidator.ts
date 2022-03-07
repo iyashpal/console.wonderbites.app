@@ -2,7 +2,7 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UpdateValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor (protected ctx: HttpContextContract) { }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -29,7 +29,7 @@ export default class UpdateValidator {
     description: schema.string.optional({ trim: true }),
     image_path: schema.file.optional({
       size: '1mb',
-      extnames: ['jpg', 'jpeg', 'png', 'gif']
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
     }),
     status: schema.number(),
   })

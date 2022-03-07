@@ -7,20 +7,18 @@ export default class Carts extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('RESTRICT')
+
+      table.string('ip_address').nullable()
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.integer('product_id').unsigned()
-      table.integer('user_id').nullable()
-        .references('products.id').onDelete('CASCADE')
-      table.integer('qty').defaultTo(1)
-      table.string('price').notNullable()
-      table.integer('status').defaultTo(1)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
   }
-   
+
   public async down () {
     this.schema.dropTable(this.tableName)
   }

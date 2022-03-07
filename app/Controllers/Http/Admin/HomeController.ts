@@ -1,11 +1,13 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class HomeController {
-
-
-    public show({ view }: HttpContextContract) {
-
-        return view.render('welcome')
-
-    }
+  /**
+   * Display a listing of the resource.
+   * 
+   * @param param0 HttpContextContract
+   * @returns ViewRendererContract
+   */
+  public async show ({ view }: HttpContextContract) {
+    return view.render('welcome')
+  }
 }

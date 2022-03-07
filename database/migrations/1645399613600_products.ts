@@ -3,26 +3,23 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class Products extends BaseSchema {
   protected tableName = 'products'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      
       table.increments('id')
+
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
 
       table.string('name').notNullable()
 
-      table.integer('category_id').unsigned()
-        .references('categories.id').onDelete('CASCADE')
-      
+      table.text('description').nullable()
 
       table.text('short_description').nullable()
 
-      table.text('description').nullable()
-
       table.string('calories').nullable()
 
-      table.string('price').notNullable()
-
       table.text('image_path').nullable()
+
+      table.string('price').notNullable().defaultTo(0)
 
       table.integer('status').defaultTo(1)
 
@@ -31,13 +28,10 @@ export default class Products extends BaseSchema {
        */
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
-
     })
   }
 
-  public async down() {
-
+  public async down () {
     this.schema.dropTable(this.tableName)
-
   }
 }

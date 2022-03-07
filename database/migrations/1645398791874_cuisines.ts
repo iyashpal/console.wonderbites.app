@@ -3,10 +3,11 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class Cuisines extends BaseSchema {
   protected tableName = 'cuisines'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
-
       table.increments('id')
+
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
 
       table.string('name').notNullable()
 
@@ -15,7 +16,7 @@ export default class Cuisines extends BaseSchema {
       table.text('image_path').nullable()
 
       table.integer('status').defaultTo(1)
-      
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
@@ -24,7 +25,7 @@ export default class Cuisines extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }
