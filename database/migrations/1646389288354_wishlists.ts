@@ -7,15 +7,13 @@ export default class Wishlists extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.integer('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 
       table.string('ip_address').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-       table.integer('user_id').notNullable()
-       table.integer('product_id').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

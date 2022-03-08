@@ -13,7 +13,7 @@ Route.group(() => {
   Route.get('/login', 'Auth/LoginController.show').as('login')
   Route.post('/login', 'Auth/LoginController.login')
 
-  Route.get('/forgot-password', 'Auth/PasswordResetLinksController.create').as('password.request')
+  Route.get('/forgot-password', 'Auth/PasswordResetLinkController.create').as('password.request')
 }).middleware('guest')
 
 Route.group(() => {
