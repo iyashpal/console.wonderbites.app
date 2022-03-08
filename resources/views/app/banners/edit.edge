@@ -1,0 +1,36 @@
+@layout('layouts/app')
+@set('title', "Edit Banner")
+@section('content')
+<form action="{{ route('banners.update', {id: Banner.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
+    {{ csrfField() }}
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-6">
+                    @!form.label({for:'title', label: "Title", required: true})
+                    @!form.input({id: "title", value: flashMessages.get('title', banner.title), name: "title", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.inputError({error: 'errors.title'})
+                </div>
+               <div class="col-span-6">
+                    @!form.label({for:'type_banner', label: "Yype banner", required: true})
+                    @!form.input({id: "type_banner", value: flashMessages.get('type', banner.type_banner), name: "type_banner", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.inputError({error: 'errors.banner'})
+                </div>
+               <div class="col-span-6">
+                    @!form.label({for:'data', label: "Data", required: true})
+                    <textarea type="text" name="data" id="data" autocomplete="data" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('data', banner.data) }}</textarea>
+                    @!form.inputError({error: 'errors.data'})
+                </div>
+
+            </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-4 sm:px-6">
+            <div class="flex justify-end">
+                <a href="{{ route('banners.index') }}" type="button" class="tw:btn tw:btn-default">Cancel</a>
+                <button type="submit" class="ml-3 tw:btn tw:btn-secondary">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+@endsection

@@ -11,7 +11,7 @@ export default class Banners extends BaseSchema {
 
       table.string('title')
 
-      table.string('type')
+      table.string('type_banner')
 
       table.jsonb('data')
 
