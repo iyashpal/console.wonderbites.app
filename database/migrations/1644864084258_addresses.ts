@@ -20,7 +20,7 @@ export default class Addresses extends BaseSchema {
 
       table.string('phone').notNullable()
 
-      table.string('type').notNullable().comment("Could be 'Home', 'Office', 'Other'")
+      table.string('type').notNullable().comment('Could be \'Home\', \'Office\', \'Other\'')
 
       table.integer('status').nullable().defaultTo(0)
 

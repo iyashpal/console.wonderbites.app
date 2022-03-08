@@ -1,16 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class CartItems extends BaseSchema {
-  protected tableName = 'cart_items'
+export default class CategoryProduct extends BaseSchema {
+  protected tableName = 'category_product'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-
-      table.integer('cart_id').unsigned()
-
-      table.integer('product_id').unsigned()
-
+      table.bigInteger('category_id').unsigned().notNullable().references('categories.id').onDelete('CASCADE')
+      table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

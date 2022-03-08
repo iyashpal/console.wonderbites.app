@@ -1,16 +1,19 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Wishlists extends BaseSchema {
-  protected tableName = 'wishlists'
+export default class Banners extends BaseSchema {
+  protected tableName = 'banners'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.integer('product_id').unsigned()
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
 
-      table.integer('user_id').nullable()
-        .references('products.id').onDelete('CASCADE')
+      table.string('title')
+
+      table.string('type')
+
+      table.jsonb('data')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

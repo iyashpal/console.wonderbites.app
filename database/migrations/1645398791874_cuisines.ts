@@ -7,6 +7,8 @@ export default class Cuisines extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
+
       table.string('name').notNullable()
 
       table.text('description').nullable()
