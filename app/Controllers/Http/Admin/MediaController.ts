@@ -46,7 +46,7 @@ export default class MediaController {
         return media
       })
 
-    response.redirect().toRoute('products.show', { id: media.id })
+    response.redirect().toRoute('media.show', { id: media.id })
   }
 
   /**
