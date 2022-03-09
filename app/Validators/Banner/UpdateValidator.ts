@@ -25,7 +25,7 @@ export default class UpdateValidator {
    */
   public schema = schema.create({
     title: schema.string({ trim: true }),
-    type_banner: schema.string({ trim: true }),
+    type: schema.string({ trim: true }),
     data: schema.string({ trim: true }),
   })
 
@@ -42,7 +42,7 @@ export default class UpdateValidator {
    */
   public messages = {
     'title.required': 'Title field is required.',
-    'type_banner.required': 'Type Banner field is required.',
+    'type.required': 'Type Banner field is required.',
     'data.required': 'Data  is required.',
     //'image_path.required': 'Image is required.',
   }

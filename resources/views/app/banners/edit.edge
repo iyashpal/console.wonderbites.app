@@ -1,7 +1,7 @@
 @layout('layouts/app')
 @set('title', "Edit Banner")
 @section('content')
-<form action="{{ route('banners.update', {id: Banner.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('banners.update', {id: banner.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
 
     <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -13,8 +13,8 @@
                     @!form.inputError({error: 'errors.title'})
                 </div>
                <div class="col-span-6">
-                    @!form.label({for:'type_banner', label: "Yype banner", required: true})
-                    @!form.input({id: "type_banner", value: flashMessages.get('type', banner.type_banner), name: "type_banner", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.label({for:'type', label: "Type", required: true})
+                    @!form.input({id: "type", value: flashMessages.get('type', banner.type), name: "type", type: "text", className: "mt-1 block w-full", autofocus: true})
                     @!form.inputError({error: 'errors.banner'})
                 </div>
                <div class="col-span-6">

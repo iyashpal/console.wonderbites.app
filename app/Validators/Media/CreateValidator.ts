@@ -24,9 +24,15 @@ export default class CreateValidator {
    *    ```
    */
   public schema = schema.create({
+    object_id: schema.number.optional(),
+    object_type: schema.string({ trim: true }),
     title: schema.string({ trim: true }),
-    type: schema.string({ trim: true }),
-    data: schema.string({ trim: true }),
+    caption: schema.string({ trim: true }),
+    image_path: schema.file({
+      size: '1mb',
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
+    }),
+    //status: schema.number(),
   })
 
   /**
@@ -41,8 +47,11 @@ export default class CreateValidator {
    *
    */
   public messages = {
-    'title.required': 'Title field is required.',
-    'type.required': 'Type Banner field is required.',
-    'data.required': 'Data is required.',
+    'object_id.required': 'Object ID field is required.',
+    'object_type.required': 'Object type field is required.',
+    'title.required': 'Title  is required.',
+    'caption.required': 'Caption  is required.',
+    'image_path.required' : 'Image is required.',
+
   }
 }

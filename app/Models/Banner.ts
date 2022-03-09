@@ -9,7 +9,7 @@ export default class Banner extends BaseModel {
   public title: string
 
   @column()
-  public type_banner: string
+  public type: string
 
   @column()
   public data: string

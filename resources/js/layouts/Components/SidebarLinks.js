@@ -35,6 +35,11 @@ export default [
     icon: 'dinner-dining',
   },
   {
+    url: '/media',
+    label: 'Media',
+    icon: 'comment',
+  },
+  {
     url: '/users',
     label: 'Users',
     icon: 'group',

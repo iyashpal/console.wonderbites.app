@@ -1,9 +1,9 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Banner from 'App/Models/Banner'
+import Media from 'App/Models/Media'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CreateValidator from 'App/Validators/Banner/CreateValidator'
-import UpdateValidator from 'App/Validators/Banner/UpdateValidator'
-export default class BannersController {
+import CreateValidator from 'App/Validators/Media/CreateValidator'
+import UpdateValidator from 'App/Validators/Media/UpdateValidator'
+export default class MediaController {
   /**
    * Display a listing of resources.
    * 
@@ -11,11 +11,11 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let banners = await Banner.query().paginate(request.input('page', 1), 2)
+    let media = await Media.query().paginate(request.input('page', 1), 2)
 
-    banners.baseUrl(request.url())
+    media.baseUrl(request.url())
 
-    return view.render('app/banners/index', { banners })
+    return view.render('app/media/index', { media })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/banners/create')
+    return view.render('app/media/create')
   }
 
   /**
@@ -35,14 +35,18 @@ export default class BannersController {
    */
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
-    console.log(data)
-    const banner = await Banner.create(data)
-      .then((banner) => {
-        session.flash('banner_created', banner.id)
-        return banner
+
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+    }
+
+    const media = await Media.create({ ...data, image_path: data.image_path!.fileName })
+      .then((media) => {
+        session.flash('media_created', media.id)
+        return media
       })
 
-    response.redirect().toRoute('banners.show', { id: banner.id })
+    response.redirect().toRoute('products.show', { id: media.id })
   }
 
   /**
@@ -52,9 +56,9 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
-    const banner = await Banner.findOrFail(id)
+    const media = await Media.findOrFail(id)
 
-    return view.render('app/banners/show', { banner })
+    return view.render('app/media/show', { media })
   }
 
   /**
@@ -64,9 +68,9 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async edit ({ view, params }: HttpContextContract) {
-    const banner = await Banner.findOrFail(params.id)
+    const media = await Media.findOrFail(params.id)
 
-    return view.render('app/banners/edit', { banner })
+    return view.render('app/media/edit', { media })
   }
 
   /**
@@ -75,12 +79,19 @@ export default class BannersController {
    * @param param0 HttpContextContract
    */
   public async update ({ request, response, params, session }: HttpContextContract) {
-    const banner = await Banner.findOrFail(params.id)
+    const media = await Media.findOrFail(params.id)
 
     const data = await request.validate(UpdateValidator)
-    await banner.merge(data).save().then(() => session.flash('banner_updated', true))
 
-    response.redirect().toRoute('banners.show', { id: banner.id })
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+    }
+
+    await media.merge({
+      ...data, image_path: data.image_path ? data.image_path.fileName : media.image_path,
+    }).save().then(() => session.flash('media_updated', true))
+
+    response.redirect().toRoute('media.show', { id: media.id })
   }
 
   /**
@@ -89,10 +100,12 @@ export default class BannersController {
    * @param param0 HttpContextContract
    */
   public async destroy ({ params: { id }, response, session }: HttpContextContract) {
-    const banner = await Banner.findOrFail(id)
-    await banner.delete().then(() => {
-      session.flash('banner_deleted', true)
-      response.redirect().toRoute('banners.index')
+    const media = await Media.findOrFail(id)
+
+    await media.delete().then(() => {
+      session.flash('media_deleted', true)
+
+      response.redirect().toRoute('media.index')
     })
   }
 }

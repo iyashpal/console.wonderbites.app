@@ -26,7 +26,7 @@
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Type</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ banner.type_banner }}</dd>
+                <dd class="mt-1 text-sm text-gray-900">{{ banner.type }}</dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Data</dt>
@@ -40,7 +40,7 @@
     </div>
     <div class="px-4 py-4 sm:px-6">
         <div class="flex justify-end items-center">
-            <a class="tw:btn tw:btn-primary mr-2" href="{{ route('banner.edit', {id: banner.id}) }}">
+            <a class="tw:btn tw:btn-primary mr-2" href="{{ route('banners.edit', {id: banner.id}) }}">
                 <icon name="edit" class="w-5 h-5 mr-1"></icon>Edit
             </a>
             <form action="{{ route('banners.destroy', {id: banner.id}, {qs: {_method: 'delete'}}) }}" method="post">
