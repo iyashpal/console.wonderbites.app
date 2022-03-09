@@ -18,8 +18,6 @@ Route.group(() => {
 
     Route.resource('cuisines', 'API/CuisinesController')
 
-    Route.resource('categories', 'API/CategoriesController')
-
     Route.resource('products', 'API/ProductsController')
 
     Route.resource('productimages', 'API/ProductImagesController')
@@ -32,7 +30,7 @@ Route.group(() => {
 
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   }).middleware('auth_api')
-
+  Route.resource('categories', 'API/CategoriesController')
   Route.get('about', 'API/HomeController.about').as('about')
 
   Route.get('terms', 'API/HomeController.terms').as('terms')
