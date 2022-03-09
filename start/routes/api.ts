@@ -31,6 +31,7 @@ Route.group(() => {
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   }).middleware('auth_api')
   Route.resource('categories', 'API/CategoriesController')
+  Route.resource('banners', 'API/BannersController')
   Route.get('about', 'API/HomeController.about').as('about')
 
   Route.get('terms', 'API/HomeController.terms').as('terms')
