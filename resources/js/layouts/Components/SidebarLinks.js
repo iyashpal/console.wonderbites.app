@@ -35,8 +35,18 @@ export default [
     icon: 'dinner-dining',
   },
   {
+    url: '/review',
+    label: 'Review',
+    icon: 'dinner-dining',
+  },
+  {
     url: '/media',
     label: 'Media',
+    icon: 'comment',
+  },
+  {
+    url: '/orders',
+    label: 'Orders',
     icon: 'comment',
   },
   {

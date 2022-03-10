@@ -1,0 +1,55 @@
+@layout('layouts/app')
+
+@set('title',review.title)
+
+@section('actions')
+<a class="tw:btn tw:btn-secondary" href="{{ route('review.index') }}">
+    <icon name="arrow-left" class="w-6 h-6 mr-1"></icon> Back
+</a>
+@end
+
+
+@section('content')
+
+@!alerts.success({show: flashMessages.get('review_created'), icon: 'check-circle', message: "Review successfully saved!", className: "mb-4"})
+@!alerts.success({show: flashMessages.get('review_updated'), icon: 'check-circle', message: "Review successfully updated!", className: "mb-4"})
+
+<div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+    <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Review Details</h3>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Title</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ review.title }}</dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Rating</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ review.rating }}</dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Body</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ review.body }}</dd>
+                    
+                </dd>
+            </div>
+            
+           
+        </dl>
+    </div>
+    <div class="px-4 py-4 sm:px-6">
+        <div class="flex justify-end items-center">
+            <a class="tw:btn tw:btn-primary mr-2" href="{{ route('review.edit', {id: review.id}) }}">
+                <icon name="edit" class="w-5 h-5 mr-1"></icon>Edit
+            </a>
+            <form action="{{ route('review.destroy', {id: review.id}, {qs: {_method: 'delete'}}) }}" method="post">
+                {{ csrfField() }}
+                <button class="tw:btn tw:btn-danger">
+                    <icon name="delete" class="w-5 h-5 mr-1"></icon>Delete
+                </button>
+            </form>
+         </div>
+    </div>
+</div>
+@endsection
