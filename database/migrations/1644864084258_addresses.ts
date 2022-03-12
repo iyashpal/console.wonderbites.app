@@ -7,8 +7,7 @@ export default class Addresses extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.integer('user_id').unsigned()
-        .references('users.id').notNullable().onDelete('CASCADE')
+      table.integer('user_id').unsigned().references('users.id').notNullable().onDelete('CASCADE')
 
       table.string('first_name').notNullable()
 
