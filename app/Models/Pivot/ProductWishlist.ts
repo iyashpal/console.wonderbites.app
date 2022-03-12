@@ -1,18 +1,23 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import User from './User'
-export default class Wishlist extends BaseModel {
+import Product from '../Product'
+import Wishlist from '../Wishlist'
+
+export default class ProductWishlist extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public userId: number
+  public productId: number
+
+  @belongsTo(() => Product)
+  public product: BelongsTo<typeof Product>
 
   @column()
-  public ipAddress: string
+  public wishlistId: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  @belongsTo(() => Wishlist)
+  public wishlist: BelongsTo<typeof Wishlist>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

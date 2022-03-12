@@ -26,6 +26,7 @@ export default class UsersSchema extends BaseSchema {
       table.integer('status').defaultTo(1)
 
       table.string('language').defaultTo('EN')
+
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ProductWishlist from 'App/Models/ProductWishlist'
+import ProductWishlist from 'App/Models/Pivot/ProductWishlist'
 //import { schema, rules } from "@ioc:Adonis/Core/Validator"
 import Wishlist from 'App/Models/Wishlist'
 export default class WishlistsController {

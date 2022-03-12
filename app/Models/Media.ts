@@ -1,21 +1,28 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 
 export default class Media extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
   @column()
-  public user_id: number
+  public userId: number
+
   @column()
-  public object_id: number
+  public objectId: number
+
   @column()
-  public object_type: string
+  public objectType: string
+
   @column()
   public title: string
+
   @column()
   public caption: string
+
   @column()
-  public image_path: string
+  public imagePath: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

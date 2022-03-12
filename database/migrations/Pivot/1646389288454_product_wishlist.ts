@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class ProductWishlists extends BaseSchema {
-  protected tableName = 'product_wishlists'
+export default class ProductWishlist extends BaseSchema {
+  protected tableName = 'product_wishlist'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {

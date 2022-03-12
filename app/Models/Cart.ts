@@ -1,12 +1,13 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-  
+
   @column()
-  public user_id: number
+  public userId: number
+
   @column()
   public qty: number
 
@@ -17,12 +18,11 @@ export default class Cart extends BaseModel {
   public status: number
 
   @column()
-  public device_token: string
+  public ipAddress: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-  
 }

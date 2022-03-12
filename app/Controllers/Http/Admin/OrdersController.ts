@@ -1,8 +1,8 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Orders from 'App/Models/Orders'
-import User from 'App/Models/User'
 //import User from 'App/Models/User'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Orders from 'App/Models/Order'
+import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/Orders/CreateValidator'
 import UpdateValidator from 'App/Validators/Orders/UpdateValidator'
 export default class OrdersController {

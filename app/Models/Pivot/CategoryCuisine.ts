@@ -1,18 +1,17 @@
-import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Cuisine from './Cuisine'
-import Category from './Category'
+import { DateTime } from 'luxon'
+import Category from '../Category'
+import Cuisine from '../Cuisine'
 
 export default class CategoryCuisine extends BaseModel {
-
   @column()
   public id: number
 
   @column()
-  public cuisine_id: number
+  public cuisineId: number
 
   @column()
-  public category_id: number
+  public categoryId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -23,8 +22,6 @@ export default class CategoryCuisine extends BaseModel {
   @belongsTo(() => Cuisine)
   public cuisine: BelongsTo<typeof Cuisine>
 
-
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>
-
 }

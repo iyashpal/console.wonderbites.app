@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 import Category from './Category'
 
 export default class Product extends BaseModel {
@@ -10,13 +10,13 @@ export default class Product extends BaseModel {
   public name: string
 
   @column()
-  public category_id: number
-
-  @column()
-  public short_description: string
+  public userId: number
 
   @column()
   public description: string
+
+  @column()
+  public shortDescription: string
 
   @column()
   public calories: string
@@ -25,7 +25,7 @@ export default class Product extends BaseModel {
   public price: string
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column()
   public status: number
@@ -35,6 +35,9 @@ export default class Product extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @column.dateTime()
+  public deletedAt: DateTime
 
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>

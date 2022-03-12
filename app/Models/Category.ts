@@ -1,10 +1,13 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public type: string
 
   @column()
   public parent: number
@@ -16,7 +19,7 @@ export default class Category extends BaseModel {
   public description: string
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column()
   public status: number

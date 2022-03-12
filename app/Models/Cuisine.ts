@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 import Category from './Category'
 
 export default class Cuisine extends BaseModel {
@@ -13,7 +13,7 @@ export default class Cuisine extends BaseModel {
   public description: string
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column()
   public status: number
