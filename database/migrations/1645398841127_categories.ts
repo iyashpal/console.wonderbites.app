@@ -9,6 +9,8 @@ export default class Categories extends BaseSchema {
 
       table.bigInteger('user_id').nullable().references('users.id').onDelete('SET NULL')
 
+      table.string('type').defaultTo('product')
+
       table.bigInteger('parent').nullable().defaultTo(0)
 
       table.string('name').notNullable()

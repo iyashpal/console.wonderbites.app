@@ -11,7 +11,7 @@ export default class CartIngridient extends BaseSchema {
 
       table.bigInteger('ingridient_id').unsigned().notNullable().references('ingridients.id').onDelete('CASCADE')
 
-      table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
+      table.bigInteger('cart_product_id').unsigned().notNullable().references('cart_product.id').onDelete('CASCADE')
 
       table.integer('qty').notNullable().defaultTo(1)
 
