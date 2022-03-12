@@ -17,24 +17,19 @@ Route.group(() => {
     Route.resource('addresses', 'API/Profile/AddressesController')
 
     Route.resource('cuisines', 'API/CuisinesController')
-
-    Route.resource('categories', 'API/CategoriesController')
-
-    Route.resource('products', 'API/ProductsController')
-
-    Route.resource('productimages', 'API/ProductImagesController')
-
-    Route.get('getcart', 'API/CartsController.getcart').as('getcart')
-
+    Route.resource('wishlists', 'API/WishlistsController')
     //Route.resource('cart', 'API/CartsController');
 
     //Route.get('/product/{id}', "API/UsersController.show");
 
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   }).middleware('auth_api')
-
+  Route.resource('categories', 'API/CategoriesController').as('categories')
+  Route.resource('banners', 'API/BannersController')
   Route.get('about', 'API/HomeController.about').as('about')
-
+  Route.resource('products', 'API/ProductsController')
+  Route.resource('productimages', 'API/ProductImagesController')
+  Route.get('getcart', 'API/CartsController.getcart').as('getcart')
   Route.get('terms', 'API/HomeController.terms').as('terms')
 
   Route.get('privacy_policy', 'API/HomeController.privacy_policy').as('privacy_policy')
