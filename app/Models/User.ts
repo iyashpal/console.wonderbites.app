@@ -1,7 +1,8 @@
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Address from './Address'
+import Notification from './Notification'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -28,6 +29,9 @@ export default class User extends BaseModel {
   @column()
   public addressId: Number
 
+  @hasOne(() => Address)
+  public address: HasOne<typeof Address>
+
   @column()
   public rememberMeToken?: string
 
@@ -36,6 +40,15 @@ export default class User extends BaseModel {
 
   @column()
   public language: string
+
+  @hasMany(() => Address)
+  public addresses: HasMany<typeof Address>
+
+  @hasMany(() => Notification, {
+    foreignKey: 'notifiableId',
+    onQuery: query => query.where('notifiable_type', 'User'),
+  })
+  public notifications: HasMany<typeof Notification>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -52,9 +65,6 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
-
-  @hasMany(() => Address)
-  public addresses: HasMany<typeof Address>
 
   public static url () {
     // eslint-disable-next-line max-len

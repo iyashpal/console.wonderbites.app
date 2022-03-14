@@ -12,7 +12,7 @@ export default class Testimonial extends BaseModel {
   public title: string
 
   @column()
-  public body: string
+  public body: JSON
 
   @column()
   public imagePath: string

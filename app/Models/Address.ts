@@ -9,6 +9,9 @@ export default class Address extends BaseModel {
   @column()
   public userId: number
 
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
   @column()
   public firstName: string
 
@@ -29,9 +32,6 @@ export default class Address extends BaseModel {
 
   @column()
   public status: number
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

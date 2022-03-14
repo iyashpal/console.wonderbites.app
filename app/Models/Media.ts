@@ -21,7 +21,7 @@ export default class Media extends BaseModel {
   public caption: string
 
   @column()
-  public imagePath: string
+  public filePath: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

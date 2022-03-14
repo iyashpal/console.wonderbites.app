@@ -17,7 +17,7 @@ export default class Media extends BaseSchema {
 
       table.text('caption').nullable()
 
-      table.string('image_path').notNullable()
+      table.string('file_path').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

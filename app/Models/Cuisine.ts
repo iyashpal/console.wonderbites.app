@@ -18,12 +18,12 @@ export default class Cuisine extends BaseModel {
   @column()
   public status: number
 
+  @manyToMany(() => Category)
+  public categories: ManyToMany<typeof Category>
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @manyToMany(() => Category, { pivotTable: 'category_cuisine' })
-  public categories: ManyToMany<typeof Category>
 }

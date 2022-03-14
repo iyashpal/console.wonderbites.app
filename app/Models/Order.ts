@@ -1,5 +1,7 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
+import Ingridient from './Ingridient'
+import Product from './Product'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -19,6 +21,12 @@ export default class Order extends BaseModel {
 
   @column()
   public status: number
+
+  @manyToMany(() => Product)
+  public products: ManyToMany<typeof Product>
+
+  @manyToMany(() => Ingridient)
+  public ingridients: ManyToMany<typeof Ingridient>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

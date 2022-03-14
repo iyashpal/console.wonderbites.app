@@ -1,4 +1,4 @@
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 
@@ -23,6 +23,9 @@ export default class Category extends BaseModel {
 
   @column()
   public status: number
+
+  @belongsTo(() => Category, { foreignKey: 'parent' })
+  public category: BelongsTo<typeof Category>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
