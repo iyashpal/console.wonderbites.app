@@ -49,7 +49,7 @@
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'category_id', label: "Category", required: false})
                         @each((category, index) in categories)
-                           <input type="checkbox" name="category_id[]" id="cat_{{category.id}}" value="{{category.id}}"/>
+                           <input type="checkbox" name="category_id[]" id="cat_{{category.id}}" value="{{category.id}}"/> {{category.name}} <br>
                         @endeach
                     
                 </div>

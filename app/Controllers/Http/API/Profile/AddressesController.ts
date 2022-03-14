@@ -57,7 +57,7 @@ export default class AddressesController {
       const address = await Address.create({ userId: user.id, ...validated })
 
       // Check if the address is default for logged in user.
-      if (request.all()?.is_default) {
+      if (request.all()?.is_default == true) {
         await user.merge({ address_id: address.id }).save()
       }
 
@@ -101,25 +101,25 @@ export default class AddressesController {
 
           schema: schema.create({
 
-            first_name: schema.string({ trim: true }, [
+            first_name: schema.string.optional({ trim: true }, [
               rules.maxLength(255),
             ]),
 
-            last_name: schema.string({ trim: true }, [
+            last_name: schema.string.optional({ trim: true }, [
               rules.maxLength(255),
             ]),
 
-            street: schema.string({ trim: true }, [
+            street: schema.string.optional({ trim: true }, [
               rules.maxLength(255),
             ]),
 
-            city: schema.string({ trim: true }, [
+            city: schema.string.optional({ trim: true }, [
               rules.maxLength(255),
             ]),
 
-            phone: schema.string({ trim: true }),
+            phone: schema.string.optional({ trim: true }),
 
-            type: schema.string(),
+            type: schema.string.optional(),
 
             status: schema.number.optional()
 
@@ -129,7 +129,7 @@ export default class AddressesController {
         await address.merge(validated).save()
 
         // Check if the address is default for logged in user.
-        if (request.all()?.is_default) {
+        if (request.all()?.is_default == true) {
           await user.merge({ address_id: address.id }).save()
         }
 
