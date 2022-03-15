@@ -1,6 +1,6 @@
-import Address from 'App/Models/Address'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import Address from 'App/Models/Address'
 
 export default class AddressesController {
   /**
@@ -57,8 +57,8 @@ export default class AddressesController {
       const address = await Address.create({ userId: user.id, ...validated })
 
       // Check if the address is default for logged in user.
-      if (request.all()?.is_default == true) {
-        await user.merge({ address_id: address.id }).save()
+      if (request.all()?.is_default === true) {
+        await user.merge({ addressId: address.id }).save()
       }
 
       // Send response
@@ -129,8 +129,8 @@ export default class AddressesController {
         await address.merge(validated).save()
 
         // Check if the address is default for logged in user.
-        if (request.all()?.is_default == true) {
-          await user.merge({ address_id: address.id }).save()
+        if (request.all()?.is_default === true) {
+          await user.merge({ addressId: address.id }).save()
         }
 
         response.status(200).json(address)
@@ -148,13 +148,9 @@ export default class AddressesController {
    * @param param0 HttpContextContract
    */
   public async destroy ({ auth, response, params }: HttpContextContract) {
-    const user = await auth.use('api').user!
+    await auth.use('api').user!
 
     const address = await Address.findOrFail(params.id)
-
-    if (user.address_id === address.id) {
-      response.badRequest({ message: 'Default address cannot be deleted' })
-    }
 
     await address.delete().then(() => {
       response.status(200).json({ deleted: true })
