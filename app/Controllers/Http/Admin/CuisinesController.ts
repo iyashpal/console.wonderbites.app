@@ -36,14 +36,14 @@ export default class CuisinesController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
+    /*if (data.image_path) {
       await data.image_path.moveToDisk('./')
-    }
+    }*/
 
-    const cuisine = await Cuisine.create({ ...data, image_path: data.image_path!.fileName })
+    const cuisine = await Cuisine.create(data)
       .then((cusine) => {
         session.flash('cuisine_created', cusine)
-        return cuisine
+        return cusine
       })
 
     response.redirect().toRoute('cuisines.show', { id: cuisine.id })
@@ -69,7 +69,6 @@ export default class CuisinesController {
    */
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const cuisine = await Cuisine.findOrFail(id)
-
     return view.render('app/cuisines/edit', { cuisine })
   }
 
@@ -83,11 +82,11 @@ export default class CuisinesController {
 
     const data = await request.validate(UpdateValidator)
 
-    if (data.image_path) {
+    /*if (data.image_path) {
       await data.image_path.moveToDisk('./')
-    }
+    }*/
 
-    await cuisine.merge({ ...data, image_path: data.image_path ? data.image_path.fileName : cuisine.image_path })
+    await cuisine.merge(data)
       .save().then(() => session.flash('cuisine_created', true))
 
     response.redirect().toRoute('cuisines.show', { id: cuisine.id })
