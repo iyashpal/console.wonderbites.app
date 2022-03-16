@@ -43,10 +43,10 @@ export default class ProductsController {
     try {
       const product = await Product.findOrFail(id)
 
-      const images = await ProductImages.query()
-        .where('product_id', id)
+      //const images = await ProductImages.query()
+       // .where('product_id', id)
 
-      response.status(200).json({ ...product, product_image: images })
+      response.status(200).json(product)
     } catch (error) {
       response.unauthorized({ message: error.message })
     }

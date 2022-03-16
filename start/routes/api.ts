@@ -33,6 +33,8 @@ Route.group(() => {
 
   Route.resource('categories', 'API/CategoriesController').as('categories')
 
+  Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
+
   Route.resource('banners', 'API/BannersController')
 
   Route.get('about', 'API/HomeController.about').as('about')
