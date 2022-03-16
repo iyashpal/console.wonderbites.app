@@ -25,11 +25,11 @@ export default class CreateValidator {
    */
   public schema = schema.create({
     name: schema.string({ trim: true }),
-    description: schema.string.optional({ trim: true }),
-    image_path: schema.file.optional({
+    /*description: schema.string.optional({ trim: true }),*/
+    /*image_path: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'jpeg', 'png', 'gif'],
-    }),
+    }),*/
     status: schema.number(),
   })
   /**
