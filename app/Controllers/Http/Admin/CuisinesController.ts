@@ -42,10 +42,18 @@ export default class CuisinesController {
       await data.image_path.moveToDisk('./')
     }*/
 
+<<<<<<< HEAD
     const cuisine = await Cuisine.create({ ...data, imagePath: data.image_path!.fileName })
       .then((cuisine) => {
         session.flash('cuisine_created', cuisine.id)
         return cuisine
+=======
+
+    const cuisine = await Cuisine.create(data)
+      .then((cusine) => {
+        session.flash('cuisine_created', cusine)
+        return cusine
+>>>>>>> d2e6378b6506e8144c6147357dfbbe272245de93
       })
 
     if (request.input('category_id')) {

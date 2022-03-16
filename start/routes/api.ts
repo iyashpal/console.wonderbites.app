@@ -27,6 +27,12 @@ Route.group(() => {
   Route.resource('cuisines', 'API/CuisinesController')
 
   Route.resource('categories', 'API/CategoriesController').as('categories')
+<<<<<<< HEAD
+=======
+
+  Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
+
+>>>>>>> d2e6378b6506e8144c6147357dfbbe272245de93
   Route.resource('banners', 'API/BannersController')
   Route.resource('teams', 'API/TeamsController').as('teams')
   Route.get('about', 'API/HomeController.about').as('about')
