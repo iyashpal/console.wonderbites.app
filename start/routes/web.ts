@@ -13,5 +13,7 @@ Route.group(() => {
   Route.resource('ingridients', 'Admin/IngridientsController')
   Route.resource('banners', 'Admin/BannersController')
   Route.resource('media', 'Admin/MediaController')
+  Route.resource('review', 'Admin/ReviewController')
   Route.resource('users', 'Admin/UsersController')
+  Route.resource('orders', 'Admin/OrdersController')
 }).middleware('auth')

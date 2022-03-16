@@ -17,8 +17,8 @@
                 </div>
                  <div class="col-span-6">
                     @!form.label({for:'type', label: "Type", required: true})
-                    @!form.input({id: "typ", value: flashMessages.get('type_banner', '') || '', name: "type", type: "text", className: "mt-1 block w-full", autofocus: true})
-                    @!form.inputError({error: 'errors.type_banner'})
+                    @!form.input({id: "typ", value: flashMessages.get('type', '') || '', name: "type", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.inputError({error: 'errors.type'})
                 </div>
                 <div class="col-span-6">
                     @!form.label({for:'data', label: "Data", required: true})

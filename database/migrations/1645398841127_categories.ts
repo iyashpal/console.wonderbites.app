@@ -7,7 +7,7 @@ export default class Categories extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.bigInteger('user_id').nullable().references('users.id').onDelete('SET NULL')
+      table.string('type').defaultTo('product')
 
       table.bigInteger('parent').nullable().defaultTo(0)
 
@@ -16,8 +16,6 @@ export default class Categories extends BaseSchema {
       table.text('description').nullable()
 
       table.text('image_path').notNullable()
-
-      table.string('type').defaultTo('product')
 
       table.integer('status').defaultTo(1)
 

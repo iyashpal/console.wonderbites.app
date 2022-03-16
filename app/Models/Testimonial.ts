@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 
 export default class Testimonial extends BaseModel {
   @column({ isPrimary: true })
@@ -12,10 +12,10 @@ export default class Testimonial extends BaseModel {
   public title: string
 
   @column()
-  public body: string
+  public body: JSON
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column()
   public status: number

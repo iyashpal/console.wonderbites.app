@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 
 export default class Banner extends BaseModel {
   @column({ isPrimary: true })
@@ -12,9 +12,11 @@ export default class Banner extends BaseModel {
   public type: string
 
   @column()
-  public data: string
+  public data: JSON
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
+
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 }

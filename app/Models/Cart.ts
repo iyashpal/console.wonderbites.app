@@ -1,28 +1,31 @@
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import Ingridient from './Ingridient'
+import Product from './Product'
+import User from './User'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-  
-  @column()
-  public user_id: number
-  @column()
-  public qty: number
 
   @column()
-  public price: string
+  public userId: number
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @column()
-  public status: number
+  public ipAddress: string
 
-  @column()
-  public device_token: string
+  @manyToMany(() => Product)
+  public products: ManyToMany<typeof Product>
+
+  @manyToMany(() => Ingridient)
+  public ingridients: ManyToMany<typeof Ingridient>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-  
 }

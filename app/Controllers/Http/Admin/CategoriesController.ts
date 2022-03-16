@@ -57,7 +57,6 @@ export default class CategoriesController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
-
     return view.render('app/categories/show', { category })
   }
 
