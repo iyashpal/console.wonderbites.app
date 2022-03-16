@@ -1,6 +1,11 @@
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Cart from './Cart'
 import Category from './Category'
+import Ingridient from './Ingridient'
+import Order from './Order'
+import User from './User'
+import Wishlist from './Wishlist'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -10,13 +15,16 @@ export default class Product extends BaseModel {
   public name: string
 
   @column()
-  public category_id: number
+  public userId: number
 
-  @column()
-  public short_description: string
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @column()
   public description: string
+
+  @column()
+  public shortDescription: string
 
   @column()
   public calories: string
@@ -25,10 +33,25 @@ export default class Product extends BaseModel {
   public price: string
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column()
   public status: number
+
+  @manyToMany(() => Category)
+  public categories: ManyToMany<typeof Category>
+
+  @manyToMany(() => Ingridient)
+  public ingridents: ManyToMany<typeof Ingridient>
+
+  @manyToMany(() => Cart)
+  public carts: ManyToMany<typeof Cart>
+
+  @manyToMany(() => Order)
+  public orders: ManyToMany<typeof Order>
+
+  @manyToMany(() => Wishlist)
+  public wishlists: ManyToMany<typeof Wishlist>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -36,6 +59,6 @@ export default class Product extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Category)
-  public category: BelongsTo<typeof Category>
+  @column.dateTime()
+  public deletedAt: DateTime
 }

@@ -1,5 +1,6 @@
-import Cuisine from 'App/Models/Cuisine'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Category from 'App/Models/Category'
+import Cuisine from 'App/Models/Cuisine'
 import CreateValidator from 'App/Validators/Cuisine/CreateValidator'
 import UpdateValidator from 'App/Validators/Cuisine/UpdateValidator'
 
@@ -25,7 +26,8 @@ export default class CuisinesController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/cuisines/create')
+    const categories = await Category.all()
+    return view.render('app/cuisines/create', { categories })
   }
 
   /**
@@ -40,12 +42,16 @@ export default class CuisinesController {
       await data.image_path.moveToDisk('./')
     }*/
 
+
     const cuisine = await Cuisine.create(data)
       .then((cusine) => {
         session.flash('cuisine_created', cusine)
         return cusine
       })
 
+    if (request.input('category_id')) {
+      await cuisine.related('categories').attach(request.input('category_id'))
+    }
     response.redirect().toRoute('cuisines.show', { id: cuisine.id })
   }
 

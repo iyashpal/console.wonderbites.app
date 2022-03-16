@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from "@ioc:Adonis/Core/Validator"
-import ProductImages from 'App/Models/ProductImage'
+import { rules, schema } from "@ioc:Adonis/Core/Validator"
+import ProductImages from 'App/Models/Pivot/ProductImage'
 export default class ProductImagesController {
     public async index({ response }: HttpContextContract) {
         try {

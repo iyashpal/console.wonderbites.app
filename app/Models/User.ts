@@ -1,17 +1,18 @@
-import Address from './Address'
-import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
+import Address from './Address'
+import Notification from './Notification'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public first_name: string
+  public firstName: string
 
   @column()
-  public last_name: string
+  public lastName: string
 
   @column()
   public email: string
@@ -20,19 +21,34 @@ export default class User extends BaseModel {
   public mobile: string
 
   @column()
-  public image_path: string
+  public imagePath: string
 
   @column({ serializeAs: null })
   public password: string
 
   @column()
-  public address_id: Number
+  public addressId: Number
+
+  @hasOne(() => Address)
+  public address: HasOne<typeof Address>
 
   @column()
   public rememberMeToken?: string
 
   @column()
   public status: number
+
+  @column()
+  public language: string
+
+  @hasMany(() => Address)
+  public addresses: HasMany<typeof Address>
+
+  @hasMany(() => Notification, {
+    foreignKey: 'notifiableId',
+    onQuery: query => query.where('notifiable_type', 'User'),
+  })
+  public notifications: HasMany<typeof Notification>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -49,9 +65,6 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
-
-  @hasMany(() => Address)
-  public addresses: HasMany<typeof Address>
 
   public static url () {
     // eslint-disable-next-line max-len

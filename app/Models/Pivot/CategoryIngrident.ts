@@ -1,25 +1,23 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import User from './User'
+import Category from '../Category'
+import Ingridient from '../Ingridient'
 
-export default class Wonderpoint extends BaseModel {
+export default class CategoryIngrident extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public userId: number
+  public categoryId: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
-  @column()
-  public event: string
+  @belongsTo(() => Category)
+  public category: BelongsTo<typeof Category>
 
   @column()
-  public description: string
+  public ingridentId: number
 
-  @column()
-  public points: number
+  @belongsTo(() => Ingridient)
+  public ingridient: BelongsTo<typeof Ingridient>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
