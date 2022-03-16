@@ -54,6 +54,11 @@ export default [
     label: 'Users',
     icon: 'group',
   },
+  {
+    url: '/teams',
+    label: 'Teams',
+    icon: 'group',
+  },
     {
         url: "/",
         label: "Feedbacks",

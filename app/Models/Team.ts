@@ -1,13 +1,21 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-
-export default class CategoryProduct extends BaseModel {
+import { DateTime } from 'luxon'
+export default class Team extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
   @column()
-  public category_id: number
+  public name: string
+
   @column()
-  public product_id: number
+  public designation: string
+
+  @column()
+  public imagePath: string
+
+  @column()
+  public status: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

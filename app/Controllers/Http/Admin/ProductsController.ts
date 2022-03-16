@@ -1,8 +1,8 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Product from 'App/Models/Product'
-import Category from 'App/Models/Category'
-import CategoryProduct from 'App/Models/CategoryProduct'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Category from 'App/Models/Category'
+import CategoryProduct from 'App/Models/Pivot/CategoryProduct'
+import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
 ///import { isDate } from '@vue/shared'
@@ -44,7 +44,6 @@ export default class ProductsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-
     const product = await Product.create({ ...data, image_path: data.image_path!.fileName })
       .then((product) => {
         session.flash('product_created', product.id)

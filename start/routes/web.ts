@@ -16,4 +16,5 @@ Route.group(() => {
   Route.resource('review', 'Admin/ReviewController')
   Route.resource('users', 'Admin/UsersController')
   Route.resource('orders', 'Admin/OrdersController')
+  Route.resource('teams', 'Admin/TeamsController')
 }).middleware('auth')
