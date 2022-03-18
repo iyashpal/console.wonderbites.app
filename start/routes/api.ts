@@ -4,12 +4,9 @@ Route.group(() => {
   Route.group(() => {
     Route.post('/login', 'API/LoginController.login').as('login')
 
-    Route.post('/register', 'API/RegisterController.register').as('register')
-
+    //Route.post('/register', 'API/RegisterController.register').as('register')
   }).middleware('guest_api')
-
   Route.group(() => {
-
     Route.post('/logout', 'API/LoginController.logout').as('logout')
 
     Route.get('/users', 'API/UsersController.show').as('user')
@@ -18,7 +15,6 @@ Route.group(() => {
 
     Route.resource('addresses', 'API/Profile/AddressesController')
 
-
     Route.resource('wishlists', 'API/WishlistsController')
 
     //Route.resource('cart', 'API/CartsController');
@@ -26,9 +22,8 @@ Route.group(() => {
     //Route.get('/product/{id}', "API/UsersController.show");
 
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
-
   }).middleware('auth_api')
-
+  Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
 
   Route.resource('categories', 'API/CategoriesController').as('categories')
@@ -36,7 +31,7 @@ Route.group(() => {
   Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
 
   Route.resource('banners', 'API/BannersController')
-
+  Route.resource('teams', 'API/TeamsController').as('teams')
   Route.get('about', 'API/HomeController.about').as('about')
 
   Route.resource('products', 'API/ProductsController')
@@ -54,5 +49,4 @@ Route.group(() => {
   Route.get('settings', 'API/HomeController.settings').as('settings')
 
   Route.get('my_subscriptions', 'API/HomeController.my_subscriptions').as('my_subscriptions')
-
 }).prefix('/api').as('api')

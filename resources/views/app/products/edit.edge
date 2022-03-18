@@ -30,7 +30,6 @@
                     @!form.inputError({error: 'errors.calories'})
                 </div>
            
-
                 <div class="col-span-6">
                     @!form.label({for:'price', label: "Price", required: true})
                     @!form.input({id: "price", value: flashMessages.get('price', product.price), name: "price", type: "text", className: "mt-1 block w-full", autofocus: true})
@@ -44,8 +43,12 @@
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'category_id', label: "Category", required: false})
                         @each((category, index) in categories)
+<<<<<<< HEAD
+                           <input type="checkbox" name="category_id[]" {{ categoryproducts.category_id === category.id ? 'checked' : ''}} id="cat_{{category.id}}" value="{{category.id}}"/> {{category.name}} <br>
+=======
                           <p><input type="checkbox" name="category_id[]" {{ categoryproducts.category_id === category.id ? 'checked' : ''}} id="cat_{{category.id}}" value="{{category.id}}"/><label class="form-check-label inline-block text-gray-800" for="inlineCheckbox2">{{category.name}}</label>
                           </p>
+>>>>>>> d2e6378b6506e8144c6147357dfbbe272245de93
                         @endeach
                     
                 </div>

@@ -44,7 +44,6 @@ export default class ProductsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-
     const product = await Product.create({ ...data, image_path: data.image_path!.fileName })
       .then((product) => {
         session.flash('product_created', product.id)

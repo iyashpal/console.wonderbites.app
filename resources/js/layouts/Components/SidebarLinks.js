@@ -54,15 +54,30 @@ export default [
     label: 'Users',
     icon: 'group',
   },
-    {
-        url: "/",
-        label: "Feedbacks",
-        icon: "thumb-up-alt"
-    },
-    {
-        url: "/",
-        label: "Coupons",
-        icon: "local-offer"
-    },
+  {
+    url: '/teams',
+    label: 'Teams',
+    icon: 'group',
+  },
+  {
+    url: '/careercategories',
+    label: 'Career Categories',
+    icon: 'group',
+  },
+  {
+    url: '/brands',
+    label: 'Brands',
+    icon: 'group',
+  },
+  {
+    url: '/',
+    label: 'Feedbacks',
+    icon: 'thumb-up-alt',
+  },
+  {
+    url: '/',
+    label: 'Coupons',
+    icon: 'local-offer',
+  },
 
 ]
