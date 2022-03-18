@@ -27,11 +27,11 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @each((banner, index) in banner)
+                        @each((banner, index) in banners)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('banners.show', {id: banner.id}) }}" class="flex items-center">
-                                    
+
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ banner.title }}</div>
                                     </div>
@@ -40,7 +40,10 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('banners.show', {id: banner.id}) }}" class="text-sm text-gray-900">{{ banner.title }}</a>
                             </td>
-                            
+                            <td class="px-6 py-4 whitespace-nowrap">
+
+                            </td>
+
                             <td class="px-6 py-4 whitespace-nowrap flex items-center text-sm font-medium">
                                 <a href="{{ route('banners.edit', {id: banner.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
                                     <icon name="edit" class="w-5 h-5"></icon>
@@ -54,6 +57,16 @@
                             </td>
                         </tr>
                         @endeach
+
+                        @if(banners.total === 0)
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Banners not available.
+                                </v-alert>
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: banners})
