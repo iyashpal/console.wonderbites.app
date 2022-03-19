@@ -15,7 +15,8 @@
     "Config": "config",
     "Database": "database",
     "Contracts": "contracts",
-    "Vue": "resources/js"
+    "ResourcesJS": "resources/js",
+    "Scss": "resources/scss"
   },
   "preloads": [
     "./start/routes",

@@ -1,4 +1,4 @@
-const { join } = require('path')
+const { join, resolve } = require('path')
 const Encore = require('@symfony/webpack-encore')
 
 /*
@@ -184,7 +184,7 @@ Encore.enablePostCssLoader()
 Encore.enableVueLoader(() => { }, {
   version: 3,
   runtimeCompilerBuild: true,
-  useJsx: false
+  useJsx: false,
 })
 
 /*
@@ -202,6 +202,12 @@ config.infrastructureLogging = {
   level: 'warn',
 }
 config.stats = 'errors-warnings'
+
+// config.resolve = {
+//   alias: {
+//     ResourcesJS: resolve(__dirname, 'resources/js/'),
+//   },
+// }
 
 /*
 |--------------------------------------------------------------------------

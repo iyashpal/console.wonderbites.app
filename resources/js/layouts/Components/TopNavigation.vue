@@ -25,6 +25,5 @@
     </div>
 </template>
 <script setup>
-import { useStore } from 'vuex';
 import UserDropdown from './UserDropdown.vue';
 </script>

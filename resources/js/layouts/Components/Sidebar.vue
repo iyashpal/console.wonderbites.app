@@ -89,11 +89,12 @@
     </div>
 </template>
 <script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { computed, ref } from 'vue'
+// import { useStore } from 'vuex'
 import SidebarLinks from './SidebarLinks'
 import SidebarLink from './SidebarLink.vue'
 
-const Store = useStore()
-const isToggled = computed(() => Store.getters['layout/isSidebarEnabled'])
+// const Store = useStore()
+// const isToggled = computed(() => Store.getters['layout/isSidebarEnabled'])
+const isToggled = ref(false)
 </script>

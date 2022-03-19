@@ -25,9 +25,12 @@
       "Database/*": [
         "./database/*"
       ],
-      "Vue/*": [
+      "ResourcesJS/*": [
         "./resources/js/*"
-      ]
+      ],
+      "Scss/*": [
+        "./resources/scss/*"
+      ],
     },
     "types": [
       "@adonisjs/core",

@@ -1483,10 +1483,10 @@
     slugify "^1.6.5"
     truncatise "0.0.8"
 
-"@symfony/webpack-encore@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-1.8.1.tgz#b28b574e33fefe0b7a46edc4b205ef93299c276d"
-  integrity sha512-7JOZvEXFuZfJhyC2jcMio59c19EwygkcRUF9/WYJkp0A4cK+BlmLnZwDTBdzc7+hXJD8DfqD3DGguCkBibiUPQ==
+"@symfony/webpack-encore@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-1.8.2.tgz#ceffa0d9326d29fa62b3a61f213e8e01a9992a7e"
+  integrity sha512-ZOsOqaZNP3BSQuISAsyH/Jv5+rDxbM4Wf6IsKo1y5Cm9BFIS2dPLsqDZfMbi6G2HdAHm88JqX/HGwxE73eADEw==
   dependencies:
     "@babel/core" "^7.7.0"
     "@babel/plugin-syntax-dynamic-import" "^7.0.0"
@@ -1949,10 +1949,10 @@
     "@vue/compiler-dom" "3.2.31"
     "@vue/shared" "3.2.31"
 
-"@vue/devtools-api@^6.0.0-beta.11":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.5.tgz#7e35cfee4f44ada65cde0d19341fbaeb0ae353f4"
-  integrity sha512-2nM84dzo3B63pKgxwoArlT1d/yqSL0y2lG2GiyyGhwpyPTwkfIuJHlCNbputCoSCNnT6MMfenK1g7nv7Mea19A==
+"@vue/devtools-api@^6.1.0":
+  version "6.1.3"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.1.3.tgz#a44c52e8fa6d22f84db3abdcdd0be5135b7dd7cf"
+  integrity sha512-79InfO2xHv+WHIrH1bHXQUiQD/wMls9qBk6WVwGCbdwP7/3zINtvqPNMtmSHXsIKjvUAHc8L0ouOj6ZQQRmcXg==
 
 "@vue/reactivity-transform@3.2.30":
   version "3.2.30"
@@ -6320,6 +6320,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
+pinia@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.0.12.tgz#4c6f7f59cb41f56f20deee71c403e66d8d3c637d"
+  integrity sha512-tUeuYGFrLU5irmGyRAIxp35q1OTcZ8sKpGT4XkPeVcG35W4R6cfXDbCGexzmVqH5lTQJJTXXbNGutIu9yS5yew==
+  dependencies:
+    "@vue/devtools-api" "^6.1.0"
+    vue-demi "*"
+
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pinkie-promise/-/pinkie-promise-2.0.1.tgz#2135d6dfa7a358c069ac9b178776288228450ffa"
@@ -8153,6 +8161,11 @@ vary@^1.1.2, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+vue-demi@*:
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.4.tgz#420dd17628f95f1bbce1102ad3c51074713a8049"
+  integrity sha512-ztPDkFt0TSUdoq1ZI6oD730vgztBkiByhUW7L1cOTebiSBqSYfSQgnhYakYigBkyAybqCTH7h44yZuDJf2xILQ==
+
 vue-loader@^17.0.0:
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-17.0.0.tgz#2eaa80aab125b19f00faa794b5bd867b17f85acb"
@@ -8172,13 +8185,6 @@ vue@^3.2.31:
     "@vue/runtime-dom" "3.2.31"
     "@vue/server-renderer" "3.2.31"
     "@vue/shared" "3.2.31"
-
-vuex@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-4.0.2.tgz#f896dbd5bf2a0e963f00c67e9b610de749ccacc9"
-  integrity sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==
-  dependencies:
-    "@vue/devtools-api" "^6.0.0-beta.11"
 
 watchpack@^2.3.1:
   version "2.3.1"
