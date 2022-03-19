@@ -27,11 +27,6 @@
   <slot />
 </template>
 <script setup>
-import { useLayoutStore } from '../store';
 import Sidebar from './Components/Sidebar.vue'
 import TopNavigation from './Components/TopNavigation.vue';
-
-const { user } = defineProps({ user: Object })
-
-console.log(user)
 </script>

@@ -2,18 +2,15 @@
     <div class="ml-3 relative">
         <div>
             <button
-                @click="toggle = !toggle"
                 type="button"
-                class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                id="user-menu-button"
-                aria-expanded="false"
                 aria-haspopup="true"
+                aria-expanded="false"
+                id="user-menu-button"
+                @click="toggle = !toggle"
+                class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 <span class="sr-only">Open user menu</span>
-                <img
-                    class="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                />
+                <img :alt="Auth.user.name" :src="Auth.user.avatar" class="h-8 w-8 rounded-full" />
             </button>
         </div>
 
@@ -63,7 +60,8 @@
     </div>
 </template>
 <script setup>
+import { useAuthStore } from 'Js/store';
 import { ref } from 'vue';
-
+const Auth = useAuthStore()
 const toggle = ref(false)
 </script>

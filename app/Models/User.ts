@@ -67,7 +67,7 @@ export default class User extends BaseModel {
   }
 
   @computed()
-  public get url () {
+  public get avatar () {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`

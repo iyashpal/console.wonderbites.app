@@ -203,11 +203,21 @@ config.infrastructureLogging = {
 }
 config.stats = 'errors-warnings'
 
-// config.resolve = {
-//   alias: {
-//     ResourcesJS: resolve(__dirname, 'resources/js/'),
-//   },
-// }
+/*
+|--------------------------------------------------------------------------
+| Alias config
+|--------------------------------------------------------------------------
+|
+| Define webpack resolve aliases. 
+|
+*/
+config.resolve.alias = {
+  // Include predefined aliases
+  ...config.resolve.alias,
+
+  Js: resolve(__dirname, 'resources/js/'),
+  Scss: resolve(__dirname, 'resources/scss/'),
+}
 
 /*
 |--------------------------------------------------------------------------

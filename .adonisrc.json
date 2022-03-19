@@ -15,7 +15,7 @@
     "Config": "config",
     "Database": "database",
     "Contracts": "contracts",
-    "ResourcesJS": "resources/js",
+    "Js": "resources/js",
     "Scss": "resources/scss"
   },
   "preloads": [

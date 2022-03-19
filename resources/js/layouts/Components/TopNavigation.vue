@@ -1,8 +1,8 @@
 <template>
     <div class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
         <button
-            @click="LayoutStore.toggleSidebar()"
             type="button"
+            @click="Layout.toggleSidebar()"
             class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
         >
             <span class="sr-only">Open sidebar</span>
@@ -25,8 +25,8 @@
     </div>
 </template>
 <script setup>
-import { useLayoutStore } from './../../store';
+import { useLayoutStore } from 'Js/store';
 import UserDropdown from './UserDropdown.vue';
 
-const LayoutStore = useLayoutStore()
+const Layout = useLayoutStore()
 </script>

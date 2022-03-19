@@ -1,7 +1,15 @@
 <template>
-    <div>
-        Hello World!
-    </div>
+    <slot></slot>
 </template>
-<script lang="ts" setup>
+<script setup>
+import { useAuthStore } from 'Js/store';
+import { onMounted } from 'vue';
+
+const props = defineProps( { user: Object } )
+
+const Auth = useAuthStore()
+
+onMounted(() => {
+    Auth.syncUser(props.user)
+})
 </script>
