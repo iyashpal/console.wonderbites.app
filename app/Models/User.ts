@@ -1,5 +1,5 @@
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, column, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Address from './Address'
 import Notification from './Notification'
@@ -66,9 +66,9 @@ export default class User extends BaseModel {
     }
   }
 
-  public static url () {
-    // eslint-disable-next-line max-len
-    let name = this.$getColumn('email') ? this.$getColumn('email') : this.$getColumn('first_name') + ' ' + this.$getColumn('last_name')
+  @computed()
+  public get url () {
+    let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
   }

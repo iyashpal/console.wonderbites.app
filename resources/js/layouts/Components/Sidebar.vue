@@ -1,7 +1,7 @@
 <template>
     <transition leave-active-class="duration-300">
         <div
-            v-show="isToggled"
+            v-show="LayoutStore.isSidebarEnabled"
             class="fixed inset-0 flex z-40 md:hidden"
             role="dialog"
             aria-modal="true"
@@ -15,7 +15,7 @@
                 leave-to-class="opacity-0"
             >
                 <div
-                    v-show="isToggled"
+                    v-show="LayoutStore.isSidebarEnabled"
                     class="fixed inset-0 bg-gray-600 bg-opacity-75"
                     aria-hidden="true"
                 ></div>
@@ -30,7 +30,7 @@
                 leave-to-class="-translate-x-full"
             >
                 <div
-                    v-show="isToggled"
+                    v-show="LayoutStore.isSidebarEnabled"
                     class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white"
                 >
                     <transition
@@ -43,7 +43,7 @@
                     >
                         <div class="absolute top-0 right-0 -mr-12 pt-2">
                             <button
-                                @click="$store.commit('layout/toggleSidebar')"
+                                @click="LayoutStore.toggleSidebar()"
                                 type="button"
                                 class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                             >
@@ -90,11 +90,9 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue'
-// import { useStore } from 'vuex'
 import SidebarLinks from './SidebarLinks'
 import SidebarLink from './SidebarLink.vue'
+import { useLayoutStore } from './../../store'
 
-// const Store = useStore()
-// const isToggled = computed(() => Store.getters['layout/isSidebarEnabled'])
-const isToggled = ref(false)
+const LayoutStore = useLayoutStore()
 </script>
