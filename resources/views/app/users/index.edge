@@ -71,6 +71,12 @@
                             </td>
                         </tr>
                         @endeach
+
+                        @if(users.total === 0)
+                        <tr>
+                            <td>No data found.</td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: users})
