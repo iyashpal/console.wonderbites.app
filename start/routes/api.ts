@@ -25,7 +25,7 @@ Route.group(() => {
   }).middleware('auth_api')
   Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
-
+  Route.resource('blogs', 'API/BlogsController').as('blogs')
   Route.resource('categories', 'API/CategoriesController').as('categories')
 
   Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
@@ -47,6 +47,7 @@ Route.group(() => {
   Route.get('content_policy', 'API/HomeController.content_policy').as('content_policy')
 
   Route.get('settings', 'API/HomeController.settings').as('settings')
+  
 
   Route.get('my_subscriptions', 'API/HomeController.my_subscriptions').as('my_subscriptions')
 }).prefix('/api').as('api')
