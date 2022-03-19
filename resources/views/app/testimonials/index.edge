@@ -62,6 +62,12 @@
                             </td>
                         </tr>
                         @endeach
+
+                        @if(testimonials.total === 0)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium bg-" colspan="4">Testimonials not found.</td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: testimonials})
