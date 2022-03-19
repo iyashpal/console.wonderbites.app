@@ -1,12 +1,10 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import CategoryProduct from 'App/Models/Pivot/CategoryProduct'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
-///import { isDate } from '@vue/shared'
-//import { CountertopsIcon } from '@materialicons/vue/round'
+
 export default class ProductsController {
   /**
    * Display a listing of resources.
@@ -29,8 +27,7 @@ export default class ProductsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    const categories = await Category.all()
-    return view.render('app/products/create',{categories})
+    return view.render('app/products/create')
   }
 
   /**
@@ -41,21 +38,12 @@ export default class ProductsController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
-    const product = await Product.create({ ...data, image_path: data.image_path!.fileName })
+    await Product.create(data)
       .then((product) => {
         session.flash('product_created', product.id)
-        return product
+
+        return response.redirect().toRoute('products.show', product)
       })
-    if(request.input('category_id')){
-      const categories = request.input('category_id')
-      for(let i in categories) {
-        await CategoryProduct.create({category_id: categories[i] , product_id : product.id })
-      }
-    }
-    response.redirect().toRoute('products.show', { id: product.id })
   }
 
   /**
@@ -78,9 +66,9 @@ export default class ProductsController {
    */
   public async edit ({ view, params }: HttpContextContract) {
     const product = await Product.findOrFail(params.id)
-    const categoryproducts = await CategoryProduct.query().where('product_id',params.id)
+    const categoryproducts = await CategoryProduct.query().where('product_id', params.id)
     const categories = await Category.all()
-    return view.render('app/products/edit', { product, categoryproducts,categories })
+    return view.render('app/products/edit', { product, categoryproducts, categories })
   }
 
   /**
@@ -100,12 +88,7 @@ export default class ProductsController {
     await product.merge({
       ...data, image_path: data.image_path ? data.image_path.fileName : product.image_path,
     }).save().then(() => session.flash('product_updated', true))
-    if(request.input('category_id')){
-      const categories = request.input('category_id')
-      for(let i in categories) {
-        await CategoryProduct.create({category_id: categories[i] , product_id : product.id })
-      }
-    }
+
     response.redirect().toRoute('products.show', { id: product.id })
   }
 

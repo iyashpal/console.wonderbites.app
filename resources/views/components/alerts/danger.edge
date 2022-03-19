@@ -1,5 +1,5 @@
 @if(show)
-<div {{ $props.serializeExcept(['show', 'icon', 'title', 'description', 'message', 'dismissable'], {class: "rounded-md bg-red-50 p-4"})}}>
+<div {{ $props.serializeExcept(['show', 'icon', 'title', 'description', 'message', 'dismissable'], {class: "rounded-md bg-red-50 p-4 border border-red-200"})}}>
     <div class="flex">
         <div class="flex-shrink-0">
             <icon name="{{ icon }}" class="h-5 w-5 text-red-400"></icon>

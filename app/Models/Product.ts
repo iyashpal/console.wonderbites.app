@@ -53,6 +53,9 @@ export default class Product extends BaseModel {
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
 
+  @column.dateTime()
+  public publishedAt: DateTime
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
