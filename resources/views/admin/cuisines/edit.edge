@@ -19,12 +19,17 @@
                     @!form.inputError({error: 'errors.description'})
                 </div>  --}}
 
-                {{--  <div class="col-span-6 sm:col-span-3">
+                <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'image_path', label: "Image", required: true})
                     <input type="file" name="image_path" id="image_path">
                     @!form.inputError({error: 'errors.image_path'})
-                </div>  --}}
-
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'category_id', label: "Category", required: false})
+                        @each((category, index) in categories)
+                           <input type="checkbox" name="category_id[]" id="cat_{{category.id}}" value="{{category.id}}"/> {{category.name}} <br>
+                        @endeach      
+                </div>
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})
                     <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">

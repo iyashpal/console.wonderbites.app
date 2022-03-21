@@ -59,6 +59,15 @@
                             </td>
                         </tr>
                         @endeach
+                        @if(teams.total === 0)
+                       <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Teams not available.
+                                </v-alert>
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: teams})

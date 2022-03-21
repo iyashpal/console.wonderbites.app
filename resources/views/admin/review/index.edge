@@ -1,5 +1,5 @@
 @layout('layouts/app')
-@set('title', "review")
+@set('title', "Reviews")
 
 @section('actions')
 <a href="{{ route('review.create') }}" class="tw:btn tw:btn-secondary">
@@ -54,6 +54,15 @@
                             </td>
                         </tr>
                         @endeach
+                        @if(reviews.total === 0)
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Reviews not available.
+                                </v-alert>
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: reviews})

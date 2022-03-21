@@ -30,9 +30,9 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('categories.show', {id: categorie.id}) }}" class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
+                                    {{--  <div class="flex-shrink-0 h-10 w-10">
                                         <img class="h-10 w-10 rounded-full object-cover" src="{{ `/uploads/${categorie.imagePath}` }}" alt="{{ categorie.name }}">
-                                    </div>
+                                    </div>  --}}
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ categorie.name }}</div>
                                     </div>

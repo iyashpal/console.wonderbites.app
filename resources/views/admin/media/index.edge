@@ -56,6 +56,15 @@
                             </td>
                         </tr>
                         @endeach
+                        @if(media.total === 0)
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Media not available.
+                                </v-alert>
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: media})

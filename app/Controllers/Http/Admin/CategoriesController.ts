@@ -36,11 +36,11 @@ export default class CategoriesController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
+    // if (data.image_path) {
+    //   await data.image_path.moveToDisk('./')
+    // }
 
-    const category = await Category.create({ ...data, image_path: data.image_path!.fileName })
+    const category = await Category.create({ ...data })
       .then((category) => {
         session.flash('category_created', category.id)
         return category
@@ -82,11 +82,11 @@ export default class CategoriesController {
 
     const data = await request.validate(UpdateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
+    // if (data.image_path) {
+    //   await data.image_path.moveToDisk('./')
+    // }
 
-    await category.merge({ ...data, image_path: data.image_path ? data.image_path.fileName : category.image_path })
+    await category.merge({ ...data })
       .save().then(() => session.flash('category_created', true))
 
     response.redirect().toRoute('categories.show', { id: category.id })

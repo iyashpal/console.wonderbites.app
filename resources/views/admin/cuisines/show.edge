@@ -24,13 +24,20 @@
                 <dt class="text-sm font-medium text-gray-500">Name</dt>
                 <dd class="mt-1 text-sm text-gray-900">{{ cuisine.name }}</dd>
             </div>
-        
-            {{--  <div class="sm:col-span-1">
+        <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Image</dt>
                 <dd class="mt-1 text-sm text-gray-900">
-                    <img src="{{ `/uploads/${cuisine.image_path}` }}" alt="{{ cuisine.name }}" class="w-10 h-10 rounded-full">
+                    <img src="{{ `/uploads/${cuisine.imagePath}` }}" alt="{{ cuisine.name }}" class="w-10 h-10 rounded-full">
                 </dd>
-            </div>  --}}
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Categories</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @each((category, index) in cuisine.categories)
+                        {{category.name}} <br>
+                    @endeach
+                </dd>
+            </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Status</dt>
                 <dd class="mt-1 text-sm text-gray-900">
