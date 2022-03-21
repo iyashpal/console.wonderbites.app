@@ -27,7 +27,7 @@ export default [
   {
     url: '/products',
     label: 'Products',
-    icon: 'dinner-dining',
+    icon: 'lunch-dining',
   },
   {
     url: '/ingridients',
