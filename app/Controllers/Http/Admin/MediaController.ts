@@ -1,6 +1,6 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Media from 'App/Models/Media'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Media from 'App/Models/Media'
 import CreateValidator from 'App/Validators/Media/CreateValidator'
 import UpdateValidator from 'App/Validators/Media/UpdateValidator'
 export default class MediaController {
@@ -15,7 +15,7 @@ export default class MediaController {
 
     media.baseUrl(request.url())
 
-    return view.render('app/media/index', { media })
+    return view.render('admin/media/index', { media })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class MediaController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/media/create')
+    return view.render('admin/media/create')
   }
 
   /**
@@ -58,7 +58,7 @@ export default class MediaController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const media = await Media.findOrFail(id)
 
-    return view.render('app/media/show', { media })
+    return view.render('admin/media/show', { media })
   }
 
   /**
@@ -70,7 +70,7 @@ export default class MediaController {
   public async edit ({ view, params }: HttpContextContract) {
     const media = await Media.findOrFail(params.id)
 
-    return view.render('app/media/edit', { media })
+    return view.render('admin/media/edit', { media })
   }
 
   /**

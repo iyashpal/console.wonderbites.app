@@ -16,7 +16,7 @@ export default class CuisinesController {
 
     cuisines.baseUrl(request.url())
 
-    return view.render('app/cuisines/index', { cuisines })
+    return view.render('admin/cuisines/index', { cuisines })
   }
 
   /**
@@ -27,7 +27,7 @@ export default class CuisinesController {
    */
   public async create ({ view }: HttpContextContract) {
     const categories = await Category.all()
-    return view.render('app/cuisines/create', { categories })
+    return view.render('admin/cuisines/create', { categories })
   }
 
   /**
@@ -42,18 +42,10 @@ export default class CuisinesController {
       await data.image_path.moveToDisk('./')
     }*/
 
-<<<<<<< HEAD
-    const cuisine = await Cuisine.create({ ...data, imagePath: data.image_path!.fileName })
-      .then((cuisine) => {
-        session.flash('cuisine_created', cuisine.id)
-        return cuisine
-=======
-
     const cuisine = await Cuisine.create(data)
       .then((cusine) => {
         session.flash('cuisine_created', cusine)
         return cusine
->>>>>>> d2e6378b6506e8144c6147357dfbbe272245de93
       })
 
     if (request.input('category_id')) {
@@ -71,7 +63,7 @@ export default class CuisinesController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const cuisine = await Cuisine.findOrFail(id)
 
-    return view.render('app/cuisines/show', { cuisine })
+    return view.render('admin/cuisines/show', { cuisine })
   }
 
   /**
@@ -82,7 +74,7 @@ export default class CuisinesController {
    */
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const cuisine = await Cuisine.findOrFail(id)
-    return view.render('app/cuisines/edit', { cuisine })
+    return view.render('admin/cuisines/edit', { cuisine })
   }
 
   /**

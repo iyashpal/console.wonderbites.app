@@ -1,6 +1,6 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Ingridient from 'App/Models/Ingridient'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Ingridient from 'App/Models/Ingridient'
 import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
 import UpdateValidator from 'App/Validators/Ingridient/UpdateValidator'
 export default class IngridientsController {
@@ -15,7 +15,7 @@ export default class IngridientsController {
 
     ingridients.baseUrl(request.url())
 
-    return view.render('app/ingridients/index', { ingridients })
+    return view.render('admin/ingridients/index', { ingridients })
   }
   /**
    * Show the form for creating a new resource.
@@ -24,7 +24,7 @@ export default class IngridientsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/ingridients/create')
+    return view.render('admin/ingridients/create')
   }
 
   /**
@@ -56,7 +56,7 @@ export default class IngridientsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const ingridient = await Ingridient.findOrFail(id)
 
-    return view.render('app/ingridients/show', { ingridient })
+    return view.render('admin/ingridients/show', { ingridient })
   }
 
   /**
@@ -68,7 +68,7 @@ export default class IngridientsController {
   public async edit ({ view, params }: HttpContextContract) {
     const ingridient = await Ingridient.findOrFail(params.id)
 
-    return view.render('app/ingridients/edit', { ingridient })
+    return view.render('admin/ingridients/edit', { ingridient })
   }
 
   /**

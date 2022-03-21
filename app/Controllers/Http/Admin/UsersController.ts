@@ -1,8 +1,8 @@
-import { DateTime } from 'luxon'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/User/CreateValidator'
 import UpdateValidator from 'App/Validators/User/UpdateValidator'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { DateTime } from 'luxon'
 
 export default class UsersController {
   /**
@@ -16,7 +16,7 @@ export default class UsersController {
 
     users.baseUrl(request.url())
 
-    return view.render('app/users/index', { users })
+    return view.render('admin/users/index', { users })
   }
 
   /**
@@ -26,7 +26,7 @@ export default class UsersController {
    * @returns ViewRendererContract 
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/users/create')
+    return view.render('admin/users/create')
   }
 
   /**
@@ -56,7 +56,7 @@ export default class UsersController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const user = await User.findOrFail(id)
 
-    return view.render('app/users/show', { user })
+    return view.render('admin/users/show', { user })
   }
 
   /**
@@ -68,7 +68,7 @@ export default class UsersController {
   public async edit ({ view, params }: HttpContextContract) {
     const user = await User.findOrFail(params.id)
 
-    return view.render('app/users/edit', { user })
+    return view.render('admin/users/edit', { user })
   }
 
   /**

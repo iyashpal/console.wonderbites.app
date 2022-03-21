@@ -1,5 +1,5 @@
-import Category from 'App/Models/Category'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Category from 'App/Models/Category'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
 
@@ -15,7 +15,7 @@ export default class CategoriesController {
 
     categories.baseUrl(request.url())
 
-    return view.render('app/categories/index', { categories })
+    return view.render('admin/categories/index', { categories })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class CategoriesController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/categories/create')
+    return view.render('admin/categories/create')
   }
 
   /**
@@ -57,7 +57,7 @@ export default class CategoriesController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
-    return view.render('app/categories/show', { category })
+    return view.render('admin/categories/show', { category })
   }
 
   /**
@@ -69,7 +69,7 @@ export default class CategoriesController {
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
 
-    return view.render('app/categories/edit', { category })
+    return view.render('admin/categories/edit', { category })
   }
 
   /**

@@ -1,12 +1,11 @@
 @layout('layouts/app')
 
-@set('title', 'Create Product')
+@set('title', "Edit")
 
-@set('breadcrumb', [{label: 'Products', link: route('products.index')}])
+@set('breadcrumb', [{label: 'Products', link: route('products.index')}, {label: product.name, link: route('products.show', product)}])
 
 @section('content')
-<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-
+<form action="{{ route('products.update', {id: product.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
 
     <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -15,39 +14,39 @@
 
                 <div class="col-span-6">
                     @!form.label({for:'name', label: "Name", required: true})
-                    @!form.input({id: "name", value: flashMessages.get('name', '') || '', name: "name", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.input({id: "name", value: flashMessages.get('name', product.name), name: "name", type: "text", className: "mt-1 block w-full", autofocus: true})
                     @!form.inputError({error: 'errors.name'})
                 </div>
 
                 <div class="col-span-6">
                     @!form.label({for:'description', label: "Description", required: true})
-                    @!form.textarea({name:'description', value: flashMessages.get('body', '') || '', className: "mt-1 block w-full"})
+                    @!form.textarea({name:'description', value: flashMessages.get('description', product.description), className: "mt-1 block w-full"})
                     @!form.inputError({error: 'errors.description'})
                 </div>
 
                 <div class="col-span-6">
                     @!form.label({for:'short_description', label: "Short description", required: true})
-                    @!form.textarea({name:'short_description', className: "mt-1 block w-full", value: flashMessages.get('short_description', '') || ''})
-                    @!form.inputError({error: 'errors.short_description'})
+                    @!form.textarea({name:'shortDescription', value: flashMessages.get('short_description', product.shortDescription), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.shortDescription'})
                 </div>
 
                 <div class="col-span-6 sm:col-span-2">
                     @!form.label({for:'calories', label: "Calories", required: true})
-                    @!form.input({id: "calories", name: "calories", type: "text", className: "mt-1 block w-full", autofocus: true, value: flashMessages.get('calories', '') || ''})
+                    @!form.input({id: "calories", name: "calories", value: flashMessages.get('calories', product.calories), type: "text", className: "mt-1 block w-full"})
                     @!form.inputError({error: 'errors.calories'})
                 </div>
 
                 <div class="col-span-6 sm:col-span-2">
                     @!form.label({for:'Price', label: "Price", required: true})
-                    @!form.input({id: "price", name: "price", type: "text", className: "mt-1 block w-full", autofocus: true, value: flashMessages.get('price', '') || ''})
+                    @!form.input({id: "price", name: "price", value: flashMessages.get('price', product.price), type: "text", className: "mt-1 block w-full"})
                     @!form.inputError({error: 'errors.price'})
                 </div>
 
                 <div class="col-span-6 sm:col-span-2">
                     @!form.label({for:'status', label: "Status", required: true})
                     <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="1" {{ flashMessages.get('errors.status', '') === 1 ? 'selected' : ''}}>Active</option>
-                        <option value="0" {{ flashMessages.get('errors.status', '') === 0 ? 'selected' : ''}}>Inactive</option>
+                        <option value="1" {{ flashMessages.get('errors.status', product.status) === 1 ? 'selected' : ''}}>Active</option>
+                        <option value="0" {{ flashMessages.get('errors.status', product.status) === 0 ? 'selected' : ''}}>Inactive</option>
                     </select>
                     @!form.inputError({error: 'errors.status'})
                 </div>

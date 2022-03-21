@@ -1,8 +1,8 @@
-import CareerCategory from 'App/Models/CareerCategory'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Brands from 'App/Models/Brands'
+import CareerCategory from 'App/Models/CareerCategory'
 import CreateValidator from 'App/Validators/CareerCategory/CreateValidator'
 import UpdateValidator from 'App/Validators/CareerCategory/UpdateValidator'
-import Brands from 'App/Models/Brands'
 export default class CareerCategoriesController {
 /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ export default class CareerCategoriesController {
   public async index ({ view, request }: HttpContextContract) {
     let careercategories = await CareerCategory.query().paginate(request.input('page', 1), 2)
     careercategories.baseUrl(request.url())
-    return view.render('app/careercategory/index', { careercategories })
+    return view.render('admin/careercategory/index', { careercategories })
   }
   /**
      * Show the form for creating a new resource.
@@ -23,7 +23,7 @@ export default class CareerCategoriesController {
      */
   public async create ({ view }: HttpContextContract) {
     const brands = await Brands.query().where('status', 1)
-    return view.render('app/careercategory/create', {brands})
+    return view.render('admin/careercategory/create', {brands})
   }
   /**
      * Store a newly created resource in storage.
@@ -47,7 +47,7 @@ export default class CareerCategoriesController {
      */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const careercategory = await CareerCategory.findOrFail(id)
-    return view.render('app/careercategory/show', { careercategory })
+    return view.render('admin/careercategory/show', { careercategory })
   }
 
   /**
@@ -59,7 +59,7 @@ export default class CareerCategoriesController {
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const careercategory = await CareerCategory.findOrFail(id)
     const brands = await Brands.query().where('status', 1)
-    return view.render('app/careercategory/edit', { careercategory,brands })
+    return view.render('admin/careercategory/edit', { careercategory,brands })
   }
 
   /**

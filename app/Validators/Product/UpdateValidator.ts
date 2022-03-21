@@ -1,5 +1,5 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class UpdateValidator {
   constructor (protected ctx: HttpContextContract) { }
@@ -26,12 +26,11 @@ export default class UpdateValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }),
     description: schema.string({ trim: true }),
+    shortDescription: schema.string({ trim: true }),
+    calories: schema.string({ trim: true }),
     price: schema.string({ trim: true }),
-    image_path: schema.file.optional({
-      size: '1mb',
-      extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
-    }),
     status: schema.number(),
+    publishedAt: schema.date.optional(),
   })
 
   /**

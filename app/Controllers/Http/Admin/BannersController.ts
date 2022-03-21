@@ -1,6 +1,6 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Banner from 'App/Models/Banner'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Banner from 'App/Models/Banner'
 import CreateValidator from 'App/Validators/Banner/CreateValidator'
 import UpdateValidator from 'App/Validators/Banner/UpdateValidator'
 export default class BannersController {
@@ -15,7 +15,7 @@ export default class BannersController {
 
     banners.baseUrl(request.url())
 
-    return view.render('app/banners/index', { banners })
+    return view.render('admin/banners/index', { banners })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/banners/create')
+    return view.render('admin/banners/create')
   }
 
   /**
@@ -54,7 +54,7 @@ export default class BannersController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const banner = await Banner.findOrFail(id)
 
-    return view.render('app/banners/show', { banner })
+    return view.render('admin/banners/show', { banner })
   }
 
   /**
@@ -66,7 +66,7 @@ export default class BannersController {
   public async edit ({ view, params }: HttpContextContract) {
     const banner = await Banner.findOrFail(params.id)
 
-    return view.render('app/banners/edit', { banner })
+    return view.render('admin/banners/edit', { banner })
   }
 
   /**

@@ -1,5 +1,5 @@
-import Brand from 'App/Models/Brands'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Brand from 'App/Models/Brands'
 import CreateValidator from 'App/Validators/Brands/CreateValidator'
 import UpdateValidator from 'App/Validators/Brands/UpdateValidator'
 
@@ -13,7 +13,7 @@ export default class BrandsController {
   public async index ({ view, request }: HttpContextContract) {
     let brands = await Brand.query().paginate(request.input('page', 1), 2)
     brands.baseUrl(request.url())
-    return view.render('app/brands/index', { brands })
+    return view.render('admin/brands/index', { brands })
   }
 
   /**
@@ -23,7 +23,7 @@ export default class BrandsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/brands/create')
+    return view.render('admin/brands/create')
   }
 
   /**
@@ -55,7 +55,7 @@ export default class BrandsController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const brand = await Brand.findOrFail(id)
-    return view.render('app/brands/show', { brand })
+    return view.render('admin/brands/show', { brand })
   }
 
   /**
@@ -67,7 +67,7 @@ export default class BrandsController {
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const brand = await Brand.findOrFail(id)
 
-    return view.render('app/brands/edit', { brand })
+    return view.render('admin/brands/edit', { brand })
   }
 
   /**

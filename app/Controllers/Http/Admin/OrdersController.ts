@@ -17,7 +17,7 @@ export default class OrdersController {
 
     orders.baseUrl(request.url())
 
-    return view.render('app/orders/index', { orders })
+    return view.render('admin/orders/index', { orders })
   }
 
   /**
@@ -29,7 +29,7 @@ export default class OrdersController {
   public async create ({ view }: HttpContextContract) {
     const users = await User.all()
     //const products = await Product.all()
-    return view.render('app/orders/create',{users})
+    return view.render('admin/orders/create',{users})
   }
 
   /**
@@ -57,7 +57,7 @@ export default class OrdersController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const order = await Orders.findOrFail(id)
-    return view.render('app/orders/show', { order })
+    return view.render('admin/orders/show', { order })
   }
 
   /**

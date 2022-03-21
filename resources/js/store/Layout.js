@@ -20,7 +20,7 @@ const useLayoutStore = defineStore('layout', {
   },
 
   actions: {
-    leSidebar (payload) {
+    toggleSidebar (payload) {
       this.sidebar = payload ? payload : !this.sidebar
     },
 

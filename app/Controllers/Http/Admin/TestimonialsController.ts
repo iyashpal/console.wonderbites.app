@@ -1,5 +1,5 @@
-import Testimonial from 'App/Models/Testimonial'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Testimonial from 'App/Models/Testimonial'
 import CreateValidator from 'App/Validators/Testimonial/CreateValidator'
 import UpdateValidator from 'App/Validators/Testimonial/UpdateValidator'
 
@@ -15,7 +15,7 @@ export default class TestimonialsController {
 
     testimonials.baseUrl(request.url())
 
-    return view.render('app/testimonials/index', { testimonials })
+    return view.render('admin/testimonials/index', { testimonials })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class TestimonialsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/testimonials/create')
+    return view.render('admin/testimonials/create')
   }
 
   /**
@@ -58,7 +58,7 @@ export default class TestimonialsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const testimonial = await Testimonial.findOrFail(id)
 
-    return view.render('app/testimonials/show', { testimonial })
+    return view.render('admin/testimonials/show', { testimonial })
   }
 
   /**
@@ -70,7 +70,7 @@ export default class TestimonialsController {
   public async edit ({ view, params }: HttpContextContract) {
     const testimonial = await Testimonial.findOrFail(params.id)
 
-    return view.render('app/testimonials/edit', { testimonial })
+    return view.render('admin/testimonials/edit', { testimonial })
   }
 
   /**

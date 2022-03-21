@@ -1,5 +1,5 @@
-import Team from 'App/Models/Team'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Team from 'App/Models/Team'
 import CreateValidator from 'App/Validators/Team/CreateValidator'
 import UpdateValidator from 'App/Validators/Team/UpdateValidator'
 
@@ -15,7 +15,7 @@ export default class TeamsController {
 
     teams.baseUrl(request.url())
 
-    return view.render('app/teams/index', { teams })
+    return view.render('admin/teams/index', { teams })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class TeamsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/teams/create')
+    return view.render('admin/teams/create')
   }
 
   /**
@@ -56,7 +56,7 @@ export default class TeamsController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const team = await Team.findOrFail(id)
-    return view.render('app/teams/show', { team })
+    return view.render('admin/teams/show', { team })
   }
 
   /**
@@ -68,7 +68,7 @@ export default class TeamsController {
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const team = await Team.findOrFail(id)
 
-    return view.render('app/teams/edit', { team })
+    return view.render('admin/teams/edit', { team })
   }
 
   /**

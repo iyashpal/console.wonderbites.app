@@ -1,9 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
-import CategoryProduct from 'App/Models/Pivot/CategoryProduct'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
+import { DateTime } from 'luxon'
 
 export default class ProductsController {
   /**
@@ -17,7 +17,7 @@ export default class ProductsController {
 
     products.baseUrl(request.url())
 
-    return view.render('app/products/index', { products })
+    return view.render('admin/products/index', { products })
   }
 
   /**
@@ -27,7 +27,7 @@ export default class ProductsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    return view.render('app/products/create')
+    return view.render('admin/products/create')
   }
 
   /**
@@ -37,6 +37,11 @@ export default class ProductsController {
    */
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
+
+    // Mark product as published if the status is set to active
+    if (data.status === 1) {
+      data.publishedAt = DateTime.now()
+    }
 
     await Product.create(data)
       .then((product) => {
@@ -55,7 +60,9 @@ export default class ProductsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
-    return view.render('app/products/show', { product })
+    const categories = await Category.query().where('type', 'Product')
+
+    return view.render('admin/products/show', { product, categories })
   }
 
   /**
@@ -66,9 +73,8 @@ export default class ProductsController {
    */
   public async edit ({ view, params }: HttpContextContract) {
     const product = await Product.findOrFail(params.id)
-    const categoryproducts = await CategoryProduct.query().where('product_id', params.id)
-    const categories = await Category.all()
-    return view.render('app/products/edit', { product, categoryproducts, categories })
+
+    return view.render('admin/products/edit', { product })
   }
 
   /**
@@ -81,15 +87,16 @@ export default class ProductsController {
 
     const data = await request.validate(UpdateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
+    // Mark product as published if the status is set to active
+    if (data.status === 1) {
+      data.publishedAt = DateTime.now()
     }
 
-    await product.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : product.image_path,
-    }).save().then(() => session.flash('product_updated', true))
+    await product.merge(data).save().then(product => {
+      session.flash('product_updated', true)
 
-    response.redirect().toRoute('products.show', { id: product.id })
+      response.redirect().toRoute('products.show', product)
+    })
   }
 
   /**
