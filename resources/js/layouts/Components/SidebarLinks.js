@@ -70,10 +70,21 @@ export default [
     icon: 'group',
   },
   {
+    url: '/categoryblog',
+    label: 'Category Blog',
+    icon: 'group',
+  },
+  {
+    url: '/blogs',
+    label: 'Blogs',
+    icon: 'group',
+  },
+  {
     url: '/',
     label: 'Feedbacks',
     icon: 'thumb-up-alt',
   },
+ 
   {
     url: '/',
     label: 'Coupons',
