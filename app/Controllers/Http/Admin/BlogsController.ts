@@ -17,10 +17,10 @@ export default class BlogsController {
    */
   public async index ({ view, request }: HttpContextContract) {
     let blogs = await Blog.query().paginate(request.input('page', 1), 2)
-
+    let categories = await CategoryBlog.all();
     blogs.baseUrl(request.url())
 
-    return view.render('app/blogs/index', { blogs })
+    return view.render('app/blogs/index', { blogs,categories })
   }
 
   /**
