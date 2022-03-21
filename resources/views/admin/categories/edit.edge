@@ -1,5 +1,8 @@
 @layout('layouts/app')
 @set('title', "Edit Categorie")
+
+@set('breadcrumb', [{label: 'Categories', link: route('categories.index')}, {label: category.name, link: route('categories.show', product)}])
+
 @section('content')
 <form action="{{ route('categories.update', {id: category.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}

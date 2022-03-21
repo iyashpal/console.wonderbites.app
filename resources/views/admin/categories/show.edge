@@ -1,7 +1,7 @@
 @layout('layouts/app')
 
 @set('title', category.name)
-
+@set('breadcrumb', [{label: 'Categories', link: route('categories.index')}])
 @section('actions')
 <a class="tw:btn tw:btn-secondary" href="{{ route('categories.index') }}">
     <icon name="arrow-left" class="w-6 h-6 mr-1"></icon> Back
