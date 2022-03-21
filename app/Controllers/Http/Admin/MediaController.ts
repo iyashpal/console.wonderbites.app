@@ -40,7 +40,7 @@ export default class MediaController {
       await data.image_path.moveToDisk('./')
     }
 
-    const media = await Media.create({ ...data, image_path: data.image_path!.fileName })
+    const media = await Media.create({ ...data, filePath: data.image_path!.fileName })
       .then((media) => {
         session.flash('media_created', media.id)
         return media
@@ -88,7 +88,7 @@ export default class MediaController {
     }
 
     await media.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : media.image_path,
+      ...data, filePath: data.image_path ? data.image_path.fileName : media.filePath,
     }).save().then(() => session.flash('media_updated', true))
 
     response.redirect().toRoute('media.show', { id: media.id })

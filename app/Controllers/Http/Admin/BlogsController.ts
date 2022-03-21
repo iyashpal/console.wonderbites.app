@@ -45,7 +45,7 @@ export default class BlogsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-    const blog = await Blog.create({ ...data, image_path: data.image_path!.fileName, user_id: 1 })
+    const blog = await Blog.create({ ...data, imagePath: data.image_path!.fileName, user_id: 1 })
       .then((blog) => {
         session.flash('blog_created', blog.id)
         return blog
@@ -100,7 +100,7 @@ export default class BlogsController {
     }
 
     await blog.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : product.image_path,
+      ...data, imagePath: data.image_path ? data.image_path.fileName : blog.imagePath,
     }).save().then(() => session.flash('blog_updated', true))
     if(request.input('category_id')){
       const categories = request.input('category_id')
