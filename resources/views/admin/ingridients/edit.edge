@@ -1,5 +1,8 @@
 @layout('layouts/app')
 @set('title', "Edit Ingridient")
+
+@set('breadcrumb', [{label: 'Ingridients', link: route('ingridients.index')}, {label: ingridient.name, link: route('ingridients.show', ingridient)}])
+
 @section('content')
 <form action="{{ route('ingridients.update', {id: ingridient.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
@@ -14,7 +17,7 @@
                 </div>
 
                <div class="col-span-6">
-                    @!form.label({for:'description', label: "Description", required: true})
+                    @!form.label({for:'description', label: "Description", required: false})
                     <textarea type="text" name="description" id="description" autocomplete="description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('description', ingridient.description) }}</textarea>
                     @!form.inputError({error: 'errors.description'})
                 </div>
@@ -30,6 +33,14 @@
                     @!form.label({for:'image_path', label: "Image", required: true})
                     <input type="file" name="image_path" id="image_path">
                     @!form.inputError({error: 'errors.image_path'})
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'status', label: "Status", required: true})
+                    <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="1" {{ flashMessages.get('errors.status', ingridient.status) === 1 ? 'selected' : ''}}>Active</option>
+                        <option value="0" {{ flashMessages.get('errors.status', ingridient.status) === 0 ? 'selected' : ''}}>Inactive</option>
+                    </select>
+                    @!form.inputError({error: 'errors.status'})
                 </div>
             </div>
         </div>
