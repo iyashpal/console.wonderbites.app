@@ -6,6 +6,7 @@ import User from 'App/Models/User'
 import BlogCategories from 'App/Models/Pivot/BlogCategory'
 import CreateValidator from 'App/Validators/Blog/CreateValidator'
 import UpdateValidator from 'App/Validators/Blog/UpdateValidator'
+import { AirlineSeatLegroomReducedIcon } from '@materialicons/vue/round'
 ///import { isDate } from '@vue/shared'
 //import { CountertopsIcon } from '@materialicons/vue/round'
 export default class BlogsController {
@@ -17,10 +18,10 @@ export default class BlogsController {
    */
   public async index ({ view, request }: HttpContextContract) {
     let blogs = await Blog.query().paginate(request.input('page', 1), 2)
-    let categories = await CategoryBlog.all();
+    let categories = await CategoryBlog.all()
     blogs.baseUrl(request.url())
 
-    return view.render('app/blogs/index', { blogs,categories })
+    return view.render('admin/blogs/index', { blogs,categories })
   }
 
   /**
@@ -32,7 +33,7 @@ export default class BlogsController {
   public async create ({ view }: HttpContextContract) {
     const categories = await CategoryBlog.all()
     const users = await User.all()
-    return view.render('app/blogs/create',{categories, users})
+    return view.render('admin/blogs/create',{categories, users})
   }
 
   /**
@@ -45,7 +46,11 @@ export default class BlogsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-    const blog = await Blog.create({ ...data, imagePath: data.image_path!.fileName, user_id: 1 })
+    const name = data.name
+    const slug = name.replace(/\s+/g, '-')
+    const slugexist = await Blog.query().where('slug', slug)
+    const slugupdate = slugexist.length === 0 ? slug : slug + (new Date()).getTime()
+    const blog = await Blog.create({ ...data, image_path: data.image_path!.fileName, user_id: 1, slug: slugupdate })
       .then((blog) => {
         session.flash('blog_created', blog.id)
         return blog
@@ -68,7 +73,7 @@ export default class BlogsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const blog = await Blog.findOrFail(id)
 
-    return view.render('app/blogs/show', { blog })
+    return view.render('admin/blogs/show', { blog })
   }
 
   /**
@@ -82,7 +87,8 @@ export default class BlogsController {
     const blogcategories = await BlogCategories.query().where('blog_id',blog.id)
     const categories = await CategoryBlog.all()
     const users = await User.all()
-    return view.render('app/blogs/edit', { blog, blogcategories,categories,users})
+    //console.log(blog)
+    return view.render('admin/blogs/edit', { blog, blogcategories,categories,users})
   }
 
   /**
@@ -100,7 +106,7 @@ export default class BlogsController {
     }
 
     await blog.merge({
-      ...data, imagePath: data.image_path ? data.image_path.fileName : blog.imagePath,
+      ...data, image_path: data.image_path ? data.image_path.fileName : blog.image_path,
     }).save().then(() => session.flash('blog_updated', true))
     if(request.input('category_id')){
       const categories = request.input('category_id')
@@ -121,7 +127,6 @@ export default class BlogsController {
 
     await blog.delete().then(() => {
       session.flash('blog_deleted', true)
-
       response.redirect().toRoute('blogs.index')
     })
   }

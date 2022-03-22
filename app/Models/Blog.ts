@@ -10,6 +10,9 @@ export default class Blog extends BaseModel {
   public name: string
 
   @column()
+  public slug: string
+
+  @column()
   public user_id: number
 
   @column()
@@ -22,10 +25,10 @@ export default class Blog extends BaseModel {
   public description: string
 
   @column()
-  public shortDescription: string
+  public short_description: string
 
   @column()
-  public imagePath: string
+  public image_path: string
 
   @column()
   public status: number

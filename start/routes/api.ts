@@ -28,7 +28,10 @@ Route.group(() => {
 
   Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
-  Route.resource('blogs', 'API/BlogsController').as('blogs')
+  //Route.resource('blogs', 'API/BlogsController').as('blogs')
+  Route.get('blogs', 'API/BlogsController.index').as('blogs')
+  Route.get('blogs/:slug', 'API/BlogsController.showBlogBySlug').as('blogslug')
+
   Route.resource('categoryblog', 'API/CategoryBlogController').as('categoryblog')
   Route.resource('categories', 'API/CategoriesController').as('categories')
 

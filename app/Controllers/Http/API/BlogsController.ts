@@ -24,4 +24,13 @@ export default class BlogsController {
       response.unauthorized({ message: error.message })
     }
   }
+  public async showBlogBySlug ({ params: { slug }, response }) {
+    try {
+      const blog = await Blog.query()
+        .where('slug', slug)
+      response.status(200).json(blog)
+    } catch (error) {
+      response.unauthorized({ message: error.message })
+    }
+  }
 }
