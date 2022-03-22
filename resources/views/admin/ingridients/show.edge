@@ -45,4 +45,10 @@
         </div>
     </div>
 </div>
+
+<ul>
+    @each(category in categories)
+    <li> {{ category.name }}</li>
+    @endeach
+</ul>
 @endsection

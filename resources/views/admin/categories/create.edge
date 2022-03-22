@@ -18,23 +18,13 @@
                     @!form.inputError({error: 'errors.name'})
                 </div>
 
-                {{--  <div class="col-span-6">
-                    @!form.label({for:'description', label: "Description", required: false})
-                    <textarea type="text" name="description" id="description" autocomplete="description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('description', '') || '' }}</textarea>
-                    @!form.inputError({error: 'errors.description'})
-                </div>  --}}
-
-                {{--  <div class="col-span-6 sm:col-span-3">
-                    @!form.label({for:'image_path', label: "Image", required: true})
-                    <input type="file" name="image_path" id="image_path">
-                    @!form.inputError({error: 'errors.image_path'})
-                </div>  --}}
+                
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Type", required: true})
                     <select id="type" name="type" autocomplete="type-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="2" {{ flashMessages.get('errors.type', '') === 2 ? 'selected' : ''}}>Product Category</option>
-                        <option value="1" {{ flashMessages.get('errors.type', '') === 1 ? 'selected' : ''}}>Ingradient Category</option>
-                        <option value="0" {{ flashMessages.get('errors.type', '') === 0 ? 'selected' : ''}}>Blog</option>
+                        <option value="Product" {{ flashMessages.get('errors.type', '') === 2 ? 'selected' : ''}}>Product</option>
+                        <option value="Ingridient" {{ flashMessages.get('errors.type', '') === 1 ? 'selected' : ''}}>Ingridient</option>
+                        <option value="Blog" {{ flashMessages.get('errors.type', '') === 0 ? 'selected' : ''}}>Blog</option>
                     </select>
                     @!form.inputError({error: 'errors.status'})
                 </div>

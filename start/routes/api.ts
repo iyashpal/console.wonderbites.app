@@ -17,12 +17,15 @@ Route.group(() => {
 
     Route.resource('wishlists', 'API/WishlistsController')
 
+    Route.post('products/:id/category', 'API/ProductsController.toggleCategory').as('products.category')
+
     //Route.resource('cart', 'API/CartsController');
 
     //Route.get('/product/{id}', "API/UsersController.show");
 
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   }).middleware('auth_api')
+
   Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
   Route.resource('blogs', 'API/BlogsController').as('blogs')
@@ -47,7 +50,6 @@ Route.group(() => {
   Route.get('content_policy', 'API/HomeController.content_policy').as('content_policy')
 
   Route.get('settings', 'API/HomeController.settings').as('settings')
-  
 
   Route.get('my_subscriptions', 'API/HomeController.my_subscriptions').as('my_subscriptions')
 }).prefix('/api').as('api')

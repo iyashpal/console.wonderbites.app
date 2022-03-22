@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Category from 'App/Models/Category'
 import Ingridient from 'App/Models/Ingridient'
 import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
 import UpdateValidator from 'App/Validators/Ingridient/UpdateValidator'
@@ -52,7 +53,9 @@ export default class IngridientsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const ingridient = await Ingridient.findOrFail(id)
 
-    return view.render('admin/ingridients/show', { ingridient })
+    const categories = await Category.query().where('type', 'Ingridient')
+
+    return view.render('admin/ingridients/show', { ingridient, categories })
   }
 
   /**

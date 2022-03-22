@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
+import Ingridient from 'App/Models/Ingridient'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
@@ -60,6 +61,12 @@ export default class ProductsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
+    product.load('categories', (query) => query.select('id'))
+
+    const ingridients = await Ingridient.all()
+
+    console.log(product)
+
     const categories = await Category.query().where('type', 'Product')
 
     return view.render('admin/products/show', { product, categories })
@@ -112,5 +119,17 @@ export default class ProductsController {
 
       response.redirect().toRoute('products.index')
     })
+  }
+
+  public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
+    const product = await Product.findOrFail(id)
+
+    const test = await product.related('categories').attach(request.input('category_id'))
+
+    response.json(test)
+    if (request.ajax()) {
+    } else {
+      // response.redirect().back()
+    }
   }
 }
