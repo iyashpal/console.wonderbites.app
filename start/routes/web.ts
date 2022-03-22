@@ -6,7 +6,10 @@ Route.group(() => {
   Route.resource('testimonials', 'Admin/TestimonialsController')
   Route.resource('cuisines', 'Admin/CuisinesController')
   Route.resource('categories', 'Admin/CategoriesController')
+
   Route.resource('products', 'Admin/ProductsController')
+  Route.post('products/:id/category', 'Admin/ProductsController.toggleCategory').as('products.category')
+
   Route.resource('ingridients', 'Admin/IngridientsController')
   Route.resource('banners', 'Admin/BannersController')
   Route.resource('media', 'Admin/MediaController')

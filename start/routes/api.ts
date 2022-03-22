@@ -17,12 +17,15 @@ Route.group(() => {
 
     Route.resource('wishlists', 'API/WishlistsController')
 
+    Route.post('products/:id/category', 'API/ProductsController.toggleCategory').as('products.category')
+
     //Route.resource('cart', 'API/CartsController');
 
     //Route.get('/product/{id}', "API/UsersController.show");
 
     //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
   }).middleware('auth_api')
+
   Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
   Route.resource('blogs', 'API/BlogsController').as('blogs')

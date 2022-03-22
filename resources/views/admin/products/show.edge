@@ -39,12 +39,12 @@
                     </dd>
                 </div>
                 <div class="sm:col-span-1">
-                    <dt class="text-sm font-medium text-gray-500">Created At</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ product.createdAt }}</dd>
+                    <dt class="text-sm font-medium text-gray-500">Published At</dt>
+                    <dd class="mt-1 text-sm text-gray-900">{{ product.publishedAt }}</dd>
                 </div>
                 <div class="sm:col-span-1">
-                    <dt class="text-sm font-medium text-gray-500">Updated At</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ product.updatedAt }}</dd>
+                    <dt class="text-sm font-medium text-gray-500">Created At</dt>
+                    <dd class="mt-1 text-sm text-gray-900">{{ product.createdAt }}</dd>
                 </div>
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Updated At</dt>
@@ -72,16 +72,17 @@
 
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h2 class="font-semibold text-xl pb-3">Categories</h2>
+            <div class="pb-3">
+                <h2 class="font-semibold text-xl">Categories</h2>
+                <p class="text-xs text-gray-400">Click categories to add/remove</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                @each(category in categories)
+                <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('products.category', product) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(product.categories) }}"></v-toggle-product-categories>
+                @endeach
 
-            @each(category in categories)
-            <button class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-                    <circle cx="4" cy="4" r="3" />
-                </svg>
-                {{ category.name }}
-            </button>
-            @endeach
+
+            </div>
 
             @if(categories.length === 0)
             <v-alert name="warning">

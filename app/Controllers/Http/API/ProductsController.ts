@@ -1,6 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import ProductImages from 'App/Models/Pivot/ProductImage'
 import Product from 'App/Models/Product'
 
 export default class ProductsController {
@@ -44,7 +43,7 @@ export default class ProductsController {
       const product = await Product.findOrFail(id)
 
       //const images = await ProductImages.query()
-       // .where('product_id', id)
+      // .where('product_id', id)
 
       response.status(200).json(product)
     } catch (error) {
@@ -68,4 +67,12 @@ export default class ProductsController {
   public async update ({ }: HttpContextContract) { }
 
   public async destroy ({ }: HttpContextContract) { }
+
+  public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
+    const product = await Product.findOrFail(id)
+
+    const test = await product.related('categories').attach(request.input('category_id'))
+
+    response.json(test)
+  }
 }

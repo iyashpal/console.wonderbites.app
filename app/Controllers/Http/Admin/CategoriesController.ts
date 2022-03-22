@@ -36,10 +36,6 @@ export default class CategoriesController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    // if (data.image_path) {
-    //   await data.image_path.moveToDisk('./')
-    // }
-
     const category = await Category.create({ ...data })
       .then((category) => {
         session.flash('category_created', category.id)

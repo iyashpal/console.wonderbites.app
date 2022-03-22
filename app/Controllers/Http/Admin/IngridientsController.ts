@@ -1,5 +1,5 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Category from 'App/Models/Category'
 import Ingridient from 'App/Models/Ingridient'
 import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
 import UpdateValidator from 'App/Validators/Ingridient/UpdateValidator'
@@ -35,10 +35,7 @@ export default class IngridientsController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
-    const ingridient = await Ingridient.create({ ...data, imagePath: data.image_path!.fileName })
+    const ingridient = await Ingridient.create(data)
       .then((ingridient) => {
         session.flash('ingridient_created', ingridient.id)
         return ingridient
@@ -56,7 +53,9 @@ export default class IngridientsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const ingridient = await Ingridient.findOrFail(id)
 
-    return view.render('admin/ingridients/show', { ingridient })
+    const categories = await Category.query().where('type', 'Ingridient')
+
+    return view.render('admin/ingridients/show', { ingridient, categories })
   }
 
   /**

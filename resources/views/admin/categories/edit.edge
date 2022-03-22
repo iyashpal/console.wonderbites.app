@@ -1,7 +1,7 @@
 @layout('layouts/app')
 @set('title', "Edit Categorie")
 
-@set('breadcrumb', [{label: 'Categories', link: route('categories.index')}, {label: category.name, link: route('categories.show', product)}])
+@set('breadcrumb', [{label: 'Categories', link: route('categories.index')}, {label: category.name, link: route('categories.show', category)}])
 
 @section('content')
 <form action="{{ route('categories.update', {id: category.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
@@ -27,7 +27,15 @@
                     <input type="file" name="image_path" id="image_path">
                     @!form.inputError({error: 'errors.image_path'})
                 </div>  --}}
-
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'type', label: "Type", required: true})
+                    <select id="type" name="type" autocomplete="type-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="2" {{ flashMessages.get('errors.type', category.status) === 2 ? 'selected' : ''}}>Product Category</option>
+                        <option value="1" {{ flashMessages.get('errors.type', category.status) === 1 ? 'selected' : ''}}>Ingradient Category</option>
+                        <option value="0" {{ flashMessages.get('errors.type', category.status) === 0 ? 'selected' : ''}}>Blog</option>
+                    </select>
+                    @!form.inputError({error: 'errors.status'})
+                </div>
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})
                     <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
