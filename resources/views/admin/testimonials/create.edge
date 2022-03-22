@@ -2,6 +2,8 @@
 
 @set('title', "Create New")
 
+@set('breadcrumb', [{label: 'Testimonials', link: route('testimonials.index')}])
+
 @section('content')
 <form action="{{ route('testimonials.store') }}" method="POST" enctype="multipart/form-data">
 

@@ -29,6 +29,9 @@ export default class Ingridient extends BaseModel {
   @column()
   public imagePath: string
 
+  @column()
+  public status: number
+
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
 

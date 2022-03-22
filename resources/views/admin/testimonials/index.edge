@@ -65,7 +65,11 @@
 
                         @if(testimonials.total === 0)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium bg-" colspan="4">Testimonials not found.</td>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Testimonials not available.
+                                </v-alert>
+                            </td>
                         </tr>
                         @endif
                     </tbody>

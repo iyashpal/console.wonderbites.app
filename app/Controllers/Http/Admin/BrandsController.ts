@@ -38,7 +38,7 @@ export default class BrandsController {
       await data.image_path.moveToDisk('./')
     }
 
-    const brand = await Brand.create({ ...data, image_path: data.image_path!.fileName })
+    const brand = await Brand.create({ ...data, imagePath: data.image_path!.fileName })
       .then((brand) => {
         session.flash('brand_updated', brand.id)
         return brand
@@ -84,7 +84,7 @@ export default class BrandsController {
       await data.image_path.moveToDisk('./')
     }
 
-    await brand.merge({ ...data, image_path: data.image_path ? data.image_path.fileName : category.image_path })
+    await brand.merge({ ...data, imagePath: data.image_path ? data.image_path.fileName : brand.imagePath })
       .save().then(() => session.flash('brand_updated', true))
 
     response.redirect().toRoute('brands.show', { id: brand.id })

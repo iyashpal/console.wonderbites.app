@@ -36,7 +36,7 @@ export default [
   },
   {
     url: '/review',
-    label: 'Review',
+    label: 'Reviews',
     icon: 'dinner-dining',
   },
   {

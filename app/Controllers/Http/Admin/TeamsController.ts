@@ -11,6 +11,11 @@ export default class TeamsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
+    // let teams = await Team.query().paginate(request.input('page', 1), 2)
+
+    // teams.baseUrl(request.url())
+
+    // return view.render('admin/teams/index', { teams })
     let teams = await Team.query().paginate(request.input('page', 1), 2)
 
     teams.baseUrl(request.url())
@@ -39,7 +44,7 @@ export default class TeamsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-    const team = await Team.create({ ...data, image_path:data.image_path!.fileName })
+    const team = await Team.create({ ...data, imagePath: data.image_path!.fileName })
       .then((team) => {
         session.flash('team_created', team.id)
         return team
@@ -84,7 +89,7 @@ export default class TeamsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-    await team.merge({ ...data, image_path: data.image_path ? data.image_path.fileName : team.image_path })
+    await team.merge({ ...data, imagePath: data.image_path ? data.image_path.fileName : team.imagePath })
       .save().then(() => session.flash('team_created', true))
 
     response.redirect().toRoute('teams.show', { id: team.id })

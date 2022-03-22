@@ -17,6 +17,8 @@ export default class Ingridients extends BaseSchema {
 
       table.integer('price').unsigned().notNullable().defaultTo(0)
 
+      table.integer('status').defaultTo(1)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -82,7 +82,7 @@ export default class IngridientsController {
     }
 
     await ingridient.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : ingridient.image_path,
+      ...data, imagePath: data.image_path ? data.image_path.fileName : ingridient.imagePath,
     }).save().then(() => session.flash('ingridient_updated', true))
 
     response.redirect().toRoute('ingridients.show', { id: ingridient.id })

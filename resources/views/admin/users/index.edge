@@ -73,8 +73,12 @@
                         @endeach
 
                         @if(users.total === 0)
-                        <tr>
-                            <td>No data found.</td>
+                       <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Users not available.
+                                </v-alert>
+                            </td>
                         </tr>
                         @endif
                     </tbody>
