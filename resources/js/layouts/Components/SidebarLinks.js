@@ -32,7 +32,7 @@ export default [
   {
     url: '/ingridients',
     label: 'Ingridients',
-    icon: 'dinner-dining',
+    icon: 'local-pizza',
   },
   {
     url: '/review',

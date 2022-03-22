@@ -1,5 +1,6 @@
 @layout('layouts/app')
-@set('title', "ingridients")
+
+@set('title', "Ingridients")
 
 @section('actions')
 <a href="{{ route('ingridients.create') }}" class="tw:btn tw:btn-secondary">
@@ -62,6 +63,16 @@
                             </td>
                         </tr>
                         @endeach
+
+                        @if(ingridients.total === 0)
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 whitespace-nowrap">
+                                <v-alert name="warning">
+                                    Ingridients not found..
+                                </v-alert>
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
                 @!pagination.simple({paginator: ingridients})

@@ -1,4 +1,4 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cart from './Cart'
 import Category from './Category'
@@ -52,4 +52,9 @@ export default class Ingridient extends BaseModel {
 
   @column.dateTime()
   public deletedAt: DateTime
+
+  @computed()
+  public image () {
+    return '/images/placeholders/ingridient.png'
+  }
 }

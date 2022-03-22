@@ -1,4 +1,3 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Ingridient from 'App/Models/Ingridient'
 import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
@@ -35,10 +34,7 @@ export default class IngridientsController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
-    const ingridient = await Ingridient.create({ ...data, image_path: data.image_path!.fileName })
+    const ingridient = await Ingridient.create(data)
       .then((ingridient) => {
         session.flash('ingridient_created', ingridient.id)
         return ingridient
