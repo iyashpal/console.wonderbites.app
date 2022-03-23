@@ -80,8 +80,6 @@
                 @each(category in categories)
                 <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('products.category', product) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(product.categories) }}"></v-toggle-product-categories>
                 @endeach
-
-
             </div>
 
             @if(categories.length === 0)
@@ -95,11 +93,19 @@
 
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h2 class="font-semibold text-xl pb-3">Media</h2>
+            <div class="flex items-center justify-between pb-3">
+                <h2 class="font-semibold text-xl">Media</h2>
+
+                <v-media-upload object-type="Product" object-id="{{ product.id }}">
+                    <button class="bg-gray-100 py-2 px-3 rounded-md shadow-md text-gray-600 uppercase text-xs font-semibold hover:bg-gray-200 hover:text-gray-700">Add</button>
+                </v-media-upload>
+            </div>
 
             <v-alert name="warning">
                 Coming next after <span class="font-semibold">categories</span>.
             </v-alert>
+
+
         </div>
     </div>
 

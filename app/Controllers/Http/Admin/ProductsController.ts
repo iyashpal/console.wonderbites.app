@@ -124,10 +124,10 @@ export default class ProductsController {
   public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
-    const test = await product.related('categories').attach(request.input('category_id'))
+    const test = await product.related('categories').sync(request.input('categories'))
 
-    response.json(test)
     if (request.ajax()) {
+      response.json(test)
     } else {
       // response.redirect().back()
     }

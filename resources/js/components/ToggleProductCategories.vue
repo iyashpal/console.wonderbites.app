@@ -30,9 +30,15 @@ const updatedToSelect = ref(false)
 
 const isSelected = computed(() => !!props.categories.find(category => props.category.id === category.id) || updatedToSelect.value)
 
+const selectedCategories = computed(() => props.categories.filter(({ id }) => id !== props.category.id).map(c => c.id))
+
 function toggle() {
-    axios.post(props.route, { _csrf: props.csrf, category_id: props.category.id }).then(({ data }) => {
-        console.log(data)
+    if (!isSelected.value) {
+        selectedCategories.value.push(props.category.id)
+    }
+
+    axios.post(props.route, { _csrf: props.csrf, categories: selectedCategories.value }).then(({ data }) => {
+        window.location.reload()
     })
 }
 
