@@ -1,6 +1,8 @@
+import Application from '@ioc:Adonis/Core/Application'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Ingridient from 'App/Models/Ingridient'
+import Media from 'App/Models/Media'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
@@ -58,13 +60,15 @@ export default class ProductsController {
 
     product.load('categories', (query) => query.select('id'))
 
-    const ingridients = await Ingridient.all()
+    const media = await Media.query().where('object_type', 'Product').where('object_id', Number(id))
 
-    console.log(product)
+    console.log(media)
+
+    const ingridients = await Ingridient.all()
 
     const categories = await Category.query().where('type', 'Product')
 
-    return view.render('admin/products/show', { product, categories })
+    return view.render('admin/products/show', { product, categories, ingridients, media })
   }
 
   /**
@@ -112,15 +116,23 @@ export default class ProductsController {
     })
   }
 
-  public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
+  public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
-    const test = await product.related('categories').sync(request.input('categories'))
+    await product.related('categories').sync(request.input('categories'))
+  }
 
-    if (request.ajax()) {
-      response.json(test)
-    } else {
-      // response.redirect().back()
+  public async handleMedia ({ request, params: { id } }: HttpContextContract) {
+    const images = request.files('files')
+
+    for (let image of images) {
+      await image.move(Application.tmpPath('uploads'))
+
+      await Media.create({
+        objectId: request.input('objectId', id),
+        objectType: request.input('objectType'),
+        filePath: image.fileName,
+      })
     }
   }
 }

@@ -38,6 +38,15 @@ export default class Product extends BaseModel {
   @column()
   public status: number
 
+  // @hasMany(() => Media, {
+  //   localKey: 'id',
+  //   foreignKey: 'objectId',
+  //   onQuery (query) {
+  //     query.where('objectType', 'Product')
+  //   },
+  // })
+  // public media: HasMany<typeof Media>
+
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
 

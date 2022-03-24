@@ -9,7 +9,7 @@
 
         <template #content>
             <div class="flex items-center">
-                <img src="" alt="">
+                <img src alt />
             </div>
             <div
                 class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
@@ -35,7 +35,14 @@
                             class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                         >
                             <span>Upload a file</span>
-                            <input id="file-upload" @change="onChange" name="file-upload" type="file" class="sr-only" multiple/>
+                            <input
+                                id="file-upload"
+                                @change="onChange"
+                                name="file-upload"
+                                type="file"
+                                class="sr-only"
+                                multiple
+                            />
                         </label>
                         <p class="pl-1">or drag and drop</p>
                     </div>
@@ -50,6 +57,7 @@
     </v-dialog-modal>
 </template>
 <script setup>
+import axios from 'redaxios'
 import { reactive, ref, render } from 'vue';
 import Input from './Form/Input.vue'
 import Label from './Form/Label.vue'
@@ -69,7 +77,7 @@ const mediaForm = reactive({
 
 
 function renderImages(images) {
-    
+
 }
 
 
@@ -77,12 +85,24 @@ function onChange(event) {
 
     renderImages(event.target.files)
 
+    console.log(event.target.files.length)
+
     let files = new FormData()
 
-    files.append('files', event.target.files)
-    
+    files.append('_csrf', csrf)
+    files.append('objectId', props.objectId)
+    files.append('objectType', props.objectType)
 
-    
+
+    for (let i in event.target.files) {
+        files.append(`files[]`, event.target.files[i])
+    }
+
+
+    axios.post('/products/5/media', files).then(({ data }) => {
+        window.location.reload()
+    })
+
 }
 
 </script>

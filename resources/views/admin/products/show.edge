@@ -101,6 +101,13 @@
                 </v-media-upload>
             </div>
 
+            
+            @each(image in media)
+
+            <div>
+                <img src="{{image.filePath }}" alt="">
+            </div>
+            @endeach
             <v-alert name="warning">
                 Coming next after <span class="font-semibold">categories</span>.
             </v-alert>
