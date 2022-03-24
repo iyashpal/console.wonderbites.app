@@ -23,9 +23,9 @@
                     <dd class="mt-1 text-sm text-gray-900">{{ product.description || '-'}}</dd>
                 </div>
                 <div class="sm:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500">Short Description</dt>
+                    <dt class="text-sm font-medium text-gray-500">SKU (Internal Reference)</dt>
                     <dd class="mt-1 text-sm text-gray-900">
-                        {{ product.shortDescription || '-' }}
+                        {{ product.sku }}
                     </dd>
                 </div>
                 <div class="sm:col-span-1">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Published At</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ product.publishedAt }}</dd>
+                    <dd class="mt-1 text-sm text-gray-900">{{ product.publishedAt || '-' }}</dd>
                 </div>
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Created At</dt>
@@ -80,8 +80,6 @@
                 @each(category in categories)
                 <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('products.category', product) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(product.categories) }}"></v-toggle-product-categories>
                 @endeach
-
-
             </div>
 
             @if(categories.length === 0)
@@ -95,11 +93,26 @@
 
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h2 class="font-semibold text-xl pb-3">Media</h2>
+            <div class="flex items-center justify-between pb-3">
+                <h2 class="font-semibold text-xl">Media</h2>
 
+                <v-media-upload object-type="Product" object-id="{{ product.id }}">
+                    <button class="bg-gray-100 py-2 px-3 rounded-md shadow-md text-gray-600 uppercase text-xs font-semibold hover:bg-gray-200 hover:text-gray-700">Add</button>
+                </v-media-upload>
+            </div>
+
+            
+            @each(image in media)
+
+            <div>
+                <img src="{{image.filePath }}" alt="">
+            </div>
+            @endeach
             <v-alert name="warning">
                 Coming next after <span class="font-semibold">categories</span>.
             </v-alert>
+
+
         </div>
     </div>
 

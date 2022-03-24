@@ -1,6 +1,8 @@
+import Application from '@ioc:Adonis/Core/Application'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Ingridient from 'App/Models/Ingridient'
+import Media from 'App/Models/Media'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
@@ -36,15 +38,10 @@ export default class ProductsController {
    * 
    * @param param0 HttpContextContract
    */
-  public async store ({ request, response, session }: HttpContextContract) {
+  public async store ({ request, response, session, auth }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    // Mark product as published if the status is set to active
-    if (data.status === 1) {
-      data.publishedAt = DateTime.now()
-    }
-
-    await Product.create(data)
+    await Product.create({ ...data, userId: auth.user?.id, publishedAt: data.status === 1 ? DateTime.now() : null })
       .then((product) => {
         session.flash('product_created', product.id)
 
@@ -63,13 +60,15 @@ export default class ProductsController {
 
     product.load('categories', (query) => query.select('id'))
 
-    const ingridients = await Ingridient.all()
+    const media = await Media.query().where('object_type', 'Product').where('object_id', Number(id))
 
-    console.log(product)
+    console.log(media)
+
+    const ingridients = await Ingridient.all()
 
     const categories = await Category.query().where('type', 'Product')
 
-    return view.render('admin/products/show', { product, categories })
+    return view.render('admin/products/show', { product, categories, ingridients, media })
   }
 
   /**
@@ -94,16 +93,12 @@ export default class ProductsController {
 
     const data = await request.validate(UpdateValidator)
 
-    // Mark product as published if the status is set to active
-    if (data.status === 1) {
-      data.publishedAt = DateTime.now()
-    }
+    await product.merge({ ...data, publishedAt: data.status === 1 ? DateTime.now() : null }).save()
+      .then(product => {
+        session.flash('product_updated', true)
 
-    await product.merge(data).save().then(product => {
-      session.flash('product_updated', true)
-
-      response.redirect().toRoute('products.show', product)
-    })
+        response.redirect().toRoute('products.show', product)
+      })
   }
 
   /**
@@ -121,15 +116,23 @@ export default class ProductsController {
     })
   }
 
-  public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
+  public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
-    const test = await product.related('categories').attach(request.input('category_id'))
+    await product.related('categories').sync(request.input('categories'))
+  }
 
-    response.json(test)
-    if (request.ajax()) {
-    } else {
-      // response.redirect().back()
+  public async handleMedia ({ request, params: { id } }: HttpContextContract) {
+    const images = request.files('files')
+
+    for (let image of images) {
+      await image.move(Application.tmpPath('uploads'))
+
+      await Media.create({
+        objectId: request.input('objectId', id),
+        objectType: request.input('objectType'),
+        filePath: image.fileName,
+      })
     }
   }
 }

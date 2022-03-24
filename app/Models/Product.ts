@@ -24,7 +24,7 @@ export default class Product extends BaseModel {
   public description: string
 
   @column()
-  public shortDescription: string
+  public sku: string
 
   @column()
   public calories: string
@@ -37,6 +37,15 @@ export default class Product extends BaseModel {
 
   @column()
   public status: number
+
+  // @hasMany(() => Media, {
+  //   localKey: 'id',
+  //   foreignKey: 'objectId',
+  //   onQuery (query) {
+  //     query.where('objectType', 'Product')
+  //   },
+  // })
+  // public media: HasMany<typeof Media>
 
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
@@ -54,7 +63,7 @@ export default class Product extends BaseModel {
   public wishlists: ManyToMany<typeof Wishlist>
 
   @column.dateTime()
-  public publishedAt: DateTime
+  public publishedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

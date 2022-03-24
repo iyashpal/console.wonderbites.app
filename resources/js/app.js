@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { MaterialIcons } from './plugins'
 import { resolveComponents } from './helpers'
+import './bootstrap'
 
 const app = createApp({})
 

@@ -13,7 +13,7 @@ export default class Products extends BaseSchema {
 
       table.text('description').nullable()
 
-      table.text('short_description').nullable()
+      table.string('sku').notNullable()
 
       table.string('calories').nullable()
 
