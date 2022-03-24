@@ -23,9 +23,9 @@
                     <dd class="mt-1 text-sm text-gray-900">{{ product.description || '-'}}</dd>
                 </div>
                 <div class="sm:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500">Short Description</dt>
+                    <dt class="text-sm font-medium text-gray-500">SKU (Internal Reference)</dt>
                     <dd class="mt-1 text-sm text-gray-900">
-                        {{ product.shortDescription || '-' }}
+                        {{ product.sku }}
                     </dd>
                 </div>
                 <div class="sm:col-span-1">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Published At</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ product.publishedAt }}</dd>
+                    <dd class="mt-1 text-sm text-gray-900">{{ product.publishedAt || '-' }}</dd>
                 </div>
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Created At</dt>

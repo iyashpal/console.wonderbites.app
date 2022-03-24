@@ -11,7 +11,11 @@ export default class IngridentProduct extends BaseSchema {
 
       table.bigInteger('product_id').unsigned().references('products.id').onDelete('CASCADE')
 
-      table.boolean('is_removable').defaultTo(true)
+      table.boolean('is_required').defaultTo(true)
+
+      table.boolean('is_optional').defaultTo(false)
+
+      table.boolean('is_addon').defaultTo(false)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

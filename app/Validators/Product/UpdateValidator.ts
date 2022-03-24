@@ -26,7 +26,7 @@ export default class UpdateValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }),
     description: schema.string({ trim: true }),
-    shortDescription: schema.string({ trim: true }),
+    sku: schema.string({ trim: true }),
     calories: schema.string({ trim: true }),
     price: schema.string({ trim: true }),
     status: schema.number(),
@@ -47,7 +47,8 @@ export default class UpdateValidator {
   public messages = {
     'name.required': 'Name field is required.',
     'description.required': 'Description field is required.',
-    'price.required': 'Price  is required.',
-    //'image_path.required': 'Image is required.',
+    'sku.required': 'Product SKU is required.',
+    'calories.required': 'Short Description  is required.',
+    'price.required': 'Price is required.',
   }
 }
