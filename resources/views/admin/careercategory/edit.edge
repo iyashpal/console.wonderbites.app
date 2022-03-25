@@ -18,7 +18,7 @@
                         <option value="{{brand.id}}" {{ flashMessages.get('errors.brand_id', careercategory.brand_id) === brand.id ? 'selected' : ''}}>{{brand.name}}</option>
                         @endeach 
                     </select>
-                    @!form.inputError({error: 'errors.status'})
+                    @!form.inputError({error: 'errors.brand_id'})
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})
