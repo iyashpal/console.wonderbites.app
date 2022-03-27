@@ -58,17 +58,15 @@ export default class ProductsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
-    product.load('categories', (query) => query.select('id'))
+    await product.load('media')
 
-    const media = await Media.query().where('object_type', 'Product').where('object_id', Number(id))
-
-    console.log(media)
+    await product.load('categories', (query) => query.select('id'))
 
     const ingridients = await Ingridient.all()
 
     const categories = await Category.query().where('type', 'Product')
 
-    return view.render('admin/products/show', { product, categories, ingridients, media })
+    return view.render('admin/products/show', { product, categories, ingridients })
   }
 
   /**
@@ -129,8 +127,8 @@ export default class ProductsController {
       await image.move(Application.tmpPath('uploads'))
 
       await Media.create({
-        objectId: request.input('objectId', id),
-        objectType: request.input('objectType'),
+        refId: request.input('refId', id),
+        refType: request.input('refType'),
         filePath: image.fileName,
       })
     }

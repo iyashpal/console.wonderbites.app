@@ -1,8 +1,11 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany
+} from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cart from './Cart'
 import Category from './Category'
 import Ingridient from './Ingridient'
+import Media from './Media'
 import Order from './Order'
 import User from './User'
 import Wishlist from './Wishlist'
@@ -38,14 +41,14 @@ export default class Product extends BaseModel {
   @column()
   public status: number
 
-  // @hasMany(() => Media, {
-  //   localKey: 'id',
-  //   foreignKey: 'objectId',
-  //   onQuery (query) {
-  //     query.where('objectType', 'Product')
-  //   },
-  // })
-  // public media: HasMany<typeof Media>
+  @hasMany(() => Media, {
+    localKey: 'id',
+    foreignKey: 'refId',
+    onQuery (query) {
+      query.where('refType', 'Product')
+    },
+  })
+  public media: HasMany<typeof Media>
 
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
