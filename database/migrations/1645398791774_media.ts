@@ -9,9 +9,9 @@ export default class Media extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
 
-      table.bigInteger('object_id').unsigned().nullable()
+      table.bigInteger('ref_id').unsigned().nullable()
 
-      table.string('object_type').nullable()
+      table.string('ref_type').nullable()
 
       table.string('title').nullable()
 

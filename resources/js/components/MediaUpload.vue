@@ -62,36 +62,16 @@ import { reactive, ref, render } from 'vue';
 import Input from './Form/Input.vue'
 import Label from './Form/Label.vue'
 
-const props = defineProps({ objectType: String, objectId: String })
+const props = defineProps({ refType: String, refId: String })
 
 const enableMedia = ref(false)
 
-
-const mediaForm = reactive({
-    title: '',
-    objectId: props.objectId,
-    objectType: props.objectType,
-    caption: "",
-    file: null
-})
-
-
-function renderImages(images) {
-
-}
-
-
 function onChange(event) {
-
-    renderImages(event.target.files)
-
-    console.log(event.target.files.length)
-
     let files = new FormData()
 
     files.append('_csrf', csrf)
-    files.append('objectId', props.objectId)
-    files.append('objectType', props.objectType)
+    files.append('refId', props.refId)
+    files.append('refType', props.refType)
 
 
     for (let i in event.target.files) {

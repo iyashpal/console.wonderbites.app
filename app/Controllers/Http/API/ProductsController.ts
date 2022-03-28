@@ -42,8 +42,7 @@ export default class ProductsController {
     try {
       const product = await Product.findOrFail(id)
 
-      //const images = await ProductImages.query()
-      // .where('product_id', id)
+      await product.load('media', (query) => query.select('id', 'file_path'))
 
       response.status(200).json(product)
     } catch (error) {

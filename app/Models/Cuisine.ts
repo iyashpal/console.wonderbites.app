@@ -1,4 +1,4 @@
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Category from './Category'
 
@@ -26,4 +26,9 @@ export default class Cuisine extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get thumbnail () {
+    return this.imagePath ? `/uploads/${this.imagePath}` : '/images/placeholders/cuisine.png'
+  }
 }

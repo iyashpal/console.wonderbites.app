@@ -26,7 +26,7 @@ export default class CuisinesController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    const categories = await Category.all()
+    const categories = await Category.query().apply(scope => scope.forCuisine())
     return view.render('admin/cuisines/create', { categories })
   }
 
@@ -40,18 +40,17 @@ export default class CuisinesController {
 
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
     }
 
-    const cuisine = await Cuisine.create({ ...data, imagePath: data.image_path!.fileName })
-      .then((cuisine) => {
-        session.flash('cuisine_created', cuisine.id)
-        return cuisine
-      })
+    await Cuisine.create({ ...data }).then(async (cuisine) => {
+      session.flash('cuisine_created', cuisine.id)
 
-    if (request.input('category_id')) {
-      await cuisine.related('categories').attach(request.input('category_id'))
-    }
-    response.redirect().toRoute('cuisines.show', { id: cuisine.id })
+      await cuisine.related('categories').attach(request.input('category_id', []))
+
+      response.redirect().toRoute('cuisines.show', { id: cuisine.id })
+    })
   }
 
   /**
@@ -62,6 +61,7 @@ export default class CuisinesController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const cuisine = await Cuisine.findOrFail(id)
+
     await cuisine.load('categories')
 
     return view.render('admin/cuisines/show', { cuisine })
@@ -75,8 +75,11 @@ export default class CuisinesController {
    */
   public async edit ({ view, params: { id } }: HttpContextContract) {
     const cuisine = await Cuisine.findOrFail(id)
+
     await cuisine.load('categories')
-    const categories = await Category.all()
+
+    const categories = await Category.query().apply(scope => scope.forCuisine())
+
     return view.render('admin/cuisines/edit', { cuisine, categories })
   }
 
@@ -92,12 +95,14 @@ export default class CuisinesController {
 
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
     }
 
-    await cuisine.merge({ ...data, imagePath: data.image_path ? data.image_path.fileName : cuisine.imagePath })
-      .save().then(() => session.flash('cuisine_created', true))
-
-    response.redirect().toRoute('cuisines.show', { id: cuisine.id })
+    await cuisine.merge(data).save().then(() => {
+      session.flash('cuisine_created', true)
+      response.redirect().toRoute('cuisines.show', { id: cuisine.id })
+    })
   }
 
   /**

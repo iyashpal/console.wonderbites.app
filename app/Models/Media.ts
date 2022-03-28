@@ -9,10 +9,10 @@ export default class Media extends BaseModel {
   public userId: number
 
   @column()
-  public objectId: number
+  public refId: number
 
   @column()
-  public objectType: string
+  public refType: string
 
   @column()
   public title: string

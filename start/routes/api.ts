@@ -1,38 +1,15 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-  Route.group(() => {
-    Route.post('/login', 'API/LoginController.login').as('login')
-
-    //Route.post('/register', 'API/RegisterController.register').as('register')
-  }).middleware('guest_api')
-  Route.group(() => {
-    Route.post('/logout', 'API/LoginController.logout').as('logout')
-
-    Route.get('/users', 'API/UsersController.show').as('user')
-
-    Route.put('/users', 'API/UsersController.update').as('user.update')
-
-    Route.resource('addresses', 'API/Profile/AddressesController')
-
-    Route.resource('wishlists', 'API/WishlistsController')
-
-    Route.post('products/:id/category', 'API/ProductsController.toggleCategory').as('products.category')
-
-    //Route.resource('cart', 'API/CartsController');
-
-    //Route.get('/product/{id}', "API/UsersController.show");
-
-    //Route.get('/products/productbycategory', "API/ProductsController.productbycategory").as('productbycategory');
-  }).middleware('auth_api')
-
-  Route.post('/register', 'API/RegisterController.register').as('register')
   Route.resource('cuisines', 'API/CuisinesController')
   //Route.resource('blogs', 'API/BlogsController').as('blogs')
   Route.get('blogs', 'API/BlogsController.index').as('blogs')
   Route.get('blogs/:slug', 'API/BlogsController.showBlogBySlug').as('blogslug')
 
   Route.resource('categoryblog', 'API/CategoryBlogController').as('categoryblog')
+
+  Route.resource('blogs', 'API/BlogsController').as('blogs')
+
   Route.resource('categories', 'API/CategoriesController').as('categories')
 
   Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
@@ -42,8 +19,6 @@ Route.group(() => {
   Route.get('about', 'API/HomeController.about').as('about')
 
   Route.resource('products', 'API/ProductsController')
-
-  Route.resource('productimages', 'API/ProductImagesController')
 
   Route.get('getcart', 'API/CartsController.getcart').as('getcart')
 
@@ -56,4 +31,24 @@ Route.group(() => {
   Route.get('settings', 'API/HomeController.settings').as('settings')
 
   Route.get('my_subscriptions', 'API/HomeController.my_subscriptions').as('my_subscriptions')
+
+  Route.group(() => {
+    Route.post('/login', 'API/LoginController.login').as('login')
+
+    Route.post('/register', 'API/RegisterController.register').as('register')
+  }).middleware('guest_api')
+
+  Route.group(() => {
+    Route.post('/logout', 'API/LoginController.logout').as('logout')
+
+    Route.get('/users', 'API/UsersController.show').as('user')
+
+    Route.put('/users', 'API/UsersController.update').as('user.update')
+
+    Route.resource('addresses', 'API/Profile/AddressesController')
+
+    Route.resource('wishlists', 'API/WishlistsController')
+
+    Route.post('products/:id/category', 'API/ProductsController.toggleCategory').as('products.category')
+  }).middleware('auth_api')
 }).prefix('/api').as('api')
