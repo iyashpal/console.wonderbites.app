@@ -6,9 +6,6 @@ export default class JobApplications extends BaseModel {
   @column({ isPrimary: true })
   public id: number
   @column()
-  public name: string
-
-  @column()
   public opening_id: number
 
   @column()
