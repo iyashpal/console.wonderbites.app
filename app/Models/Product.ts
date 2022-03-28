@@ -1,5 +1,5 @@
 import {
-  BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany
+  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany
 } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cart from './Cart'
@@ -76,4 +76,14 @@ export default class Product extends BaseModel {
 
   @column.dateTime()
   public deletedAt: DateTime
+
+  /**
+   * Get product default thumbnail based on imagePath column value.
+   * 
+   * @returns {String}
+   */
+  @computed()
+  public get thumbnail () {
+    return this.imagePath ? `/uploads/${this.imagePath}` : '/images/placeholders/product.png'
+  }
 }
