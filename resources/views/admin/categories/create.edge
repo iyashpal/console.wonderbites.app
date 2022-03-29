@@ -1,6 +1,6 @@
 @layout('layouts/app')
 
-@set('title', "Create New Category")
+@set('title', "New Category")
 
 @set('breadcrumb', [{label: 'Categories', link: route('categories.index')}])
 
@@ -20,28 +20,19 @@
 
 
                 <div class="col-span-6 sm:col-span-3">
-                    @!form.label({for:'status', label: "Type", required: true})
-                    <select id="type" name="type" autocomplete="type-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="Cuisine" {{ flashMessages.get('errors.type', '') === 0 ? 'selected' : ''}}>Cuisine</option>
-                        <option value="Blog" {{ flashMessages.get('errors.type', '') === 0 ? 'selected' : ''}}>Blog</option>
-                        <option value="Ingridient" {{ flashMessages.get('errors.type', '') === 1 ? 'selected' : ''}}>Ingridient</option>
-                        <option value="Product" {{ flashMessages.get('errors.type', '') === 2 ? 'selected' : ''}}>Product</option>
-                    </select>
-                    @!form.inputError({error: 'errors.status'})
+                    @!form.label({for:'type', label: "Type", required: true})
+                    @!form.select({ id: 'type', name: 'type', options: [{value: "Blog"}, {value: "Cuisine"},{value: "Ingridient"}, {value: "Product"}]})
+                    @!form.inputError({error: 'errors.type'})
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})
-                    <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="1" {{ flashMessages.get('errors.status', '') === 1 ? 'selected' : ''}}>Active</option>
-                        <option value="0" {{ flashMessages.get('errors.status', '') === 0 ? 'selected' : ''}}>Inactive</option>
-                    </select>
+                    @!form.select({ id: 'status', name: 'status', options: [{value: "1", label: "Active"}, {value: "0", label: "Inactive"}]})
                     @!form.inputError({error: 'errors.status'})
                 </div>
             </div>
         </div>
         <div class="bg-gray-50 px-4 py-4 sm:px-6">
             <div class="flex justify-end">
-                <a href="{{ route('categories.index') }}" type="button" class="tw:btn tw:btn-default">Cancel</a>
                 <button type="submit" class="ml-3 tw:btn tw:btn-secondary">Save</button>
             </div>
         </div>

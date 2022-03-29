@@ -1,0 +1,13 @@
+<div class="relative">
+    <div class="flex items-center justify-end space-x-4">
+        <a href="{{ editUri }}" class="inline-flex items-center uppercase text-sm font-semibold text-gray-400 hover:text-blue-400">
+            <icon name="edit" class="w-5 h-5 mr-1"></icon> Edit {{ name }}
+        </a>
+        <button onclick="document.getElementById('trash-{{ name.toLowerCase() }}').submit()" class="inline-flex items-center uppercase text-sm font-semibold text-gray-400 hover:text-red-400">
+            <icon name="delete" class="w-5 h-5 mr-1"></icon> Delete {{ name }}
+        </button>
+        <form id="trash-{{ name.toLowerCase() }}" class="hidden" action="{{ trashUri }}" method="post">
+            {{ csrfField() }}
+        </form>
+    </div>
+</div>

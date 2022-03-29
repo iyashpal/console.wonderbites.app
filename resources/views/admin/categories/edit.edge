@@ -1,5 +1,5 @@
 @layout('layouts/app')
-@set('title', "Edit Categorie")
+@set('title', "Edit Category")
 
 @set('breadcrumb', [{label: 'Categories', link: route('categories.index')}, {label: category.name, link: route('categories.show', category)}])
 
@@ -15,40 +15,22 @@
                     @!form.input({id: "name", value: flashMessages.get('name', category.name), name: "name", type: "text", className: "mt-1 block w-full", autofocus: true})
                     @!form.inputError({error: 'errors.name'})
                 </div>
-               
-                {{--  <div class="col-span-6">
-                    @!form.label({for:'description', label: "Description", required: false})
-                    <textarea type="text" name="description" id="description" autocomplete="description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('description', category.description) }}</textarea>
-                    @!form.inputError({error: 'errors.description'})
-                </div>  --}}
 
-                {{--  <div class="col-span-6 sm:col-span-3">
-                    @!form.label({for:'image_path', label: "Image", required: true})
-                    <input type="file" name="image_path" id="image_path">
-                    @!form.inputError({error: 'errors.image_path'})
-                </div>  --}}
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'type', label: "Type", required: true})
-                    <select id="type" name="type" autocomplete="type-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="2" {{ flashMessages.get('errors.type', category.status) === 2 ? 'selected' : ''}}>Product Category</option>
-                        <option value="1" {{ flashMessages.get('errors.type', category.status) === 1 ? 'selected' : ''}}>Ingradient Category</option>
-                        <option value="0" {{ flashMessages.get('errors.type', category.status) === 0 ? 'selected' : ''}}>Blog</option>
-                    </select>
-                    @!form.inputError({error: 'errors.status'})
+                    @!form.select({ id: 'type', value:flashMessages.get('type', category.type), name: 'type', options: [{value: "Blog"}, {value: "Cuisine"},{value: "Ingridient"}, {value: "Product"}]})
+                    @!form.inputError({error: 'errors.type'})
                 </div>
+
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})
-                    <select id="status" name="status" autocomplete="status-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="1" {{ flashMessages.get('errors.status', category.status) === 1 ? 'selected' : ''}}>Active</option>
-                        <option value="0" {{ flashMessages.get('errors.status', category.status) === 0 ? 'selected' : ''}}>Inactive</option>
-                    </select>
+                    @!form.select({ id: 'status', value: flashMessages.get('status', category.status.toString()), name: 'status', options: [{value: "1", label: "Active"}, {value: "0", label: "Inactive"}]})
                     @!form.inputError({error: 'errors.status'})
                 </div>
             </div>
         </div>
         <div class="bg-gray-50 px-4 py-4 sm:px-6">
             <div class="flex justify-end">
-                <a href="{{ route('categories.index') }}" type="button" class="tw:btn tw:btn-default">Cancel</a>
                 <button type="submit" class="ml-3 tw:btn tw:btn-secondary">Save</button>
             </div>
         </div>

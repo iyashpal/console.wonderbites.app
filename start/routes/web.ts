@@ -23,6 +23,5 @@ Route.group(() => {
   Route.resource('teams', 'Admin/TeamsController')
   Route.resource('careercategories', 'Admin/CareerCategoriesController')
   Route.resource('brands', 'Admin/BrandsController')
-  Route.resource('categoryblog', 'Admin/CategoryBlogsController')
   Route.resource('blogs', 'Admin/BlogsController')
 }).middleware('auth')
