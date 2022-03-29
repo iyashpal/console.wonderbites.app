@@ -9,6 +9,9 @@ Route.group(() => {
 
   Route.resource('products', 'Admin/ProductsController')
   Route.post('products/:id/category', 'Admin/ProductsController.toggleCategory').as('products.category')
+
+  Route.post('category/:id/cuisine', 'Admin/CategoriesController.toggleCuisine').as('category.cuisine')
+
   Route.post('products/:id/media', 'Admin/ProductsController.handleMedia').as('products.media')
 
   Route.resource('ingridients', 'Admin/IngridientsController')

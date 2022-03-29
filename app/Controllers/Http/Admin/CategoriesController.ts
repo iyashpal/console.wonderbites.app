@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
+import Cuisine from 'App/Models/Cuisine'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
 
@@ -53,7 +54,9 @@ export default class CategoriesController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
-    return view.render('admin/categories/show', { category })
+    await category.load('cuisines')
+    const cuisines = await Category.query().where('type', 'Cuisine')
+    return view.render('admin/categories/show', { category, cuisines })
   }
 
   /**
@@ -102,4 +105,10 @@ export default class CategoriesController {
       response.redirect().toRoute('categories.index')
     })
   }
+
+  public async toggleCuisine({ params: { id }, request }: HttpContextContract) {
+    const cuisine = await Category.findOrFail(id);
+    await cuisine.related('category').sync(request.input('cuisine'))
+  }
+
 }
