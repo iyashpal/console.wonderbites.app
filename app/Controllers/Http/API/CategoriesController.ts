@@ -57,10 +57,11 @@ export default class CategoriesController {
    */
   public async show ({ response, params: { id } }: HttpContextContract) {
     try {
-      // console.log(id)
       const category = await Category.findOrFail(id)
 
-      await category.load('products')
+      await category.load('products', (builder) => {
+        builder.preload('media')
+      })
 
       response.status(200).json(category)
     } catch (error) {

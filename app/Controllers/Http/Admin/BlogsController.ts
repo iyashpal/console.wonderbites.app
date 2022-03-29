@@ -2,8 +2,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CategoryBlog from 'App/Models/CategoryBlog'
 import Blog from 'App/Models/Blog'
-import User from 'App/Models/User'
 import BlogCategories from 'App/Models/Pivot/BlogCategory'
+import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/Blog/CreateValidator'
 import UpdateValidator from 'App/Validators/Blog/UpdateValidator'
 ///import { isDate } from '@vue/shared'
@@ -20,7 +20,7 @@ export default class BlogsController {
 
     blogs.baseUrl(request.url())
 
-    return view.render('app/blogs/index', { blogs })
+    return view.render('admin/blogs/index', { blogs })
   }
 
   /**
@@ -32,7 +32,7 @@ export default class BlogsController {
   public async create ({ view }: HttpContextContract) {
     const categories = await CategoryBlog.all()
     const users = await User.all()
-    return view.render('app/blogs/create',{categories, users})
+    return view.render('admin/blogs/create', { categories, users })
   }
 
   /**
@@ -50,10 +50,10 @@ export default class BlogsController {
         session.flash('blog_created', blog.id)
         return blog
       })
-    if(request.input('category_id')){
+    if (request.input('category_id')) {
       const categories = request.input('category_id')
-      for(let i in categories) {
-        await BlogCategories.create({category_id: categories[i] , blog_id : blog.id })
+      for (let i in categories) {
+        await BlogCategories.create({ category_id: categories[i], blog_id: blog.id })
       }
     }
     response.redirect().toRoute('blogs.show', { id: blog.id })
@@ -68,7 +68,7 @@ export default class BlogsController {
   public async show ({ view, params: { id } }: HttpContextContract) {
     const blog = await Blog.findOrFail(id)
 
-    return view.render('app/blogs/show', { blog })
+    return view.render('admin/blogs/show', { blog })
   }
 
   /**
@@ -79,10 +79,10 @@ export default class BlogsController {
    */
   public async edit ({ view, params }: HttpContextContract) {
     const blog = await Blog.findOrFail(params.id)
-    const blogcategories = await BlogCategories.query().where('blog_id',blog.id)
+    const blogcategories = await BlogCategories.query().where('blog_id', blog.id)
     const categories = await CategoryBlog.all()
     const users = await User.all()
-    return view.render('app/blogs/edit', { blog, blogcategories,categories,users})
+    return view.render('admin/blogs/edit', { blog, blogcategories, categories, users })
   }
 
   /**
@@ -102,10 +102,10 @@ export default class BlogsController {
     await blog.merge({
       ...data, imagePath: data.image_path ? data.image_path.fileName : blog.imagePath,
     }).save().then(() => session.flash('blog_updated', true))
-    if(request.input('category_id')){
+    if (request.input('category_id')) {
       const categories = request.input('category_id')
-      for(let i in categories) {
-        await BlogCategories.create({category_id: categories[i] , blog_id : blog.id })
+      for (let i in categories) {
+        await BlogCategories.create({ category_id: categories[i], blog_id: blog.id })
       }
     }
     response.redirect().toRoute('blogs.show', { id: blog.id })
