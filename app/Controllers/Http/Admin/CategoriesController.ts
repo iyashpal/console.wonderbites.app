@@ -37,6 +37,12 @@ export default class CategoriesController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
+    }
+
     const category = await Category.create({ ...data })
       .then((category) => {
         session.flash('category_created', category.id)
@@ -81,6 +87,11 @@ export default class CategoriesController {
 
     const data = await request.validate(UpdateValidator)
 
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
+    }
     // if (data.image_path) {
     //   await data.image_path.moveToDisk('./')
     // }

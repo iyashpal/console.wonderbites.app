@@ -27,6 +27,10 @@ export default class CreateValidator {
     parent: schema.number.optional(),
     name: schema.string({ trim: true }),
     description: schema.string.optional({ trim: true }),
+    image_path: schema.file.optional({
+      size: '1mb',
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
+    }),
     type: schema.string({ trim: true }),
     status: schema.number(),
   })
