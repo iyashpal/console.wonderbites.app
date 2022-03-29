@@ -24,4 +24,5 @@ Route.group(() => {
   Route.resource('blogs', 'Admin/BlogsController')
   Route.resource('openingpositions', 'Admin/OpeningPositionsController')
   Route.resource('jobapplications', 'Admin/JobApplicationsController')
+  Route.resource('contacts', 'Admin/ContactsController')
 }).middleware('auth')

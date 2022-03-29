@@ -1,7 +1,7 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class JobApplicationValidator {
+export default class ContactsValidator {
   constructor (protected ctx: HttpContextContract) { }
 
   /*
@@ -24,17 +24,11 @@ export default class JobApplicationValidator {
    *    ```
    */
   public schema = schema.create({
-    first_name: schema.string({ trim: true }),
-    last_name: schema.string({ trim: true }),
-    mobile: schema.string({ trim: true }),
+    name: schema.string({ trim: true }),
     email: schema.string({ trim: true }, [
       rules.email(),
     ]),
-    address: schema.string({ trim: true }),
-    desired_pay: schema.string({ trim: true }),
-    reference_from: schema.string({ trim: true }),
-    notice_period: schema.string({ trim: true }),
-    agreed_terms_conditions: schema.string({trim:true}),
+    comment: schema.string({ trim: true }),
     status: schema.number(),
 
   })
@@ -51,15 +45,10 @@ export default class JobApplicationValidator {
    *
    */
   public messages = {
-    'first_name.required': 'First name is required.',
-    'last_name.required': 'Last name is required.',
-    'mobile.required': 'Mobile no. is required.',
+    'name.required': 'First name is required.',
     'email.required': 'Email address is required.',
     'email.email': 'Enter a valid email.',
-    'adddress.required': 'Enter your address',
-    'desired_pay.required': 'Enter your desired pay',
-    'reference_from.required': 'Enter your reference',
-    'notice_period.required': 'Enter your notice period',
-    'agreed_terms_conditions.required': 'Please check check and conditions',
+    'comment.required': 'Enter your comment',
+
   }
 }

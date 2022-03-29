@@ -14,11 +14,9 @@ export default class JobApplicationsController {
       const data = await request.validate(JobApplicationValidator)
       console.log(request)
       const application = await jobApplication.create(data)
-     //applcation.merge = {status:'success'}
-      response.status(200).json(application)
+      response.status(200).json({statusCode: 200,msg: 'Job submitted successfully',data:application})
     } catch (error) {
-
-      response.badRequest(error.messages)
+      response.badRequest({error :error.messages,statusCode: 400})
     }
   }
 }

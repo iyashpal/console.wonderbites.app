@@ -85,6 +85,11 @@ export default [
     icon: 'group',
   },
   {
+    url: '/contacts',
+    label: 'Contacts',
+    icon: 'group',
+  },
+  {
     url: '/jobapplications',
     label: 'Job Applications',
     icon: 'group',
@@ -94,7 +99,7 @@ export default [
     label: 'Feedbacks',
     icon: 'thumb-up-alt',
   },
-  
+
   {
     url: '/',
     label: 'Coupons',

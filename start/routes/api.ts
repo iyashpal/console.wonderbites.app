@@ -36,6 +36,7 @@ Route.group(() => {
 
     Route.post('/register', 'API/RegisterController.register').as('register')
     Route.post('job-apply', 'API/JobApplicationsController.apply').as('jobapply')
+    Route.post('contacts', 'API/ContactsController.send').as('contacts')
   }).middleware('guest_api')
 
   Route.group(() => {
