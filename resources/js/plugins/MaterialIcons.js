@@ -1,15 +1,16 @@
 import {
   AddCircleIcon, ArrowLeftIcon,
-  CheckCircleIcon, CancelIcon, CategoryIcon, CommentIcon, CloseIcon,
+  CallToActionIcon, CheckCircleIcon, CancelIcon, CategoryIcon, CommentIcon, CloseIcon, CollectionsIcon,
   DeleteIcon, DinnerDiningIcon,
   EditIcon,
-  GroupIcon,
+  GroupIcon, GroupWorkIcon,
   LocalOfferIcon, LunchDiningIcon, LocalPizzaIcon,
   MenuIcon, MenuBookIcon, MessageIcon,
-  ReviewsIcon,
+  PaymentsIcon,
+  ReviewsIcon, RssFeedIcon, RateReviewIcon,
   ThumbUpAltIcon,
   NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
-  SpaceDashboardIcon,
+  SpaceDashboardIcon, StoreIcon,
 } from '@materialicons/vue/round'
 import MaterialIcons from '@materialicons/vue'
 
@@ -20,16 +21,17 @@ export default {
       icons: {
         Round: {
           AddCircleIcon, ArrowLeftIcon,
-          CancelIcon, CheckCircleIcon, CategoryIcon, CommentIcon, CloseIcon,
+          CallToActionIcon, CancelIcon, CheckCircleIcon, CategoryIcon, CommentIcon, CloseIcon, CollectionsIcon,
           DeleteIcon, DinnerDiningIcon,
           EditIcon,
-          GroupIcon,
+          GroupIcon, GroupWorkIcon,
           LocalOfferIcon, LunchDiningIcon, LocalPizzaIcon,
           MenuIcon, MenuBookIcon, MessageIcon,
-          ReviewsIcon,
+          PaymentsIcon,
+          ReviewsIcon, RssFeedIcon, RateReviewIcon,
           ThumbUpAltIcon,
           NavigateBeforeIcon, NavigateNextIcon, NotificationsIcon,
-          SpaceDashboardIcon,
+          SpaceDashboardIcon, StoreIcon,
         },
       },
     })

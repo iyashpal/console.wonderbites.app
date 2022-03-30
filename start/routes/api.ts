@@ -33,8 +33,12 @@ Route.group(() => {
 
   Route.group(() => {
     Route.post('/login', 'API/LoginController.login').as('login')
+    Route.post('/loginUser', 'API/LoginController.loginUser').as('loginUser')
+
+    
 
     Route.post('/register', 'API/RegisterController.register').as('register')
+    Route.post('/signup', 'API/RegisterController.signup').as('signup')
     Route.post('job-apply', 'API/JobApplicationsController.apply').as('jobapply')
     Route.post('contacts', 'API/ContactsController.send').as('contacts')
   }).middleware('guest_api')

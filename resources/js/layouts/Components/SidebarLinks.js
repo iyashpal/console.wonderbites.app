@@ -7,7 +7,7 @@ export default [
   {
     url: '/banners',
     label: 'Banners',
-    icon: 'category',
+    icon: 'call-to-action',
   },
   {
     url: '/categories',
@@ -37,17 +37,17 @@ export default [
   {
     url: '/review',
     label: 'Reviews',
-    icon: 'dinner-dining',
+    icon: 'reviews',
   },
   {
     url: '/media',
     label: 'Media',
-    icon: 'comment',
+    icon: 'collections',
   },
   {
     url: '/orders',
     label: 'Orders',
-    icon: 'comment',
+    icon: 'payments',
   },
   {
     url: '/users',
@@ -57,27 +57,18 @@ export default [
   {
     url: '/teams',
     label: 'Teams',
-    icon: 'group',
-  },
-  {
-    url: '/careercategories',
-    label: 'Career Categories',
-    icon: 'group',
+    icon: 'group-work',
   },
   {
     url: '/brands',
     label: 'Brands',
-    icon: 'group',
+    icon: 'store',
   },
-  {
-    url: '/categoryblog',
-    label: 'Category Blog',
-    icon: 'group',
-  },
+
   {
     url: '/blogs',
     label: 'Blogs',
-    icon: 'group',
+    icon: 'rss-feed',
   },
   {
     url: '/openingpositions',
@@ -97,7 +88,7 @@ export default [
   {
     url: '/',
     label: 'Feedbacks',
-    icon: 'thumb-up-alt',
+    icon: 'rate-review',
   },
 
   {

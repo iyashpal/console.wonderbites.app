@@ -9,7 +9,7 @@ export default class CareerCategoriesController {
      * 
      * @param param0 HttpContextContract
      * @returns ViewRendererContract
-     */
+*/
   public async index ({ view, request }: HttpContextContract) {
     let careercategories = await CareerCategory.query().paginate(request.input('page', 1), 2)
     careercategories.baseUrl(request.url())

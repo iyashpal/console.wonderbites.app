@@ -2,8 +2,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CategoryBlog from 'App/Models/CategoryBlog'
 import Blog from 'App/Models/Blog'
-import User from 'App/Models/User'
 import BlogCategories from 'App/Models/Pivot/BlogCategory'
+import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/Blog/CreateValidator'
 import UpdateValidator from 'App/Validators/Blog/UpdateValidator'
 import { AirlineSeatLegroomReducedIcon } from '@materialicons/vue/round'
@@ -21,7 +21,7 @@ export default class BlogsController {
     let categories = await CategoryBlog.all()
     blogs.baseUrl(request.url())
 
-    return view.render('admin/blogs/index', { blogs,categories })
+    return view.render('admin/blogs/index', { blogs })
   }
 
   /**
@@ -34,6 +34,7 @@ export default class BlogsController {
     const categories = await CategoryBlog.all()
     const users = await User.all()
     return view.render('admin/blogs/create',{categories, users})
+    //return view.render('admin/blogs/create', { categories, users })
   }
 
   /**
@@ -55,10 +56,10 @@ export default class BlogsController {
         session.flash('blog_created', blog.id)
         return blog
       })
-    if(request.input('category_id')){
+    if (request.input('category_id')) {
       const categories = request.input('category_id')
-      for(let i in categories) {
-        await BlogCategories.create({category_id: categories[i] , blog_id : blog.id })
+      for (let i in categories) {
+        await BlogCategories.create({ category_id: categories[i], blog_id: blog.id })
       }
     }
     response.redirect().toRoute('blogs.show', { id: blog.id })
@@ -84,11 +85,10 @@ export default class BlogsController {
    */
   public async edit ({ view, params }: HttpContextContract) {
     const blog = await Blog.findOrFail(params.id)
-    const blogcategories = await BlogCategories.query().where('blog_id',blog.id)
+    const blogcategories = await BlogCategories.query().where('blog_id', blog.id)
     const categories = await CategoryBlog.all()
     const users = await User.all()
-    //console.log(blog)
-    return view.render('admin/blogs/edit', { blog, blogcategories,categories,users})
+    return view.render('admin/blogs/edit', { blog, blogcategories, categories, users })
   }
 
   /**
@@ -108,10 +108,10 @@ export default class BlogsController {
     await blog.merge({
       ...data, image_path: data.image_path ? data.image_path.fileName : blog.image_path,
     }).save().then(() => session.flash('blog_updated', true))
-    if(request.input('category_id')){
+    if (request.input('category_id')) {
       const categories = request.input('category_id')
-      for(let i in categories) {
-        await BlogCategories.create({category_id: categories[i] , blog_id : blog.id })
+      for (let i in categories) {
+        await BlogCategories.create({ category_id: categories[i], blog_id: blog.id })
       }
     }
     response.redirect().toRoute('blogs.show', { id: blog.id })
