@@ -8,7 +8,7 @@ Route.group(() => {
   Route.resource('categories', 'Admin/CategoriesController')
 
   Route.resource('products', 'Admin/ProductsController')
-  Route.post('products/:id/category', 'Admin/ProductsController.toggleCategory').as('products.category')
+  Route.post('products/:id/category', 'Admin/CategoriesController.toggleCategory').as('products.category')
 
   Route.post('category/:id/cuisine', 'Admin/CategoriesController.toggleCuisine').as('category.cuisine')
 

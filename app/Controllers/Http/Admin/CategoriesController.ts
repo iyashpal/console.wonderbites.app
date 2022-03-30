@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Cuisine from 'App/Models/Cuisine'
+import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
 
@@ -118,8 +119,15 @@ export default class CategoriesController {
   }
 
   public async toggleCuisine({ params: { id }, request }: HttpContextContract) {
-    const cuisine = await Category.findOrFail(id);
-    await cuisine.related('category').sync(request.input('cuisine'))
+    const category = await Category.findOrFail(id);
+    await category.related('cuisines').sync(request.input('cuisines', []))
+  }
+
+
+  public async toggleCategory({ params: { id }, request }: HttpContextContract) {
+    const product = await Product.findOrFail(id)
+
+    await product.related('categories').sync(request.input('categories'))
   }
 
 }

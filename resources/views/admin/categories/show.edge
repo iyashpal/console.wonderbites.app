@@ -8,11 +8,9 @@
 
 @!alerts.success({show: flashMessages.get('categorie_created'), icon: 'check-circle', message: "Categorie successfully saved!", className: "mb-4"})
 @!alerts.success({show: flashMessages.get('categorie_updated'), icon: 'check-circle', message: "Categorie successfully updated!", className: "mb-4"})
+
 <div class="space-y-5">
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-        <div class="px-4 py-5 sm:px-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ category.type }} Category Details</h3>
-        </div>
         <div class="px-4 py-5 sm:p-6">
             <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                 <div class="sm:col-span-1">
@@ -30,12 +28,6 @@
                     <dd class="mt-1 text-sm text-gray-900">{{ category.type }} Category</dd>
                 </div>
             
-                {{--  <div class="sm:col-span-1">
-                    <dt class="text-sm font-medium text-gray-500">Image</dt>
-                    <dd class="mt-1 text-sm text-gray-900">
-                        <img src="{{ `/uploads/${category.imagePath}` }}" alt="{{ category.name }}" class="w-10 h-10 rounded-full">
-                    </dd>
-                </div>  --}}
                 <div class="sm:col-span-1">
                     <dt class="text-sm font-medium text-gray-500">Status</dt>
                     <dd class="mt-1 text-sm text-gray-900">
@@ -46,28 +38,16 @@
                         @endif
                     </dd>
                 </div>
-                {{--  <div class="sm:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500">Description</dt>
-                    <dd class="mt-1 text-sm text-gray-900">{{ category.description }}</dd>
-                </div>  --}}
+                
             </dl>
         </div>
-        <div class="px-4 py-4 sm:px-6">
-            <div class="flex justify-end items-center">
-                <a class="tw:btn tw:btn-primary mr-2" href="{{ route('categories.edit', {id: category.id}) }}">
-                    <icon name="edit" class="w-5 h-5 mr-1"></icon>Edit
-                </a>
-                <form action="{{ route('categories.destroy', {id: category.id}, {qs: {_method: 'delete'}}) }}" method="post">
-                    {{ csrfField() }}
-                    <button class="tw:btn tw:btn-danger">
-                        <icon name="delete" class="w-5 h-5 mr-1"></icon>Delete
-                    </button>
-                </form>
-
-            </div>
-        </div>
+        
     </div>
-    @if(category.type === "Product")
+
+    @!page.content.actions({editUri: route('categories.edit', category), trashUri: route('categories.destroy', category, {qs: {_method: 'delete'}}), name: "Category"})
+
+
+    @if(category.isForCuisine)
     <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
         <div class="px-4 py-5 sm:p-6">
             <div class="pb-3">
@@ -76,20 +56,32 @@
             </div>
             <div class="flex items-center space-x-3">
                 @each(cuisine in cuisines)
-                    <v-toggle-cuisine-categories csrf="{{ csrfToken }}" route="{{ route('category.cuisine', cuisine) }}" :cuisine="{{ JSON.stringify(cuisine) }}" :cuisines="{{ JSON.stringify(cuisines) }}"></v-toggle-cuisine-categories>
+                    <v-toggle-cuisine-categories csrf="{{ csrfToken }}" route="{{ route('category.cuisine', cuisine) }}" :cuisine="{{ JSON.stringify(cuisine) }}" :cuisines="{{ JSON.stringify(category.cuisines) }}"></v-toggle-cuisine-categories>
                 @endeach
             </div>
 
             @if(cuisines.length === 0)
             <v-alert name="warning">
-                cuisines not found. <a class="font-semibold underline hover:italic" href="{{ route('categories.create') }}">Click here</a> to create cuisines.
+                Cuisines not found. <a class="font-semibold underline hover:italic" href="{{ route('cuisines.create') }}">Click here</a> to create cuisines.
             </v-alert>
             @endif
         </div>
     </div>
     @endif
 
-    @!page.content.actions({editUri: route('categories.edit', category), trashUri: route('categories.destroy', category, {qs: {_method: 'delete'}}), name: "Category"})
+    @if(category.isForProduct)
+    <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="pb-3">
+                <h2 class="font-semibold text-xl">Products</h2>
+                <p class="text-xs text-gray-400">Click products to add/remove</p>
+            </div>
+            <div class="flex items-center space-x-3">
+            
+            </div>
+        </div>
+    </div>
+    @endif
 
 </div>
 

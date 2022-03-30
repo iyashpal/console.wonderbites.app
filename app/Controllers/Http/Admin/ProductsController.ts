@@ -114,12 +114,6 @@ export default class ProductsController {
     })
   }
 
-  public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
-    const product = await Product.findOrFail(id)
-
-    await product.related('categories').sync(request.input('categories'))
-  }
-
   public async handleMedia ({ request, params: { id } }: HttpContextContract) {
     const images = request.files('files')
 

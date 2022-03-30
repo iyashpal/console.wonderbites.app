@@ -1,4 +1,4 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 import Product from './Product'
@@ -39,6 +39,26 @@ export default class Category extends BaseModel {
 
   @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
   public cuisines: ManyToMany<typeof Cuisine>
+
+  @computed()
+  public get isForProduct() {
+    return this.type === 'Product'
+  }
+
+  @computed()
+  public get isForCuisine() {
+    return this.type === 'Cuisine'
+  }
+
+  @computed()
+  public get isForBlog() {
+    return this.type === 'Blog'
+  }
+
+  @computed()
+  public get isForIngridient() {
+    return this.type === 'Ingridient'
+  }
 
   /**
    * Query scope for different types of categories.
