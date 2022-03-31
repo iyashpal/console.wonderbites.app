@@ -11,7 +11,7 @@ export default class MediaController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let media = await Media.query().paginate(request.input('page', 1), 2)
+    let media = await Media.query().paginate(request.input('page', 1), 10)
 
     media.baseUrl(request.url())
 

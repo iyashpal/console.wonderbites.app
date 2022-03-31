@@ -6,11 +6,12 @@ Route.group(() => {
   Route.resource('testimonials', 'Admin/TestimonialsController')
   Route.resource('cuisines', 'Admin/CuisinesController')
   Route.resource('categories', 'Admin/CategoriesController')
-
   Route.resource('products', 'Admin/ProductsController')
-  Route.post('products/:id/category', 'Admin/ProductsController.toggleCategory').as('products.category')
-  Route.post('products/:id/media', 'Admin/ProductsController.handleMedia').as('products.media')
+  Route.post('products/:id/category', 'Admin/CategoriesController.toggleCategory').as('products.category')
 
+  Route.post('category/:id/cuisine', 'Admin/CategoriesController.toggleCuisine').as('category.cuisine')
+
+  Route.post('products/:id/media', 'Admin/ProductsController.handleMedia').as('products.media')
   Route.resource('ingridients', 'Admin/IngridientsController')
   Route.resource('banners', 'Admin/BannersController')
   Route.resource('media', 'Admin/MediaController')
@@ -21,4 +22,8 @@ Route.group(() => {
   Route.resource('careercategories', 'Admin/CareerCategoriesController')
   Route.resource('brands', 'Admin/BrandsController')
   Route.resource('blogs', 'Admin/BlogsController')
+  Route.post('blogs/:id/category', 'Admin/BlogsController.toggleCategory').as('blogs.category')
+  Route.resource('openingpositions', 'Admin/OpeningPositionsController')
+  Route.resource('jobapplications', 'Admin/JobApplicationsController')
+  Route.resource('contacts', 'Admin/ContactsController')
 }).middleware('auth')

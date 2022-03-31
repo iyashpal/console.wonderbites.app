@@ -1,6 +1,7 @@
-import { BaseModel, column} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-export default class CareerCategory extends BaseModel {
+
+export default class Contacts extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -8,10 +9,16 @@ export default class CareerCategory extends BaseModel {
   public name: string
 
   @column()
-  public brand_id: number
+  public email: string
+
+  @column()
+  public comment: string
 
   @column()
   public status: number
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime

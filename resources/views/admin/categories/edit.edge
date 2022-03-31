@@ -15,10 +15,14 @@
                     @!form.input({id: "name", value: flashMessages.get('name', category.name), name: "name", type: "text", className: "mt-1 block w-full", autofocus: true})
                     @!form.inputError({error: 'errors.name'})
                 </div>
-
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'image_path', label: "Image", required: true})
+                    <input type="file" name="image_path" id="image_path">
+                    @!form.inputError({error: 'errors.image_path'})
+                </div>
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'type', label: "Type", required: true})
-                    @!form.select({ id: 'type', value:flashMessages.get('type', category.type), name: 'type', options: [{value: "Blog"}, {value: "Cuisine"},{value: "Ingridient"}, {value: "Product"}]})
+                    @!form.select({ id: 'type', value:flashMessages.get('type', category.type), name: 'type', options: [{value: "Blog"}, {value: "Brand"},{value: "Cuisine"},{value: "Ingridient"}, {value: "job"}, {value: "Product"}]})
                     @!form.inputError({error: 'errors.type'})
                 </div>
 

@@ -71,6 +71,21 @@ export default [
     icon: 'rss-feed',
   },
   {
+    url: '/openingpositions',
+    label: 'Openingpositions',
+    icon: 'group',
+  },
+  {
+    url: '/contacts',
+    label: 'Contacts',
+    icon: 'group',
+  },
+  {
+    url: '/jobapplications',
+    label: 'Job Applications',
+    icon: 'group',
+  },
+  {
     url: '/',
     label: 'Feedbacks',
     icon: 'rate-review',

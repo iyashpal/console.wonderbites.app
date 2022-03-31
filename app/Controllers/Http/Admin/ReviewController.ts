@@ -13,7 +13,7 @@ export default class ReviewController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let reviews = await Review.query().paginate(request.input('page', 1), 2)
+    let reviews = await Review.query().paginate(request.input('page', 1), 10)
 
     reviews.baseUrl(request.url())
 

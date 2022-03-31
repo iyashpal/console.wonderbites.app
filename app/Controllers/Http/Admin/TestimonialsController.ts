@@ -11,7 +11,7 @@ export default class TestimonialsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let testimonials = await Testimonial.query().paginate(request.input('page', 1), 2)
+    let testimonials = await Testimonial.query().paginate(request.input('page', 1), 10)
 
     testimonials.baseUrl(request.url())
 

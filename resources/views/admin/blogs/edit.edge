@@ -1,9 +1,8 @@
 @layout('layouts/app')
-@set('title', "Edit Blog")
+@set('title', "Edit")
 @section('content')
 <form action="{{ route('blogs.update', {id: blog.id}, {qs: {_method: 'PUT'}}) }}" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
-
     <div class="bg-white overflow-hidden shadow rounded-lg">
         <div class="px-4 py-5 sm:p-6">
             <div class="grid grid-cols-6 gap-6">
@@ -22,7 +21,7 @@
 
                   <div class="col-span-6">
                     @!form.label({for:'short_description', label: "Short Description", required: true})
-                    <textarea type="text" name="short_description" id="short_description" autocomplete="short_description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('short_description', blog.short_description) }}</textarea>
+                    <textarea type="text" name="short_description" id="short_description" data-description = "{{blog.short_description}}" autocomplete="short_description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ flashMessages.get('short_description', blog.short_description) }}</textarea>
                     @!form.inputError({error: 'errors.short_description'})
                 </div>
     
