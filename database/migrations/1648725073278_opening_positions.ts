@@ -10,7 +10,8 @@ export default class OpeningPositions extends BaseSchema {
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      //table.bigInteger('category_id').unsigned().nullable().references('career_categories.id').onDelete('SET NULL')
+      table.bigInteger('category_id').unsigned().nullable().references('categories.id').onDelete('SET NULL')
+      table.bigInteger('brand_id').unsigned().nullable().references('brands.id').onDelete('SET NULL')
       table.string('name').notNullable()
       table.integer('number').unsigned().notNullable()
       table.text('description').nullable()
@@ -25,3 +26,4 @@ export default class OpeningPositions extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
+

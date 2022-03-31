@@ -1,6 +1,7 @@
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, HasMany, hasMany, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import CareerCategory from './Pivot/CareerCategory'
+import Category from './Category'
+import Media from './Media'
 export default class OpeningPosition extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -10,6 +11,17 @@ export default class OpeningPosition extends BaseModel {
 
   @column()
   public category_id: number
+
+  @hasMany(() => Media, {
+    localKey: 'id',
+    foreignKey: 'refId',
+    onQuery (query) {
+      query.where('refType', 'Job')
+    },
+  })
+  public media: HasMany<typeof Media>
+  @manyToMany(() => Category)
+  public categories: ManyToMany<typeof Category>
 
   @column()
   public description: string
@@ -34,9 +46,6 @@ export default class OpeningPosition extends BaseModel {
   //   },
   // })
   // public media: HasMany<typeof Media>
-
-  @manyToMany(() => CareerCategory)
-  public careercategory: ManyToMany<typeof CareerCategory>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

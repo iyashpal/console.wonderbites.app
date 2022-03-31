@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CareerCategory from 'App/Models/Pivot/CareerCategory'
+import Category from 'App/Models/Category'
 import OpeningPosition from 'App/Models/OpeningPosition'
 import CreateValidator from 'App/Validators/OpeningPosition/CreateValidator'
 import UpdateValidator from 'App/Validators/OpeningPosition/UpdateValidator'
@@ -15,8 +15,9 @@ export default class OpeningPositionsController {
     let openingpositions = await OpeningPosition.query().paginate(request.input('page', 1), 2)
 
     openingpositions.baseUrl(request.url())
+    let categories = await Category.query().where('type', 'Blog')
 
-    return view.render('admin/openingpositions/index', { openingpositions })
+    return view.render('admin/openingpositions/index', { openingpositions,categories })
   }
 
   /**
@@ -26,8 +27,8 @@ export default class OpeningPositionsController {
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
-    const careercategories = await CareerCategory.query().where('status', 1)
-    return view.render('admin/openingpositions/create',{careercategories})
+    //const careercategories = await .query().where('status', 1)
+    return view.render('admin/openingpositions/create')
   }
 
   /**
@@ -54,11 +55,11 @@ export default class OpeningPositionsController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const openingposition = await OpeningPosition.findOrFail(id)
-
+    await openingposition.load('categories')
     //openingposition.load('career_categories', (query) => query.select('id'))
-    const careercategories = await CareerCategory.query().where('status',1)
+    const categories = await Category.query().where('type', 'Job')
 
-    return view.render('admin/openingpositions/show', {openingposition,careercategories})
+    return view.render('admin/openingpositions/show', {openingposition,categories})
   }
 
   /**
@@ -69,8 +70,8 @@ export default class OpeningPositionsController {
    */
   public async edit ({ view, params }: HttpContextContract) {
     const openingposition = await OpeningPosition.findOrFail(params.id)
-    const careercategories = await CareerCategory.query().where('status', 1)
-    return view.render('admin/openingpositions/edit', { openingposition ,careercategories})
+    //const careercategories = await CareerCategory.query().where('status', 1)
+    return view.render('admin/openingpositions/edit', { openingposition})
   }
 
   /**

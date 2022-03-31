@@ -19,6 +19,7 @@ Route.group(() => {
   Route.resource('careercategories', 'Admin/CareerCategoriesController')
   Route.resource('brands', 'Admin/BrandsController')
   Route.resource('blogs', 'Admin/BlogsController')
+  Route.post('blogs/:id/category', 'Admin/BlogsController.toggleCategory').as('blogs.category')
   Route.resource('openingpositions', 'Admin/OpeningPositionsController')
   Route.resource('jobapplications', 'Admin/JobApplicationsController')
   Route.resource('contacts', 'Admin/ContactsController')

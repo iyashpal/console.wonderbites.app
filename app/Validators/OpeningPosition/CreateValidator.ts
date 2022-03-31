@@ -24,7 +24,6 @@ export default class CreateValidator {
    *    ```
    */
   public schema = schema.create({
-    category_id: schema.number.optional(),
     name: schema.string.optional(),
     description: schema.string.optional(),
     number: schema.number.optional(),
@@ -45,7 +44,6 @@ export default class CreateValidator {
    *
    */
   public messages = {
-    'catgorycategory_id_id.required': 'Category field is required.',
     'name.required': 'Title field is required.',
     'description.required': 'Description field is required.',
     'number.required': 'Number of opening is required.',

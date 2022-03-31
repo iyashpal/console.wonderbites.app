@@ -1,9 +1,9 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Category from '../Category'
-import Blog from '../Blog'
+import OpeningPosition from '../OpeningPosition'
 
-export default class BlogCategory extends BaseModel {
+export default class CategoryOpeningPosition extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -16,8 +16,8 @@ export default class BlogCategory extends BaseModel {
   @column()
   public blogId: number
 
-  @belongsTo(() => Blog)
-  public blog: BelongsTo<typeof Blog>
+  @belongsTo(() => OpeningPosition)
+  public openingposition: BelongsTo<typeof OpeningPosition>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

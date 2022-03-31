@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Brands from 'App/Models/Brands'
-import CareerCategory from 'App//Models/Pivot/CareerCategory'
+import CareerCategory from 'App/Models/Pivot/JobCategory'
 import CreateValidator from 'App/Validators/CareerCategory/CreateValidator'
 import UpdateValidator from 'App/Validators/CareerCategory/UpdateValidator'
 export default class CareerCategoriesController {

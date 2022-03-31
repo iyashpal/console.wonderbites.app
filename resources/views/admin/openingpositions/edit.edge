@@ -15,15 +15,6 @@
                     @!form.input({id: "name", id:'name', value: flashMessages.get('name', openingposition.name), name: "name", type: "text", className: "mt-1 block w-full", autofocus: true})
                     @!form.inputError({error: 'errors.name'})
                 </div>
-                <div class="col-span-6 sm:col-span-3">
-                    @!form.label({for:'category_id', label: "Category", required: true})
-                    <select id="category_id" name="category_id" autocomplete="category_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        @each((category, index) in careercategories)
-                        <option data-value="{{openingposition.category_id}}" value="{{category.id}}" {{ flashMessages.get('errors.category_id', openingposition.category_id) === category.id ? 'selected' : ''}}>{{category.name}}</option>
-                        @endeach 
-                    </select>
-                    @!form.inputError({error: 'errors.brand_id'})
-                </div>
                 <div class="col-span-6">
                     @!form.label({for:'description', label: "Description", required: true})
                     @!form.textarea({name:'description', id:'description', value: flashMessages.get('description', openingposition.description), className: "mt-1 block w-full"})
