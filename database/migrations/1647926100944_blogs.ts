@@ -8,6 +8,7 @@ export default class Blogs extends BaseSchema {
       table.increments('id')
       table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('SET NULL')
       table.string('name').notNullable()
+      table.string('slug').notNullable()
       table.text('description').nullable()
       table.text('short_description').nullable()
       table.text('image_path').nullable()

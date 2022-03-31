@@ -1,7 +1,7 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, HasMany, hasMany, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import CategoryBlog from './CategoryBlog'
-import User from './User'
+import Category from './Category'
+import Media from './Media'
 
 export default class Blog extends BaseModel {
   @column({ isPrimary: true })
@@ -10,28 +10,32 @@ export default class Blog extends BaseModel {
   public name: string
 
   @column()
-  public user_id: number
+  public slug: string
 
   @column()
-  public category_id: number
+  public user_id: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
+  @hasMany(() => Media, {
+    localKey: 'id',
+    foreignKey: 'refId',
+    onQuery (query) {
+      query.where('refType', 'Product')
+    },
+  })
+  public media: HasMany<typeof Media>
+  @manyToMany(() => Category)
+  public categories: ManyToMany<typeof Category>
   @column()
   public description: string
 
   @column()
-  public shortDescription: string
+  public short_description: string
 
   @column()
-  public imagePath: string
+  public image_path: string
 
   @column()
   public status: number
-
-  @manyToMany(() => CategoryBlog)
-  public categories: ManyToMany<typeof CategoryBlog>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

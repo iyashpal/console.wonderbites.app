@@ -1,6 +1,6 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import CategoryBlog from '../CategoryBlog'
+import Category from '../Category'
 import Blog from '../Blog'
 
 export default class BlogCategory extends BaseModel {
@@ -8,13 +8,13 @@ export default class BlogCategory extends BaseModel {
   public id: number
 
   @column()
-  public category_id: number
+  public categoryId: number
 
-  @belongsTo(() => CategoryBlog)
-  public categoryblog: BelongsTo<typeof CategoryBlog>
+  @belongsTo(() => Category)
+  public category: BelongsTo<typeof Category>
 
   @column()
-  public blog_id: number
+  public blogId: number
 
   @belongsTo(() => Blog)
   public blog: BelongsTo<typeof Blog>
