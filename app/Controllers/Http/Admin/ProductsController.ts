@@ -16,7 +16,7 @@ export default class ProductsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let products = await Product.query().paginate(request.input('page', 1), 2)
+    let products = await Product.query().paginate(request.input('page', 1), 10)
 
     products.baseUrl(request.url())
 

@@ -16,7 +16,7 @@ export default class BlogsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let blogs = await Blog.query().paginate(request.input('page', 1), 2)
+    let blogs = await Blog.query().paginate(request.input('page', 1), 10)
 
     blogs.baseUrl(request.url())
 

@@ -11,7 +11,7 @@ export default class IngridientsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let ingridients = await Ingridient.query().paginate(request.input('page', 1), 2)
+    let ingridients = await Ingridient.query().paginate(request.input('page', 1), 10)
 
     ingridients.baseUrl(request.url())
 

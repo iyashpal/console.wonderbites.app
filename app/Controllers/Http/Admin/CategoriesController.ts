@@ -13,7 +13,7 @@ export default class CategoriesController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let categories = await Category.query().paginate(request.input('page', 1), 2)
+    let categories = await Category.query().paginate(request.input('page', 1), 10)
 
     categories.baseUrl(request.url())
 

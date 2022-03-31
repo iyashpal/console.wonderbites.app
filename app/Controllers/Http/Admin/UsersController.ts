@@ -12,7 +12,7 @@ export default class UsersController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let users = await User.query().paginate(request.input('page', 1), 2)
+    let users = await User.query().paginate(request.input('page', 1), 10)
 
     users.baseUrl(request.url())
 
