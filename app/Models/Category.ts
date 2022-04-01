@@ -1,7 +1,9 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 import Product from './Product'
+import Blog from './Blog'
+import OpeningPosition from './OpeningPosition'
 
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
@@ -40,6 +42,34 @@ export default class Category extends BaseModel {
   @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
   public cuisines: ManyToMany<typeof Cuisine>
 
+
+  @computed()
+  public get isForProduct() {
+    return this.type === 'Product'
+  }
+
+  @computed()
+  public get isForCuisine() {
+    return this.type === 'Cuisine'
+  }
+
+  @computed()
+  public get isForBlog() {
+    return this.type === 'Blog'
+  }
+
+  @computed()
+  public get isForIngridient() {
+    return this.type === 'Ingridient'
+  }
+
+  @manyToMany(() => Blog, { pivotTable: 'blog_category' })
+  public blog: ManyToMany<typeof Blog>
+
+  @manyToMany(() => OpeningPosition, { pivotTable: 'job_category' })
+  public openingposition: ManyToMany<typeof OpeningPosition>
+
+
   /**
    * Query scope for different types of categories.
    */
@@ -49,6 +79,11 @@ export default class Category extends BaseModel {
    * Query scope for blog categories.
    */
   public static forBlog = scope((query) => query.where('type', 'Blog'))
+
+  /**
+   * Query scope for Job categories.
+   */
+  public static forJob = scope((query) => query.where('type', 'job'))
 
   /**
    * Query scope for product categories.

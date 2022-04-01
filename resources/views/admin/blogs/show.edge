@@ -1,18 +1,15 @@
 @layout('layouts/app')
 
-@set('title', blog.title)
+@set('title', blog.name)
 
 @section('actions')
 <a class="tw:btn tw:btn-secondary" href="{{ route('blogs.index') }}">
     <icon name="arrow-left" class="w-6 h-6 mr-1"></icon> Back
 </a>
 @end
-
 @section('content')
-
 @!alerts.success({show: flashMessages.get('blog_created'), icon: 'check-circle', message: "Blog successfully saved!", className: "mb-4"})
 @!alerts.success({show: flashMessages.get('blog_updated'), icon: 'check-circle', message: "Blog successfully updated!", className: "mb-4"})
-
 <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
     <div class="px-4 py-5 sm:px-6">
         <h3 class="text-lg leading-6 font-medium text-gray-900">Blog Details</h3>
@@ -60,5 +57,25 @@
 
         </div>
     </div>
+   <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="pb-3">
+                <h2 class="font-semibold text-xl">Categories</h2>
+                <p class="text-xs text-gray-400">Click categories to add/remove</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                @each(category in categories)
+                <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('blogs.category', blog) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(blog.categories) }}"></v-toggle-product-categories>
+                @endeach
+            </div>
+
+            @if(categories.length === 0)
+            <v-alert name="warning">
+                Categories not found. <a class="font-semibold underline hover:italic" href="{{ route('categories.create') }}">Click here</a> to create categories.
+            </v-alert>
+            @endif
+        </div>
+    </div>
+
 </div>
 @endsection

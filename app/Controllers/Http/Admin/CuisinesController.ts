@@ -12,7 +12,7 @@ export default class CuisinesController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let cuisines = await Cuisine.query().paginate(request.input('page', 1), 2)
+    let cuisines = await Cuisine.query().paginate(request.input('page', 1), 10)
 
     cuisines.baseUrl(request.url())
 

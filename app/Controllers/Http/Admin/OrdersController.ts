@@ -13,7 +13,7 @@ export default class OrdersController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let orders = await Orders.query().paginate(request.input('page', 1), 2)
+    let orders = await Orders.query().paginate(request.input('page', 1), 10)
 
     orders.baseUrl(request.url())
 

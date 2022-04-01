@@ -11,7 +11,7 @@ export default class BrandsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let brands = await Brand.query().paginate(request.input('page', 1), 2)
+    let brands = await Brand.query().paginate(request.input('page', 1), 10)
     brands.baseUrl(request.url())
     return view.render('admin/brands/index', { brands })
   }

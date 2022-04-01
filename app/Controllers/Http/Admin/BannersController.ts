@@ -11,7 +11,7 @@ export default class BannersController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let banners = await Banner.query().paginate(request.input('page', 1), 2)
+    let banners = await Banner.query().paginate(request.input('page', 1), 10)
 
     banners.baseUrl(request.url())
 

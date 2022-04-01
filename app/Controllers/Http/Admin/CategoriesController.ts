@@ -1,5 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
+import Cuisine from 'App/Models/Cuisine'
+import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Category/CreateValidator'
 import UpdateValidator from 'App/Validators/Category/UpdateValidator'
 
@@ -11,7 +13,7 @@ export default class CategoriesController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let categories = await Category.query().paginate(request.input('page', 1), 2)
+    let categories = await Category.query().paginate(request.input('page', 1), 10)
 
     categories.baseUrl(request.url())
 
@@ -36,6 +38,12 @@ export default class CategoriesController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
+    }
+
     const category = await Category.create({ ...data })
       .then((category) => {
         session.flash('category_created', category.id)
@@ -53,7 +61,9 @@ export default class CategoriesController {
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
     const category = await Category.findOrFail(id)
-    return view.render('admin/categories/show', { category })
+    await category.load('cuisines')
+    const cuisines = await Category.query().where('type', 'Cuisine')
+    return view.render('admin/categories/show', { category, cuisines })
   }
 
   /**
@@ -78,6 +88,11 @@ export default class CategoriesController {
 
     const data = await request.validate(UpdateValidator)
 
+    if (data.image_path) {
+      await data.image_path.moveToDisk('./')
+
+      Object.assign(data, { imagePath: data.image_path!.fileName })
+    }
     // if (data.image_path) {
     //   await data.image_path.moveToDisk('./')
     // }
@@ -102,4 +117,17 @@ export default class CategoriesController {
       response.redirect().toRoute('categories.index')
     })
   }
+
+  public async toggleCuisine({ params: { id }, request }: HttpContextContract) {
+    const category = await Category.findOrFail(id);
+    await category.related('cuisines').sync(request.input('cuisines', []))
+  }
+
+
+  public async toggleCategory({ params: { id }, request }: HttpContextContract) {
+    const product = await Product.findOrFail(id)
+
+    await product.related('categories').sync(request.input('categories'))
+  }
+
 }

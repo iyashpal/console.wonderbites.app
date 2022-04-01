@@ -1,9 +1,13 @@
 import Route from '@ioc:Adonis/Core/Route'
-
 Route.group(() => {
   Route.resource('cuisines', 'API/CuisinesController')
+  //Route.resource('blogs', 'API/BlogsController').as('blogs')
+  Route.get('blogs', 'API/BlogsController.index').as('blogs')
+  Route.get('blogs/:slug', 'API/BlogsController.showBlogBySlug').as('blogslug')
 
-  Route.resource('blogs', 'API/BlogsController').as('blogs')
+  Route.resource('categoryblog', 'API/CategoryBlogController').as('categoryblog')
+
+  //Route.resource('blogs', 'API/BlogsController').as('blogs')
 
   Route.resource('categories', 'API/CategoriesController').as('categories')
 
@@ -29,8 +33,14 @@ Route.group(() => {
 
   Route.group(() => {
     Route.post('/login', 'API/LoginController.login').as('login')
+    Route.post('/loginUser', 'API/LoginController.loginUser').as('loginUser')
+
+    
 
     Route.post('/register', 'API/RegisterController.register').as('register')
+    Route.post('/signup', 'API/RegisterController.signup').as('signup')
+    Route.post('job-apply', 'API/JobApplicationsController.apply').as('jobapply')
+    Route.post('contacts', 'API/ContactsController.send').as('contacts')
   }).middleware('guest_api')
 
   Route.group(() => {

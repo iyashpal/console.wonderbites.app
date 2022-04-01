@@ -16,7 +16,7 @@ export default class TeamsController {
     // teams.baseUrl(request.url())
 
     // return view.render('admin/teams/index', { teams })
-    let teams = await Team.query().paginate(request.input('page', 1), 2)
+    let teams = await Team.query().paginate(request.input('page', 1), 10)
 
     teams.baseUrl(request.url())
 
