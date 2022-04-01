@@ -1,5 +1,5 @@
 import {
-  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany
+  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany, scope
 } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cart from './Cart'
@@ -42,8 +42,7 @@ export default class Product extends BaseModel {
   public status: number
 
   @hasMany(() => Media, {
-    localKey: 'id',
-    foreignKey: 'refId',
+    localKey: 'id', foreignKey: 'refId',
     onQuery (query) {
       query.where('refType', 'Product')
     },

@@ -118,16 +118,14 @@ export default class CategoriesController {
     })
   }
 
-  public async toggleCuisine({ params: { id }, request }: HttpContextContract) {
+  public async toggleCuisine ({ params: { id }, request }: HttpContextContract) {
     const category = await Category.findOrFail(id);
     await category.related('cuisines').sync(request.input('cuisines', []))
   }
 
-
-  public async toggleCategory({ params: { id }, request }: HttpContextContract) {
+  public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
     await product.related('categories').sync(request.input('categories'))
   }
-
 }

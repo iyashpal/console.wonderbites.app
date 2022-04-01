@@ -59,9 +59,18 @@ export default class CategoriesController {
     try {
       const category = await Category.findOrFail(id)
 
-      await category.load('products', (builder) => {
-        builder.preload('media')
+      await category.load('products', async (builder) => {
+        await builder.preload('media', media => {
+          media.select('*')
+        })
       })
+
+      // const category = await Category.query()
+      //   .preload('products', async (builder) => {
+      //     await builder.preload('media')
+      //   })
+      //   .where('id', id)
+      //   .firstOrFail()
 
       response.status(200).json(category)
     } catch (error) {

@@ -1,9 +1,9 @@
-import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import Blog from './Blog'
 import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 import Product from './Product'
-import Blog from './Blog'
 import OpeningPosition from './OpeningPosition'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
   @column({ isPrimary: true })
@@ -30,7 +30,9 @@ export default class Category extends BaseModel {
   @belongsTo(() => Category, { foreignKey: 'parent' })
   public category: BelongsTo<typeof Category>
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotTable: 'category_product',
+  })
   public products: ManyToMany<typeof Product>
 
   @column.dateTime({ autoCreate: true })
@@ -42,24 +44,23 @@ export default class Category extends BaseModel {
   @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
   public cuisines: ManyToMany<typeof Cuisine>
 
-
   @computed()
-  public get isForProduct() {
+  public get isForProduct () {
     return this.type === 'Product'
   }
 
   @computed()
-  public get isForCuisine() {
+  public get isForCuisine () {
     return this.type === 'Cuisine'
   }
 
   @computed()
-  public get isForBlog() {
+  public get isForBlog () {
     return this.type === 'Blog'
   }
 
   @computed()
-  public get isForIngridient() {
+  public get isForIngridient () {
     return this.type === 'Ingridient'
   }
 
@@ -68,7 +69,6 @@ export default class Category extends BaseModel {
 
   @manyToMany(() => OpeningPosition, { pivotTable: 'job_category' })
   public openingposition: ManyToMany<typeof OpeningPosition>
-
 
   /**
    * Query scope for different types of categories.
