@@ -103,12 +103,6 @@ export default class BlogsController {
     await blog.merge({
       ...data, image_path: data.image_path ? data.image_path.fileName : blog.image_path,
     }).save().then(() => session.flash('blog_updated', true))
-    if (request.input('category_id')) {
-      const categories = request.input('category_id')
-      for (let i in categories) {
-        await BlogCategories.create({ category_id: categories[i], blog_id: blog.id })
-      }
-    }
     response.redirect().toRoute('blogs.show', { id: blog.id })
   }
   public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
