@@ -88,7 +88,7 @@ export default class TestimonialsController {
     }
 
     await testimonial.merge({
-      ...data, imagePath: data.image_path ? data.image_path.fileName : testimonial.imagePath,
+      ...data, image_path: data.image_path ? data.image_path.fileName : testimonial.image_path,
     }).save().then(() => session.flash('testimonial_updated', true))
 
     response.redirect().toRoute('testimonials.show', { id: testimonial.id })
