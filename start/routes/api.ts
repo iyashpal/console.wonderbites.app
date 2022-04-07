@@ -1,59 +1,82 @@
 import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
-  Route.resource('cuisines', 'API/CuisinesController')
-  //Route.resource('blogs', 'API/BlogsController').as('blogs')
-  Route.get('blogs', 'API/BlogsController.index').as('blogs')
-  Route.get('blogs/:slug', 'API/BlogsController.showBlogBySlug').as('blogslug')
-
-  Route.resource('categoryblog', 'API/CategoryBlogController').as('categoryblog')
-
-  //Route.resource('blogs', 'API/BlogsController').as('blogs')
-
-  Route.resource('categories', 'API/CategoriesController').as('categories')
-
-  Route.resource('testimonials', 'API/TestimonialsController').as('testimonials')
-
-  Route.resource('banners', 'API/BannersController')
-  Route.resource('teams', 'API/TeamsController').as('teams')
-  Route.get('about', 'API/HomeController.about').as('about')
-
-  Route.resource('products', 'API/ProductsController')
-
-  Route.get('getcart', 'API/CartsController.getcart').as('getcart')
-
-  Route.get('terms', 'API/HomeController.terms').as('terms')
-
-  Route.get('privacy_policy', 'API/HomeController.privacy_policy').as('privacy_policy')
-
-  Route.get('content_policy', 'API/HomeController.content_policy').as('content_policy')
-
-  Route.get('settings', 'API/HomeController.settings').as('settings')
-
-  Route.get('my_subscriptions', 'API/HomeController.my_subscriptions').as('my_subscriptions')
-
+  /**
+   * Routes that allowed only for guest users.
+   */
   Route.group(() => {
-    Route.post('/login', 'API/LoginController.login').as('login')
-    Route.post('/loginUser', 'API/LoginController.loginUser').as('loginUser')
+    Route.post('/login', 'Auth/LoginController.login').as('login')
 
-    
+    Route.post('/register', 'Auth/RegisterController.register').as('register')
 
-    Route.post('/register', 'API/RegisterController.register').as('register')
-    Route.post('/signup', 'API/RegisterController.signup').as('signup')
-    Route.post('job-apply', 'API/JobApplicationsController.apply').as('jobapply')
-    Route.post('contacts', 'API/ContactsController.send').as('contacts')
+    Route.post('/signup', 'Auth/RegisterController.signup').as('signup')
   }).middleware('guest_api')
 
+  /**
+   * Routes that allowed only for a logged in user.
+   */
   Route.group(() => {
-    Route.post('/logout', 'API/LoginController.logout').as('logout')
+    Route.post('/logout', 'LoginController.logout').as('logout')
 
-    Route.get('/users', 'API/UsersController.show').as('user')
+    Route.get('/users', 'UsersController.show').as('user')
 
-    Route.put('/users', 'API/UsersController.update').as('user.update')
+    Route.put('/users', 'UsersController.update').as('user.update')
 
-    Route.resource('addresses', 'API/Profile/AddressesController')
+    Route.resource('addresses', 'Profile/AddressesController')
 
-    Route.resource('wishlists', 'API/WishlistsController')
+    Route.resource('wishlists', 'WishlistsController')
 
-    Route.post('products/:id/category', 'API/ProductsController.toggleCategory').as('products.category')
+    Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
   }).middleware('auth_api')
-}).prefix('/api').as('api')
+
+  /**
+   * Routes that allowed for everyone (guest|logged in) users.
+   */
+  Route.group(() => {
+    /**
+     * Cart Routes
+     */
+    Route.group(() => {
+      Route.get('cart', 'CartsController.show').as('show')
+      Route.post('cart', 'CartsController.update').as('update')
+    }).as('cart')
+
+    Route.resource('cuisines', 'CuisinesController')
+
+    //Route.resource('blogs', 'BlogsController').as('blogs')
+    Route.get('blogs', 'BlogsController.index').as('blogs')
+
+    Route.get('blogs/:slug', 'BlogsController.showBlogBySlug').as('blogslug')
+
+    Route.resource('categoryblog', 'CategoryBlogController').as('categoryblog')
+
+    //Route.resource('blogs', 'BlogsController').as('blogs')
+
+    Route.resource('categories', 'CategoriesController').as('categories')
+
+    Route.resource('testimonials', 'TestimonialsController').as('testimonials')
+
+    Route.resource('banners', 'BannersController')
+
+    Route.resource('teams', 'TeamsController').as('teams')
+
+    Route.get('about', 'HomeController.about').as('about')
+
+    Route.resource('products', 'ProductsController')
+
+    Route.get('getcart', 'CartsController.getcart').as('getcart')
+
+    Route.get('terms', 'HomeController.terms').as('terms')
+
+    Route.get('privacy_policy', 'HomeController.privacy_policy').as('privacy_policy')
+
+    Route.get('content_policy', 'HomeController.content_policy').as('content_policy')
+
+    Route.get('settings', 'HomeController.settings').as('settings')
+
+    Route.get('my_subscriptions', 'HomeController.my_subscriptions').as('my_subscriptions')
+
+    Route.post('job-apply', 'JobApplicationsController.apply').as('jobapply')
+
+    Route.post('contacts', 'ContactsController.send').as('contacts')
+  })
+}).prefix('/api').as('api').namespace('App/Controllers/Http/API')

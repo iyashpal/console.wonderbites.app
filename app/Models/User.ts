@@ -2,6 +2,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Address from './Address'
+import Cart from './Cart'
 import Notification from './Notification'
 
 export default class User extends BaseModel {
@@ -49,6 +50,9 @@ export default class User extends BaseModel {
     onQuery: query => query.where('notifiable_type', 'User'),
   })
   public notifications: HasMany<typeof Notification>
+
+  @hasOne(() => Cart)
+  public cart: HasOne<typeof Cart>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

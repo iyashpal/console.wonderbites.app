@@ -35,19 +35,4 @@ export default class LoginController {
       response.badRequest(error.messages)
     }
   }
-
-  public async loginUser ({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await request.validate(LoginUserValidator)
-
-    try {
-      const token = await auth.use('api').attempt(email, password)
-
-      return response.status(200).json({statusCode: 200,msg: 'You have successfully logged in',data:token})
-    } catch {
-      return response.badRequest({error:error.messages,statusCode: 400})
-    }
-  }
-
-
-
 }
