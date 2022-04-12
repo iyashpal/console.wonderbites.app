@@ -23,7 +23,13 @@ Route.group(() => {
 
     Route.resource('addresses', 'Profile/AddressesController')
 
-    Route.resource('wishlists', 'WishlistsController')
+    /**
+     * Wishlist Routes
+     */
+    Route.group(() => {
+      Route.get('wishlists', 'WishlistsController.show').as('show')
+      Route.post('wishlists', 'WishlistsController.update').as('update')
+    }).as('wishlists')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
   }).middleware('auth_api')
@@ -38,7 +44,7 @@ Route.group(() => {
     Route.group(() => {
       Route.get('cart', 'CartsController.show').as('show')
       Route.post('cart', 'CartsController.update').as('update')
-    }).as('cart')
+    }).as('carts')
 
     Route.resource('cuisines', 'CuisinesController')
 

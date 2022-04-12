@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import Address from './Address'
 import Cart from './Cart'
 import Notification from './Notification'
+import Wishlist from './Wishlist'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -53,6 +54,9 @@ export default class User extends BaseModel {
 
   @hasOne(() => Cart)
   public cart: HasOne<typeof Cart>
+
+  @hasOne(() => Wishlist)
+  public wishlist: HasOne<typeof Wishlist>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
