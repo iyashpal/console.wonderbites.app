@@ -25,7 +25,7 @@ export default Env.rules({
   CACHE_VIEWS: Env.schema.boolean(),
   SESSION_DRIVER: Env.schema.string(),
   DRIVE_DISK: Env.schema.enum(['local'] as const),
-  NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),  
+  NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
   /************************************************
    * Database
    ************************************************/
@@ -34,7 +34,7 @@ export default Env.rules({
   PG_PORT: Env.schema.number(),
   PG_USER: Env.schema.string(),
   PG_PASSWORD: Env.schema.string.optional(),
-  PG_DB_NAME: Env.schema.string(),  
+  PG_DB_NAME: Env.schema.string(),
   /************************************************
    * SMTP Mailer
    ************************************************/
