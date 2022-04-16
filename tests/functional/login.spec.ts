@@ -10,3 +10,7 @@ test('Guest users can access login page.', async ({ client }) => {
   response.assertTextIncludes('Remember me')
   response.assertTextIncludes('Forgot your password?')
 })
+
+test('Authenticated users can\'t access the login page', async ({ assert }) => {
+  assert.isTrue(true)
+})

@@ -50,19 +50,6 @@ const databaseConfig: DatabaseConfig = {
       healthCheck: true,
       debug: true,
     },
-
-    sqlite: {
-      client: 'sqlite',
-      connection: {
-        filename: Application.tmpPath('db.sqlite3'),
-      },
-      migrations: {
-        naturalSort: true,
-      },
-      useNullAsDefault: true,
-      healthCheck: false,
-      debug: false,
-    },
   },
 }
 
