@@ -41,7 +41,8 @@
       "@adonisjs/lucid",
       "@adonisjs/auth",
       "@adonisjs/mail",
-      "@japa/preset-adonis/build/adonis-typings"
+      "@japa/preset-adonis/build/adonis-typings",
+      "@adonisjs/attachment-lite"
     ]
   }
 }

@@ -53,6 +53,13 @@
     picomatch "^2.3.1"
     slash "^3.0.0"
 
+"@adonisjs/attachment-lite@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@adonisjs/attachment-lite/-/attachment-lite-1.0.4.tgz#14bea5444828213f27ed822e9f031521c4ec1fdb"
+  integrity sha512-5YdB+qud4qVTcf48r+7Y/4n7OJYkAB1/oE7uCGcNBdIVPJN/sbrBF9vQc/bCVsCNS77d9ItDyNwPOg+YZIwcBQ==
+  dependencies:
+    "@poppinss/utils" "^4.0.4"
+
 "@adonisjs/auth@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@adonisjs/auth/-/auth-8.1.0.tgz#f4aa283cb801b6ab143d0220c99eb1ef2353087a"
