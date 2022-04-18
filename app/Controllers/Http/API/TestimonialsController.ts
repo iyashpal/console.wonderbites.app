@@ -15,7 +15,7 @@ export default class TestimonialsController {
 
     testimonials.body = "hello"
 
-    testimonials.image_path = "asdas"
+    testimonials.imagePath = "asdas"
 
     testimonials.status = 1
 

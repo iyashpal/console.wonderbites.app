@@ -5,7 +5,7 @@ import Category from 'App/Models/Category'
 import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/Blog/CreateValidator'
 import UpdateValidator from 'App/Validators/Blog/UpdateValidator'
-import { AirlineSeatLegroomReducedIcon } from '@materialicons/vue/round'
+// import { AirlineSeatLegroomReducedIcon } from '@materialicons/vue/round'
 ///import { isDate } from '@vue/shared'
 //import { CountertopsIcon } from '@materialicons/vue/round'
 export default class BlogsController {

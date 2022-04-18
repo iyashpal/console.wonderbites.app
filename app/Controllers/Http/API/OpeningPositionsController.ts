@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Category from 'App/Models/Category'
+// import Category from 'App/Models/Category'
 import OpeningPosition from 'App/Models/OpeningPosition'
 export default class OpeningPositionsController {
   /**
