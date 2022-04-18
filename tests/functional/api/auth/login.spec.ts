@@ -1,7 +1,14 @@
 import { test } from '@japa/runner'
+import { UserFactory } from 'Database/factories'
+import Database from '@ioc:Adonis/Lucid/Database'
 
-test.group('Api auth login', () => {
-  test('Need email & password to login.', async ({ client }) => {
+test.group('Api auth login', (group) => {
+  group.each.setup(async () => {
+    await Database.beginGlobalTransaction()
+    return () => Database.rollbackGlobalTransaction()
+  })
+
+  test('Need email|mobile & password to login.', async ({ client }) => {
     const response = await client.post('/api/login').accept('json')
 
     response.assertStatus(422)
@@ -9,5 +16,27 @@ test.group('Api auth login', () => {
     response.assert?.containsSubset(response.body(), {
       errors: [{ field: 'email' }, { field: 'password' }],
     })
+  })
+
+  test('Can\'t login without a password', async ({ client }) => {
+    const response = await client.post('/api/login').accept('json').fields({ email: 'info@example.com' })
+
+    response.assertStatus(422)
+    response.assert?.containsSubset(response.body(), { errors: [{ field: 'password' }] })
+  })
+
+  test('Can\'t login without an email|mobile', async ({ client }) => {
+    const response = await client.post('/api/login').accept('json').fields({ password: 'Welcome@123!' })
+
+    response.assertStatus(422)
+    response.assert?.containsSubset(response.body(), { errors: [{ field: 'email' }] })
+  })
+
+  test('Authenticated user can\'t process the login', async ({ client }) => {
+    // const user = await UserFactory.create()
+
+    // const response = await client.post('/api/login').loginAs(user).accept('json')
+
+    // response.dumpBody()
   })
 })
