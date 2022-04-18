@@ -10,7 +10,7 @@ export default class CuisinesController {
    */
   public async index ({ response }: HttpContextContract) {
     try {
-      const cuisines = await Cuisine.query().preload('categories')
+      const cuisines = await Cuisine.query().where('type', 'Cuisine').preload('categories')
 
       response.status(200).json(cuisines)
     } catch (error) {
@@ -23,27 +23,27 @@ export default class CuisinesController {
    * 
    * @param param0 HttpContextContract
    */
-  public async store ({ request, response }: HttpContextContract) {
-    try {
-      const validate = await request.validate({
+  public async store({ }: HttpContextContract) {
+    // try {
+    //   const validate = await request.validate({
 
-        schema: schema.create({
+    //     schema: schema.create({
 
-          name: schema.string({ trim: true }, [rules.maxLength(255)]),
+    //       name: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          description: schema.string({ trim: true }, [rules.maxLength(255)]),
+    //       description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          status: schema.number.optional(),
+    //       status: schema.number.optional(),
 
-        }),
-      })
+    //     }),
+    //   })
 
-      const cuisine = await Cuisine.create(validate)
+    //   const cuisine = await Cuisine.create(validate)
 
-      response.status(200).json(cuisine)
-    } catch (error) {
-      response.badRequest(error.messages)
-    }
+    //   response.status(200).json(cuisine)
+    // } catch (error) {
+    //   response.badRequest(error.messages)
+    // }
   }
 
   public async show ({ }: HttpContextContract) { }

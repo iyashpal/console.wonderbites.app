@@ -10,8 +10,7 @@ export default class CategoriesController {
    */
   public async index ({ response }: HttpContextContract) {
     try {
-      const category = await Category.all()
-
+      const category = await Category.query().where('type', 'Product')
       response.status(200).json(category)
     } catch (error) {
       response.badRequest(error.messages)
@@ -23,31 +22,31 @@ export default class CategoriesController {
    * 
    * @param param0 HttpContextContract
    */
-  public async store ({ request, response }: HttpContextContract) {
-    try {
-      const validate = await request.validate({
+  public async store({ }: HttpContextContract) {
+    // try {
+    //   const validate = await request.validate({
 
-        schema: schema.create({
+    //     schema: schema.create({
 
-          parent: schema.number.optional(),
+    //       parent: schema.number.optional(),
 
-          name: schema.string({ trim: true }, [rules.maxLength(255)]),
+    //       name: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          description: schema.string({ trim: true }, [rules.maxLength(255)]),
+    //       description: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
+    //       image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
 
-          status: schema.number.optional(),
+    //       status: schema.number.optional(),
 
-        }),
-      })
+    //     }),
+    //   })
 
-      const category = await Category.create(validate)
+    //   const category = await Category.create(validate)
 
-      response.status(200).json(category)
-    } catch (error) {
-      response.badRequest(error.messages)
-    }
+    //   response.status(200).json(category)
+    // } catch (error) {
+    //   response.badRequest(error.messages)
+    // }
   }
 
   /**
