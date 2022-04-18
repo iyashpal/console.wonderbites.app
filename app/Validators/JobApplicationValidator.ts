@@ -24,6 +24,7 @@ export default class JobApplicationValidator {
    *    ```
    */
   public schema = schema.create({
+  
     first_name: schema.string({ trim: true }),
     last_name: schema.string({ trim: true }),
     mobile: schema.string({ trim: true }),
@@ -61,5 +62,6 @@ export default class JobApplicationValidator {
     'reference_from.required': 'Enter your reference',
     'notice_period.required': 'Enter your notice period',
     'agreed_terms_conditions.required': 'Please check check and conditions',
+    //'resume_path.required': 'Please select resume file',
   }
 }
