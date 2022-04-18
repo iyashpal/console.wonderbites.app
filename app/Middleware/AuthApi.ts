@@ -2,12 +2,14 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class AuthApi {
   public async handle ({ auth, response }: HttpContextContract, next: () => Promise<void>) {
-    try {
-      await auth.use('api').authenticate()
+    await auth.use('api').check()
 
+    if (auth.use('api').isLoggedIn) {
       await next()
-    } catch (error) {
-      response.unauthorized({ message: 'Unauthenticated' })
+
+      return
     }
+
+    response.unauthorized({ message: 'Unauthenticated' })
   }
 }

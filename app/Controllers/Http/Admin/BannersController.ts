@@ -1,6 +1,5 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Banner from 'App/Models/Banner'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Banner/CreateValidator'
 import UpdateValidator from 'App/Validators/Banner/UpdateValidator'
 export default class BannersController {
