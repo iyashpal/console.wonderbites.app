@@ -30,14 +30,6 @@
                     <input type="file" name="image_path" id="image_path">
                     @!form.inputError({error: 'errors.image_path'})
                 </div>
-                <div class="col-span-6 sm:col-span-3">
-                    @!form.label({for:'category_id', label: "Category", required: false})
-                        @each((category, index) in categories)
-                          <p><input type="checkbox" name="category_id[]" {{ blogcategories.category_id === category.id ? 'checked' : ''}} id="cat_{{category.id}}" value="{{category.id}}"/><label class="form-check-label inline-block text-gray-800" for="inlineCheckbox2">{{category.name}}</label>
-                          </p>
-                        @endeach
-                    @!form.inputError({error: 'errors.category_id'})                  
-                </div>
 
                 <div class="col-span-6 sm:col-span-3">
                     @!form.label({for:'status', label: "Status", required: true})

@@ -47,7 +47,7 @@ export default class BlogsController {
     if (data.image_path) {
       await data.image_path.moveToDisk('./')
     }
-    const name = data.name
+    const name = data.name.toLowerCase()
     const slug = name.replace(/\s+/g, '-')
     const slugexist = await Blog.query().where('slug', slug)
     const slugupdate = slugexist.length === 0 ? slug : slug + (new Date()).getTime()

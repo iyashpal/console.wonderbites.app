@@ -76,7 +76,14 @@ export default class CategoriesController {
       response.notFound({ message: 'Category Not Found' })
     }
   }
+  public async categoryblog ({response }: HttpContextContract){
+    const category = await Category.query().where('type','Blog')
+    //category.load('blogs')
+    //let category_blogs = [];
 
+
+    response.status(200).json(category)
+  }
   public async update ({ }: HttpContextContract) { }
 
   public async destroy ({ }: HttpContextContract) { }
