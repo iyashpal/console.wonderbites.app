@@ -57,8 +57,8 @@ export default class OpeningPositionsController {
     const openingposition = await OpeningPosition.findOrFail(id)
     await openingposition.load('categories')
     //openingposition.load('career_categories', (query) => query.select('id'))
-    const categories = await Category.query().where('type', 'Job')
-
+    const categories = await Category.query().where('type', 'job')
+  
     return view.render('admin/openingpositions/show', {openingposition,categories})
   }
 
@@ -97,6 +97,13 @@ export default class OpeningPositionsController {
    * 
    * @param param0 HttpContextContract
    */
+  public async toggleCategory ({ params: { id }, request }: HttpContextContract) {
+    const openingposition = await OpeningPosition.findOrFail(id)
+
+    await openingposition.related('categories').sync(request.input('categories'))
+  }
+
+
   public async destroy ({ params: { id }, response, session }: HttpContextContract) {
     const openingposition = await OpeningPosition.findOrFail(id)
     await openingposition.delete().then(() => {

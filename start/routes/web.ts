@@ -24,6 +24,7 @@ Route.group(() => {
   Route.resource('blogs', 'Admin/BlogsController')
   Route.post('blogs/:id/category', 'Admin/BlogsController.toggleCategory').as('blogs.category')
   Route.resource('openingpositions', 'Admin/OpeningPositionsController')
+  Route.post('openingpositions/:id/category', 'Admin/OpeningPositionsController.toggleCategory').as('opening.category')
   Route.resource('jobapplications', 'Admin/JobApplicationsController')
   Route.resource('contacts', 'Admin/ContactsController')
 }).middleware('auth')

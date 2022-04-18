@@ -38,10 +38,33 @@
                         @endif
                     </dd>
                 </div>
+
+                
                 
 
             </dl>
         </div>
+        <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="pb-3">
+                <h2 class="font-semibold text-xl">Categories</h2>
+                <p class="text-xs text-gray-400">Click categories to add/remove</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                @each(category in categories)
+               <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('opening.category', openingposition) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(openingposition.categories) }}"></v-toggle-product-categories>
+                @endeach
+            </div>
+
+            @if(categories.length === 0)
+            <v-alert name="warning">
+                Categories not found. <a class="font-semibold underline hover:italic" href="{{ route('categories.create') }}">Click here</a> to create categories.
+            </v-alert>
+            @endif
+        </div>
+    </div>
+
+</div>
     </div>
 
     
