@@ -1,7 +1,8 @@
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Ingridient from './Ingridient'
 import Product from './Product'
+import User from './User'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -11,7 +12,7 @@ export default class Order extends BaseModel {
   public userId: number
 
   @column()
-  public ipAddress: number
+  public ipAddress: string
 
   @column()
   public paymentMethod: string
@@ -21,6 +22,9 @@ export default class Order extends BaseModel {
 
   @column()
   public status: number
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @manyToMany(() => Product)
   public products: ManyToMany<typeof Product>

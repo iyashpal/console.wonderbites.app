@@ -22,7 +22,7 @@ export default class CategoriesController {
    * 
    * @param param0 HttpContextContract
    */
-  public async store({ }: HttpContextContract) {
+  public async store ({ }: HttpContextContract) {
     // try {
     //   const validate = await request.validate({
 
@@ -64,20 +64,13 @@ export default class CategoriesController {
         })
       })
 
-      // const category = await Category.query()
-      //   .preload('products', async (builder) => {
-      //     await builder.preload('media')
-      //   })
-      //   .where('id', id)
-      //   .firstOrFail()
-
       response.status(200).json(category)
     } catch (error) {
       response.notFound({ message: 'Category Not Found' })
     }
   }
-  public async categoryblog ({response }: HttpContextContract){
-    const category = await Category.query().where('type','Blog')
+  public async categoryblog ({ response }: HttpContextContract) {
+    const category = await Category.query().where('type', 'Blog')
     //category.load('blogs')
     //let category_blogs = [];
 
