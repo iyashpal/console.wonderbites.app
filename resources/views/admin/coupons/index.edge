@@ -1,14 +1,13 @@
 @layout('layouts/app')
-@set('title', 'Products')
+@set('title', 'Coupons')
 
 @section('actions')
-<a href="{{ route('products.create') }}" class="tw:btn tw:btn-secondary">
+<a href="{{ route('coupons.create') }}" class="tw:btn tw:btn-secondary">
     <icon name="add-circle" class="w-4 h-4 mr-1"></icon> Add New
 </a>
-@end
+@endsection
 
 @section('content')
-
 @!alerts.danger({show: flashMessages.get('product_deleted'), icon: 'cancel', message: "Product successfully deleted!", className: "mb-4"})
 
 <div class="flex flex-col">
@@ -18,9 +17,9 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Calories</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Discount</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th scope="col" class="relative px-6 py-3 w-20">
                                 <span class="sr-only">Edit</span>
@@ -29,10 +28,10 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
 
-                        @each((product, index) in products)
+                        @each((product, index) in coupons)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="{{ route('products.show', {id: product.id}) }}" class="flex items-center">
+                                <a href="{{ route('coupons.show', {id: product.id}) }}" class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
                                         <img class="h-10 w-10 rounded-full object-cover" src="{{ product.thumbnail }}" alt="{{ product.name }}">
                                     </div>
@@ -55,10 +54,10 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap flex items-center text-sm font-medium">
-                                <a href="{{ route('products.edit', {id: product.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
+                                <a href="{{ route('coupons.edit', {id: product.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
                                     <icon name="edit" class="w-5 h-5"></icon>
                                 </a>
-                                <form action="{{ route('products.destroy', {id: product.id}, {qs: {_method: 'delete'}}) }}" method="post">
+                                <form action="{{ route('coupons.destroy', {id: product.id}, {qs: {_method: 'delete'}}) }}" method="post">
                                     {{ csrfField() }}
                                     <button type="submit" class="text-red-600 hover:text-red-900">
                                         <icon name="delete" class="w-5 h-5"></icon>
@@ -67,11 +66,11 @@
                             </td>
                         </tr>
                         @endeach
-                        @if(products.total === 0)
+                        @if(coupons.total === 0)
                         <tr>
                             <td colspan="5" class="px-6 py-4 whitespace-nowrap">
                                 <v-alert name="warning">
-                                    Products not available.
+                                    Coupons not available.
                                 </v-alert>
                             </td>
                         </tr>
@@ -79,12 +78,9 @@
 
                     </tbody>
                 </table>
-                @!pagination.simple({paginator: products})
+                @!pagination.simple({paginator: coupons})
             </div>
         </div>
     </div>
 </div>
-
-
-
 @endsection

@@ -24,6 +24,13 @@ Route.group(() => {
     Route.resource('addresses', 'Profile/AddressesController')
 
     /**
+     * Orders Routes.
+     */
+    Route.group(() => {
+      Route.post('orders', 'OrdersController.store').as('store')
+    }).as('orders')
+
+    /**
      * Wishlist Routes
      */
     Route.group(() => {

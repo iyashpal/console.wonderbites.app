@@ -1,8 +1,9 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import User from './User'
+import Product from './Product'
+import Address from './Address'
 import { DateTime } from 'luxon'
 import Ingridient from './Ingridient'
-import Product from './Product'
-import User from './User'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -10,6 +11,9 @@ export default class Order extends BaseModel {
 
   @column()
   public userId: number
+
+  @column()
+  public addressId: number
 
   @column()
   public ipAddress: string
@@ -22,6 +26,9 @@ export default class Order extends BaseModel {
 
   @column()
   public status: number
+
+  @belongsTo(() => Address)
+  public address: BelongsTo<typeof Address>
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

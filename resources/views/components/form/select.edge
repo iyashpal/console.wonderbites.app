@@ -1,11 +1,11 @@
-<select {{ $props.serializeExcept(['options', 'value'], {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-200 focus:border-blue-300 focus:ring-opacity-50 sm:text-sm"}) }}>
+<select {{ $props.serializeExcept(['options', 'value'], {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-200 focus:border-blue-300 focus:ring-opacity-50"}) }}>
     @if(await $slots.options)
 
     {{{ await $slots.options() }}}
 
     @endif
 
-    @if(options.length)
+    @if(options && options.length)
 
     @each(option in options)
 

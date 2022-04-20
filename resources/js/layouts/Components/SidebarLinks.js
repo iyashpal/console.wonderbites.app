@@ -45,6 +45,11 @@ export default [
     icon: 'collections',
   },
   {
+    url: '/coupons',
+    label: 'Coupons',
+    icon: 'receipt',
+  },
+  {
     url: '/orders',
     label: 'Orders',
     icon: 'payments',
