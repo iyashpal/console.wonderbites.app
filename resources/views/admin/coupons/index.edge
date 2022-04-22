@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-@!alerts.danger({show: flashMessages.get('product_deleted'), icon: 'cancel', message: "Product successfully deleted!", className: "mb-4"})
+@!alerts.danger({show: flashMessages.get('coupon_deleted'), icon: 'cancel', message: "Coupon successfully deleted!", className: "mb-4"})
 
 <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -28,36 +28,33 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
 
-                        @each((product, index) in coupons)
+                        @each((coupon, index) in coupons)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="{{ route('coupons.show', {id: product.id}) }}" class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full object-cover" src="{{ product.thumbnail }}" alt="{{ product.name }}">
-                                    </div>
+                                <a href="{{ route('coupons.show', {id: coupon.id}) }}" class="flex items-center">
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ coupon.title }}</div>
                                     </div>
                                 </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
-                                {{ product.calories }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center">
-                                {{ product.price }}
+                                {{ coupon.code }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if(product.status === 1)
+                                {{ coupon.discount }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if(coupon.status === 1)
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Published</span>
                                 @else
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Draft</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap flex items-center text-sm font-medium">
-                                <a href="{{ route('coupons.edit', {id: product.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
+                                <a href="{{ route('coupons.edit', {id: coupon.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
                                     <icon name="edit" class="w-5 h-5"></icon>
                                 </a>
-                                <form action="{{ route('coupons.destroy', {id: product.id}, {qs: {_method: 'delete'}}) }}" method="post">
+                                <form action="{{ route('coupons.destroy', {id: coupon.id}, {qs: {_method: 'delete'}}) }}" method="post">
                                     {{ csrfField() }}
                                     <button type="submit" class="text-red-600 hover:text-red-900">
                                         <icon name="delete" class="w-5 h-5"></icon>

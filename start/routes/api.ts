@@ -53,6 +53,10 @@ Route.group(() => {
       Route.post('cart', 'CartsController.update').as('update')
     }).as('carts')
 
+    Route.group(() => {
+      Route.post('coupons/apply', 'CouponsController.apply')
+    }).as('coupons')
+
     Route.resource('cuisines', 'CuisinesController')
 
     //Route.resource('blogs', 'BlogsController').as('blogs')

@@ -1,12 +1,15 @@
+import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
-import { CategoryFactory, UserFactory } from 'Database/factories'
+import { CategoryFactory } from 'Database/factories'
 
-test.group('Api category show', () => {
+test.group('Api category show', (group) => {
+  group.each.setup(async () => {
+    await Database.beginGlobalTransaction()
+    return () => Database.rollbackGlobalTransaction()
+  })
+
   test('A Guest user can see the list of categories.', async ({ client }) => {
-    await CategoryFactory.merge([
-      {type: 'Cusine'},
-      {type: 'Blog'},
-    ]).createMany(5)
+    await CategoryFactory.createMany(5)
 
     const response = await client.get('/api/categories').accept('json')
 

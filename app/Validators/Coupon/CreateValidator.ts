@@ -29,8 +29,8 @@ export default class CreateValidator {
     code: schema.string([rules.trim()]),
     discountType: schema.string([rules.trim()]),
     discountValue: schema.string([rules.trim()]),
-    startedAt: schema.date.optional({ format: 'yyyy-MM-dd HH:mm:ss' }),
-    expiredAt: schema.date.optional({ format: 'yyyy-MM-dd HH:mm:ss' }),
+    startedAt: schema.date.optional({ }),
+    expiredAt: schema.date.optional({ }),
   })
 
   /**

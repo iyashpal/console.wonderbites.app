@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Coupon extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +31,13 @@ export default class Coupon extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get discount () {
+    if (this.discountType === 'price') {
+      return `$${this.discountValue}`
+    }
+
+    return `${this.discountValue}%`
+  }
 }
