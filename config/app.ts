@@ -50,7 +50,7 @@ export const http: ServerConfig = {
   | so on.
   |
   */
-  allowMethodSpoofing: true,
+  allowMethodSpoofing: false,
 
   /*
   |--------------------------------------------------------------------------
@@ -236,7 +236,7 @@ export const assets: AssetsManagerConfig = {
   | in the future
   |
   */
-  driver: 'encore',
+  driver: Env.get('ASSETS_DRIVER'),
 
   /*
   |--------------------------------------------------------------------------

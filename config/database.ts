@@ -6,7 +6,6 @@
  */
 
 import Env from '@ioc:Adonis/Core/Env'
-import Application from '@ioc:Adonis/Core/Application'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
 const databaseConfig: DatabaseConfig = {
@@ -23,7 +22,6 @@ const databaseConfig: DatabaseConfig = {
   connection: Env.get('DB_CONNECTION'),
 
   connections: {
-
     /*
     |--------------------------------------------------------------------------
     | PostgreSQL config
@@ -47,9 +45,10 @@ const databaseConfig: DatabaseConfig = {
       migrations: {
         naturalSort: true,
       },
-      healthCheck: true,
-      debug: true,
+      healthCheck: false,
+      debug: false,
     },
+
   },
 }
 

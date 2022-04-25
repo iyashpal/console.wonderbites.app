@@ -1,4 +1,4 @@
-# wonderbites.com
+# admin.wonderbites.com
 
 ## Server Details
 **HOST** : `18.222.25.196`

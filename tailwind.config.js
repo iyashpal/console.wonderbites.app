@@ -2,7 +2,7 @@ const { fontFamily } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   content: [
-    "./resources/**/*.{js,vue,edge}"
+    './resources/**/*.{js,vue,edge}',
   ],
 
   theme: {

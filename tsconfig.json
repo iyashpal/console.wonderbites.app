@@ -11,7 +11,6 @@
     "outDir": "build",
     "rootDir": "./",
     "sourceMap": true,
-    "allowJs": true,
     "paths": {
       "App/*": [
         "./app/*"
@@ -38,11 +37,10 @@
       "@adonisjs/session",
       "@adonisjs/view",
       "@adonisjs/shield",
+      "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/lucid",
       "@adonisjs/auth",
-      "@adonisjs/mail",
-      "@japa/preset-adonis/build/adonis-typings",
-      "@adonisjs/attachment-lite"
+      "@adonisjs/mail"
     ]
   }
 }

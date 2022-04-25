@@ -74,7 +74,7 @@ export const csrf: ShieldConfig['csrf'] = {
   | Enable/Disable CSRF
   |--------------------------------------------------------------------------
   */
-  enabled: Env.get('NODE_ENV') !== 'testing',
+  enabled: Env.get('NODE_ENV') !== 'test',
 
   /*
   |--------------------------------------------------------------------------
@@ -86,20 +86,14 @@ export const csrf: ShieldConfig['csrf'] = {
   | slash. Example:
   |
   | `/foo/bar`
-  |
-  | Also you can define a function that is evaluated on every HTTP Request.
-  | ```
-  |  exceptRoutes: ({ request }) => request.url().includes('/api')
-  | ```
+	|
+	| Also you can define a function that is evaluated on every HTTP Request.
+	| ```
+	|  exceptRoutes: ({ request }) => request.url().includes('/api')
+	| ```
   |
   */
-  exceptRoutes: ({ request }) => {
-    
-    // Check if the route is api
-    if (request.url().includes('/api')) return true
-
-    return false
-  },
+  exceptRoutes: [],
 
   /*
   |--------------------------------------------------------------------------
@@ -236,7 +230,7 @@ export const hsts: ShieldConfig['hsts'] = {
 | files with .txt extension containing Javascript code will be executed as
 | Javascript. You can disable this behavior by setting nosniff to false.
 |
-| Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+| Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
 |
 */
 export const contentTypeSniffing: ShieldConfig['contentTypeSniffing'] = {

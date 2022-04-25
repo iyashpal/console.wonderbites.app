@@ -181,7 +181,7 @@ Encore.enablePostCssLoader()
 | sure to install the required dependencies.
 |
 */
-Encore.enableVueLoader(() => { }, {
+Encore.enableVueLoader(() => {}, {
   version: 3,
   runtimeCompilerBuild: true,
   useJsx: false,

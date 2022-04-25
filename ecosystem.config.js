@@ -2,9 +2,9 @@ module.exports = {
   apps: [
     {
 
-      name: "admin.wonderbites",
+      name: 'admin.wonderbites',
 
-      script: "./build/server.js",
+      script: './build/server.js',
 
       autorestart: true,
 
@@ -16,20 +16,20 @@ module.exports = {
 
       instances: 1,
 
-      exec_mode: "cluster",
+      exec_mode: 'cluster',
 
       kill_timeout: 3000,
 
       watch: true,
 
-      ignore_watch: ["node_modules"],
+      ignore_watch: ['node_modules'],
 
-      cwd: "/home/ubuntu/sites/wonderbites.com/",
+      cwd: '/home/ubuntu/sites/wonderbites.com/',
 
       post_update: ['yarn install', 'yarn build'],
 
-      env: { NODE_ENV: "production", ENV_PATH: "/home/ubuntu/sites/wonderbites.com/.env", PORT: 8080 },
+      env: { NODE_ENV: 'production', ENV_PATH: '/home/ubuntu/sites/wonderbites.com/.env', PORT: 8080 },
 
-    }
-  ]
+    },
+  ],
 }
