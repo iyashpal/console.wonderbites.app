@@ -1,5 +1,4 @@
 import { test } from '@japa/runner'
-import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 test.group('Api auth login', (group) => {
@@ -30,13 +29,5 @@ test.group('Api auth login', (group) => {
 
     response.assertStatus(422)
     response.assert?.containsSubset(response.body(), { errors: [{ field: 'email' }] })
-  })
-
-  test('Authenticated user can\'t process the login', async ({ client }) => {
-    // const user = await UserFactory.create()
-
-    // const response = await client.post('/api/login').loginAs(user).accept('json')
-
-    // response.dumpBody()
   })
 })

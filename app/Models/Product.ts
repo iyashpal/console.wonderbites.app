@@ -1,14 +1,14 @@
-import {
-  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany, scope
-} from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
 import Cart from './Cart'
-import Category from './Category'
-import Ingridient from './Ingridient'
+import User from './User'
 import Media from './Media'
 import Order from './Order'
-import User from './User'
+import { DateTime } from 'luxon'
+import Category from './Category'
 import Wishlist from './Wishlist'
+import Ingridient from './Ingridient'
+import {
+  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany, ModelQueryBuilderContract, scope,
+} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -19,9 +19,6 @@ export default class Product extends BaseModel {
 
   @column()
   public userId: number
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
 
   @column()
   public description: string
@@ -40,6 +37,21 @@ export default class Product extends BaseModel {
 
   @column()
   public status: number
+
+  @column.dateTime()
+  public publishedAt: DateTime | null
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime
+
+  @column.dateTime()
+  public deletedAt: DateTime
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @hasMany(() => Media, {
     localKey: 'id', foreignKey: 'refId',
@@ -63,18 +75,6 @@ export default class Product extends BaseModel {
 
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
-
-  @column.dateTime()
-  public publishedAt: DateTime | null
-
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
-
-  @column.dateTime()
-  public deletedAt: DateTime
 
   /**
    * Get product default thumbnail based on imagePath column value.

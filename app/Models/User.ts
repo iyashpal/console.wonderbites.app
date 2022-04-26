@@ -1,10 +1,10 @@
-import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
-import Address from './Address'
 import Cart from './Cart'
-import Notification from './Notification'
+import Address from './Address'
+import { DateTime } from 'luxon'
 import Wishlist from './Wishlist'
+import Hash from '@ioc:Adonis/Core/Hash'
+import Notification from './Notification'
+import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -43,6 +43,29 @@ export default class User extends BaseModel {
   @column()
   public language: string
 
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime
+
+  @column.dateTime()
+  public deletedAt: DateTime
+
+  @computed()
+  public get avatar () {
+    let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
+
+    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
+  }
+
+  @beforeSave()
+  public static async hashPassword (user: User) {
+    if (user.$dirty.password) {
+      user.password = await Hash.make(user.password)
+    }
+  }
+
   @hasMany(() => Address)
   public addresses: HasMany<typeof Address>
 
@@ -57,27 +80,4 @@ export default class User extends BaseModel {
 
   @hasOne(() => Wishlist)
   public wishlist: HasOne<typeof Wishlist>
-
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
-
-  @column.dateTime()
-  public deletedAt: DateTime
-
-  @beforeSave()
-  public static async hashPassword (user: User) {
-    if (user.$dirty.password) {
-      user.password = await Hash.make(user.password)
-    }
-  }
-
-  @computed()
-  public get avatar () {
-    let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
-
-    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
-  }
 }

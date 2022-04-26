@@ -1,11 +1,12 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Product from 'App/Models/Product'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProductsController {
-  public async index ({ response }: HttpContextContract) {
+  public async index ({ response, auth }: HttpContextContract) {
     try {
-      const products = await Product.all()
+      console.log(auth.use('api').user?.id)
+      const products = await Product.query().preload('wishlists')
 
       response.status(200).json(products)
     } catch (error) {

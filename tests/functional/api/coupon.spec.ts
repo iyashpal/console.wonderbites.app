@@ -1,6 +1,6 @@
-import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 test.group('Api coupons', (group) => {
   group.each.setup(async () => {
