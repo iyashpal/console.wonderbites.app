@@ -1,5 +1,6 @@
+import Cart from './Cart'
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Coupon extends BaseModel {
   @column({ isPrimary: true })
@@ -32,6 +33,9 @@ export default class Coupon extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @manyToMany(() => Cart)
+  public carts: ManyToMany<typeof Cart>
+
   @computed()
   public get discount () {
     if (this.discountType === 'price') {
@@ -39,5 +43,15 @@ export default class Coupon extends BaseModel {
     }
 
     return `${this.discountValue}%`
+  }
+
+  @computed()
+  public get is_expired () {
+    return parseInt(this.expiredAt.diff(DateTime.now(), 'days').toFormat('d')) < 0
+  }
+
+  @computed()
+  public get is_valid () {
+    return parseInt(this.expiredAt.diff(DateTime.now(), 'days').toFormat('d')) >= 0
   }
 }

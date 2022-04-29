@@ -17,11 +17,12 @@ export default class CouponsController {
   public async destroy ({ }: HttpContextContract) { }
 
   public async apply ({ request, response }: HttpContextContract) {
-    return response.json({ coupon: request.input('coupon') })
-    // console.log('testing')
-    // await Coupon.query().where('code', request.input('coupon')).firstOrFail()
-    //   .then((coupon) => {
-    //     console.log()
-    //   })
+    await Coupon.query().where('code', request.input('coupon')).firstOrFail()
+      .then(async (coupon) => {
+        if (coupon.is_valid) {
+          await coupon.related('carts').attach([request.input('cart')])
+        }
+        response.json({ coupon })
+      })
   }
 }
