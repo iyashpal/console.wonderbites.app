@@ -7,7 +7,7 @@ export default class CouponUser extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.bigInteger('coupon_id').unsigned().notNullable().references('coupon.id').onDelete('CASCADE')
+      table.bigInteger('coupon_id').unsigned().notNullable().references('coupons.id').onDelete('CASCADE')
 
       table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 

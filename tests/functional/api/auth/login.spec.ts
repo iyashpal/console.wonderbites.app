@@ -7,8 +7,8 @@ test.group('Api auth login', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('Need email|mobile & password to login.', async ({ client }) => {
-    const response = await client.post('/api/login').accept('json')
+  test('Need email|mobile & password to login.', async ({ client, route }) => {
+    const response = await client.post(route('api.login')).accept('json')
 
     response.assertStatus(422)
 
