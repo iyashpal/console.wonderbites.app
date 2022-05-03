@@ -15,7 +15,7 @@ Route.group(() => {
    * Routes that allowed only for a logged in user.
    */
   Route.group(() => {
-    Route.post('/logout', 'LoginController.logout').as('logout')
+    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
 
     Route.get('/users', 'UsersController.show').as('user')
 

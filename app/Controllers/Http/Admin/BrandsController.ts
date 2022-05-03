@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Brand from 'App/Models/Brands'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Brands/CreateValidator'
 import UpdateValidator from 'App/Validators/Brands/UpdateValidator'
 

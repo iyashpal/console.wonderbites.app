@@ -1,6 +1,5 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Media from 'App/Models/Media'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Media/CreateValidator'
 import UpdateValidator from 'App/Validators/Media/UpdateValidator'
 export default class MediaController {

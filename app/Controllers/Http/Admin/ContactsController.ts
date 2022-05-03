@@ -1,5 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Contacts from 'App/Models/Contacts'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
 export default class ContactsController {
   /**
    * Display a listing of the resource.

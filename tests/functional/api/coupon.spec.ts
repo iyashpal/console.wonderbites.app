@@ -21,6 +21,6 @@ test.group('Api coupons', (group) => {
 
     response.assertStatus(200)
 
-    response.dumpBody()
+    // response.dumpBody()
   })
 })

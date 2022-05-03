@@ -1,7 +1,7 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Team from 'App/Models/Team'
 import CreateValidator from 'App/Validators/Team/CreateValidator'
 import UpdateValidator from 'App/Validators/Team/UpdateValidator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class TeamsController {
   /**

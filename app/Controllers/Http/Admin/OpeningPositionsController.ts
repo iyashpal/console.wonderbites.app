@@ -1,9 +1,8 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import OpeningPosition from 'App/Models/OpeningPosition'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/OpeningPosition/CreateValidator'
 import UpdateValidator from 'App/Validators/OpeningPosition/UpdateValidator'
-import { DeckIcon } from '@materialicons/vue/round'
 export default class OpeningPositionsController {
   /**
    * Display a listing of resources.
@@ -37,7 +36,7 @@ export default class OpeningPositionsController {
    * @param param0 HttpContextContract
    */
   public async store ({ request, response, session}: HttpContextContract) {
-    console.log('Asaas');
+    console.log('Asaas')
     const data = await request.validate(CreateValidator)
     await OpeningPosition.create({...data})
       .then((openingposition) => {
@@ -58,7 +57,7 @@ export default class OpeningPositionsController {
     await openingposition.load('categories')
     //openingposition.load('career_categories', (query) => query.select('id'))
     const categories = await Category.query().where('type', 'job')
-  
+
     return view.render('admin/openingpositions/show', {openingposition,categories})
   }
 
@@ -102,7 +101,6 @@ export default class OpeningPositionsController {
 
     await openingposition.related('categories').sync(request.input('categories'))
   }
-
 
   public async destroy ({ params: { id }, response, session }: HttpContextContract) {
     const openingposition = await OpeningPosition.findOrFail(id)

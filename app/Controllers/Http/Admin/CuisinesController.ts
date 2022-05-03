@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Category from 'App/Models/Category'
 import Cuisine from 'App/Models/Cuisine'
+import Category from 'App/Models/Category'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Cuisine/CreateValidator'
 import UpdateValidator from 'App/Validators/Cuisine/UpdateValidator'
 

@@ -1,8 +1,8 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { DateTime } from 'luxon'
 import User from 'App/Models/User'
 import CreateValidator from 'App/Validators/User/CreateValidator'
 import UpdateValidator from 'App/Validators/User/UpdateValidator'
-import { DateTime } from 'luxon'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UsersController {
   /**

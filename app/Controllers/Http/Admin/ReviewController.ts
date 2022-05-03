@@ -1,8 +1,7 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Product from 'App/Models/Product'
-import Review from 'App/Models/Review'
 import User from 'App/Models/User'
+import Review from 'App/Models/Review'
+import Product from 'App/Models/Product'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Review/CreateValidator'
 import UpdateValidator from 'App/Validators/Review/UpdateValidator'
 export default class ReviewController {
@@ -29,7 +28,7 @@ export default class ReviewController {
   public async create ({ view }: HttpContextContract) {
     const users = await User.all()
     const products = await Product.all()
-    return view.render('admin/review/create',{users,products})
+    return view.render('admin/review/create', { users, products })
   }
 
   /**
@@ -71,7 +70,7 @@ export default class ReviewController {
     const review = await Review.findOrFail(params.id)
     const users = await User.all()
     const products = await Product.all()
-    return view.render('admin/review/edit', { review ,users, products})
+    return view.render('admin/review/edit', { review, users, products })
   }
 
   /**

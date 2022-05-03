@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Testimonial from 'App/Models/Testimonial'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Testimonial/CreateValidator'
 import UpdateValidator from 'App/Validators/Testimonial/UpdateValidator'
 
@@ -40,7 +40,7 @@ export default class TestimonialsController {
       await data.image_path.moveToDisk('./')
     }
 
-    const testimonial = await Testimonial.create({ ...data, image_path: data.image_path!.fileName })
+    const testimonial = await Testimonial.create({ ...data, imagePath: null })
       .then((testimonial) => {
         session.flash('testimonial_created', testimonial.id)
         return testimonial

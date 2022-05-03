@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
 import Ingridient from 'App/Models/Ingridient'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
 import UpdateValidator from 'App/Validators/Ingridient/UpdateValidator'
 export default class IngridientsController {
