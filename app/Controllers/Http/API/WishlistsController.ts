@@ -11,7 +11,10 @@ export default class WishlistsController {
   public async show ({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user!
 
-    const wishlist = await user.related('wishlist').firstOrCreate({ ipAddress: request.ip() })
+    const wishlist = await user.related('wishlist').firstOrCreate(
+      { userId: user.id }, // Search payload
+      { ipAddress: request.ip() } // Save payload
+    )
 
     await wishlist.load('products')
     await wishlist.load('ingridients')
@@ -27,7 +30,10 @@ export default class WishlistsController {
   public async update ({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user!
 
-    const wishlist = await user.related('wishlist').firstOrCreate({ ipAddress: request.ip() })
+    const wishlist = await user.related('wishlist').firstOrCreate(
+      { userId: user.id }, // Search payload
+      { ipAddress: request.ip() } // Save payload
+    )
 
     // Add products to cart.
     if (request.input('action') === 'SYNC') {
