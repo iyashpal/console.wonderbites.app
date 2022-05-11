@@ -4,7 +4,7 @@ import { ProductFactory, UserFactory, WishlistFactory } from 'Database/factories
 
 test.group('Api wishlist', (group) => {
   /**
-   * Setup Global transaction for every test in this group.
+   * 🚀 Setup Global transaction for every test in this group.
    */
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()

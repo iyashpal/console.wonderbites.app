@@ -4,7 +4,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 
 test.group('Api auth login', (group) => {
   /**
-   * Setup Global transaction for every test in this group.
+   * 🚀 Setup Global transaction for every test in this group.
    */
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
