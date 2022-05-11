@@ -12,7 +12,6 @@ export default class RegisterController {
   public async register ({ request, response }: HttpContextContract) {
     try {
       const data = await request.validate(RegisterUserValidator)
-      console.log(request)
       const user = await User.create(data)
 
       response.status(200).json(user)

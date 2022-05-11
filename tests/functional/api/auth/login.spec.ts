@@ -14,9 +14,9 @@ test.group('Api auth login', (group) => {
   /**
    * Case: User needs email OR mobile & password to login to the account.
    * 
-   * Step 1: POST request hit to `route('api.login')` without fields.
-   * Step 2: Request status should be Unprocessable Entity response.
-   * Step 3: Validation response should contain error fields (email, password).
+   * ✔ POST request to `route('api.login')` without body.
+   * ✔ Request status should be Unprocessable Entity response.
+   * ✔ Response should contain error fields (email, password).
    */
   test('User needs email|mobile & password to login.', async ({ client, route }) => {
     const response = await client.post(route('api.login')).accept('json')
@@ -31,9 +31,9 @@ test.group('Api auth login', (group) => {
   /**
    * Case: User cannot login without a password.
    * 
-   * Step 1: POST request hit to `route('api.login')` with only email field.
-   * Step 2: Request status should be Unprocessable Entity response.
-   * Step 3: Validation response should contain error field (password).
+   * ✔ POST request to `route('api.login')` with only email in the body.
+   * ✔ Request status should be Unprocessable Entity response.
+   * ✔ Validation response should contain error field (password).
    */
   test('User cannot login without a password', async ({ client, route }) => {
     const response = await client.post(route('api.login')).accept('json').fields({ email: 'info@example.com' })
@@ -45,9 +45,9 @@ test.group('Api auth login', (group) => {
   /**
    * Case: User cannot login without an email|mobile.
    * 
-   * Step 1: POST request hit to `route('api.login')` with only password field.
-   * Step 2: Request status should be Unprocessable Entity response.
-   * Step 3: Validation response should contain error field (email).
+   * ✔ POST request hit to `route('api.login')` with only password in the body.
+   * ✔ Request status should be Unprocessable Entity response.
+   * ✔ Validation response should contain error field (email).
    */
   test('User cannot login without an email|mobile', async ({ client, route }) => {
     const response = await client.post(route('api.login')).accept('json').fields({ password: 'Welcome@123!' })
@@ -59,9 +59,9 @@ test.group('Api auth login', (group) => {
   /**
    * Case: User cannot login with incorrect email.
    * 
-   * Step 1: POST request hit to `route('api.login')` with only password field.
-   * Step 2: Request status should be Unprocessable Entity response.
-   * Step 3: Validation response should contain error message ("Email does not exists.").
+   * ✔ POST request to `route('api.login')` with incorrect email & password.
+   * ✔ Request status should be Unprocessable Entity response.
+   * ✔ Validation response should contain error message ("Email does not exists.").
    */
   test('User cannot login with incorrect email', async ({ client, route }) => {
     const response = await client.post(route('api.login')).accept('json')
@@ -75,10 +75,10 @@ test.group('Api auth login', (group) => {
   /**
    * Case: User cannot login with incorrect password.
    * 
-   * Step 1: Create user with UserFactory.
-   * Step 2: POST request hit to `route('api.login')` with only password field.
-   * Step 3: Request status should be Unprocessable Entity response.
-   * Step 4: Validation response should contain error message ("Credentials not found.").
+   * ✔ Needs a user.
+   * ✔ POST request to `route('api.login')` with user's email & a wrong password.
+   * ✔ Request status should be Unprocessable Entity response.
+   * ✔ Validation response should contain error message ("Credentials not found.").
    */
   test('User cannot login with incorrect password', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -86,25 +86,32 @@ test.group('Api auth login', (group) => {
     const response = await client.post(route('api.login')).accept('json')
       .fields({ email: user.email, password: 'wrong-password' })
 
-    response.assertStatus(422)
-    response.assert?.containsSubset(response.body(), { message: 'Credentials not found.' })
+    response.assertStatus(400)
+
+    response.assertBodyContains({
+      errors: [{
+        field: 'password', message: 'Password do not match.',
+      }],
+    })
+
+    // response.assert?.containsSubset(response.body(), { message: 'Credentials not found.' })
   })
 
   /**
-   * Case: User cannot login with incorrect password.
+   * Case: User can login with valid credencials.
    * 
-   * Step 1: Create user with UserFactory.
-   * Step 2: POST request hit to `route('api.login')` with only password field.
-   * Step 3: Request status should be OK.
-   * Step 4: Request response should contain fields (type, token).
+   * ✔ Needs a user.
+   * ✔ POST request to `route('api.login')` with user's email & password in the body.
+   * ✔ Request status should be OK.
+   * ✔ Request response should contain fields (type, token).
    */
-  test('User can login with valid login details', async ({ client, route }) => {
+  test('User can login with valid credencials', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const response = await client.post(route('api.login')).accept('json')
       .fields({ email: user.email, password: 'Welcome@123!' })
 
     response.assertStatus(200)
-    response.assert?.containsSubset(response.body(), { type: 'bearer' })
+    response.assertBodyContains({ type: 'bearer' })
   })
 })

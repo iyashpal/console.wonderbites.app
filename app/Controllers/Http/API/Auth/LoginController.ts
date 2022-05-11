@@ -15,7 +15,15 @@ export default class LoginController {
 
       return response.status(200).json(token)
     } catch {
-      return response.badRequest({ message: 'Credentials not found.' })
+      return response.badRequest({
+        errors: [
+          {
+            rule: 'incorrect',
+            field: 'password',
+            message: 'Password do not match.',
+          },
+        ],
+      })
     }
   }
 
