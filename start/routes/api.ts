@@ -7,8 +7,6 @@ Route.group(() => {
     Route.post('/login', 'Auth/LoginController.login').as('login')
 
     Route.post('/register', 'Auth/RegisterController.register').as('register')
-
-    Route.post('/signup', 'Auth/RegisterController.signup').as('signup')
   }).middleware('guest_api')
 
   /**

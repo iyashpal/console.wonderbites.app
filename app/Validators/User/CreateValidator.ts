@@ -43,10 +43,16 @@ export default class CreateValidator {
       size: '1mb',
       extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
     }),
-    password: schema.string({ trim: true }),
-    address_id: schema.number(),
-    remember_me_token: schema.string({ trim: true }),
-    status: schema.number(),
+
+    password: schema.string({ trim: true }, [
+      rules.confirmed(),
+    ]),
+
+    address_id: schema.number.optional(),
+
+    remember_me_token: schema.string.optional({ trim: true }),
+
+    status: schema.number.optional(),
   })
 
   /**
@@ -60,5 +66,17 @@ export default class CreateValidator {
    * }
    *
    */
-  public messages = {}
+  public messages = {
+    'first_name.required': 'First name is required.',
+    'last_name.required': 'Last name is required.',
+    'mobile.required': 'Mobile no. is required.',
+    'mobile.mobile': 'Enter a correct mobile no.',
+    'mobile.unique': 'The mobile no. already registered.',
+    'email.required': 'Email address is required.',
+    'email.email': 'Enter a valid email.',
+    'email.max_length': 'Email field length shouldn\'t exceed 255 characters.',
+    'email.unique': 'The email address already taken.',
+    'password.required': 'Choose a password.',
+    'password.confirmed': 'Password didn\'t match.',
+  }
 }

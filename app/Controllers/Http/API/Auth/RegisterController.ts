@@ -1,6 +1,6 @@
 import User from 'App/Models/User'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
+import UserCreateValidator from 'App/Validators/User/CreateValidator'
 
 export default class RegisterController {
   /**
@@ -10,8 +10,8 @@ export default class RegisterController {
    * @param {JSON}
    */
   public async register ({ request, response }: HttpContextContract) {
+    const data = await request.validate(UserCreateValidator)
     try {
-      const data = await request.validate(RegisterUserValidator)
       const user = await User.create(data)
 
       response.status(200).json(user)
@@ -19,17 +19,4 @@ export default class RegisterController {
       response.badRequest(error.messages)
     }
   }
-
-  public async signup ({ request, response }: HttpContextContract) {
-    try {
-      const data = await request.validate(RegisterUserValidator)
-      console.log(request)
-      const user = await User.create(data)
-
-      response.status(200).json({statusCode: 200,msg: 'You have successfully registered',data:user})
-    } catch (error) {
-      response.badRequest({error :error.messages,statusCode: 400})
-    }
-  }
-
 }
