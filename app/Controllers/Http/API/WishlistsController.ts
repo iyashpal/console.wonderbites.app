@@ -16,7 +16,11 @@ export default class WishlistsController {
       { ipAddress: request.ip() } // Save payload
     )
 
-    await wishlist.load('products')
+    await wishlist.load('products', (queryBuilder) => {
+      queryBuilder.preload('media', (builder) => {
+        builder.select('id')
+      })
+    })
     await wishlist.load('ingridients')
 
     response.json(wishlist)

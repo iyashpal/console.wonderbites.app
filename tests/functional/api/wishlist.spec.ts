@@ -72,7 +72,7 @@ test.group('Api wishlist', (group) => {
       response.body(),
       {
         products: [
-          { id: product.id, name: product.name, description: product.description }
+          { id: product.id, name: product.name, description: product.description },
         ],
       }
     )

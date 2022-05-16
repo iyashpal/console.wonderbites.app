@@ -24,7 +24,10 @@ export default class Cart extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotColumns: ['qty'],
+    pivotTimestamps: true,
+  })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingridient)

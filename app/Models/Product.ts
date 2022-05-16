@@ -6,11 +6,15 @@ import { DateTime } from 'luxon'
 import Category from './Category'
 import Wishlist from './Wishlist'
 import Ingridient from './Ingridient'
-import {
-  BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany, ManyToMany, manyToMany, ModelQueryBuilderContract, scope,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Product extends BaseModel {
+  /**
+   * Serialize the `$extras` object as it is
+   */
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
