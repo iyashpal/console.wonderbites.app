@@ -57,13 +57,8 @@ export default class Product extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @hasMany(() => Media, {
-    localKey: 'id', foreignKey: 'refId',
-    onQuery (query) {
-      query.where('refType', 'Product')
-    },
-  })
-  public media: HasMany<typeof Media>
+  @manyToMany(() => Media)
+  public media: ManyToMany<typeof Media>
 
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>

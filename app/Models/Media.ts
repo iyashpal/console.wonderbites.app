@@ -1,5 +1,6 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import Product from './Product'
 import { DateTime } from 'luxon'
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Media extends BaseModel {
   @column({ isPrimary: true })
@@ -7,12 +8,6 @@ export default class Media extends BaseModel {
 
   @column()
   public userId: number
-
-  @column()
-  public refId: number
-
-  @column()
-  public refType: string
 
   @column()
   public title: string
@@ -28,4 +23,7 @@ export default class Media extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @manyToMany(() => Product)
+  public products: ManyToMany<typeof Product>
 }

@@ -19,8 +19,14 @@ export default class CartsController {
 
     const cart = await this.cart(request, auth.use('api').user!)
 
-    await cart.load('products')
+    await cart.load('products', (builder) => {
+      builder.preload('media')
+    })
     await cart.load('ingridients')
+
+    // await cart.products.forEach(async (product) => await product.load('media'))
+
+    console.log(cart.products)
 
     response.json(cart)
   }
@@ -49,8 +55,12 @@ export default class CartsController {
       await this.detachFromCart(request, cart)
     }
 
-    await cart.load('products')
+    await cart.load('products', (builder) => {
+      // builder.preload('media')
+    })
     await cart.load('ingridients')
+
+    cart.products.forEach(async (product) => await product.load('media'))
 
     response.json(cart)
   }

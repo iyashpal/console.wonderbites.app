@@ -115,14 +115,13 @@ export default class ProductsController {
   }
 
   public async handleMedia ({ request, params: { id } }: HttpContextContract) {
+    const product = await Product.findOrFail(id)
     const images = request.files('files')
 
     for (let image of images) {
       await image.move(Application.tmpPath('uploads'))
 
-      await Media.create({
-        refId: request.input('refId', id),
-        refType: request.input('refType'),
+      await product.related('media').create({
         filePath: image.fileName,
       })
     }
