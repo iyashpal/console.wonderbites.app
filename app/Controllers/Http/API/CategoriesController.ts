@@ -10,7 +10,10 @@ export default class CategoriesController {
    */
   public async index ({ response }: HttpContextContract) {
     try {
-      const category = await Category.query().where('type', 'Product')
+      const category = await Category.query().where('type', 'Product').preload('products', (builder) => {
+        builder.preload('media')
+      })
+
       response.status(200).json(category)
     } catch (error) {
       response.badRequest(error.messages)

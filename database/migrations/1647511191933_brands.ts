@@ -5,7 +5,7 @@ export default class Brands extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
       table.string('name').notNullable()
       table.text('image_path').notNullable()
       table.integer('status').defaultTo(1)

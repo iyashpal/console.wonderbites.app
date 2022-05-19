@@ -5,9 +5,9 @@ export default class Addresses extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
-      table.integer('user_id').unsigned().references('users.id').notNullable().onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().references('users.id').notNullable().onDelete('CASCADE')
 
       table.string('first_name').notNullable()
 

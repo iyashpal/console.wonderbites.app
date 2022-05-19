@@ -5,7 +5,7 @@ export default class Teams extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
       table.string('name').notNullable()
       table.text('designation').nullable()
       table.text('image_path').notNullable()

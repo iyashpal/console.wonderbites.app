@@ -5,7 +5,7 @@ export default class CartIngridient extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       table.bigInteger('cart_id').unsigned().notNullable().references('carts.id').onDelete('CASCADE')
 

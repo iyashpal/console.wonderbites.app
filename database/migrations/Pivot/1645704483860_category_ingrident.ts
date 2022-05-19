@@ -5,7 +5,7 @@ export default class CategoryIngrident extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       table.bigInteger('category_id').unsigned().references('categories.id').onDelete('CASCADE')
 

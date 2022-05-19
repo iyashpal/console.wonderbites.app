@@ -1,4 +1,4 @@
-import Product from 'App/Models/Product'
+import { Product } from 'App/Models'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -48,17 +48,6 @@ export default class ProductsController {
       response.status(200).json(product)
     } catch (error) {
       response.unauthorized({ message: error.message })
-    }
-  }
-
-  public async productbycategory ({ request, response }: HttpContextContract) {
-    try {
-      //const category_id = request['category_id'];
-      //const products = await Product.query() .where('category_id', category_id);
-      //const products = await Product.all()
-      response.status(200).json(request)
-    } catch (error) {
-      response.badRequest(error.messages)
     }
   }
 

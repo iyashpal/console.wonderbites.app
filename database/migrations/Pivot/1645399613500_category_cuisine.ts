@@ -5,11 +5,11 @@ export default class CategoryCuisine extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
-      table.integer('cuisine_id').unsigned().index('cuisine_id').references('cuisines.id').onDelete('CASCADE')
+      table.bigInteger('cuisine_id').unsigned().index('cuisine_id').references('cuisines.id').onDelete('CASCADE')
 
-      table.integer('category_id').unsigned().index('category_id').references('categories.id').onDelete('CASCADE')
+      table.bigInteger('category_id').unsigned().index('category_id').references('categories.id').onDelete('CASCADE')
 
       table.unique(['cuisine_id', 'category_id'])
 

@@ -5,6 +5,7 @@ import Wishlist from './Wishlist'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Notification from './Notification'
 import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import Product from './Product'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -69,10 +70,14 @@ export default class User extends BaseModel {
   @hasMany(() => Address)
   public addresses: HasMany<typeof Address>
 
+  @hasMany(() => Product)
+  public products: HasMany<typeof Product>
+
   @hasMany(() => Notification, {
     foreignKey: 'notifiableId',
     onQuery: query => query.where('notifiable_type', 'User'),
   })
+
   public notifications: HasMany<typeof Notification>
 
   @hasOne(() => Cart)

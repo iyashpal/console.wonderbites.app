@@ -5,8 +5,11 @@ export default class CategoryOpeningPosition extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.bigInteger('category_id').unsigned().notNullable().references('categories.id').onDelete('CASCADE')
+      table.bigIncrements('id')
+
+      table.bigInteger('category_id').unsigned().notNullable()
+        .references('categories.id').onDelete('CASCADE')
+
       table.bigInteger('opening_position_id').unsigned().notNullable()
         .references('opening_positions.id').onDelete('CASCADE')
 

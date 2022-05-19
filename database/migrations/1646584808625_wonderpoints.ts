@@ -5,7 +5,7 @@ export default class Wonderpoints extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 

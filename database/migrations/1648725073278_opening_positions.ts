@@ -5,7 +5,7 @@ export default class OpeningPositions extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -26,4 +26,3 @@ export default class OpeningPositions extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
-

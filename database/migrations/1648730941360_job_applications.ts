@@ -5,7 +5,7 @@ export default class JobApplications extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
       table.bigInteger('opening_id').unsigned().nullable().references('opening_positions.id').onDelete('SET NULL')
       table.string('first_name').notNullable()
       table.string('last_name').notNullable()

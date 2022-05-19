@@ -5,7 +5,7 @@ export default class ProductWishlist extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
 

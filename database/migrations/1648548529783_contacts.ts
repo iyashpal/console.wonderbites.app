@@ -5,7 +5,7 @@ export default class Contacts extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
       table.string('name').notNullable()
       table.string('email').notNullable()
       table.text('comment').nullable()

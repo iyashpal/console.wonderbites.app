@@ -5,9 +5,12 @@ export default class BlogCategory extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
+
       table.bigInteger('category_id').unsigned().notNullable().references('categories.id').onDelete('CASCADE')
+
       table.bigInteger('blog_id').unsigned().notNullable().references('blogs.id').onDelete('CASCADE')
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

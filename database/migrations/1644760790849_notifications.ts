@@ -5,7 +5,7 @@ export default class Notifications extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
 
       table.string('type').notNullable()
 
