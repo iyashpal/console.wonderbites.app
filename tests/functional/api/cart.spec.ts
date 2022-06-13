@@ -125,12 +125,14 @@ test.group('Api cart', (group) => {
     })
 
     request.assertStatus(200)
+
     request.assertBodyContains({
       products: [
         {
           id: product.id,
           meta: {
-            pivot_qty: 5, pivot_product_id: product.id.toString(),
+            pivot_qty: 5,
+            pivot_product_id: product.id,
           },
         },
       ],

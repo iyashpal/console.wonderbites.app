@@ -1,5 +1,4 @@
-import Cart from 'App/Models/Cart'
-import User from 'App/Models/User'
+import { User, Cart } from 'App/Models'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { isNull, isUndefined } from '@poppinss/utils/build/src/Helpers/types'
@@ -20,6 +19,7 @@ export default class CartsController {
     const cart = await this.cart(request, auth.use('api').user!)
 
     await cart.load('products', (builder) => builder.preload('media'))
+
     await cart.load('ingridients')
 
     response.json(cart)
@@ -49,9 +49,8 @@ export default class CartsController {
       await this.detachFromCart(request, cart)
     }
 
-    await cart.load('products', (builder) => {
-      builder.preload('media')
-    })
+    await cart.load('products', (builder) => builder.preload('media'))
+
     await cart.load('ingridients')
 
     response.json(cart)

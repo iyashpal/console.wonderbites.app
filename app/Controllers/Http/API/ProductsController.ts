@@ -5,7 +5,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class ProductsController {
   public async index ({ response, auth }: HttpContextContract) {
     try {
-      console.log(auth.use('api').user?.id)
       const products = await Product.query().preload('wishlists')
 
       response.status(200).json(products)
@@ -39,11 +38,22 @@ export default class ProductsController {
     }
   }
 
-  public async show ({ params: { id }, response }) {
+  public async show ({ params: { id }, auth, response }) {
     try {
+      const user = await auth.use('api').user
+
       const product = await Product.findOrFail(id)
 
-      await product.load('media', (query) => query.select('id', 'file_path'))
+      // const wishlist = await 
+
+      await product.load(loader => {
+        loader.load('media', (query) => query.select('id', 'file_path'))
+          .load('wishlists', (builder) => {
+            if (user?.id) {
+              builder.where('user_id', user.id)
+            }
+          })
+      })
 
       response.status(200).json(product)
     } catch (error) {
