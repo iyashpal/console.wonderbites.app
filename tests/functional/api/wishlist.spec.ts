@@ -49,7 +49,10 @@ test.group('Api wishlist', (group) => {
 
     wishlist.related('products').attach(products.map(({ id }) => id))
 
-    const response = await client.get(route('api.wishlists.show')).guard('api').loginAs(user)
+    const response = await client.get(route('api.wishlists.show')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
 
     response.assertStatus(200)
 
@@ -63,7 +66,11 @@ test.group('Api wishlist', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.wishlists.update')).guard('api').loginAs(user)
+    const response = await client.post(route('api.wishlists.update')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
       .json({ action: 'SYNC', products: { [product.id]: { qty: 3 } } })
 
     response.assertStatus(200)
@@ -82,7 +89,11 @@ test.group('Api wishlist', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.wishlists.update')).guard('api').loginAs(user)
+    const response = await client.post(route('api.wishlists.update')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
       .json({ action: 'DETACH', products: [product.id] })
 
     response.assertStatus(200)

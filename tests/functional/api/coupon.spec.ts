@@ -20,7 +20,5 @@ test.group('Api coupons', (group) => {
       .json({ coupon: coupon.code, cart: cart.id })
 
     response.assertStatus(200)
-
-    // response.dumpBody()
   })
 })

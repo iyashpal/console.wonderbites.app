@@ -16,10 +16,14 @@ test.group('Api product', (group) => {
 
     const product = await ProductFactory.create()
 
-    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
+    await WishlistFactory.merge({ userId: user.id }).create()
 
-    const response = await client.get(route('api.products.show', product)).guard('api').loginAs(user)
+    const response = await client.get(route('api.products.show', product)).guard('api')
 
-    response.dumpBody()
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertBodyContains({ name: product.name, description: product.description, price: product.price })
+    // response.dumpBody()
   })
 })

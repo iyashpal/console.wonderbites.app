@@ -15,7 +15,7 @@ export default class ProductsController {
 
   public async create ({ }: HttpContextContract) { }
 
-  public async store ({ request, response }: HttpContextContract) {
+  public async store ({ request, response, auth }: HttpContextContract) {
     try {
       const validate = await request.validate({
         schema: schema.create({
@@ -43,8 +43,6 @@ export default class ProductsController {
       const user = await auth.use('api').user
 
       const product = await Product.findOrFail(id)
-
-      // const wishlist = await 
 
       await product.load(loader => {
         loader.load('media', (query) => query.select('id', 'file_path'))
