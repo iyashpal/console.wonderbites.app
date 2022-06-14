@@ -1,8 +1,8 @@
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import User from './User'
+import Product from './Product'
 import { DateTime } from 'luxon'
 import Ingridient from './Ingridient'
-import Product from './Product'
-import User from './User'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 export default class Wishlist extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -16,7 +16,10 @@ export default class Wishlist extends BaseModel {
   @column()
   public ipAddress: string
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotColumns: ['qty'],
+    pivotTimestamps: true,
+  })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingridient)

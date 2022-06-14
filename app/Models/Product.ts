@@ -7,7 +7,7 @@ import Category from './Category'
 import Wishlist from './Wishlist'
 import Ingridient from './Ingridient'
 import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
-import { BelongsTo, belongsTo, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Product extends BaseModel {
   /**
