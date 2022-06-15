@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { ProductFactory, UserFactory } from 'Database/factories'
+import { CartFactory, ProductFactory, UserFactory } from 'Database/factories'
 
 test.group('Api cart', (group) => {
   /**
@@ -28,13 +28,11 @@ test.group('Api cart', (group) => {
    * ✔ Need a product.
    * ✔ Add product to cart without api guard and authentication.
    * ✔ Verify product data in cart response with the count of total products in cart.
-   * ✔ Remove product from cart.
-   * ✔ Verify product data in cart response with the count of total products in cart.
    */
-  test('Guest users can add/remove products to their cart', async ({ client, route, assert }) => {
+  test('Guest users can add products to their cart', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    let response = await client.post(route('api.carts.show')).json({
+    let response = await client.post(route('api.carts.update')).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -42,17 +40,57 @@ test.group('Api cart', (group) => {
     })
 
     response.assertStatus(200)
-    response.assertBodyContains({ products: [{ id: product.id }] })
+    response.assertBodyContains({ products: [{ id: product.id, meta: { pivot_qty: 5 } }] })
     assert.equal(response.body()?.products.length, 1)
+  })
 
-    response = await client.post(route('api.carts.update')).json({
-      action: 'DETACH',
-      products: [product.id],
-    })
+  /**
+   * ✔ Need a cart for the guest user.
+   * ✔ Need at least 5 products in the cart.
+   * ✔ Request to remove a product from the cart.
+   * ✔ Verify the removed product shouldn't be in the response body.
+   * ✔ Verify the products excluding the removed one are still in the cart product list.
+   */
+  test('Guest users can remove products from cart', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+    const cart = await CartFactory.merge({ ipAddress: '127.0.0.1' }).create()
+    const products = await ProductFactory.merge([
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+    ]).createMany(5)
+
+    await products.map(async ({ id }) => cart.related('products').attach({ [id]: { qty: 1 } }))
+
+    let response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
-    response.assertBodyContains({ products: [] })
-    assert.equal(response.body()?.products.length, 0)
+
+    response.assertBodyContains({
+      products: products.map(({ id, name, description, sku, price }) => ({ id, name, description, sku, price })),
+    })
+
+    assert.equal(response.body()?.products.length, products.length)
+
+    // pick product from cart list to remove.
+    let product = products[0]
+
+    response = await client.post(route('api.carts.update'))
+      .json({
+        action: 'DETACH',
+        products: [product.id],
+      })
+
+    response.assertStatus(200)
+
+    assert.notContainsSubset(response.body(), { products: [{ id: product.id, name: product.name }] })
+
+    response.assertBodyContains({
+      products: products.filter(({ id }) => id !== product.id)
+        .map(({ id, name, description }) => ({ id, name, description })),
+    })
   })
 
   /**
@@ -74,12 +112,12 @@ test.group('Api cart', (group) => {
    * ✔ Remove product from cart.
    * ✔ Verify product data in cart response with the count of total products in cart.
    */
-  test('Authenticated user can add/remove products to their cart', async ({ client, route, assert }) => {
+  test('Authenticated user can add products to cart', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
 
     const product = await ProductFactory.create()
 
-    let response = await client.post(route('api.carts.show')).loginAs(user).json({
+    let response = await client.post(route('api.carts.update')).loginAs(user).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -87,18 +125,65 @@ test.group('Api cart', (group) => {
     })
 
     response.assertStatus(200)
-    response.assertBodyContains({ products: [{ id: product.id }] })
+    response.assertBodyContains({ products: [{ id: product.id, meta: { pivot_qty: 5 } }] })
     assert.equal(response.body()?.products.length, 1)
+  })
 
-    // Sending request to remove the product from cart.
-    response = await client.post(route('api.carts.update')).json({
-      action: 'DETACH',
-      products: [product.id],
-    })
+  /**
+   * ✔ Need a user to login.
+   * ✔ Need a cart for the user.
+   * ✔ Need at least 5 products in the cart.
+   * ✔ Request to remove a product from the cart.
+   * ✔ Verify the removed product shouldn't be in the response body.
+   * ✔ Verify the products excluding the removed one are still in the cart product list.
+   */
+  test('Authenticated User can remove products from cart', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+
+    const cart = await CartFactory.merge({ userId: user.id }).create()
+
+    const products = await ProductFactory.merge([
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+      { userId: user.id },
+    ]).createMany(5)
+
+    products.map(({ id }) => cart.related('products').attach({ [id]: { qty: 1 } }))
+
+    let response = await client.get(route('api.carts.show')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
 
     response.assertStatus(200)
-    response.assertBodyContains({ products: [] })
-    assert.equal(response.body()?.products.length, 0)
+
+    response.assertBodyContains({
+      products: products.map(({ id, name, description, sku, price }) => ({ id, name, description, sku, price })),
+    })
+
+    assert.equal(response.body()?.products.length, products.length)
+
+    // pick product from cart list to remove.
+    let product = products[0]
+
+    response = await client.post(route('api.carts.update')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user).json({
+        action: 'DETACH',
+        products: [product.id],
+      })
+
+    response.assertStatus(200)
+
+    assert.notContainsSubset(response.body(), { products: [{ id: product.id, name: product.name }] })
+
+    response.assertBodyContains({
+      products: products.filter(({ id }) => id !== product.id)
+        .map(({ id, name, description }) => ({ id, name, description })),
+    })
   })
 
   /**
@@ -110,7 +195,7 @@ test.group('Api cart', (group) => {
   test('Cart product should contain the quantity added by the user.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.carts.show')).json({
+    const response = await client.post(route('api.carts.update')).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -161,7 +246,7 @@ test.group('Api cart', (group) => {
       ],
     }
 
-    let response = await client.post(route('api.carts.show')).json(postData)
+    let response = await client.post(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -172,7 +257,7 @@ test.group('Api cart', (group) => {
     assertData.products[0].meta.pivot_qty--
 
     // Sending request to cart with decreased
-    response = await client.post(route('api.carts.show')).json(postData)
+    response = await client.post(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -208,7 +293,7 @@ test.group('Api cart', (group) => {
       ],
     }
 
-    let response = await client.post(route('api.carts.show')).json(postData)
+    let response = await client.post(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -219,7 +304,7 @@ test.group('Api cart', (group) => {
     assertData.products[0].meta.pivot_qty++
 
     // Sending request to cart with decreased
-    response = await client.post(route('api.carts.show')).json(postData)
+    response = await client.post(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
