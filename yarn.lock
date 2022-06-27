@@ -104,10 +104,10 @@
   dependencies:
     "@poppinss/utils" "^4.0.2"
 
-"@adonisjs/core@^5.8.3":
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.8.3.tgz#8804421d3fb924c71d803e03266422a1e39064dd"
-  integrity sha512-hzIfOp+leo4KD45uh4TYjLzCBPFgreOlEqJX/+LBmN40dh6S6Dhl6ayWSHrD2N5yiA+5LXBY/Drw3zfjUJQ8ZQ==
+"@adonisjs/core@^5.8.4":
+  version "5.8.4"
+  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.8.4.tgz#6b31b2432aa91509ca7a9c1229ff8277258586a5"
+  integrity sha512-Qc05xCTAEi1Yfu8ZReT+Fib6TAsKZzC6MIMqMVF+UsmP31woUFPqnSO2006lRWC56dJrvju1OSj6rYE54Js14g==
   dependencies:
     "@adonisjs/ace" "^11.3.0"
     "@adonisjs/application" "^5.2.5"
@@ -116,14 +116,14 @@
     "@adonisjs/encryption" "^4.0.8"
     "@adonisjs/events" "^7.2.1"
     "@adonisjs/hash" "^7.1.1"
-    "@adonisjs/http-server" "^5.10.0"
+    "@adonisjs/http-server" "^5.10.1"
     "@adonisjs/validator" "^12.3.2"
     "@poppinss/cliui" "^3.0.2"
     "@poppinss/manager" "^5.0.2"
     "@poppinss/utils" "^4.0.4"
     fs-extra "^10.1.0"
     macroable "^7.0.1"
-    memfs "^3.4.3"
+    memfs "^3.4.4"
     serve-static "^1.15.0"
     stringify-attributes "^2.0.0"
 
@@ -185,7 +185,7 @@
     "@poppinss/manager" "^5.0.2"
     "@poppinss/utils" "^4.0.4"
 
-"@adonisjs/http-server@^5.10.0":
+"@adonisjs/http-server@^5.10.1":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@adonisjs/http-server/-/http-server-5.11.0.tgz#66962e484445158413be02312d3aad8d27410543"
   integrity sha512-cxvdWs9ve6zkWWDyzH+rBM/1zHjbCAXkDd1wiQjzKN3YTV246iZcmX6g1R7dPwi+38o/YleSrtI7Luk+wv5OAA==
@@ -235,12 +235,12 @@
     "@poppinss/utils" "^4.0.4"
     nanoid "^3.3.4"
 
-"@adonisjs/lucid@^18.0.1":
-  version "18.0.1"
-  resolved "https://registry.yarnpkg.com/@adonisjs/lucid/-/lucid-18.0.1.tgz#f3372105f846660d85120423c10ba6760301b3a7"
-  integrity sha512-oiE586osItDN1v7L+O44tHZupR4JyVyqpG5Oel6EdqfnPb7qhc+jKfBl81XA96MwZtLvI8yLGAx0e+GLAPgtXA==
+"@adonisjs/lucid@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/lucid/-/lucid-18.1.0.tgz#93b4c8e91f26cc70afe0b14d46c611dbc8869035"
+  integrity sha512-RAUtsBSkdEC3hkbcRawY+v2OljX1zt/b1zEuBN0/4kXHNYp3y+dCuF73OGVoWpwReJsEsvKUsGmZ1Nyn0DbBSw==
   dependencies:
-    "@faker-js/faker" "^6.3.1"
+    "@faker-js/faker" "^7.3.0"
     "@poppinss/hooks" "^5.0.3"
     "@poppinss/utils" "^4.0.4"
     fast-deep-equal "^3.1.3"
@@ -252,6 +252,7 @@
     pretty-hrtime "^1.0.3"
     qs "^6.10.3"
     slash "^3.0.0"
+    tarn "^3.0.2"
 
 "@adonisjs/mail@^8.1.2":
   version "8.1.2"
@@ -1355,10 +1356,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@faker-js/faker@^6.3.1":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-6.3.1.tgz#1ae963dd40405450a2945408cba553e1afa3e0fb"
-  integrity sha512-8YXBE2ZcU/pImVOHX7MWrSR/X5up7t6rPWZlk34RwZEcdr3ua6X+32pSd6XuOQRN+vbuvYNfA6iey8NbrjuMFQ==
+"@faker-js/faker@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.3.0.tgz#a508df35ded585c4e071cb5d9d7c89623c837fae"
+  integrity sha512-1W0PZezq2rxlAssoWemi9gFRD8IQxvf0FPL5Km3TOmGHFG7ib0TbFBJ0yC7D/1NsxunjNTK6WjUXV8ao/mKZ5w==
 
 "@gar/promisify@^1.0.1":
   version "1.1.3"
@@ -4881,7 +4882,7 @@ fs-minipass@^2.0.0:
   dependencies:
     minipass "^3.0.0"
 
-fs-monkey@1.0.3:
+fs-monkey@1.0.3, fs-monkey@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fs-monkey/-/fs-monkey-1.0.3.tgz#ae3ac92d53bb328efe0e9a1d9541f6ad8d48e2d3"
   integrity sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==
@@ -6284,12 +6285,12 @@ memfs@^3.4.1:
   dependencies:
     fs-monkey "1.0.3"
 
-memfs@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.4.3.tgz#fc08ac32363b6ea6c95381cabb4d67838180d4e1"
-  integrity sha512-eivjfi7Ahr6eQTn44nvTnR60e4a1Fs1Via2kCR5lHo/kyNoiMWaXCNJ/GpSd0ilXas2JSOl9B5FTIhflXu0hlg==
+memfs@^3.4.4:
+  version "3.4.7"
+  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.4.7.tgz#e5252ad2242a724f938cb937e3c4f7ceb1f70e5a"
+  integrity sha512-ygaiUSNalBX85388uskeCyhSAoOSgzBbtVCr9jA2RROssFL9Q19/ZXFqS+2Th2sr1ewNIWgFdLzLC3Yl1Zv+lw==
   dependencies:
-    fs-monkey "1.0.3"
+    fs-monkey "^1.0.3"
 
 memory-cache@~0.2.0:
   version "0.2.0"
