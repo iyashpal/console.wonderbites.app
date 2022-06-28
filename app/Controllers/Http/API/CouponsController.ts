@@ -3,10 +3,26 @@ import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CouponsController {
-  public async index ({ }: HttpContextContract) { }
+  /**
+   * List the specified resources.
+   * 
+   * @param param0 {HttpContextContract}
+   */
+  public async index ({ response }: HttpContextContract) {
+    try {
+      const coupons = await Coupon.all()
 
-  public async create ({ }: HttpContextContract) { }
+      response.json(coupons)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
 
+  /**
+   * Store a coupon to database.
+   * 
+   * @param param0 {HttpcontextContract}
+   */
   public async store ({ }: HttpContextContract) { }
 
   public async show ({ }: HttpContextContract) { }
@@ -42,7 +58,7 @@ export default class CouponsController {
       }
 
       if (coupon && coupon.is_expired) {
-        response.status(422).json({ coupon: ['Coupon code is expired.'] })
+        response.status(422).json({ messages: { coupon: ['Coupon code is expired.'] } })
       }
     } catch (error) {
       response.status(422).json(error)

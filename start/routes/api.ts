@@ -51,7 +51,11 @@ Route.group(() => {
       Route.post('cart', 'CartsController.update').as('update')
     }).as('carts')
 
+    /**
+     * Coupon Routes
+     */
     Route.group(() => {
+      Route.get('coupons', 'CouponsController.index').as('index').middleware('auth_api')
       Route.post('coupons/apply', 'CouponsController.apply').as('apply')
     }).as('coupons')
 

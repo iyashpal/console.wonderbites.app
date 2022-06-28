@@ -11,6 +11,37 @@ test.group('Api coupons', (group) => {
 
   /**
    * ✔ Need a user to login.
+   * ✔ Need some coupons to list out.
+   * ✔ Access the coupons list page.
+   * ✔ See the list of coupons in response.
+   */
+  test('Only logged in user can list the coupons', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+
+    const coupons = await CouponFactory.createMany(10)
+
+    const response = await client.get(route('api.coupons.index')).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertStatus(200)
+    response.assertBodyContains(coupons.map(({ id }) => ({ id })))
+    assert.equal(response.body().length, coupons.length)
+  })
+
+  /**
+   * ✔ See cart list without login.
+   * ✔ assert request status as Unauthorized.
+   */
+  test('Guest users can not list the coupons', async ({ client, route }) => {
+    const response = await client.get(route('api.coupons.index'))
+
+    response.assertStatus(401)
+  })
+
+  /**
+   * ✔ Need a user to login.
    * ✔ Need cart attached to the user.
    * ✔ Need a coupon to apply.
    * ✔ Post code and cart id to apply the coupon.
@@ -35,6 +66,27 @@ test.group('Api coupons', (group) => {
         discountValue: coupon.discountValue,
       },
     })
+  })
+
+  /**
+   * ✔ Need a user to login.
+   * ✔ Need cart attached to the user.
+   * ✔ Need a expired coupon to apply.
+   * ✔ Post code and cart id to apply the coupon.
+   * ✔ Assert expired error in response.
+   */
+  test('Expired coupon code can not be applied to checkout/cart.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const cart = await CartFactory.merge({ userId: user.id }).create()
+
+    const coupon = await CouponFactory.merge({ code: 'FRI24', expiredAt: DateTime.now().minus({ day: 1 }) }).create()
+
+    const response = await client.post(route('api.coupons.apply')).loginAs(user)
+      .json({ coupon: coupon.code, cart: cart.id })
+
+    response.assertStatus(422)
+    response.assertBodyContains({ messages: { coupon: ['Coupon code is expired.'] } })
   })
 
   /**
