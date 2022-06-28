@@ -7,7 +7,7 @@ export default Factory.define(Coupon, ({ faker }) => {
     title: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
     code: faker.internet.userName(),
-    discountType: 'Price',
+    discountType: 'price',
     discountValue: '50',
     started_at: DateTime.now(),
     expired_at: DateTime.now().endOf('month'),
