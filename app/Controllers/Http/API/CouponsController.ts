@@ -1,6 +1,8 @@
 import Coupon from 'App/Models/Coupon'
-import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
+import CreateCouponValidator from 'App/Validators/Coupon/CreateValidator'
+import UpdateCouponValidator from 'App/Validators/Coupon/UpdateValidator'
 
 export default class CouponsController {
   /**
@@ -23,15 +25,70 @@ export default class CouponsController {
    * 
    * @param param0 {HttpcontextContract}
    */
-  public async store ({ }: HttpContextContract) { }
+  public async store ({ request, response }: HttpContextContract) {
+    try {
+      const payload = await request.validate(CreateCouponValidator)
 
-  public async show ({ }: HttpContextContract) { }
+      const coupon = await Coupon.create(payload)
 
-  public async edit ({ }: HttpContextContract) { }
+      response.json(coupon)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
 
-  public async update ({ }: HttpContextContract) { }
+  /**
+   * Get the resource details.
+   * 
+   * @returns {JSON}
+   */
+  public async show ({ params, response }: HttpContextContract) {
+    try {
+      const coupon = await Coupon.findOrFail(params.id)
 
-  public async destroy ({ }: HttpContextContract) { }
+      response.status(200).json(coupon)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
+
+  /**
+   * Update the resource data.
+   * 
+   * @returns {JSON}
+   */
+  public async update ({ request, response, params }: HttpContextContract) {
+    try {
+      const coupon = await Coupon.findOrFail(params.id)
+
+      const payload = await request.validate(UpdateCouponValidator)
+
+      await coupon.merge(payload).save()
+
+      await coupon.refresh()
+
+      response.status(200).json(coupon)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
+
+  /**
+   * Delete the resource from database.
+   * 
+   * @returns {JSON}
+   */
+  public async destroy ({ params, response }: HttpContextContract) {
+    try {
+      const coupon = await Coupon.findOrFail(params.id)
+
+      response.json({
+        deleted: await coupon.delete(),
+      })
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
 
   /**
    * Apply Coupon to user cart.

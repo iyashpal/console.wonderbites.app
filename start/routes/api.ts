@@ -55,9 +55,13 @@ Route.group(() => {
      * Coupon Routes
      */
     Route.group(() => {
-      Route.get('coupons', 'CouponsController.index').as('index').middleware('auth_api')
-      Route.post('coupons/apply', 'CouponsController.apply').as('apply')
-    }).as('coupons')
+      Route.get('coupons', 'CouponsController.index').as('index')
+      Route.post('coupons', 'CouponsController.store').as('store')
+      Route.get('coupons/:id', 'CouponsController.show').as('show')
+      Route.put('coupons/:id', 'CouponsController.update').as('update')
+      Route.delete('coupons/:id', 'CouponsController.destroy').as('destroy')
+    }).as('coupons').middleware('auth_api')
+    Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
 
     Route.resource('cuisines', 'CuisinesController')
 

@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { CartFactory, CouponFactory, UserFactory } from 'Database/factories'
+import { Coupon } from 'App/Models'
 
 test.group('Api coupons', (group) => {
   group.each.setup(async () => {
@@ -38,6 +39,185 @@ test.group('Api coupons', (group) => {
     const response = await client.get(route('api.coupons.index'))
 
     response.assertStatus(401)
+  })
+
+  /**
+   * ✔ Need a user to login.
+   * ✔ Need a coupon data prepared for create request.
+   * ✔ Post the coupon data to store.
+   * ✔ Assert the request status and coupon data in response.
+   */
+  test('Only authenticated user can create new coupon', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const coupon = await (await CouponFactory.make()).toObject()
+
+    const response = await client.post(route('api.coupons.store')).guard('api')
+      // @ts-ignore
+      .loginAs(user).json(coupon)
+
+    response.assertStatus(200)
+    response.assertBodyContains({ title: coupon.title, description: coupon.description, code: coupon.code })
+  })
+
+  /**
+   * ✔ Need a coupon data prepared for create request.
+   * ✔ Post the coupon data to store.
+   * ✔ Assert the request status and Unauthenticated message.
+   */
+  test('Unauthenticated user can not create new copuon', async ({ client, route }) => {
+    const coupon = await (await CouponFactory.make()).toObject()
+
+    const response = await client.post(route('api.coupons.store')).json(coupon)
+
+    response.assertStatus(401)
+    response.assertBodyContains({ message: 'Unauthenticated' })
+  })
+
+  /**
+   * ✔ Need a user to login.
+   * ✔ Need a coupon stored in database.
+   * ✔ Post the coupon's updated data to update request.
+   * ✔ Assert the request status and updated coupon data.
+   */
+  test('Only authenticated user can update a coupon.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const coupon = await CouponFactory.create()
+
+    const response = await client.put(route('api.coupons.update', { id: coupon.id })).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+      .json({
+        ...(await coupon.toObject()),
+        title: 'Updated Title for tests.',
+        description: 'Updated Description for tests.',
+        code: 'UPDATED',
+        startedAt: coupon.startedAt.toFormat('yyyy-MM-dd HH:mm:ss'),
+        expiredAt: coupon.expiredAt.toFormat('yyyy-MM-dd HH:mm:ss'),
+      })
+
+    response.assertStatus(200)
+    response.assertBodyContains({
+      title: 'Updated Title for tests.',
+      description: 'Updated Description for tests.',
+      code: 'UPDATED',
+    })
+  })
+
+  /**
+   * ✔ Need a coupon stored in database.
+   * ✔ Post the coupon's updated data to update request without login.
+   * ✔ Assert the request status and Unauthenticated message.
+   */
+  test('Un-authenticated user can not update a coupon.', async ({ client, route }) => {
+    const coupon = await CouponFactory.create()
+
+    const response = await client.put(route('api.coupons.update', { id: coupon.id }))
+      .json({ title: 'Updated Title for tests.', description: 'Updated Description for tests.', code: 'UPDATED' })
+
+    response.assertStatus(401)
+    response.assertBodyContains({ message: 'Unauthenticated' })
+  })
+
+  /**
+   * ✔ Need a user to login.
+   * ✔ Post the coupon's updated data to update request without login.
+   * ✔ Assert the request status and Unauthenticated message.
+   */
+  test('Only existing coupons can be updated.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const response = await client.put(route('api.coupons.update', { id: 15 })).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertStatus(400)
+  })
+
+  /**
+   * 
+   */
+  test('Only authenticated user can see the coupon resource', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const coupon = await CouponFactory.create()
+
+    const response = await client.get(route('api.coupons.show', { id: coupon.id })).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertStatus(200)
+    response.assertBodyContains({
+      id: coupon.id,
+      title: coupon.title,
+      description: coupon.description,
+      code: coupon.code,
+    })
+  })
+
+  /**
+   * 
+   */
+  test('Only existing coupon is accessible via id or request param.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const response = await client.get(route('api.coupons.show', { id: 15 })).guard('api')
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertStatus(400)
+  })
+
+  /**
+   * 
+   */
+  test('Un-authenticated user can not see the coupon resource.', async ({ client, route }) => {
+    const coupon = await CouponFactory.create()
+
+    const response = await client.get(route('api.coupons.show', { id: coupon.id }))
+
+    response.assertStatus(401)
+    response.assertBodyContains({ message: 'Unauthenticated' })
+  })
+
+  /**
+   * 
+   */
+  test('Only authenticated user can delete a coupon.', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+
+    const coupon = await CouponFactory.create()
+
+    const response = await client.delete(route('api.coupons.destroy', { id: coupon.id })).guard('api')
+
+      // @ts-ignore
+      .loginAs(user)
+
+    response.assertStatus(200)
+
+    const couponAfterDelete = await Coupon.find(coupon.id)
+    assert.notEqual({
+      id: couponAfterDelete?.id,
+    }, { id: coupon.id })
+  })
+
+  /**
+   * 
+   */
+  test('Un-authenticated user can not delete a coupon.', async ({ client, route, assert }) => {
+    const coupon = await CouponFactory.create()
+
+    const response = await client.delete(route('api.coupons.destroy', { id: coupon.id }))
+
+    response.assertStatus(401)
+
+    const couponAfterDelete = await Coupon.find(coupon.id)
+
+    assert.equal(couponAfterDelete?.id, coupon.id)
   })
 
   /**
