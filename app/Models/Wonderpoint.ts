@@ -9,9 +9,6 @@ export default class Wonderpoint extends BaseModel {
   @column()
   public userId: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
   @column()
   public event: string
 
@@ -26,4 +23,10 @@ export default class Wonderpoint extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  /**
+   * Relation to user
+   */
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }

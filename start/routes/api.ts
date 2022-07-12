@@ -37,6 +37,10 @@ Route.group(() => {
     }).as('wishlists')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
+
+    Route.group(() => {
+      Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
+    }).as('wonderpoints')
   }).middleware('auth_api')
 
   /**
@@ -61,6 +65,7 @@ Route.group(() => {
       Route.put('coupons/:id', 'CouponsController.update').as('update')
       Route.delete('coupons/:id', 'CouponsController.destroy').as('destroy')
     }).as('coupons').middleware('auth_api')
+
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
 
     Route.resource('cuisines', 'CuisinesController')
