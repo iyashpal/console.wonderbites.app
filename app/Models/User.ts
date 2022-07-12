@@ -6,6 +6,8 @@ import Wishlist from './Wishlist'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Notification from './Notification'
 import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import Wonderpoint from './Wonderpoint'
+import RedeemedWonderpoint from './RedeemedWonderpoint'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -100,6 +102,18 @@ export default class User extends BaseModel {
    */
   @hasOne(() => Wishlist)
   public wishlist: HasOne<typeof Wishlist>
+
+  /**
+   * Relation to user wonderpoints.
+   */
+  @hasMany(() => Wonderpoint)
+  public wonderpoints: HasMany<typeof Wonderpoint>
+
+  /**
+   * Relation to redeemed wonderpoints of user.
+   */
+  @hasMany(() => RedeemedWonderpoint)
+  public redeemedWonderpoints: HasMany<typeof RedeemedWonderpoint>
 
   /**
    * User avatar attribute.
