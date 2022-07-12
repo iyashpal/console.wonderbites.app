@@ -65,7 +65,8 @@ export default class CartsController {
    */
   protected async cart (request: RequestContract, user: User): Promise<Cart> {
     if (isNull(user) || isUndefined(user)) {
-      const guestCart = await Cart.query().whereNull('user_id').where('ip_address', request.ip()).first()
+      const guestCart = await Cart.query().whereNull('user_id')
+        .where('ip_address', request.ip()).first()
 
       if (isNull(guestCart)) {
         return await Cart.create({ ipAddress: request.ip() })

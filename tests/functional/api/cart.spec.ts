@@ -106,6 +106,23 @@ test.group('Api cart', (group) => {
   })
 
   /**
+   * ✔ Need a user to login.
+   * ✔ Need a inactive cart to attach to the user.
+   * ✔ Access logged in user cart.
+   * ✔ Match accessed cart id with attached inactive cart.
+   */
+  test('Only active carts are accessible.', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+    const cart = await CartFactory.merge({ userId: user.id, status: 0 }).create()
+
+    const response = await client.get(route('api.carts.show')).guard('api')
+      // @ts-ignore
+      .loginAs(user)
+
+    assert.notEqual(response.body()?.id, cart.id)
+  })
+
+  /**
    * ✔ Need a product.
    * ✔ Add product to cart with api guard and authentication.
    * ✔ Verify product data in cart response with the count of total products in cart.

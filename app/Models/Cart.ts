@@ -18,6 +18,9 @@ export default class Cart extends BaseModel {
   @column()
   public ipAddress: string
 
+  @column()
+  public status: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

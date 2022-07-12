@@ -11,6 +11,7 @@ export default class Carts extends BaseSchema {
 
       table.string('ip_address').nullable()
 
+      table.integer('status').defaultTo(1)
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
