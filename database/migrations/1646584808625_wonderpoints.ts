@@ -9,11 +9,15 @@ export default class Wonderpoints extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 
+      table.string('action').defaultTo('earn')
+
       table.string('event').notNullable()
 
       table.string('description').notNullable()
 
       table.integer('points').unsigned().notNullable()
+
+      table.json('extras').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -2,7 +2,22 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class WonderpointsController {
-  public async index ({ }: HttpContextContract) { }
+  /**
+   * Show the list of wonderpoints.
+   * 
+   * @param param0 {HttpContextContract}
+   */
+  public async index ({ auth, request, response }: HttpContextContract) {
+    // Authenticate user
+    const user = await auth.use('api').authenticate()
+
+    // Query user wonderpoints.
+    const wonderpoints = await user.related('wonderpoints').query()
+      .paginate(request.input('page', 1), request.input('limit', 10))
+
+    // Send the json response
+    response.json(wonderpoints)
+  }
 
   public async create ({ }: HttpContextContract) { }
 
@@ -27,13 +42,13 @@ export default class WonderpointsController {
 
     // Get total user wonderpoints
     const [wonderpoints] = await Database.from('wonderpoints').sum('points as total')
-      .where('user_id', user.id)
+      .where('user_id', user.id).where('action', 'earn')
 
     const total = (wonderpoints.total ? wonderpoints.total : 0)
 
     // Get total redeemed wonderpoints
-    const [redeemedWonderpoints] = await Database.from('redeemed_wonderpoints').sum('points as total')
-      .where('user_id', user.id)
+    const [redeemedWonderpoints] = await Database.from('wonderpoints').sum('points as total')
+      .where('user_id', user.id).where('action', 'redeem')
 
     const redeemed = (redeemedWonderpoints.total ? redeemedWonderpoints.total : 0)
 

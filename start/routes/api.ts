@@ -39,6 +39,7 @@ Route.group(() => {
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
 
     Route.group(() => {
+      Route.get('wonderpoints', 'WonderpointsController.index').as('index')
       Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
     }).as('wonderpoints')
   }).middleware('auth_api')

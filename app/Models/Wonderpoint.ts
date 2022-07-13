@@ -10,6 +10,9 @@ export default class Wonderpoint extends BaseModel {
   public userId: number
 
   @column()
+  public action: string
+
+  @column()
   public event: string
 
   @column()
@@ -17,6 +20,9 @@ export default class Wonderpoint extends BaseModel {
 
   @column()
   public points: number
+
+  @column()
+  public extras: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
