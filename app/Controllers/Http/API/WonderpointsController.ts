@@ -3,7 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class WonderpointsController {
   /**
-   * Show the list of wonderpoints.
+   * Show the list of all wonderpoints.
    * 
    * @param param0 {HttpContextContract}
    */
@@ -13,6 +13,10 @@ export default class WonderpointsController {
 
     // Query user wonderpoints.
     const wonderpoints = await user.related('wonderpoints').query()
+      .match(
+        [request.input('filter') === 'earned', query => query.where('action', 'earn')],
+        [request.input('filter') === 'redeem', query => query.where('action', 'redeem')],
+      )
       .paginate(request.input('page', 1), request.input('limit', 10))
 
     // Send the json response

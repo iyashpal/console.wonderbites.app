@@ -56,6 +56,48 @@ test.group('API wonderpoints', (group) => {
   })
 
   /**
+   * ✔ Need a user to login.
+   * ✔ Need some mixed wonderpoints associated with user.
+   * ✔ Access wonderpoints listing url with filter 'earned'.
+   * ✔ Response body should contains filtered wonderpoints associated with the user.
+   */
+  test('Users can list only earned wonderpoints', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+
+    await WonderpointFactory.merge([
+      { userId: user.id, points: 50, action: 'earn' },
+      { userId: user.id, points: 50, action: 'redeem' },
+    ]).createMany(2)
+
+    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'earned' } })).guard('api')
+      // @ts-ignore
+      .loginAs(user)
+
+    assert.strictEqual(response.body().data.length, 1)
+  })
+
+  /**
+   * ✔ Need a user to login.
+   * ✔ Need some mixed wonderpoints associated with user.
+   * ✔ Access wonderpoints listing url with filter 'redeemed'.
+   * ✔ Response body should contains filtered wonderpoints associated with the user.
+   */
+  test('Users can list only redeemed wonderpoints', async ({ client, route, assert }) => {
+    const user = await UserFactory.create()
+
+    await WonderpointFactory.merge([
+      { userId: user.id, points: 50, action: 'earn' },
+      { userId: user.id, points: 50, action: 'redeem' },
+    ]).createMany(2)
+
+    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeem' } })).guard('api')
+      // @ts-ignore
+      .loginAs(user)
+
+    assert.strictEqual(response.body().data.length, 1)
+  })
+
+  /**
    * ✔ Access url to avail wonderpoints without login.
    * ✔ Response body should contain 'Unauthenticated' message.
    */
