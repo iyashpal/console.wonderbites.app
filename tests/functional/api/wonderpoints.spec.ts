@@ -161,4 +161,26 @@ test.group('API wonderpoints', (group) => {
 
     redeemedResponse.assertBodyContains({ wonderpoints: totalPoints - redeemedWonderpoint.points })
   })
+
+  test('Users can redeem wonderpoints.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    await WonderpointFactory.merge([
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+    ]).createMany(3)
+
+    const redeemResponse = await client.post(route('api.wonderpoints.store')).guard('api')
+      // @ts-ignore
+      .loginAs(user).json({ points: 100 }).accept('json')
+
+    redeemResponse.assertBodyContains({ points: 100 })
+
+    const availResponse = await client.get(route('api.wonderpoints.avail')).guard('api')
+      // @ts-ignore
+      .loginAs(user)
+
+    availResponse.assertBodyContains({ wonderpoints: 50 })
+  })
 })

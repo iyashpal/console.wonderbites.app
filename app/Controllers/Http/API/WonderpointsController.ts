@@ -1,5 +1,6 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { default as CreateWonderpointValidator } from 'App/Validators/Wonderpoint/CreateValidator'
 
 export default class WonderpointsController {
   /**
@@ -23,13 +24,17 @@ export default class WonderpointsController {
     response.json(wonderpoints)
   }
 
-  public async create ({ }: HttpContextContract) { }
+  public async store ({ auth, request, response }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
 
-  public async store ({ }: HttpContextContract) { }
+    const attributes = await request.validate(CreateWonderpointValidator)
+
+    const wonderpoint = await user.related('wonderpoints').create(attributes)
+
+    response.json(wonderpoint)
+  }
 
   public async show ({ }: HttpContextContract) { }
-
-  public async edit ({ }: HttpContextContract) { }
 
   public async update ({ }: HttpContextContract) { }
 

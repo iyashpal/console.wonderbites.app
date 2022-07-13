@@ -7,7 +7,7 @@ Route.group(() => {
     Route.post('/login', 'Auth/LoginController.login').as('login')
 
     Route.post('/register', 'Auth/RegisterController.register').as('register')
-  }).middleware('guest_api')
+  }).middleware('guest_api:api')
 
   /**
    * Routes that allowed only for a logged in user.
@@ -40,9 +40,10 @@ Route.group(() => {
 
     Route.group(() => {
       Route.get('wonderpoints', 'WonderpointsController.index').as('index')
+      Route.post('wonderpoints', 'WonderpointsController.store').as('store')
       Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
     }).as('wonderpoints')
-  }).middleware('auth_api')
+  }).middleware('auth_api:api')
 
   /**
    * Routes that allowed for everyone (guest|logged in) users.

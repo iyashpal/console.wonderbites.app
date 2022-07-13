@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class GuestApi {
-  public async handle ({ auth, response }: HttpContextContract, next: () => Promise<void>) {
+  public async handle ({ auth, response }: HttpContextContract, next: () => Promise<void>, guards?: string[]) {
     if (auth.use('api').isGuest) {
       await next()
 
