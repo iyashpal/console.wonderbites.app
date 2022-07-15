@@ -215,7 +215,7 @@ config.resolve.alias = {
   // Include predefined aliases
   ...config.resolve.alias,
 
-  Js: resolve(__dirname, 'resources/js/'),
+  JS: resolve(__dirname, 'resources/js/'),
   Scss: resolve(__dirname, 'resources/scss/'),
 }
 

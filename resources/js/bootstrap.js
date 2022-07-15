@@ -1,7 +1,9 @@
 
 window.axios = require('redaxios')
 
-window.csrf = document.querySelector('meta[name="csrf"]').getAttribute('content')
+if (document.querySelector('meta[name="csrf"]')) {
+  window.csrf = document.querySelector('meta[name="csrf"]').getAttribute('content')
+}
 
 // window.axios.defaults = {
 //     headers: {

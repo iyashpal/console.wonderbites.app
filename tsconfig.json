@@ -8,6 +8,7 @@
     "build"
   ],
   "compilerOptions": {
+    "allowJs": true,
     "experimentalDecorators": true,
     "outDir": "build",
     "rootDir": "./",
@@ -25,7 +26,7 @@
       "Database/*": [
         "./database/*"
       ],
-      "Js/*": [
+      "JS/*": [
         "./resources/js/*"
       ],
       "Scss/*": [
@@ -43,7 +44,8 @@
       "@adonisjs/auth",
       "@adonisjs/mail",
       "@adonisjs/lucid-slugify",
-      "@adonisjs/bouncer"
+      "@adonisjs/bouncer",
+      "@eidellev/inertia-adonisjs"
     ]
   }
 }

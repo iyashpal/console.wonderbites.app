@@ -1,6 +1,9 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.get('inertia-js', async ({inertia}) => {
+  return inertia.render('Testing')
+})
 /**
  * Admin Routes
  */

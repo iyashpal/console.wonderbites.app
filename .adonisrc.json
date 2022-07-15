@@ -17,13 +17,19 @@
     "Config": "config",
     "Database": "database",
     "Contracts": "contracts",
-    "Js": "resources/js",
+    "JS": "resources/js",
     "Scss": "resources/scss"
   },
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/bouncer"
+    "./start/bouncer",
+    {
+      "file": "./start/inertia",
+      "environment": [
+        "web"
+      ]
+    }
   ],
   "providers": [
     "./providers/AppProvider",
@@ -36,7 +42,8 @@
     "@adonisjs/mail",
     "@adonisjs/attachment-lite",
     "@adonisjs/lucid-slugify",
-    "@adonisjs/bouncer"
+    "@adonisjs/bouncer",
+    "@eidellev/inertia-adonisjs"
   ],
   "metaFiles": [
     {
