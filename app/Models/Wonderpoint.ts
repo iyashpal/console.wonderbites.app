@@ -22,7 +22,7 @@ export default class Wonderpoint extends BaseModel {
   public points: number
 
   @column()
-  public extras: string
+  public extras: object
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

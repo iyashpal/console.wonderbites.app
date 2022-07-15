@@ -149,10 +149,10 @@ test.group('API wonderpoints', (group) => {
     wonderpointsResponse.assertBodyContains({ wonderpoints: totalPoints })
 
     const redeemedWonderpoint = await WonderpointFactory.merge({
+      points: 50,
       userId: user.id,
       action: 'redeem',
-      points: 50,
-      extras: JSON.stringify({ cart_id: cart.id }),
+      extras: { cart_id: cart.id },
     }).create()
 
     const redeemedResponse = await client.get(route('api.wonderpoints.avail')).guard('api')
@@ -173,7 +173,8 @@ test.group('API wonderpoints', (group) => {
 
     const redeemResponse = await client.post(route('api.wonderpoints.store')).guard('api')
       // @ts-ignore
-      .loginAs(user).json({ points: 100 }).accept('json')
+      .loginAs(user).accept('json')
+      .json({ event: 'test event', description: 'test', action: 'redeem', points: 100, extras: { cart_id: 1 } })
 
     redeemResponse.assertBodyContains({ points: 100 })
 

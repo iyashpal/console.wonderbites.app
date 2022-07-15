@@ -28,7 +28,7 @@ export default class CreateValidator {
     description: schema.string({}),
     action: schema.string({}),
     points: schema.number(),
-    extras: schema.string(),
+    extras: schema.object().anyMembers(),
   })
 
   /**
