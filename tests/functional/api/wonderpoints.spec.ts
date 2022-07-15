@@ -174,7 +174,7 @@ test.group('API wonderpoints', (group) => {
     const redeemResponse = await client.post(route('api.wonderpoints.store')).guard('api')
       // @ts-ignore
       .loginAs(user).accept('json')
-      .json({ event: 'test event', description: 'test', action: 'redeem', points: 100, extras: { cart_id: 1 } })
+      .json({ event: 'Login', action: 'redeem', points: 100, extras: { cart_id: 1 } })
 
     redeemResponse.assertBodyContains({ points: 100 })
 

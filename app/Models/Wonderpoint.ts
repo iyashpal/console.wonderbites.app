@@ -16,9 +16,6 @@ export default class Wonderpoint extends BaseModel {
   public event: string
 
   @column()
-  public description: string
-
-  @column()
   public points: number
 
   @column()

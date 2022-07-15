@@ -13,8 +13,6 @@ export default class Wonderpoints extends BaseSchema {
 
       table.string('event').notNullable()
 
-      table.string('description').notNullable()
-
       table.integer('points').unsigned().notNullable()
 
       table.json('extras').nullable()
