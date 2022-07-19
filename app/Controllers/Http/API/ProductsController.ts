@@ -3,7 +3,7 @@ import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProductsController {
-  public async index ({ response, auth }: HttpContextContract) {
+  public async index ({ response }: HttpContextContract) {
     try {
       const products = await Product.query().preload('wishlists')
 
@@ -15,7 +15,7 @@ export default class ProductsController {
 
   public async create ({ }: HttpContextContract) { }
 
-  public async store ({ request, response, auth }: HttpContextContract) {
+  public async store ({ request, response }: HttpContextContract) {
     try {
       const validate = await request.validate({
         schema: schema.create({

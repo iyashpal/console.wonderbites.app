@@ -41,7 +41,7 @@ export default class UsersController {
       await data.image_path.moveToDisk('./')
     }
 
-    await User.create({ ...data, image_path: data.image_path!.fileName }).then((user) => {
+    await User.create({}).then((user) => {
       session.flash('user_created', user.id)
 
       response.redirect().toRoute('users.show', { id: user.id })
@@ -86,7 +86,7 @@ export default class UsersController {
     }
 
     await user.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : user.image_path,
+      ...data, imagePath: data.image_path ? data.image_path.fileName : user.imagePath,
     }).save().then(user => {
       session.flash('user_updated', true)
 

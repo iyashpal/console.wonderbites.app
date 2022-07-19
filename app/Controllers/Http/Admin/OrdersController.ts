@@ -39,7 +39,7 @@ export default class OrdersController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
     console.log(data)
-    const order = await Orders.create(data)
+    const order = await Orders.create({})
       .then((order) => {
         session.flash('order_created', order.id)
         return order
@@ -81,7 +81,7 @@ export default class OrdersController {
     const order = await Orders.findOrFail(params.id)
 
     const data = await request.validate(UpdateValidator)
-    await order.merge(data).save().then(() => session.flash('order_updated', true))
+    await order.merge({}).save().then(() => session.flash('order_updated', true))
     response.redirect().toRoute('orders.show', { id: order.id })
   }
 

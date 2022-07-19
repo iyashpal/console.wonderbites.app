@@ -21,7 +21,9 @@ export default class TestimonialsController {
   /**
    * Show the form for creating a new resource.
    * 
-   * @param param0 HttpContextContract
+   * @param param0 HttpContextContract9+
+   * 
+   * 469+6-
    * @returns ViewRendererContract
    */
   public async create ({ view }: HttpContextContract) {
@@ -40,7 +42,7 @@ export default class TestimonialsController {
       await data.image_path.moveToDisk('./')
     }
 
-    const testimonial = await Testimonial.create({ ...data, imagePath: null })
+    const testimonial = await Testimonial.create({})
       .then((testimonial) => {
         session.flash('testimonial_created', testimonial.id)
         return testimonial
@@ -87,9 +89,7 @@ export default class TestimonialsController {
       await data.image_path.moveToDisk('./')
     }
 
-    await testimonial.merge({
-      ...data, image_path: data.image_path ? data.image_path.fileName : testimonial.image_path,
-    }).save().then(() => session.flash('testimonial_updated', true))
+    await testimonial.merge({}).save().then(() => session.flash('testimonial_updated', true))
 
     response.redirect().toRoute('testimonials.show', { id: testimonial.id })
   }

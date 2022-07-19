@@ -118,7 +118,7 @@ test.group('Api wishlist', (group) => {
    * ✔ Request status needs to be OK(200).
    * ✔ Request response body should have the product data as well as the increased quantity.
    */
-  test('User can increase the wishlist product quantity.', async ({ client, route, assert }) => {
+  test('User can increase the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
@@ -155,7 +155,7 @@ test.group('Api wishlist', (group) => {
    * ✔ Request status needs to be OK(200).
    * ✔ Request response body should have the product data as well as the decreased quantity.
    */
-  test('User can increase the wishlist product quantity.', async ({ client, route, assert }) => {
+  test('User can increase the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 

@@ -22,7 +22,9 @@ test.group('Api auth logout', (group) => {
   test('Only authenticated user can logout from a session', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const response = await client.post(route('api.logout')).guard('api').loginAs(user)
+    const response = await client.post(route('api.logout')).guard('api')
+      // @ts-ignore
+      .loginAs(user)
 
     response.assertStatus(200)
     response.assertBodyContains({ revoked: true })

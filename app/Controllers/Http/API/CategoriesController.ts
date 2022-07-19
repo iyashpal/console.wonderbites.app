@@ -1,5 +1,4 @@
 import Category from 'App/Models/Category'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoriesController {
@@ -76,7 +75,6 @@ export default class CategoriesController {
     const category = await Category.query().where('type', 'Blog')
     //category.load('blogs')
     //let category_blogs = [];
-
 
     response.status(200).json(category)
   }

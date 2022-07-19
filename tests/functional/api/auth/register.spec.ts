@@ -182,7 +182,9 @@ test.group('Api auth register', (group) => {
   test('Authenticated user cannot register', async ({ client, route }) => {
     const User = await UserFactory.create()
 
-    const response = await client.post(route('api.register')).guard('api').loginAs(User)
+    const response = await client.post(route('api.register')).guard('api')
+      // @ts-ignore
+      .loginAs(User)
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Only guest users are allowed.' })

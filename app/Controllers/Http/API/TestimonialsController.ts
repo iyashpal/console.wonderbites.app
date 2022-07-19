@@ -9,17 +9,17 @@ export default class TestimonialsController {
   }
 
   public async create ({ }: HttpContextContract) {
-    const testimonials = new Testimonial()
+    // const testimonials = new Testimonial()
 
-    testimonials.title = "karna"
+    // testimonials.title = "karna"
 
-    testimonials.body = "hello"
+    // testimonials.body = "hello"
 
-    testimonials.imagePath = "asdas"
+    // testimonials.imagePath = "asdas"
 
-    testimonials.status = 1
+    // testimonials.status = 1
 
-    await testimonials.save()
+    // await testimonials.save()
   }
 
   public async store ({ }: HttpContextContract) { }

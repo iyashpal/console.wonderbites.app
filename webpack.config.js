@@ -160,6 +160,8 @@ Encore.enableSassLoader()
 // Encore.enableLessLoader()
 // Encore.enableStylusLoader()
 
+Encore.enableTypeScriptLoader()
+
 /*
 |--------------------------------------------------------------------------
 | CSS loaders
