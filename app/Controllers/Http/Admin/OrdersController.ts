@@ -28,7 +28,7 @@ export default class OrdersController {
   public async create ({ view }: HttpContextContract) {
     const users = await User.all()
     //const products = await Product.all()
-    return view.render('admin/orders/create',{users})
+    return view.render('admin/orders/create', { users })
   }
 
   /**
@@ -69,7 +69,7 @@ export default class OrdersController {
     const order = await Orders.findOrFail(params.id)
     const users = await User.all()
     //const products = await Product.all()
-    return view.render('app/review/edit', { order ,users})
+    return view.render('app/review/edit', { order, users })
   }
 
   /**
@@ -81,6 +81,7 @@ export default class OrdersController {
     const order = await Orders.findOrFail(params.id)
 
     const data = await request.validate(UpdateValidator)
+    console.log(data)
     await order.merge({}).save().then(() => session.flash('order_updated', true))
     response.redirect().toRoute('orders.show', { id: order.id })
   }

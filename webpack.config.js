@@ -45,7 +45,7 @@ Encore.setPublicPath('/assets')
 | entrypoints.
 |
 */
-Encore.addEntry('app', './resources/ts/app.ts')
+Encore.addEntry('app', './resources/vue/app.ts')
 
 /*
 |--------------------------------------------------------------------------
@@ -217,7 +217,7 @@ config.resolve.alias = {
   // Include predefined aliases
   ...config.resolve.alias,
 
-  VueApp: resolve(__dirname, 'resources/ts/'),
+  VueApp: resolve(__dirname, 'resources/vue/'),
 
   Scss: resolve(__dirname, 'resources/scss/'),
 
