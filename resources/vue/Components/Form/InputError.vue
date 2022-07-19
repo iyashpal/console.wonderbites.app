@@ -8,7 +8,6 @@
 export default {
     props: ['message'],
     mounted() {
-        console.log(this.message)
     }
 }
 </script>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 </script>
 <template>
-    <div>
-        <slot></slot>
-    </div>
+    <div>This is dashboard</div>
 </template>

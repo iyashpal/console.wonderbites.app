@@ -6,9 +6,7 @@ import AuthenticationCard from 'VueApp/components/AuthenticationCard.vue'
 
 const form = useForm(<{ email: string, password: string }>{ email: '', password: '' })
 
-function handler () {
-    form.post(`/login`)
-}
+function handler() {}
 </script>
 <template>
     <AuthenticationCard>
@@ -19,17 +17,13 @@ function handler () {
         <form @submit.prevent="handler" method="post">
             <div class="flex flex-col items-center justify-center gap-4 max-w-xs mx-auto pt-3">
                 <div class="w-full">
-                    <Input v-model="form.email" type="email" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.email }" />
+                    <Input v-model="form.email" type="email" placeholder="Email Address" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.email }" />
                     <p v-if="form.errors.email" class="text-red-600 text-xs pl-1 mt-1">{{ form.errors.email }}</p>
-                </div>
-                <div class="w-full">
-                    <Input v-model="form.password" type="password" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.password }" />
-                    <p v-if="form.errors.password" class="text-red-600 text-xs pl-1 mt-1">{{ form.errors.password }}</p>
                 </div>
                 <div class="w-full">
                     <Button class="w-full">{{ form.processing ? 'Processing...' : 'Log In' }}</Button>
                 </div>
-                <Link href="/forgot-password" class="text-sm text-red-600 hover:text-red-500 underline">Forgot Password?</Link>
+                <Link href="/login" class="text-sm text-red-600 hover:text-red-500 underline">Login to your account?</Link>
             </div>
         </form>
     </AuthenticationCard>

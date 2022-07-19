@@ -13,6 +13,7 @@
       "ES6",
       "DOM"
     ],
+    "jsx": "preserve",
     "experimentalDecorators": true,
     "outDir": "build",
     "rootDir": "./",

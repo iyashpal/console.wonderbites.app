@@ -7,7 +7,7 @@ export default class HomeController {
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
-  public async show ({ view }: HttpContextContract) {
-    return view.render('welcome')
+  public async show ({ inertia }: HttpContextContract) {
+    return inertia.render('Dashboard')
   }
 }

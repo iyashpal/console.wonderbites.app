@@ -1,5 +1,6 @@
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import LoginUserValidator from 'App/Validators/LoginUserValidator'
+
 export default class LoginController {
   /**
    * Display the login form.
@@ -12,15 +13,20 @@ export default class LoginController {
   }
 
   public async login ({ auth, request, response, session }: HttpContextContract) {
-    const { email, password } = await request.validate(LoginUserValidator)
+    const { email, password } = await this.validateRequest(request)
+
     try {
       await auth.use('web').attempt(email, password)
 
       response.redirect('/')
     } catch (error) {
-      session.flash('status', 'failed')
+      // Check if the error is Invalid auth password.
+      if (error.message.includes('E_INVALID_AUTH_PASSWORD')) {
+        session.flash({ errors: { password: ['Password do not match.'] } })
+      }
 
-      response.redirect('back')
+      // redirect back to previous page
+      response.redirect().back()
     }
   }
 
@@ -28,5 +34,30 @@ export default class LoginController {
     await auth.logout()
 
     response.redirect('/')
+  }
+
+  /**
+   * Validate the login request.
+   * 
+   * @param request 
+   * @returns 
+   */
+  protected validateRequest (request) {
+    return request.validate({
+      schema: schema.create({
+        email: schema.string({ trim: true }, [
+          rules.email(),
+          rules.exists({ table: 'users', column: 'email' }),
+        ]),
+        password: schema.string({ trim: true }),
+      }),
+
+      messages: {
+        'email.required': 'Email address is required to login.',
+        'email.email': 'Enter a valid email address.',
+        'email.exists': 'Email does not exists.',
+        'password.required': 'Enter password to login.',
+      },
+    })
   }
 }
