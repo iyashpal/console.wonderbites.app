@@ -1,8 +1,17 @@
+declare global {
+  interface Window {
+    axios: any;
+    csrf: any
+  }
+}
 
-window.axios = require('redaxios')
+import axios from 'redaxios'
+window.axios = axios
 
-if (document.querySelector('meta[name="csrf"]')) {
-  window.csrf = document.querySelector('meta[name="csrf"]').getAttribute('content')
+const CsrfMeta = document.querySelector('meta[name="csrf"]')
+
+if (CsrfMeta) {
+  window.csrf = CsrfMeta.getAttribute('content')
 }
 
 // window.axios.defaults = {
