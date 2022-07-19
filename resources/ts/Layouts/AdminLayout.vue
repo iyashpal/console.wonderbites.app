@@ -32,7 +32,7 @@
   </div>
 </template>
 <script setup>
-import { useLayoutStore } from 'Js/store';
+import { useLayoutStore } from 'VueApp/store';
 import Sidebar from './Components/Sidebar.vue'
 import Breadcrumb from './Components/Breadcrumb.vue';
 import TopNavigation from './Components/TopNavigation.vue';

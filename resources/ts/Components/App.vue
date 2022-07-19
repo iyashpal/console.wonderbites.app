@@ -2,7 +2,7 @@
     <slot></slot>
 </template>
 <script setup>
-import { useAuthStore, useLayoutStore } from 'Js/store';
+import { useAuthStore, useLayoutStore } from 'VueApp/store';
 import { onMounted } from 'vue';
 
 const props = defineProps({

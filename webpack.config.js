@@ -45,7 +45,7 @@ Encore.setPublicPath('/assets')
 | entrypoints.
 |
 */
-Encore.addEntry('app', './resources/js/app.js')
+Encore.addEntry('app', './resources/ts/app.ts')
 
 /*
 |--------------------------------------------------------------------------
@@ -181,7 +181,7 @@ Encore.enablePostCssLoader()
 | sure to install the required dependencies.
 |
 */
-Encore.enableVueLoader(() => {}, {
+Encore.enableVueLoader(() => { }, {
   version: 3,
   runtimeCompilerBuild: true,
   useJsx: false,
@@ -215,8 +215,10 @@ config.resolve.alias = {
   // Include predefined aliases
   ...config.resolve.alias,
 
-  JS: resolve(__dirname, 'resources/js/'),
+  VueApp: resolve(__dirname, 'resources/ts/'),
+
   Scss: resolve(__dirname, 'resources/scss/'),
+
 }
 
 /*

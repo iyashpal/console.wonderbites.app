@@ -25,7 +25,7 @@
     </div>
 </template>
 <script setup>
-import { useLayoutStore } from 'Js/store';
+import { useLayoutStore } from 'VueApp/store';
 import UserDropdown from './UserDropdown.vue';
 
 const Layout = useLayoutStore()

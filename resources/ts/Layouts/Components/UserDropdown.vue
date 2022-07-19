@@ -60,7 +60,7 @@
     </div>
 </template>
 <script setup>
-import { useAuthStore } from 'Js/store';
+import { useAuthStore } from 'VueApp/store';
 import { ref } from 'vue';
 const Auth = useAuthStore()
 const toggle = ref(false)

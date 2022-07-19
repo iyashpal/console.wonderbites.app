@@ -26,8 +26,8 @@
       "Database/*": [
         "./database/*"
       ],
-      "JS/*": [
-        "./resources/js/*"
+      "VueApp/*": [
+        "./resources/ts/*"
       ],
       "Scss/*": [
         "./resources/scss/*"

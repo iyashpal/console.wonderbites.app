@@ -1,7 +1,7 @@
 <script setup>
-import AuthenticationCard from 'JS/components/AuthenticationCard.vue'
-import Input from 'JS/components/Form/Input.vue';
-import Button from 'JS/components/Form/Button.vue';
+import AuthenticationCard from 'VueApp/components/AuthenticationCard.vue'
+import Input from 'VueApp/components/Form/Input.vue';
+import Button from 'VueApp/components/Form/Button.vue';
 </script>
 <template>
     <AuthenticationCard>

@@ -60,7 +60,7 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import { useLayoutStore } from 'Js/store';
+import { useLayoutStore } from 'VueApp/store';
 
 const Layout = useLayoutStore()
 </script>

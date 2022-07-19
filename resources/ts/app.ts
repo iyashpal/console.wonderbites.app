@@ -10,17 +10,20 @@ createInertiaApp({
     const PageModule = import(`./Pages/${TemplateName}`)
 
     // By default the layout will be User Layout
-    PageModule.layout = import('./Layouts/UserLayout.vue')
+    let PageLayout = 'UserLayout'
 
     // If page namespace starts with "Auth" Use guest layout.
     if (TemplateName.startsWith('Auth')) {
-      PageModule.layout = import('./Layouts/GuestLayout.vue')
+      PageLayout = 'GuestLayout'
     }
+
+    // @ts-ignore
+    PageModule.layout = import(`./Layouts/${PageLayout}.vue`)
 
     return PageModule
   },
 
-  setup: ({ el, App, props, plugin }) => {
-    createApp({ render: () => h(App, props) }).use(plugin).use(createPinia()).mount(el)
+  setup: ({ el, app, props, plugin }) => {
+    createApp({ render: () => h(app, props) }).use(plugin).use(createPinia()).mount(el)
   },
 })
