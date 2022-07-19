@@ -31,7 +31,7 @@
         "./database/*"
       ],
       "VueApp/*": [
-        "./resources/ts/*"
+        "resources/vue/*"
       ],
       "Scss/*": [
         "./resources/scss/*"

@@ -17,7 +17,7 @@
     "Config": "config",
     "Database": "database",
     "Contracts": "contracts",
-    "VueApp": "resources/ts",
+    "VueApp": "resources/vue",
     "Scss": "resources/scss"
   },
   "preloads": [
