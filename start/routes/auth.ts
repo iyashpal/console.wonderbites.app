@@ -14,6 +14,7 @@ Route.group(() => {
   Route.post('/login', 'Auth/LoginController.login')
 
   Route.get('/forgot-password', 'Auth/PasswordResetLinkController.create').as('password.request')
+  Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
 }).middleware('guest')
 
 Route.group(() => {

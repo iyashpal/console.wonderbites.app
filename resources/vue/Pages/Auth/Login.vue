@@ -7,6 +7,7 @@ import AuthenticationCard from 'VueApp/components/AuthenticationCard.vue'
 const form = useForm(<{ email: string, password: string }>{ email: '', password: '' })
 
 function handler () {
+    form.clearErrors()
     form.post(`/login`)
 }
 </script>

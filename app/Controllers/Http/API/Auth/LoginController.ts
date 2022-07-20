@@ -1,4 +1,4 @@
-import LoginUserValidator from 'App/Validators/LoginUserValidator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class LoginController {
   /**
@@ -8,7 +8,7 @@ export default class LoginController {
    * @returns {JSON}
    */
   public async login ({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await request.validate(LoginUserValidator)
+    const { email, password } = await this.validateRequest(request)
 
     try {
       const token = await auth.use('api').attempt(email, password)
@@ -42,5 +42,30 @@ export default class LoginController {
     } catch (error) {
       response.badRequest(error.messages)
     }
+  }
+
+  /**
+   * Validate the login request.
+   * 
+   * @param request 
+   * @returns 
+   */
+  protected validateRequest (request) {
+    return request.validate({
+      schema: schema.create({
+        email: schema.string({ trim: true }, [
+          rules.email(),
+          rules.exists({ table: 'users', column: 'email' }),
+        ]),
+        password: schema.string({ trim: true }),
+      }),
+
+      messages: {
+        'email.required': 'Email address is required to login.',
+        'email.email': 'Enter a valid email address.',
+        'email.exists': 'Email does not exists.',
+        'password.required': 'Enter password to login.',
+      },
+    })
   }
 }
