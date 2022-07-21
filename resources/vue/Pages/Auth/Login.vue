@@ -20,11 +20,11 @@ function handler () {
         <form @submit.prevent="handler" method="post">
             <div class="flex flex-col items-center justify-center gap-4 max-w-xs mx-auto pt-3">
                 <div class="w-full">
-                    <Input v-model="form.email" type="email" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.email }" />
+                    <Input v-model="form.email" type="email" placeholder="E-mail Address" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.email }" />
                     <p v-if="form.errors.email" class="text-red-600 text-xs pl-1 mt-1">{{ form.errors.email }}</p>
                 </div>
                 <div class="w-full">
-                    <Input v-model="form.password" type="password" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.password }" />
+                    <Input v-model="form.password" type="password" placeholder="Password" class="w-full rounded-none" :class="{ 'border-red-600 text-red-600': form.errors.password }" />
                     <p v-if="form.errors.password" class="text-red-600 text-xs pl-1 mt-1">{{ form.errors.password }}</p>
                 </div>
                 <div class="w-full">

@@ -35,5 +35,5 @@ export default Env.rules({
   SMTP_HOST: Env.schema.string({ format: 'host' }),
   SMTP_PORT: Env.schema.number(),
   SMTP_USERNAME: Env.schema.string(),
-  SMTP_PASSWORD: Env.schema.string(),
+  SMTP_PASSWORD: Env.schema.string() || null,
 })

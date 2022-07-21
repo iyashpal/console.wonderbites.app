@@ -47,4 +47,8 @@ export default class PasswordResetLinksController {
       },
     })
   }
+
+  public testing () {
+
+  }
 }
