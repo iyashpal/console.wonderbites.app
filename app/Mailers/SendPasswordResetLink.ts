@@ -1,8 +1,8 @@
 import renderHTML from 'mjml'
-import Route from '@ioc:Adonis/Core/Route'
+import { User } from 'App/Models'
 import View from '@ioc:Adonis/Core/View'
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
-import { User } from 'App/Models'
+import DatabaseTokenRepository from 'App/Auth/Passwords/DatabaseTokenRepository'
 
 export default class SendPasswordResetLink extends BaseMailer {
   /**
@@ -16,12 +16,10 @@ export default class SendPasswordResetLink extends BaseMailer {
 
   private html
 
-  private resetURL
+  private token
 
   constructor (private user: User) {
     super()
-
-    this.resetURL = Route.makeSignedUrl('verifyEmail', { email: user.email }, { expiresIn: '60m' })
   }
 
   /**
@@ -32,7 +30,9 @@ export default class SendPasswordResetLink extends BaseMailer {
    * also be async.
    */
   public async prepare (message: MessageContract) {
-    this.html = await View.render('emails/send-password-reset-link', { url: this.resetURL })
+    this.token = await (new DatabaseTokenRepository()).create(this.user)
+
+    this.html = await View.render('emails/send-password-reset-link', { token: this.token })
 
     message
       .subject('Reset Password Notification')

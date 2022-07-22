@@ -1,7 +1,8 @@
+import { User } from 'App/Models'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import SendPasswordResetLink from 'App/Mailers/SendPasswordResetLink'
-import { User } from 'App/Models'
+
 export default class PasswordResetLinksController {
   /**
    * Display the password reset link request view.
