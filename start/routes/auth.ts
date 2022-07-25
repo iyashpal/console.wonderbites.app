@@ -33,14 +33,14 @@ Route.group(() => {
    * Routes that allowed only for guest users.
    */
   Route.group(() => {
-    Route.post('/login', 'Auth/LoginController.login').as('login')
+    Route.post('/login', 'API/Auth/LoginController.login').as('login')
 
-    Route.post('/register', 'Auth/RegisterController.register').as('register')
+    Route.post('/register', 'API/Auth/RegisterController.register').as('register')
 
     Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
   }).middleware('api.guest')
 
   Route.group(() => {
-    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
+    Route.post('/logout', 'API/Auth/LoginController.logout').as('logout')
   }).middleware('api.auth')
 }).prefix('/api').as('api')

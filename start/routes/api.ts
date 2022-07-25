@@ -2,8 +2,8 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   /**
-       * Routes that allowed only for a logged in user.
-       */
+   * Routes that allowed only for a logged in user.
+   */
   Route.group(() => {
     Route.get('/users', 'UsersController.show').as('user')
 
@@ -12,15 +12,15 @@ Route.group(() => {
     Route.resource('addresses', 'Profile/AddressesController')
 
     /**
-             * Orders Routes.
-             */
+     * Orders Routes.
+     */
     Route.group(() => {
       Route.post('orders', 'OrdersController.store').as('store')
     }).as('orders')
 
     /**
-             * Wishlist Routes
-             */
+     * Wishlist Routes
+     */
     Route.group(() => {
       Route.get('wishlists', 'WishlistsController.show').as('show')
       Route.post('wishlists', 'WishlistsController.update').as('update')
@@ -36,20 +36,20 @@ Route.group(() => {
   }).middleware('api.auth')
 
   /**
-       * Routes that allowed for everyone (guest|logged in) users.
-       */
+   * Routes that allowed for everyone (guest|logged in) users.
+   */
   Route.group(() => {
     /**
-             * Cart Routes
-             */
+     * Cart Routes
+     */
     Route.group(() => {
       Route.get('cart', 'CartsController.show').as('show')
       Route.post('cart', 'CartsController.update').as('update')
     }).as('carts')
 
     /**
-             * Coupon Routes
-             */
+     * Coupon Routes
+     */
     Route.group(() => {
       Route.get('coupons', 'CouponsController.index').as('index')
       Route.post('coupons', 'CouponsController.store').as('store')
