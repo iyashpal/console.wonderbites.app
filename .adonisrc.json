@@ -29,7 +29,8 @@
       "environment": [
         "web"
       ]
-    }
+    },
+    "./start/limiter"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -43,7 +44,9 @@
     "@adonisjs/attachment-lite",
     "@adonisjs/lucid-slugify",
     "@adonisjs/bouncer",
-    "@eidellev/inertia-adonisjs"
+    "@eidellev/inertia-adonisjs",
+    "@adonisjs/limiter",
+    "@adonisjs/redis"
   ],
   "metaFiles": [
     {

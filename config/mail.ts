@@ -48,6 +48,7 @@ const mailConfig: MailConfig = {
       port: Env.get('SMTP_PORT'),
       auth: {
         user: Env.get('SMTP_USERNAME'),
+        // @ts-ignore
         pass: Env.get('SMTP_PASSWORD'),
         type: 'login',
       },
