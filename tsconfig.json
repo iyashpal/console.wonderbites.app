@@ -13,6 +13,7 @@
       "ES6",
       "DOM"
     ],
+    "strict": false,
     "jsx": "preserve",
     "experimentalDecorators": true,
     "noUnusedParameters": false,
@@ -51,7 +52,9 @@
       "@adonisjs/mail",
       "@adonisjs/lucid-slugify",
       "@adonisjs/bouncer",
-      "@eidellev/inertia-adonisjs"
+      "@eidellev/inertia-adonisjs",
+      "@adonisjs/limiter",
+      "@adonisjs/redis"
     ]
   }
 }

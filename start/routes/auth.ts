@@ -1,31 +1,46 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-  /*************************************************************************************
-   * User register Routes.
-   *************************************************************************************/
-  Route.get('/register', 'Auth/RegistersController.show').as('register')
-  Route.post('/register', 'Auth/RegistersController.register')
+  Route.group(() => {
+    /*************************************************************************************
+     * User register Routes.
+     *************************************************************************************/
+    Route.get('/register', 'Auth/RegistersController.show').as('register')
+    Route.post('/register', 'Auth/RegistersController.register')
 
-  /************************************************************************************
-   * User login Routes.
-   ************************************************************************************/
-  Route.get('/login', 'Auth/LoginController.show').as('login')
-  Route.post('/login', 'Auth/LoginController.login')
+    /************************************************************************************
+     * User login Routes.
+     ************************************************************************************/
+    Route.get('/login', 'Auth/LoginController.show').as('login')
+    Route.post('/login', 'Auth/LoginController.login')
 
-  Route.get('/forgot-password', 'Auth/PasswordResetLinkController.create').as('password.request')
-  Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
-  Route.get('/reset-password/:email', 'Auth/').as('password.reset')
+    Route.get('/forgot-password', 'Auth/PasswordResetLinkController.create').as('password.request')
+    Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
+    Route.post('/reset-password', 'Auth/NewPasswordController.store').as('password.update')
+    Route.get('/reset-password/:token', 'Auth/NewPasswordController.create').as('password.reset')
+  }).middleware('guest')
 
-  Route.get('/verify/:email', async ({ request }) => {
-    if (request.hasValidSignature()) {
-      return 'Marking email as verified'
-    }
+  Route.group(() => {
+    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
+  }).middleware('auth')
+})
 
-    return 'Signature is missing or URL was tampered.'
-  }).as('verifyEmail')
-}).middleware('guest')
-
+/**
+ * Auth api routes 
+ */
 Route.group(() => {
-  Route.post('/logout', 'Auth/LoginController.logout').as('logout')
-}).middleware('auth')
+  /**
+   * Routes that allowed only for guest users.
+   */
+  Route.group(() => {
+    Route.post('/login', 'Auth/LoginController.login').as('login')
+
+    Route.post('/register', 'Auth/RegisterController.register').as('register')
+
+    Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
+  }).middleware('api.guest')
+
+  Route.group(() => {
+    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
+  }).middleware('api.auth')
+}).prefix('/api').as('api')

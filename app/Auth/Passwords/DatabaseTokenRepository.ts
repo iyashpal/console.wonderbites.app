@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { User } from 'App/Models'
-import { v5 as uuid } from 'uuid'
-import Hash from '@ioc:Adonis/Core/Hash'
+import { createHash } from 'crypto'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import PasswordReset from 'App/Models/PasswordReset'
 
@@ -19,7 +18,7 @@ export default class DatabaseTokenRepository {
     // We will create a new, random token for the user so that we can e-mail them
     // a safe link to the password reset form. Then we will insert a record in
     // the database so that we can verify the token within the actual reset.
-    const token = await DatabaseTokenRepository.createNewToken()
+    const token = this.createNewToken()
 
     await PasswordReset.create({ token: token, email: user.email })
 
@@ -69,8 +68,8 @@ export default class DatabaseTokenRepository {
    *
    * @return string
    */
-  public static async createNewToken () {
-    return await Hash.use('bcrypt').make(string.generateRandom(32))
+  public createNewToken () {
+    return createHash('sha256').update(string.generateRandom(32)).digest('hex')
   }
 
   /**

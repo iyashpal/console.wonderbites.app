@@ -1,20 +1,10 @@
 import Route from '@ioc:Adonis/Core/Route'
+
 Route.group(() => {
   /**
-   * Routes that allowed only for guest users.
-   */
+       * Routes that allowed only for a logged in user.
+       */
   Route.group(() => {
-    Route.post('/login', 'Auth/LoginController.login').as('login')
-
-    Route.post('/register', 'Auth/RegisterController.register').as('register')
-  }).middleware('guest_api:api')
-
-  /**
-   * Routes that allowed only for a logged in user.
-   */
-  Route.group(() => {
-    Route.post('/logout', 'Auth/LoginController.logout').as('logout')
-
     Route.get('/users', 'UsersController.show').as('user')
 
     Route.put('/users', 'UsersController.update').as('user.update')
@@ -22,15 +12,15 @@ Route.group(() => {
     Route.resource('addresses', 'Profile/AddressesController')
 
     /**
-     * Orders Routes.
-     */
+             * Orders Routes.
+             */
     Route.group(() => {
       Route.post('orders', 'OrdersController.store').as('store')
     }).as('orders')
 
     /**
-     * Wishlist Routes
-     */
+             * Wishlist Routes
+             */
     Route.group(() => {
       Route.get('wishlists', 'WishlistsController.show').as('show')
       Route.post('wishlists', 'WishlistsController.update').as('update')
@@ -43,30 +33,30 @@ Route.group(() => {
       Route.post('wonderpoints', 'WonderpointsController.store').as('store')
       Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
     }).as('wonderpoints')
-  }).middleware('auth_api:api')
+  }).middleware('api.auth')
 
   /**
-   * Routes that allowed for everyone (guest|logged in) users.
-   */
+       * Routes that allowed for everyone (guest|logged in) users.
+       */
   Route.group(() => {
     /**
-     * Cart Routes
-     */
+             * Cart Routes
+             */
     Route.group(() => {
       Route.get('cart', 'CartsController.show').as('show')
       Route.post('cart', 'CartsController.update').as('update')
     }).as('carts')
 
     /**
-     * Coupon Routes
-     */
+             * Coupon Routes
+             */
     Route.group(() => {
       Route.get('coupons', 'CouponsController.index').as('index')
       Route.post('coupons', 'CouponsController.store').as('store')
       Route.get('coupons/:id', 'CouponsController.show').as('show')
       Route.put('coupons/:id', 'CouponsController.update').as('update')
       Route.delete('coupons/:id', 'CouponsController.destroy').as('destroy')
-    }).as('coupons').middleware('auth_api')
+    }).as('coupons').middleware('api.auth')
 
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
 

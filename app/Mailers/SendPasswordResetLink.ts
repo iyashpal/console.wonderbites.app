@@ -32,7 +32,7 @@ export default class SendPasswordResetLink extends BaseMailer {
   public async prepare (message: MessageContract) {
     this.token = await (new DatabaseTokenRepository()).create(this.user)
 
-    this.html = await View.render('emails/send-password-reset-link', { token: this.token })
+    this.html = await View.render('emails/send-password-reset-link', { token: this.token, user: this.user })
 
     message
       .subject('Reset Password Notification')

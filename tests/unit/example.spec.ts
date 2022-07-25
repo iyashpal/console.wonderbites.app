@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 
 test.group('Example', () => {
   test('testing of abc', async () => {
-    console.log(await DatabaseTokenRepository.createNewToken())
+    console.log((new DatabaseTokenRepository()).createNewToken())
     console.log(DateTime.now().toISO())
   })
 })

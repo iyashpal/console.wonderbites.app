@@ -1,12 +1,6 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('inertia-js', async ({inertia}) => {
-  return inertia.render('Testing')
-})
-/**
- * Admin Routes
- */
 Route.group(() => {
   Route.get('/', 'HomeController.show')
   Route.resource('testimonials', 'TestimonialsController')

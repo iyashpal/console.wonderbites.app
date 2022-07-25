@@ -4,7 +4,7 @@ import Input from 'VueApp/Components/Form/Input.vue';
 import Button from 'VueApp/components/Form/Button.vue';
 import AuthenticationCard from 'VueApp/components/AuthenticationCard.vue'
 
-const form = useForm(<{ email: string, password: string }>{ email: '', password: '' })
+const form = useForm(<{ email: string }>{ email: '' })
 
 function handler () {
     form.clearErrors()
