@@ -8,6 +8,6 @@ export default class Guest {
       return
     }
 
-    response.unauthorized({ message: 'Only guest users are allowed.' })
+    response.unauthorized({ message: 'unauthorized access' })
   }
 }

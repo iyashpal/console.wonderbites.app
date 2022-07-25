@@ -177,7 +177,7 @@ test.group('Api auth register', (group) => {
    * ✔ Need user from database.
    * ✔ POST request to `route('api.register')` with api guard and authentication data.
    * ✔ Request response status should be Unauthorized (401)
-   * ✔ Request response should contain message field with value 'Only guest users are allowed.'.
+   * ✔ Request response should contain message field with value 'unauthorized access'.
    */
   test('Authenticated user cannot register', async ({ client, route }) => {
     const User = await UserFactory.create()
@@ -187,7 +187,7 @@ test.group('Api auth register', (group) => {
       .loginAs(User)
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Only guest users are allowed.' })
+    response.assertBodyContains({ message: 'unauthorized access' })
   })
 
   /**

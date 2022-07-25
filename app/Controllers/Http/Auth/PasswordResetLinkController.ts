@@ -25,21 +25,21 @@ export default class PasswordResetLinksController {
 
     const user = <User>await User.findBy('email', email)
 
+    let success = false
+
     try {
-      const mail = await (new SendPasswordResetLink(user)).send()
+      await (new SendPasswordResetLink(user)).send()
 
-      // mail.response
-
-      if (request.accepts(['json'])) {
-        return response.json({
-          success: mail.accepted.length,
-        })
-      }
-
-      response.redirect().toRoute('password.request', {}, { qs: { success: mail.accepted.length } })
+      success = true
     } catch (error) {
-      console.log(error)
+      success = false
     }
+
+    if (request.accepts(['json'])) {
+      return response.json({ success })
+    }
+
+    response.redirect().toRoute('password.request', {}, { qs: { success } })
   }
 
   /**
@@ -62,7 +62,7 @@ export default class PasswordResetLinksController {
 
       messages: {
 
-        'email.required': 'Email address is required to login.',
+        'email.required': 'Email address is required.',
         'email.email': 'Enter a valid email address.',
         'email.exists': 'Email does not exists.',
 
