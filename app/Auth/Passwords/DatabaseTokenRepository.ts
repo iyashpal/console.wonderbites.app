@@ -70,7 +70,6 @@ export default class DatabaseTokenRepository {
    * @return string
    */
   public static async createNewToken () {
-    console.log(uuid())
     return await Hash.use('bcrypt').make(string.generateRandom(32))
   }
 
