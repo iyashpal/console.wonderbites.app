@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
 
-test.group('Api auth logout', (group) => {
+test.group('Auth logout', (group) => {
   /**
    * Setup Global transaction for every test in this group.
    */
