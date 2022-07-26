@@ -46,6 +46,8 @@ export default class AddressesController {
             rules.maxLength(255),
           ]),
 
+          location: schema.object.optional(),
+
           phone: schema.string({ trim: true }),
 
           type: schema.string(),
@@ -119,9 +121,11 @@ export default class AddressesController {
 
             phone: schema.string.optional({ trim: true }),
 
+            location: schema.object.optional(),
+
             type: schema.string.optional(),
 
-            status: schema.number.optional()
+            status: schema.number.optional(),
 
           }),
         })

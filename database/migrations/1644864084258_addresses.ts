@@ -23,6 +23,8 @@ export default class Addresses extends BaseSchema {
 
       table.integer('status').nullable().defaultTo(0)
 
+      table.json('location')
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
