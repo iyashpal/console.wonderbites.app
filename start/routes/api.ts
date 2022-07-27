@@ -5,11 +5,9 @@ Route.group(() => {
    * Routes that allowed only for a logged in user.
    */
   Route.group(() => {
-    Route.get('/users', 'UsersController.show').as('user')
+    Route.resource('users', 'UsersController')
 
-    Route.put('/users', 'UsersController.update').as('user.update')
-
-    Route.resource('addresses', 'Profile/AddressesController')
+    Route.resource('addresses', 'AddressesController')
 
     /**
      * Orders Routes.

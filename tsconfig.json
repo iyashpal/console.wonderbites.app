@@ -13,7 +13,6 @@
       "ES6",
       "DOM"
     ],
-    "strict": false,
     "jsx": "preserve",
     "experimentalDecorators": true,
     "noUnusedParameters": false,

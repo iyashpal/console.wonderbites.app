@@ -19,11 +19,9 @@ export default class Addresses extends BaseSchema {
 
       table.string('phone').notNullable()
 
-      table.string('type').notNullable().comment('Could be \'Home\', \'Office\', \'Other\'')
-
-      table.integer('status').nullable().defaultTo(0)
-
       table.json('location')
+
+      table.string('type').notNullable().comment('Could be \'Home\', \'Office\', \'Other\'')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

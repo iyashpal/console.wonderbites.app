@@ -1,6 +1,7 @@
 import Address from 'App/Models/Address'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import CreateAddressValidator from 'App/Validators/Address/CreateValidator'
+import UpdateAddressValidator from 'App/Validators/Address/UpdateValidator'
 
 export default class AddressesController {
   /**
@@ -26,37 +27,9 @@ export default class AddressesController {
     const user = auth.use('api').user!
 
     try {
-      const validated = await request.validate({
+      const attributes = await request.validate(CreateAddressValidator)
 
-        schema: schema.create({
-
-          first_name: schema.string({ trim: true }, [
-            rules.maxLength(255),
-          ]),
-
-          last_name: schema.string({ trim: true }, [
-            rules.maxLength(255),
-          ]),
-
-          street: schema.string({ trim: true }, [
-            rules.maxLength(255),
-          ]),
-
-          city: schema.string({ trim: true }, [
-            rules.maxLength(255),
-          ]),
-
-          location: schema.object.optional(),
-
-          phone: schema.string({ trim: true }),
-
-          type: schema.string(),
-
-          status: schema.number.optional(),
-        }),
-      })
-
-      const address = await Address.create({ userId: user.id, ...validated })
+      const address = await user.related('addresses').create(attributes)
 
       // Check if the address is default for logged in user.
       if (request.all()?.is_default === true) {
@@ -66,7 +39,8 @@ export default class AddressesController {
       // Send response
       response.status(200).json(address)
     } catch (error) {
-      response.badRequest(error.message)
+      // console.log(error.messages)
+      response.unprocessableEntity(error)
     }
   }
 
@@ -83,7 +57,7 @@ export default class AddressesController {
 
       response.status(200).json(address)
     } catch (error) {
-      response.notFound({ message: 'Page Not Found' })
+      response.notFound({ message: 'Page not found' })
     }
   }
 
@@ -99,36 +73,7 @@ export default class AddressesController {
       const address = await Address.findOrFail(params.id)
 
       try {
-        const validated = await request.validate({
-
-          schema: schema.create({
-
-            first_name: schema.string.optional({ trim: true }, [
-              rules.maxLength(255),
-            ]),
-
-            last_name: schema.string.optional({ trim: true }, [
-              rules.maxLength(255),
-            ]),
-
-            street: schema.string.optional({ trim: true }, [
-              rules.maxLength(255),
-            ]),
-
-            city: schema.string.optional({ trim: true }, [
-              rules.maxLength(255),
-            ]),
-
-            phone: schema.string.optional({ trim: true }),
-
-            location: schema.object.optional(),
-
-            type: schema.string.optional(),
-
-            status: schema.number.optional(),
-
-          }),
-        })
+        const validated = await request.validate(UpdateAddressValidator)
 
         await address.merge(validated).save()
 
@@ -142,7 +87,7 @@ export default class AddressesController {
         response.badRequest(error)
       }
     } catch (error) {
-      response.badRequest(error)
+      response.notFound({ message: 'Page not found' })
     }
   }
 
@@ -151,9 +96,7 @@ export default class AddressesController {
    * 
    * @param param0 HttpContextContract
    */
-  public async destroy ({ auth, response, params }: HttpContextContract) {
-    await auth.use('api').user!
-
+  public async destroy ({ response, params }: HttpContextContract) {
     const address = await Address.findOrFail(params.id)
 
     await address.delete().then(() => {

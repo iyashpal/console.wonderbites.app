@@ -6,7 +6,9 @@ import Wishlist from './Wishlist'
 import Wonderpoint from './Wonderpoint'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Notification from './Notification'
-import { BaseModel, beforeSave, column, computed, hasMany, HasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel, beforeSave, BelongsTo, belongsTo, column, computed, hasMany, HasMany, HasOne, hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -66,8 +68,8 @@ export default class User extends BaseModel {
   /**
    * Relation to default address of user.
    */
-  @hasOne(() => Address)
-  public address: HasOne<typeof Address>
+  @belongsTo(() => Address)
+  public address: BelongsTo<typeof Address>
 
   /**
    * Relation to user addresses.

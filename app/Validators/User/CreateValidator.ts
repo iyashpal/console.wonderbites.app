@@ -30,7 +30,7 @@ export default class CreateValidator {
     last_name: schema.string({ trim: true }),
 
     mobile: schema.string({ trim: true }, [
-      rules.mobile(),
+      // rules.mobile({ strict: true }),
       rules.unique({ table: 'users', column: 'mobile' }),
     ]),
 

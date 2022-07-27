@@ -90,7 +90,7 @@ test.group('API wonderpoints', (group) => {
       { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
-    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeem' } })).guard('api')
+    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeemed' } })).guard('api')
       // @ts-ignore
       .loginAs(user)
 

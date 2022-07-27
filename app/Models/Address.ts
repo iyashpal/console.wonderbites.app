@@ -28,13 +28,10 @@ export default class Address extends BaseModel {
   public phone: string
 
   @column()
-  public location: JSON
+  public location: object
 
   @column()
   public type: string
-
-  @column()
-  public status: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
