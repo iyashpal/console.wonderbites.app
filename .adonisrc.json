@@ -46,7 +46,8 @@
     "@adonisjs/bouncer",
     "@eidellev/inertia-adonisjs",
     "@adonisjs/limiter",
-    "@adonisjs/redis"
+    "@adonisjs/redis",
+    "@adonisjs/route-model-binding/build/providers/RmbProvider"
   ],
   "metaFiles": [
     {

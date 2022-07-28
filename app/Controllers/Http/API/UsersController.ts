@@ -1,4 +1,3 @@
-//import User from 'App/Models/User'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UsersController {
@@ -11,13 +10,7 @@ export default class UsersController {
    * 
    * @param param0 HttpContextContract
    */
-  public async show ({ auth, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
-    await user.load('addresses')
-
-    response.status(200).json(user)
-  }
+  public async show ({ }: HttpContextContract) { }
 
   /**
    * Update the specified resource in storage.
@@ -34,11 +27,24 @@ export default class UsersController {
     }
 
     await user.merge({
-      firstName: request.input('firstName')? request.input('first_name') : user.firstName ,
-      lastName: request.input('lastName')? request.input('last_name') : user.lastName ,
+      firstName: request.input('firstName') ? request.input('first_name') : user.firstName,
+      lastName: request.input('lastName') ? request.input('last_name') : user.lastName,
       imagePath: image ? image!.fileName : user.imagePath,
     }).save().then((user) => response.status(200).json(user))
   }
 
   public async destroy ({ }: HttpContextContract) { }
+
+  /**
+   * Display the authenticated user's data.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async user ({ auth, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    await user.load('addresses')
+
+    response.status(200).json(user)
+  }
 }

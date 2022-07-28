@@ -5,7 +5,8 @@ Route.group(() => {
    * Routes that allowed only for a logged in user.
    */
   Route.group(() => {
-    Route.resource('users', 'UsersController')
+    Route.get('auth/user', 'UsersController.user').as('auth.user')
+    Route.resource('users', 'UsersController').apiOnly().only(['update'])
 
     Route.resource('addresses', 'AddressesController')
 
