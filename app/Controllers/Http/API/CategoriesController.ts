@@ -7,11 +7,16 @@ export default class CategoriesController {
    * 
    * @param param0 HttpContextContract
    */
-  public async index ({ response }: HttpContextContract) {
+  public async index ({ response, request }: HttpContextContract) {
     try {
-      const category = await Category.query().where('type', 'Product').preload('products', (builder) => {
-        builder.preload('media')
-      })
+      const category = await Category.query()
+        .match(
+          [
+            request.input('type'),
+            query => query.where('type', request.input('type'))
+              .preload('products', (builder) => builder.preload('media')),
+          ],
+        )
 
       response.status(200).json(category)
     } catch (error) {
