@@ -5,7 +5,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class WishlistsController {
   /**
    * Show user wishlist.
-   * 
+   *
    * @param param0 HttpContextContract Request payload
    */
   public async show ({ auth, response, request }: HttpContextContract) {
@@ -21,14 +21,14 @@ export default class WishlistsController {
         builder.select('id')
       })
     })
-    await wishlist.load('ingridients')
+    await wishlist.load('ingredients')
 
     response.json(wishlist)
   }
 
   /**
    * Update user wishlist.
-   * 
+   *
    * @param param0 {HttpContextContract} Request payload.
    */
   public async update ({ auth, response, request }: HttpContextContract) {
@@ -50,15 +50,15 @@ export default class WishlistsController {
     }
 
     await wishlist.load('products')
-    await wishlist.load('ingridients')
+    await wishlist.load('ingredients')
 
     response.json(wishlist)
   }
 
   /**
    * Synchronize products with cart.
-   * 
-   * @param request RequestContract 
+   *
+   * @param request RequestContract
    * @param cart Cart
    */
   protected async syncToWishlist (request: RequestContract, wishlist: Wishlist) {
@@ -67,15 +67,15 @@ export default class WishlistsController {
       await wishlist.related('products').sync(request.input('products'), false)
     }
 
-    // Add ingridients to cart
-    if (request.input('ingridients')) {
-      await wishlist.related('ingridients').sync(request.input('ingridients'), false)
+    // Add ingredients to cart
+    if (request.input('ingredients')) {
+      await wishlist.related('ingredients').sync(request.input('ingredients'), false)
     }
   }
 
   /**
    * Remove products from wishlist.
-   * 
+   *
    * @param request RequestContract
    * @param wishlist Wishlist
    */
@@ -86,8 +86,8 @@ export default class WishlistsController {
     }
 
     // Remove products from cart.
-    if (request.input('ingridients')) {
-      await wishlist.related('ingridients').detach(request.input('ingridients'))
+    if (request.input('ingredients')) {
+      await wishlist.related('ingredients').detach(request.input('ingredients'))
     }
   }
 }

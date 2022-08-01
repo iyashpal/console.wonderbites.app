@@ -11,17 +11,12 @@ test.group('Api cart', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  /**
-   * ✔ Request the cart with without login.
-   * ✔ Request status should be OK(200).
-   * ✔ Request response body should contain empty products and ingridients arrays.
-   */
   test('Guest users can access the cart', async ({ client, route, assert }) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
     assert.equal(response.body()?.products.length, 0)
-    assert.equal(response.body()?.ingridients.length, 0)
+    assert.equal(response.body()?.ingredients.length, 0)
   })
 
   /**
@@ -32,7 +27,7 @@ test.group('Api cart', (group) => {
   test('Guest users can add products to their cart', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    let response = await client.post(route('api.carts.update')).json({
+    let response = await client.put(route('api.carts.update')).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -77,7 +72,7 @@ test.group('Api cart', (group) => {
     // pick product from cart list to remove.
     let product = products[0]
 
-    response = await client.post(route('api.carts.update'))
+    response = await client.put(route('api.carts.update'))
       .json({
         action: 'DETACH',
         products: [product.id],
@@ -96,13 +91,13 @@ test.group('Api cart', (group) => {
   /**
    * ✔ Request the cart page.
    * ✔ Request status should be OK(200).
-   * ✔ Request response body should contain empty products and ingridients arrays.
+   * ✔ Request response body should contain empty products and ingredients arrays.
    */
   test('Authenticated user can access the cart', async ({ client, route }) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
-    response.assertBodyContains({ products: [], ingridients: [] })
+    response.assertBodyContains({ products: [], ingredients: [] })
   })
 
   /**
@@ -134,7 +129,7 @@ test.group('Api cart', (group) => {
 
     const product = await ProductFactory.create()
 
-    let response = await client.post(route('api.carts.update')).loginAs(user).json({
+    let response = await client.put(route('api.carts.update')).loginAs(user).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -185,7 +180,7 @@ test.group('Api cart', (group) => {
     // pick product from cart list to remove.
     let product = products[0]
 
-    response = await client.post(route('api.carts.update')).guard('api')
+    response = await client.put(route('api.carts.update')).guard('api')
 
       // @ts-ignore
       .loginAs(user).json({
@@ -212,7 +207,7 @@ test.group('Api cart', (group) => {
   test('Cart product should contain the quantity added by the user.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.carts.update')).json({
+    const response = await client.put(route('api.carts.update')).json({
       action: 'SYNC',
       products: {
         [product.id]: { qty: 5 },
@@ -263,7 +258,7 @@ test.group('Api cart', (group) => {
       ],
     }
 
-    let response = await client.post(route('api.carts.update')).json(postData)
+    let response = await client.put(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -274,7 +269,7 @@ test.group('Api cart', (group) => {
     assertData.products[0].meta.pivot_qty--
 
     // Sending request to cart with decreased
-    response = await client.post(route('api.carts.update')).json(postData)
+    response = await client.put(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -310,7 +305,7 @@ test.group('Api cart', (group) => {
       ],
     }
 
-    let response = await client.post(route('api.carts.update')).json(postData)
+    let response = await client.put(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)
@@ -321,7 +316,7 @@ test.group('Api cart', (group) => {
     assertData.products[0].meta.pivot_qty++
 
     // Sending request to cart with decreased
-    response = await client.post(route('api.carts.update')).json(postData)
+    response = await client.put(route('api.carts.update')).json(postData)
 
     response.assertStatus(200)
     response.assertBodyContains(assertData)

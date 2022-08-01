@@ -1,13 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class IngridentProduct extends BaseSchema {
-  protected tableName = 'ingrident_product'
+export default class IngredientProduct extends BaseSchema {
+  protected tableName = 'ingredient_product'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
 
-      table.bigInteger('ingridient_id').unsigned().references('ingridients.id').onDelete('CASCADE')
+      table.bigInteger('ingredient_id').unsigned().references('ingredients.id').onDelete('CASCADE')
 
       table.bigInteger('product_id').unsigned().references('products.id').onDelete('CASCADE')
 

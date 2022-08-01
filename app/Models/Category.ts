@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import Cuisine from './Cuisine'
 import Product from './Product'
 import OpeningPosition from './OpeningPosition'
+import Ingredient from 'App/Models/Ingredient'
 import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
@@ -27,22 +28,11 @@ export default class Category extends BaseModel {
   @column()
   public status: number
 
-  @belongsTo(() => Category, { foreignKey: 'parent' })
-  public category: BelongsTo<typeof Category>
-
-  @manyToMany(() => Product, {
-    pivotTable: 'category_product',
-  })
-  public products: ManyToMany<typeof Product>
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
-  public cuisines: ManyToMany<typeof Cuisine>
 
   @computed()
   public get isForProduct () {
@@ -60,9 +50,21 @@ export default class Category extends BaseModel {
   }
 
   @computed()
-  public get isForIngridient () {
-    return this.type === 'Ingridient'
+  public get isForIngredient () {
+    return this.type === 'Ingredient'
   }
+
+  @belongsTo(() => Category, { foreignKey: 'parent' })
+  public category: BelongsTo<typeof Category>
+
+  @manyToMany(() => Product, { pivotTable: 'category_product' })
+  public products: ManyToMany<typeof Product>
+
+  @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
+  public cuisines: ManyToMany<typeof Cuisine>
+
+  @manyToMany(() => Ingredient, { pivotTable: 'category_ingredient' })
+  public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Blog, { pivotTable: 'blog_category' })
   public blog: ManyToMany<typeof Blog>
@@ -91,9 +93,9 @@ export default class Category extends BaseModel {
   public static forProduct = scope((query) => query.where('type', 'Product'))
 
   /**
-   * Query scope for ingridient categories.
+   * Query scope for ingredient categories.
    */
-  public static forIngridient = scope((query) => query.where('type', 'Ingridient'))
+  public static forIngredient = scope((query) => query.where('type', 'Ingredient'))
 
   /**
    * Query scope for cuisine categories.

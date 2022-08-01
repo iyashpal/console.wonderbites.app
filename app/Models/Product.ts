@@ -5,7 +5,7 @@ import Order from './Order'
 import { DateTime } from 'luxon'
 import Category from './Category'
 import Wishlist from './Wishlist'
-import Ingridient from './Ingridient'
+import Ingredient from './Ingredient'
 import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 import { BelongsTo, belongsTo, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
@@ -63,8 +63,8 @@ export default class Product extends BaseModel {
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
 
-  @manyToMany(() => Ingridient)
-  public ingridents: ManyToMany<typeof Ingridient>
+  @manyToMany(() => Ingredient)
+  public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Cart)
   public carts: ManyToMany<typeof Cart>
@@ -77,7 +77,7 @@ export default class Product extends BaseModel {
 
   /**
    * Get product default thumbnail based on imagePath column value.
-   * 
+   *
    * @returns {String}
    */
   @computed()

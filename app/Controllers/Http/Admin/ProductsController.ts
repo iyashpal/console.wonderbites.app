@@ -1,7 +1,7 @@
 import Application from '@ioc:Adonis/Core/Application'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Category from 'App/Models/Category'
-import Ingridient from 'App/Models/Ingridient'
+import Ingredient from 'App/Models/Ingredient'
 import Product from 'App/Models/Product'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
@@ -10,7 +10,7 @@ import { DateTime } from 'luxon'
 export default class ProductsController {
   /**
    * Display a listing of resources.
-   * 
+   *
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
@@ -24,7 +24,7 @@ export default class ProductsController {
 
   /**
    * Show the form for creating a new resource.
-   * 
+   *
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
@@ -34,7 +34,7 @@ export default class ProductsController {
 
   /**
    * Store a newly created resource in storage.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async store ({ request, response, session, auth }: HttpContextContract) {
@@ -50,7 +50,7 @@ export default class ProductsController {
 
   /**
    * Display the specified resource.
-   * 
+   *
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
@@ -61,7 +61,7 @@ export default class ProductsController {
 
     await product.load('categories', (query) => query.select('id'))
 
-    const ingridients = await Ingridient.all()
+    const ingridients = await Ingredient.all()
 
     const categories = await Category.query().where('type', 'Product')
 
@@ -70,7 +70,7 @@ export default class ProductsController {
 
   /**
    * Show the form for editing the specified resource.
-   * 
+   *
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
@@ -82,7 +82,7 @@ export default class ProductsController {
 
   /**
    * Update the specified resource in storage.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async update ({ request, response, params, session }: HttpContextContract) {
@@ -100,7 +100,7 @@ export default class ProductsController {
 
   /**
    * Remove the specified resource from storage.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async destroy ({ params: { id }, response, session }: HttpContextContract) {

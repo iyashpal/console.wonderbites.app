@@ -7,7 +7,7 @@ import Product from './Product'
 import User from './User'
 import Wishlist from './Wishlist'
 
-export default class Ingridient extends BaseModel {
+export default class Ingredient extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -58,6 +58,6 @@ export default class Ingridient extends BaseModel {
 
   @computed()
   public image () {
-    return '/images/placeholders/ingridient.png'
+    return '/images/placeholders/ingredient.png'
   }
 }

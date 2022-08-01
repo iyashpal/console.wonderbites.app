@@ -9,7 +9,7 @@ export default class CategoryIngrident extends BaseSchema {
 
       table.bigInteger('category_id').unsigned().references('categories.id').onDelete('CASCADE')
 
-      table.bigInteger('ingridient_id').unsigned().references('ingridients.id').onDelete('CASCADE')
+      table.bigInteger('ingridient_id').unsigned().references('ingredients.id').onDelete('CASCADE')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

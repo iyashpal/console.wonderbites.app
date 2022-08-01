@@ -45,10 +45,10 @@ test.group('Api wishlist', (group) => {
 
     wishlist.related('products').attach(products.map(({ id }) => id))
 
-    const response = await client.get(route('api.wishlists.show')).guard('api')
+    const response = await client.get(route('api.wishlists.show'))
 
       // @ts-ignore
-      .loginAs(user)
+      .guard('api').loginAs(user)
 
     response.assertStatus(200)
 
@@ -69,7 +69,7 @@ test.group('Api wishlist', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.wishlists.update')).guard('api')
+    const response = await client.put(route('api.wishlists.update')).guard('api')
 
       // @ts-ignore
       .loginAs(user)
@@ -99,7 +99,7 @@ test.group('Api wishlist', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const response = await client.post(route('api.wishlists.update')).guard('api')
+    const response = await client.put(route('api.wishlists.update')).guard('api')
 
       // @ts-ignore
       .loginAs(user)
@@ -126,7 +126,7 @@ test.group('Api wishlist', (group) => {
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
 
-    const response = await client.post(route('api.wishlists.update')).guard('api')
+    const response = await client.put(route('api.wishlists.update')).guard('api')
 
       // @ts-ignore
       .loginAs(user)
@@ -163,7 +163,7 @@ test.group('Api wishlist', (group) => {
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
 
-    const response = await client.post(route('api.wishlists.update')).guard('api')
+    const response = await client.put(route('api.wishlists.update')).guard('api')
 
       // @ts-ignore
       .loginAs(user)

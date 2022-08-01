@@ -2,14 +2,14 @@
 @set('title', "Ingridients")
 
 @section('actions')
-<a href="{{ route('ingridients.create') }}" class="tw:btn tw:btn-secondary">
+<a href="{{ route('ingredients.create') }}" class="tw:btn tw:btn-secondary">
     <icon name="add-circle" class="w-4 h-4 mr-1"></icon> Add New
 </a>
 @end
 
 @section('content')
 
-@!alerts.danger({show: flashMessages.get('ingridient_deleted'), icon: 'cancel', message: "Ingridient successfully deleted!", className: "mb-4"})
+@!alerts.danger({show: flashMessages.get('ingridient_deleted'), icon: 'cancel', message: "Ingredient successfully deleted!", className: "mb-4"})
 
 <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -27,33 +27,33 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @each((ingridient, index) in ingridients)
+                        @each((ingredient, index) in ingredients)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="{{ route('ingridients.show', {id: ingridient.id}) }}" class="flex items-center">
+                                <a href="{{ route('ingredients.show', {id: ingredient.id}) }}" class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full object-cover" src="{{ `/uploads/${ingridient.imagePath}` }}" alt="{{ ingridient.name }}">
+                                        <img class="h-10 w-10 rounded-full object-cover" src="{{ `/uploads/${ingredient.imagePath}` }}" alt="{{ ingredient.name }}">
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ ingridient.name }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ ingredient.name }}</div>
                                     </div>
                                 </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="{{ route('ingridients.show', {id: ingridient.id}) }}" class="text-sm text-gray-900">{{ ingridient.price }} L</a>
+                                <a href="{{ route('ingredients.show', {id: ingredient.id}) }}" class="text-sm text-gray-900">{{ ingredient.price }} L</a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if(ingridient.status === 1)
+                                @if(ingredient.status === 1)
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                                 @else
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Disabled</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap flex items-center text-sm font-medium">
-                                <a href="{{ route('ingridients.edit', {id: ingridient.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
+                                <a href="{{ route('ingredients.edit', {id: ingredient.id}) }}" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block">
                                     <icon name="edit" class="w-5 h-5"></icon>
                                 </a>
-                                <form action="{{ route('ingridients.destroy', {id: ingridient.id}, {qs: {_method: 'delete'}}) }}" method="post">
+                                <form action="{{ route('ingredients.destroy', {id: ingredient.id}, {qs: {_method: 'delete'}}) }}" method="post">
                                     {{ csrfField() }}
                                     <button type="submit" class="text-red-600 hover:text-red-900">
                                         <icon name="delete" class="w-5 h-5"></icon>
@@ -63,7 +63,7 @@
                         </tr>
                         @endeach
 
-                        @if(ingridients.total === 0)
+                        @if(ingredients.total === 0)
                         <tr>
                             <td colspan="5" class="px-6 py-4 whitespace-nowrap">
                                 <v-alert name="warning">
@@ -74,7 +74,7 @@
                         @endif
                     </tbody>
                 </table>
-                @!pagination.simple({paginator: ingridients})
+                @!pagination.simple({paginator: ingredients})
             </div>
         </div>
     </div>

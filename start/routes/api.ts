@@ -5,57 +5,41 @@ Route.group(() => {
    * Routes that allowed only for a logged in user.
    */
   Route.group(() => {
+    // Get the authenticated user.
     Route.get('auth/user', 'UsersController.user').as('auth.user')
-    Route.resource('users', 'UsersController').apiOnly().only(['update'])
 
+    // Endpoints to user operations.
+    Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])
+
+    // Resources endpoints to user addresses.
     Route.resource('addresses', 'AddressesController')
 
-    /**
-     * Orders Routes.
-     */
-    Route.group(() => {
-      Route.post('orders', 'OrdersController.store').as('store')
-    }).as('orders')
+    // Endpoint to create user orders.
+    Route.resource('orders', 'OrdersController').apiOnly().only(['store'])
 
-    /**
-     * Wishlist Routes
-     */
-    Route.group(() => {
-      Route.get('wishlists', 'WishlistsController.show').as('show')
-      Route.post('wishlists', 'WishlistsController.update').as('update')
-    }).as('wishlists')
+    // Endpoint to create wishlists.
+    Route.get('wishlists', 'WishlistsController.show').as('wishlists.show')
+    Route.put('wishlists', 'WishlistsController.update').as('wishlists.update')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
-
+    // Endpoints to Wonderpoints routes
     Route.group(() => {
       Route.get('wonderpoints', 'WonderpointsController.index').as('index')
       Route.post('wonderpoints', 'WonderpointsController.store').as('store')
       Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
     }).as('wonderpoints')
+
+    // Cart coupons endpoints.
+    Route.resource('coupons', 'CouponsController').apiOnly()
   }).middleware('api.auth')
 
   /**
    * Routes that allowed for everyone (guest|logged in) users.
    */
   Route.group(() => {
-    /**
-     * Cart Routes
-     */
-    Route.group(() => {
-      Route.get('cart', 'CartsController.show').as('show')
-      Route.post('cart', 'CartsController.update').as('update')
-    }).as('carts')
-
-    /**
-     * Coupon Routes
-     */
-    Route.group(() => {
-      Route.get('coupons', 'CouponsController.index').as('index')
-      Route.post('coupons', 'CouponsController.store').as('store')
-      Route.get('coupons/:id', 'CouponsController.show').as('show')
-      Route.put('coupons/:id', 'CouponsController.update').as('update')
-      Route.delete('coupons/:id', 'CouponsController.destroy').as('destroy')
-    }).as('coupons').middleware('api.auth')
+    // Endpoints for cart.
+    Route.get('cart', 'CartsController.show').as('carts.show')
+    Route.put('cart', 'CartsController.update').as('carts.update')
 
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
 
@@ -70,7 +54,7 @@ Route.group(() => {
 
     //Route.resource('blogs', 'BlogsController').as('blogs')
 
-    Route.resource('categories', 'CategoriesController').as('categories')
+    Route.resource('categories', 'CategoriesController')
 
     Route.resource('testimonials', 'TestimonialsController').as('testimonials')
 

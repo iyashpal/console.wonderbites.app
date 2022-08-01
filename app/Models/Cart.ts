@@ -2,7 +2,7 @@ import User from './User'
 import Coupon from './Coupon'
 import Product from './Product'
 import { DateTime } from 'luxon'
-import Ingridient from './Ingridient'
+import Ingredient from './Ingredient'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
@@ -33,8 +33,8 @@ export default class Cart extends BaseModel {
   })
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Ingridient)
-  public ingridients: ManyToMany<typeof Ingridient>
+  @manyToMany(() => Ingredient)
+  public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Coupon)
   public coupons: ManyToMany<typeof Coupon>

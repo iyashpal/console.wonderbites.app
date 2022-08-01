@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class CartIngridient extends BaseSchema {
-  protected tableName = 'cart_ingridient'
+export default class CartIngredient extends BaseSchema {
+  protected tableName = 'cart_ingredient'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
@@ -9,7 +9,7 @@ export default class CartIngridient extends BaseSchema {
 
       table.bigInteger('cart_id').unsigned().notNullable().references('carts.id').onDelete('CASCADE')
 
-      table.bigInteger('ingridient_id').unsigned().notNullable().references('ingridients.id').onDelete('CASCADE')
+      table.bigInteger('ingredient_id').unsigned().notNullable().references('ingredients.id').onDelete('CASCADE')
 
       table.bigInteger('cart_product_id').unsigned().notNullable().references('cart_product.id').onDelete('CASCADE')
 

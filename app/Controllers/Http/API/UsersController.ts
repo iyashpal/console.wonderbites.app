@@ -1,20 +1,23 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UsersController {
-  public async index ({ }: HttpContextContract) { }
+  public async index ({ }: HttpContextContract) {
+  }
 
-  public async store ({ }: HttpContextContract) { }
+  public async store ({ }: HttpContextContract) {
+  }
 
   /**
    * Display the specified resource.
-   * 
+   *
    * @param param0 HttpContextContract
    */
-  public async show ({ }: HttpContextContract) { }
+  public async show ({ }: HttpContextContract) {
+  }
 
   /**
    * Update the specified resource in storage.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async update ({ auth, request, response }: HttpContextContract) {
@@ -33,11 +36,12 @@ export default class UsersController {
     }).save().then((user) => response.status(200).json(user))
   }
 
-  public async destroy ({ }: HttpContextContract) { }
+  public async destroy ({ }: HttpContextContract) {
+  }
 
   /**
    * Display the authenticated user's data.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async user ({ auth, response }: HttpContextContract) {

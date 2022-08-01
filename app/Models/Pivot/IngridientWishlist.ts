@@ -1,6 +1,6 @@
 import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import Ingridient from '../Ingridient'
+import Ingredient from '../Ingredient'
 import Wishlist from '../Wishlist'
 
 export default class IngridientWishlist extends BaseModel {
@@ -10,8 +10,8 @@ export default class IngridientWishlist extends BaseModel {
   @column()
   public ingridientId: number
 
-  @belongsTo(() => Ingridient)
-  public ingridient: BelongsTo<typeof Ingridient>
+  @belongsTo(() => Ingredient)
+  public ingridient: BelongsTo<typeof Ingredient>
 
   @column()
   public wishlistId: number

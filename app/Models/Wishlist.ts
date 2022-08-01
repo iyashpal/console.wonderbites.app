@@ -1,7 +1,7 @@
 import User from './User'
 import Product from './Product'
 import { DateTime } from 'luxon'
-import Ingridient from './Ingridient'
+import Ingredient from './Ingredient'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 export default class Wishlist extends BaseModel {
   @column({ isPrimary: true })
@@ -22,8 +22,8 @@ export default class Wishlist extends BaseModel {
   })
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Ingridient)
-  public ingridients: ManyToMany<typeof Ingridient>
+  @manyToMany(() => Ingredient)
+  public ingredients: ManyToMany<typeof Ingredient>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

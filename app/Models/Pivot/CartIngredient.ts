@@ -1,9 +1,9 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Cart from '../Cart'
-import Ingridient from '../Ingridient'
+import Ingredient from '../Ingredient'
 
-export default class CartIngridient extends BaseModel {
+export default class CartIngredient extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -16,8 +16,8 @@ export default class CartIngridient extends BaseModel {
   @column()
   public ingridientId: number
 
-  @belongsTo(() => Ingridient)
-  public ingridient: BelongsTo<typeof Ingridient>
+  @belongsTo(() => Ingredient)
+  public ingridient: BelongsTo<typeof Ingredient>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
