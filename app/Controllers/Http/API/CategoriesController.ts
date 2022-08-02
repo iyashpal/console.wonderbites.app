@@ -31,32 +31,7 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async store ({ }: HttpContextContract) {
-    // try {
-    //   const validate = await request.validate({
-
-    //     schema: schema.create({
-
-    //       parent: schema.number.optional(),
-
-    //       name: schema.string({ trim: true }, [rules.maxLength(255)]),
-
-    //       description: schema.string({ trim: true }, [rules.maxLength(255)]),
-
-    //       image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
-
-    //       status: schema.number.optional(),
-
-    //     }),
-    //   })
-
-    //   const category = await Category.create(validate)
-
-    //   response.status(200).json(category)
-    // } catch (error) {
-    //   response.badRequest(error.messages)
-    // }
-  }
+  public async store ({ }: HttpContextContract) { }
 
   /**
    * Display the specified resource.
@@ -67,11 +42,7 @@ export default class CategoriesController {
     try {
       const category = await Category.findOrFail(id)
 
-      await category.load('products', async (builder) => {
-        await builder.preload('media', media => {
-          media.select('*')
-        })
-      })
+      await category.load('products', (builder) => builder.preload('media'))
 
       response.status(200).json(category)
     } catch (error) {

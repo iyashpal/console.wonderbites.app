@@ -8,7 +8,7 @@ test.group('Api category show', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('All users can see the list of categories.', async ({ client, route, assert }) => {
+  test('[Index] All users can see the list of categories.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
 
     const categories = await CategoryFactory.createMany(5)
@@ -30,16 +30,16 @@ test.group('Api category show', (group) => {
     authRequest.assert?.equal(5, guestRequest.body()?.length)
 
     assert.containsSubset(authRequest.body(), categories.map(({ id, type, name }) => ({ id, type, name })))
-  })
+  }).tags(['@category'])
 
-  test('Category list should contain the list of products under it.', async ({ client, route }) => {
+  test('[Index] it should contain the list of products under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
     const category = await CategoryFactory.create()
 
     await category.related('products').attach([product.id])
 
-    const request = await client.get(route('api.categories.index'))
+    const request = await client.get(route('api.categories.index', {}, { qs: { type: 'product' } }))
 
     request.assertStatus(200)
 
@@ -53,9 +53,9 @@ test.group('Api category show', (group) => {
         },
       ],
     }])
-  })
+  }).tags(['@category'])
 
-  test('Category products list should contain the list of media under it.', async ({ client, route }) => {
+  test('[Index] products list should contain the list of media under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
     const category = await CategoryFactory.create()
     const media = await MediaFactory.createMany(5)
@@ -64,7 +64,7 @@ test.group('Api category show', (group) => {
 
     await category.related('products').attach([product.id])
 
-    const request = await client.get(route('api.categories.index'))
+    const request = await client.get(route('api.categories.index', {}, { qs: { type: 'product' } }))
 
     request.assertStatus(200)
 
@@ -81,5 +81,7 @@ test.group('Api category show', (group) => {
         },
       ],
     }])
-  })
+  }).tags(['@category'])
+
+  test('')
 })

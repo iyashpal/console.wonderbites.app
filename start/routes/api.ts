@@ -22,15 +22,10 @@ Route.group(() => {
     Route.put('wishlists', 'WishlistsController.update').as('wishlists.update')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
-    // Endpoints to Wonderpoints routes
-    Route.group(() => {
-      Route.get('wonderpoints', 'WonderpointsController.index').as('index')
-      Route.post('wonderpoints', 'WonderpointsController.store').as('store')
-      Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('avail')
-    }).as('wonderpoints')
 
-    // Cart coupons endpoints.
-    Route.resource('coupons', 'CouponsController').apiOnly()
+    // Endpoints to Wonderpoints
+    Route.resource('wonderpoints', 'WonderpointsController').apiOnly().only(['index', 'store'])
+    Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('wonderpoints.avail')
   }).middleware('api.auth')
 
   /**
@@ -41,7 +36,13 @@ Route.group(() => {
     Route.get('cart', 'CartsController.show').as('carts.show')
     Route.put('cart', 'CartsController.update').as('carts.update')
 
+    // Apply coupon to a checkout
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
+
+    // Cart coupons endpoints.
+    Route.resource('coupons', 'CouponsController').apiOnly().middleware({ '*': ['api.auth'] })
+
+    Route.resource('categories', 'CategoriesController')
 
     Route.resource('cuisines', 'CuisinesController')
 
@@ -50,11 +51,7 @@ Route.group(() => {
 
     Route.get('blogs/:slug', 'BlogsController.showBlogBySlug').as('blogslug')
 
-    Route.resource('categoryblog', 'CategoryBlogController').as('categoryblog')
-
     //Route.resource('blogs', 'BlogsController').as('blogs')
-
-    Route.resource('categories', 'CategoriesController')
 
     Route.resource('testimonials', 'TestimonialsController').as('testimonials')
 
