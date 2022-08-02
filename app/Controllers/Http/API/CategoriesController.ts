@@ -73,14 +73,6 @@ export default class CategoriesController {
     }
   }
 
-  public async categoryblog ({ response }: HttpContextContract) {
-    const category = await Category.query().where('type', 'Blog')
-    //category.load('blogs')
-    //let category_blogs = [];
-
-    response.status(200).json(category)
-  }
-
   public async update ({ }: HttpContextContract) {
   }
 
