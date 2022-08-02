@@ -1,5 +1,6 @@
 import Category from 'App/Models/Category'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import ProductFactory from './ProductFactory'
 
 export default Factory.define(Category, ({ faker }) => {
   return {
@@ -9,4 +10,6 @@ export default Factory.define(Category, ({ faker }) => {
     parent: 0,
     status: 1,
   }
-}).build()
+})
+  .relation('products', () => ProductFactory)
+  .build()
