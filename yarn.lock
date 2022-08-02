@@ -1379,10 +1379,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@eidellev/inertia-adonisjs@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@eidellev/inertia-adonisjs/-/inertia-adonisjs-6.3.0.tgz#6c29a7e83b09c7b3b89cb72da587a4c5ce560e41"
-  integrity sha512-8lDl2N2eZKv7EvwCt35b+984ULnOsBVztwqYdS1IdO+k8t6ghELkwmqKHdOzwQSEm+APQ47OUowBvWyT/8NE5g==
+"@eidellev/inertia-adonisjs@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@eidellev/inertia-adonisjs/-/inertia-adonisjs-7.0.0.tgz#647c54bfc6d37cf45e32be1c60d1ce2c960a163f"
+  integrity sha512-Vq6Pvb6pCcGx1rmOZ14CBgW09L/I6wXdrWknkObAsYNG9z4vrKs8H/uBsaYSA1fujiVhgLJ4SfoWp/tML7CRhA==
   dependencies:
     "@types/md5" "^2.3.2"
     html-entities "^2.3.3"
