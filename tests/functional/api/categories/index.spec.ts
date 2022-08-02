@@ -2,13 +2,13 @@ import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { CategoryFactory, MediaFactory, ProductFactory, UserFactory } from 'Database/factories'
 
-test.group('Api category show', (group) => {
+test.group('API [categories.index]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('[Index] All users can see the list of categories.', async ({ client, route, assert }) => {
+  test('all users can see the list of categories.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
 
     const categories = await CategoryFactory.createMany(5)
@@ -30,9 +30,9 @@ test.group('Api category show', (group) => {
     authRequest.assert?.equal(5, guestRequest.body()?.length)
 
     assert.containsSubset(authRequest.body(), categories.map(({ id, type, name }) => ({ id, type, name })))
-  }).tags(['@category'])
+  }).tags(['@categories', '@categories.index'])
 
-  test('[Index] it should contain the list of products under it.', async ({ client, route }) => {
+  test('it should contain the list of products under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
     const category = await CategoryFactory.create()
@@ -53,9 +53,9 @@ test.group('Api category show', (group) => {
         },
       ],
     }])
-  }).tags(['@category'])
+  }).tags(['@categories', '@categories.index'])
 
-  test('[Index] it should contain the list of media under products.', async ({ client, route }) => {
+  test('it should contain the list of media under products.', async ({ client, route }) => {
     const product = await ProductFactory.create()
     const category = await CategoryFactory.create()
     const media = await MediaFactory.createMany(5)
@@ -83,9 +83,9 @@ test.group('Api category show', (group) => {
         },
       ],
     }])
-  }).tags(['@category'])
+  }).tags(['@categories', '@categories.index'])
 
-  test('[Index] it should list only given type of categories.', async ({ client, route, assert }) => {
+  test('it should list only given type of categories.', async ({ client, route, assert }) => {
     await CategoryFactory.merge([
       { type: 'Product' },
       { type: 'Product' },
@@ -122,5 +122,5 @@ test.group('Api category show', (group) => {
     blogCategories.assertStatus(200)
 
     assert.equal(1, blogCategories.body().length)
-  }).tags(['@category'])
+  }).tags(['@categories', '@categories.index'])
 })

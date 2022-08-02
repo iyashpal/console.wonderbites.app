@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { ProductFactory, UserFactory, WishlistFactory } from 'Database/factories'
 
-test.group('Api product', (group) => {
+test.group('API [products.show]', (group) => {
   /**
    * 🚀 Setup Global transaction for every test in this group.
    */
@@ -24,6 +24,5 @@ test.group('Api product', (group) => {
       .loginAs(user)
 
     response.assertBodyContains({ name: product.name, description: product.description, price: product.price })
-    // response.dumpBody()
-  })
+  }).tags(['@products', '@products.show'])
 })

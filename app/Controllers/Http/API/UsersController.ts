@@ -44,7 +44,7 @@ export default class UsersController {
    *
    * @param param0 HttpContextContract
    */
-  public async user ({ auth, response }: HttpContextContract) {
+  public async auth ({ auth, response }: HttpContextContract) {
     const user = auth.use('api').user!
 
     await user.load('addresses')

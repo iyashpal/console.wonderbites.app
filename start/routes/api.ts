@@ -6,7 +6,7 @@ Route.group(() => {
    */
   Route.group(() => {
     // Get the authenticated user.
-    Route.get('auth/user', 'UsersController.user').as('auth.user')
+    Route.get('users/auth', 'UsersController.auth').as('users.auth')
 
     // Endpoints to user operations.
     Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])

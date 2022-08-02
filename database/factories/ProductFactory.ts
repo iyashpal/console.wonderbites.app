@@ -1,6 +1,7 @@
 import UserFactory from './UserFactory'
 import Product from 'App/Models/Product'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import MediaFactory from './MediaFactory'
 
 export default Factory.define(Product, ({ faker }) => ({
   name: faker.unique.name,
@@ -11,4 +12,5 @@ export default Factory.define(Product, ({ faker }) => ({
   status: 1,
 }))
   .relation('user', () => UserFactory)
+  .relation('media', () => MediaFactory)
   .build()
