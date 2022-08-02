@@ -61,11 +61,17 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ response, params: { id } }: HttpContextContract) {
+  public async show ({ response, params: { id }, request }: HttpContextContract) {
     try {
       const category = await Category.findOrFail(id)
 
-      await category.load('products', (builder) => builder.preload('media'))
+      // Load products when endpoint contains with attribute.
+      if (request.input('with', []).includes('products')) {
+        await category.load('products', (builder) => builder.match([
+          request.input('with', []).includes('products.media'),
+          query => query.preload('media'),
+        ]))
+      }
 
       response.status(200).json(category)
     } catch (error) {
