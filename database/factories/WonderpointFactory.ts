@@ -1,6 +1,6 @@
 import Wonderpoint from 'App/Models/Wonderpoint'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import UserFactory from './UserFactory'
+import { UserFactory } from '.'
 
 export default Factory.define(Wonderpoint, ({ faker }) => {
   return {

@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class CategoryIngrident extends BaseSchema {
-  protected tableName = 'category_ingrident'
+export default class CategoryIngredient extends BaseSchema {
+  protected tableName = 'category_ingredient'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
@@ -9,7 +9,7 @@ export default class CategoryIngrident extends BaseSchema {
 
       table.bigInteger('category_id').unsigned().references('categories.id').onDelete('CASCADE')
 
-      table.bigInteger('ingridient_id').unsigned().references('ingredients.id').onDelete('CASCADE')
+      table.bigInteger('ingredient_id').unsigned().references('ingredients.id').onDelete('CASCADE')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

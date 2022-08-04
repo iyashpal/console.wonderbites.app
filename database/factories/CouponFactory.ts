@@ -1,6 +1,7 @@
-import Factory from '@ioc:Adonis/Lucid/Factory'
-import Coupon from 'App/Models/Coupon'
+import { CartFactory } from '.'
 import { DateTime } from 'luxon'
+import Coupon from 'App/Models/Coupon'
+import Factory from '@ioc:Adonis/Lucid/Factory'
 
 export default Factory.define(Coupon, ({ faker }) => {
   return {
@@ -12,4 +13,6 @@ export default Factory.define(Coupon, ({ faker }) => {
     started_at: DateTime.now(),
     expired_at: DateTime.now().endOf('month'),
   }
-}).build()
+})
+  .relation('carts', () => CartFactory)
+  .build()

@@ -1,11 +1,6 @@
-import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import Cart from './Cart'
-import Category from './Category'
-import Order from './Order'
-import Product from './Product'
-import User from './User'
-import Wishlist from './Wishlist'
+import { Cart, User, Order, Product, Wishlist, Category } from '.'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Ingredient extends BaseModel {
   @column({ isPrimary: true })

@@ -1,7 +1,6 @@
 import Order from 'App/Models/Order'
-import UserFactory from './UserFactory'
-import ProductFactory from './ProductFactory'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import { ProductFactory, UserFactory } from '.'
 
 export default Factory.define(Order, ({ faker }) => ({
   payment_method: 'Cash',

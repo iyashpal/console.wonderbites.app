@@ -1,11 +1,10 @@
-import UserFactory from './UserFactory'
 import Product from 'App/Models/Product'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import MediaFactory from './MediaFactory'
+import { IngredientFactory, MediaFactory, UserFactory } from '.'
 
 export default Factory.define(Product, ({ faker }) => ({
-  name: faker.unique.name,
-  description: faker.lorem.sentences(6),
+  name: faker.commerce.productName(),
+  description: faker.commerce.productDescription(),
   sku: faker.datatype.number({ min: 10000, max: 100000 }).toString(),
   calories: faker.datatype.number({ min: 0, max: 1000 }).toString(),
   price: faker.datatype.number({ min: 0, max: 1500 }).toString(),
@@ -13,4 +12,5 @@ export default Factory.define(Product, ({ faker }) => ({
 }))
   .relation('user', () => UserFactory)
   .relation('media', () => MediaFactory)
+  .relation('ingredients', () => IngredientFactory)
   .build()

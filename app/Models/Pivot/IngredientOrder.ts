@@ -3,15 +3,15 @@ import { DateTime } from 'luxon'
 import Ingredient from '../Ingredient'
 import Order from '../Order'
 
-export default class IngridentOrder extends BaseModel {
+export default class IngredientOrder extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public ingridentId: number
+  public ingredientId: number
 
   @belongsTo(() => Ingredient)
-  public ingridient: BelongsTo<typeof Ingredient>
+  public ingredient: BelongsTo<typeof Ingredient>
 
   @column()
   public orderId: number

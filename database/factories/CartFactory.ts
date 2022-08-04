@@ -1,5 +1,6 @@
 import Cart from 'App/Models/Cart'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import { CouponFactory, IngredientFactory, ProductFactory, UserFactory } from '.'
 
 export default Factory.define(Cart, ({ faker }) => {
   return {
@@ -7,4 +8,9 @@ export default Factory.define(Cart, ({ faker }) => {
     ipAddress: faker.internet.ip(),
     status: 1,
   }
-}).build()
+})
+  .relation('user', () => UserFactory)
+  .relation('coupons', () => CouponFactory)
+  .relation('products', () => ProductFactory)
+  .relation('ingredients', () => IngredientFactory)
+  .build()
