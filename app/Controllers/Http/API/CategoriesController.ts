@@ -10,15 +10,27 @@ export default class CategoriesController {
   public async index ({ response, request }: HttpContextContract) {
     try {
       // Nested conditional query to load the categories data.
-      const queryOnRequestInput = (query) => query.match([
-        // Load products if it is requested in query string.
-        request.input('with', []).includes('category.products'),
-        query => query.preload('products', (builder) => builder.match([
-          // Load product media if it is requested in query string.
-          request.input('with', []).includes('category.products.media'),
-          query => query.preload('media'),
-        ])),
-      ])
+      const queryOnRequestInput = (query) => query.match(
+        [
+          // Load products if it is requested in query string.
+          request.input('with', []).includes('category.products'),
+          query => query.preload('products', (builder) => builder.match([
+            // Load product media if it is requested in query string.
+            request.input('with', []).includes('category.products.media'),
+            query => query.preload('media'),
+          ])),
+        ],
+        [
+          // Load ingredients if it is requested in query string.
+          request.input('with', []).includes('category.ingredients'),
+          query => query.preload('ingredients'),
+        ],
+        [
+          // Load cuisines if it is requested in query string.
+          request.input('with', []).includes('category.cuisines'),
+          query => query.preload('cuisines'),
+        ],
+      )
 
       const category = await Category.query().match(
         [

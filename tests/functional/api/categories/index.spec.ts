@@ -1,6 +1,8 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { CategoryFactory, MediaFactory, ProductFactory, UserFactory } from 'Database/factories'
+import {
+  CategoryFactory, CuisineFactory, IngredientFactory, MediaFactory, ProductFactory, UserFactory,
+} from 'Database/factories'
 
 test.group('API [categories.index]', (group) => {
   group.each.setup(async () => {
@@ -122,5 +124,51 @@ test.group('API [categories.index]', (group) => {
     blogCategories.assertStatus(200)
 
     assert.equal(1, blogCategories.body().length)
+  }).tags(['@categories', '@categories.index'])
+
+  test('it should contain the list of ingredients under it', async ({ client, route }) => {
+    const ingredient = await IngredientFactory.create()
+
+    const category = await CategoryFactory.create()
+
+    await category.related('ingredients').attach([ingredient.id])
+
+    const request = await client.get(route('api.categories.index', {}, { qs: { with: ['category.ingredients'] } }))
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      ingredients: [
+        {
+          id: ingredient.id,
+          name: ingredient.name,
+        },
+      ],
+    }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it should contain the list of cuisines under it', async ({ client, route }) => {
+    const cuisine = await CuisineFactory.create()
+
+    const category = await CategoryFactory.create()
+
+    await category.related('cuisines').attach([cuisine.id])
+
+    const request = await client.get(route('api.categories.index', {}, { qs: { with: ['category.cuisines'] } }))
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      cuisines: [
+        {
+          id: cuisine.id,
+          name: cuisine.name,
+        },
+      ],
+    }])
   }).tags(['@categories', '@categories.index'])
 })
