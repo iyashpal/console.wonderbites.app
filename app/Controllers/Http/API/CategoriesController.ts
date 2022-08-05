@@ -85,6 +85,16 @@ export default class CategoriesController {
         ]))
       }
 
+      // Load ingredients when endpoint contains with attribute.
+      if (request.input('with', []).includes('ingredients')) {
+        await category.load('ingredients')
+      }
+
+      // Load cuisines when endpoint contains with attribute.
+      if (request.input('with', []).includes('cuisines')) {
+        await category.load('cuisines')
+      }
+
       response.status(200).json(category)
     } catch (error) {
       response.notFound({ message: 'Category Not Found' })
