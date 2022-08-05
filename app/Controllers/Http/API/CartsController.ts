@@ -55,9 +55,9 @@ export default class CartsController {
       await this.detachFromCart(request, cart)
     }
 
-    await cart.load('products', (builder) => builder.preload('media'))
-
     await cart.load('ingredients')
+
+    await cart.load('products', (builder) => builder.preload('media'))
 
     response.json(cart)
   }

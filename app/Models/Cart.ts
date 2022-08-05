@@ -28,14 +28,20 @@ export default class Cart extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Product, {
-    pivotColumns: ['qty'],
+    pivotColumns: ['id', 'qty'],
     pivotTimestamps: true,
   })
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Ingredient)
+  @manyToMany(() => Ingredient, {
+    pivotColumns: ['id', 'qty'],
+    pivotTimestamps: true,
+  })
   public ingredients: ManyToMany<typeof Ingredient>
 
-  @manyToMany(() => Coupon)
+  @manyToMany(() => Coupon, {
+    pivotColumns: ['id', 'qty'],
+    pivotTimestamps: true,
+  })
   public coupons: ManyToMany<typeof Coupon>
 }

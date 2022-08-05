@@ -1,6 +1,7 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { CartFactory, ProductFactory, UserFactory } from 'Database/factories'
+import { CartFactory, IngredientFactory, ProductFactory, UserFactory } from 'Database/factories'
+import { CartProduct } from 'App/Models/Pivot'
 
 test.group('API [carts.update]', (group) => {
   /**
@@ -237,5 +238,86 @@ test.group('API [carts.update]', (group) => {
     response.assertStatus(200)
     response.assertBodyContains(assertData)
     assert.equal(response.body()?.products.length, 1)
+  }).tags(['@carts', '@carts.update'])
+
+  test('It can add ingredients to cart.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('cart').create()
+
+    const product = await ProductFactory.create()
+
+    const ingredient = await IngredientFactory.create()
+
+    await user.cart.related('products').attach([product.id])
+
+    const CART_PRODUCT = await CartProduct.query()
+      .where('cart_id', user.cart.id)
+      .where('product_id', product.id).first()
+
+    const request = await client.put(route('api.carts.update'))
+      // @ts-ignore
+      .guard('api').loginAs(user).json({
+        action: 'SYNC',
+        ingredients: {
+          [ingredient.id]: { cart_product_id: CART_PRODUCT?.id },
+        },
+      })
+
+    const { products, ingredients } = request.body()
+
+    request.assertStatus(200)
+
+    request.assertBodyContains({
+      products: [{ id: product.id, name: product.name }],
+      ingredients: [{ id: ingredient.id, name: ingredient.name }],
+    })
+
+    assert.equal(1, products.length)
+    assert.equal(1, ingredients.length)
+  }).tags(['@carts', '@carts.update'])
+
+  test('It can remove products ingredients on removal of product from cart.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('cart').create()
+
+    const product = await ProductFactory.create()
+
+    const ingredient = await IngredientFactory.create()
+
+    await user.cart.related('products').attach([product.id])
+
+    const CART_PRODUCT = await CartProduct.query()
+      .where('cart_id', user.cart.id)
+      .where('product_id', product.id).first()
+
+    const request = await client.put(route('api.carts.update'))
+      // @ts-ignore
+      .guard('api').loginAs(user).json({
+        action: 'SYNC',
+        ingredients: {
+          [ingredient.id]: { cart_product_id: CART_PRODUCT?.id },
+        },
+      })
+
+    const { products, ingredients } = request.body()
+
+    request.assertStatus(200)
+
+    request.assertBodyContains({
+      products: [{ id: product.id, name: product.name }],
+      ingredients: [{ id: ingredient.id, name: ingredient.name }],
+    })
+
+    assert.equal(1, products.length)
+    assert.equal(1, ingredients.length)
+
+    const detachData = {
+      action: 'DETACH',
+      products: [products.id],
+    }
+    const removeRequest = await client.put(route('api.carts.update')).json(detachData)
+
+    removeRequest.assertStatus(200)
+
+    assert.equal(0, removeRequest.body()?.products.length)
+    assert.equal(0, removeRequest.body()?.ingredients.length)
   }).tags(['@carts', '@carts.update'])
 })

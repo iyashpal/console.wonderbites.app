@@ -30,9 +30,9 @@ test.group('API [carts.show]', (group) => {
     const user = await UserFactory.create()
     const cart = await CartFactory.merge({ userId: user.id, status: 0 }).create()
 
-    const response = await client.get(route('api.carts.show')).guard('api')
+    const response = await client.get(route('api.carts.show'))
       // @ts-ignore
-      .loginAs(user)
+      .guard('api').loginAs(user)
 
     assert.notEqual(response.body()?.id, cart.id)
   }).tags(['@carts', '@carts.show'])

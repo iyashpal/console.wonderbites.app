@@ -4,6 +4,8 @@ import Cart from '../Cart'
 import Product from '../Product'
 
 export default class CartProduct extends BaseModel {
+  public static table = 'cart_product'
+
   @column({ isPrimary: true })
   public id: number
 

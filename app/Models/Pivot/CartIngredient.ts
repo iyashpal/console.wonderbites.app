@@ -1,7 +1,6 @@
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import Cart from '../Cart'
-import Ingredient from '../Ingredient'
+import { Cart, Ingredient, Product } from '../'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class CartIngredient extends BaseModel {
   @column({ isPrimary: true })
@@ -10,18 +9,27 @@ export default class CartIngredient extends BaseModel {
   @column()
   public cartId: number
 
-  @belongsTo(() => Cart)
-  public cart: BelongsTo<typeof Cart>
+  @column()
+  public ingredientId: number
 
   @column()
-  public ingridientId: number
-
-  @belongsTo(() => Ingredient)
-  public ingridient: BelongsTo<typeof Ingredient>
+  public cartProductId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Cart)
+  public cart: BelongsTo<typeof Cart>
+
+  @belongsTo(() => Ingredient)
+  public ingredient: BelongsTo<typeof Ingredient>
+
+  @belongsTo(() => Product, {
+    localKey: 'id',
+    foreignKey: 'cartProductId',
+  })
+  public product: BelongsTo<typeof Product>
 }
