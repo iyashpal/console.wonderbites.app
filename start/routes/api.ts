@@ -14,7 +14,7 @@ Route.group(() => {
     // Resources endpoints to user addresses.
     Route.resource('addresses', 'AddressesController')
 
-    Route.route('checkout', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkout.process')
+    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
 
     // Endpoint to create user orders.
     Route.resource('orders', 'OrdersController').apiOnly().only(['store'])
