@@ -9,9 +9,9 @@ export default class CartIngredient extends BaseSchema {
 
       table.bigInteger('cart_id').unsigned().notNullable().references('carts.id').onDelete('CASCADE')
 
-      table.bigInteger('ingredient_id').unsigned().notNullable().references('ingredients.id').onDelete('CASCADE')
+      table.bigInteger('ingredient_id').unsigned().notNullable().references('ingredients.id').onDelete('RESTRICT')
 
-      table.bigInteger('cart_product_id').unsigned().notNullable().references('cart_product.id').onDelete('CASCADE')
+      table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('RESTRICT')
 
       table.integer('qty').notNullable().defaultTo(1)
 

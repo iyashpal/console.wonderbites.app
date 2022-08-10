@@ -55,7 +55,7 @@ export default class AddressesController {
 
       await address.load('user')
 
-      response.status(200).json(address)
+      response.status(200).json(address.toObject())
     } catch (error) {
       response.notFound({ message: 'Page not found' })
     }
