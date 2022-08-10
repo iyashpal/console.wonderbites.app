@@ -1,5 +1,4 @@
 import { test } from '@japa/runner'
-import { CartProduct } from 'App/Models/Pivot'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { CouponFactory, ProductFactory, UserFactory } from 'Database/factories'
 
@@ -28,14 +27,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -62,14 +57,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -95,14 +86,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -129,14 +116,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -162,14 +145,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -196,14 +175,10 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
     product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
+      cartIngredients[id] = { product_id: product.id }
     })
 
     await user.cart.related('ingredients').attach(cartIngredients)
@@ -229,15 +204,11 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const cartIngredients = {}
 
-    product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { cart_product_id: CART_PRODUCT?.id }
-    })
+    const address = user.addresses[0]
+
+    product.ingredients.map(({ id }) => (cartIngredients[id] = { product_id: product.id }))
 
     await user.cart.related('ingredients').attach(cartIngredients)
 
@@ -245,10 +216,20 @@ test.group('API [checkout.process]', (group) => {
       // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: user.addresses[0].id,
+        address: address.id,
         payment_method: 'COD',
       })
 
     request.assertStatus(200)
+
+    request.assertBodyContains({
+      user_id: user.id,
+      payment_method: 'COD',
+      address_id: address.id,
+      products: [{ id: product.id, name: product.name }],
+      ingredients: product.ingredients.map(({ id, name }) => ({ id, name })),
+      address: { id: address.id, first_name: address.firstName, last_name: address.lastName },
+      user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
+    })
   }).tags(['@checkout', '@checkouts.process'])
 })

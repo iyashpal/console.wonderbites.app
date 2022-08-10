@@ -1,13 +1,9 @@
-import { Address, Cart, User } from 'App/Models'
+import { Address, Cart, Order, User } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/Checkouts/ProcessValidator'
 
 export default class CheckoutsController {
   protected user: User
-
-  protected cart: Cart
-
-  protected address: Address
 
   protected response: object = {}
 
@@ -17,18 +13,40 @@ export default class CheckoutsController {
     try {
       const attrs = await request.validate(ProcessValidator)
 
-      await this.syncCart(attrs.cart)
+      // Load and validate cart by the requested cart id
+      const cart = await Cart.query()
+        .where('id', attrs.cart).where('user_id', this.user.id)
+        .preload('ingredients').preload('products').preload('coupons').firstOrFail()
 
-      await this.syncAddress(attrs.address)
+      // Load and validate the order address by request requested address id
+      const address = await await Address.query()
+        .where('id', attrs.address).where('user_id', this.user.id).firstOrFail()
 
       try {
-        switch (attrs.payment_method) {
-          case 'COD':
-            this.cashOnDelivery()
-            break
-        }
+        // Create order from cart details.
+        let order = await Order.create({
+          note: attrs.note,
+          userId: this.user.id,
+          addressId: address.id,
+          couponId: cart.couponId,
+          ipAddress: cart.ipAddress,
+          paymentMethod: attrs.payment_method,
+        })
 
-        response.json(this.response)
+        await order.related('products').attach(this.cartProducts(cart.products))
+
+        await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
+
+        // Send order in response with all associated data.
+        response.json(
+          await Order.query()
+            .preload('user')
+            .preload('address')
+            .preload('products')
+            .preload('ingredients')
+            .where('id', order.id)
+            .first()
+        )
       } catch (error) {
         response.badRequest({ message: 'Something went wrong' })
       }
@@ -37,19 +55,21 @@ export default class CheckoutsController {
     }
   }
 
-  protected async syncCart (id: number) {
-    this.cart = await Cart.query()
-      .where('id', id).where('user_id', this.user.id)
-      .preload('ingredients').preload('products').preload('coupons').firstOrFail()
+  public cartProducts (items: any[]) {
+    const products = {}
+
+    items.forEach(product => (products[product.id] = { qty: product.$extras.pivot_qty }))
+
+    return products
   }
 
-  protected async syncAddress (id) {
-    this.address = await Address.query()
-      .where('id', id).where('user_id', this.user.id)
-      .firstOrFail()
-  }
+  public cartIngredients (items: any[]) {
+    const ingredients = {}
 
-  protected cashOnDelivery () {
-    return {}
+    items.map((ingredient) => (ingredients[ingredient.id] = {
+      qty: ingredient.$extras.pivot_qty, product_id: ingredient.$extras.pivot_product_id,
+    }))
+
+    return ingredients
   }
 }

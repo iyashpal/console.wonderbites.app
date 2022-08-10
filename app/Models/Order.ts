@@ -16,6 +16,9 @@ export default class Order extends BaseModel {
   public addressId: number
 
   @column()
+  public couponId: number
+
+  @column()
   public ipAddress: string
 
   @column()

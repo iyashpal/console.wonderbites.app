@@ -9,9 +9,9 @@ export default class IngredientOrder extends BaseSchema {
 
       table.bigInteger('order_id').unsigned().notNullable().references('orders.id').onDelete('CASCADE')
 
-      table.bigInteger('ingredient_id').unsigned().notNullable().references('ingredients.id').onDelete('CASCADE')
+      table.bigInteger('ingredient_id').unsigned().notNullable().references('ingredients.id').onDelete('RESTRICT')
 
-      table.bigInteger('order_product_id').unsigned().notNullable().references('order_product.id').onDelete('CASCADE')
+      table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('RESTRICT')
 
       table.integer('qty').notNullable().defaultTo(1)
 
