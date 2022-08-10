@@ -9,6 +9,8 @@ export default class Carts extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('RESTRICT')
 
+      table.bigInteger('coupon_id').unsigned().nullable().references('coupons.id').onDelete('RESTRICT')
+
       table.string('ip_address').nullable()
 
       table.integer('status').defaultTo(1)

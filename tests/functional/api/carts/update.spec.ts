@@ -249,16 +249,12 @@ test.group('API [carts.update]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const request = await client.put(route('api.carts.update'))
       // @ts-ignore
       .guard('api').loginAs(user).json({
         action: 'SYNC',
         ingredients: {
-          [ingredient.id]: { cart_product_id: CART_PRODUCT?.id },
+          [ingredient.id]: { product_id: product?.id },
         },
       })
 
@@ -284,16 +280,12 @@ test.group('API [carts.update]', (group) => {
 
     await user.cart.related('products').attach([product.id])
 
-    const CART_PRODUCT = await CartProduct.query()
-      .where('cart_id', user.cart.id)
-      .where('product_id', product.id).first()
-
     const request = await client.put(route('api.carts.update'))
       // @ts-ignore
       .guard('api').loginAs(user).json({
         action: 'SYNC',
         ingredients: {
-          [ingredient.id]: { cart_product_id: CART_PRODUCT?.id },
+          [ingredient.id]: { product_id: product.id },
         },
       })
 
@@ -311,9 +303,11 @@ test.group('API [carts.update]', (group) => {
 
     const detachData = {
       action: 'DETACH',
-      products: [products.id],
+      products: [product.id],
     }
-    const removeRequest = await client.put(route('api.carts.update')).json(detachData)
+    const removeRequest = await client.put(route('api.carts.update'))
+      // @ts-ignore
+      .guard('api').loginAs(user).json(detachData)
 
     removeRequest.assertStatus(200)
 
