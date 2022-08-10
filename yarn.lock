@@ -111,10 +111,10 @@
   dependencies:
     "@poppinss/utils" "^4.0.2"
 
-"@adonisjs/core@^5.8.5":
-  version "5.8.5"
-  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.8.5.tgz#ee53677c45de0235a5b40f66d9b1a948abf90848"
-  integrity sha512-G2J31nkiZRHGxOafgnS0iyvns5BVqUqxnuNaTv17pD6DhIRqiFu2kigYNpHzBie/MKjT5MmFWXLu21MwlA8/7A==
+"@adonisjs/core@^5.8.6":
+  version "5.8.6"
+  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.8.6.tgz#d4252721a6f2af83d520a00714222cb51e17126d"
+  integrity sha512-t2eP1BL4IFNBBzkcC1YWoBX5FFwB3GP8QODz5a3BzpsLHp9l+bmK2UUpY9HtsZCD94NwanMYVT6x0NeGAo6TjA==
   dependencies:
     "@adonisjs/ace" "^11.3.0"
     "@adonisjs/application" "^5.2.5"
@@ -124,7 +124,7 @@
     "@adonisjs/events" "^7.2.1"
     "@adonisjs/hash" "^7.1.1"
     "@adonisjs/http-server" "^5.11.0"
-    "@adonisjs/validator" "^12.3.2"
+    "@adonisjs/validator" "^12.4.0"
     "@poppinss/cliui" "^3.0.2"
     "@poppinss/manager" "^5.0.2"
     "@poppinss/utils" "^4.0.4"
@@ -365,14 +365,14 @@
     mustache "^4.2.0"
     open "^8.4.0"
 
-"@adonisjs/validator@^12.3.2":
-  version "12.3.2"
-  resolved "https://registry.yarnpkg.com/@adonisjs/validator/-/validator-12.3.2.tgz#d182e922b148eed5e63738f2f7fc31de8e3944b3"
-  integrity sha512-nwI4wTamYHgleMn4LoU/ZleSRhKBOVzK/bnkBvCOpiUuF4Bxtz+JCSpRWp6VX66jRJwh8DLBFH09Ul0HzKnjJg==
+"@adonisjs/validator@^12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/validator/-/validator-12.4.0.tgz#2b9e5819d630f53f148b3fcfbc0bea3f50ad6b14"
+  integrity sha512-J8PP+DUIkHmQKsA87tdz02PDepXXUsC88QQY1hThQGXgJ7Rd0FBsNXO2zBzmHi5wprZsgeUwNPWPDWIb8vK/gg==
   dependencies:
     "@poppinss/utils" "^4.0.4"
     "@types/luxon" "^2.3.2"
-    "@types/validator" "^13.7.2"
+    "@types/validator" "^13.7.3"
     luxon "^2.4.0"
     normalize-url "^6.1.0"
     tmp-cache "^1.1.0"
@@ -2204,10 +2204,10 @@
     "@types/cookiejar" "*"
     "@types/node" "*"
 
-"@types/validator@^13.7.2":
-  version "13.7.2"
-  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.2.tgz#a2114225d9be743fb154b06c29b8257aaca42922"
-  integrity sha512-KFcchQ3h0OPQgFirBRPZr5F/sVjxZsOrQHedj3zi8AH3Zv/hOLx2OLR4hxR5HcfoU+33n69ZuOfzthKVdMoTiw==
+"@types/validator@^13.7.3":
+  version "13.7.5"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.5.tgz#96ad8c50d441c8c86a639efccc4d8d9d5d9cd5ea"
+  integrity sha512-9rQHeAqz6Jw3gDhttkmWetoriW5FPbxylv/6h6mXtaj2NKRcOvOmvfcswVdLVpbuy10NrO486K3lCoLgoIhiIA==
 
 "@types/ws@^8.5.1":
   version "8.5.3"
