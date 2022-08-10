@@ -35,6 +35,7 @@ export default class ProcessValidator {
     payment_method: schema.string({ trim: true }, [
       rules.required(),
     ]),
+    note: schema.string.optional({trim: true}),
   })
 
   /**

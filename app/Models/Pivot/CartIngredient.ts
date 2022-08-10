@@ -13,7 +13,7 @@ export default class CartIngredient extends BaseModel {
   public ingredientId: number
 
   @column()
-  public cartProductId: number
+  public productId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -29,7 +29,7 @@ export default class CartIngredient extends BaseModel {
 
   @belongsTo(() => Product, {
     localKey: 'id',
-    foreignKey: 'cartProductId',
+    foreignKey: 'productId',
   })
   public product: BelongsTo<typeof Product>
 }

@@ -36,7 +36,7 @@ export default class CartsController {
   }
 
   /**
-   * Update loggedin/guest user cart.
+   * Update logged in/guest user cart.
    *
    * @param param0 {HttpContextContract} Request payload.
    */
@@ -118,9 +118,11 @@ export default class CartsController {
     // Remove products from cart.
     if (request.input('products')) {
       await cart.related('products').detach(request.input('products'))
+
+      await cart.related('ingredients').query().whereIn('product_id', request.input('products')).delete()
     }
 
-    // Remove products from cart.
+    // Remove ingredients from cart.
     if (request.input('ingredients')) {
       await cart.related('ingredients').detach(request.input('ingredients'))
     }
