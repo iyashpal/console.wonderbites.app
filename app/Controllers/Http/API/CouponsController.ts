@@ -102,7 +102,9 @@ export default class CouponsController {
       const coupon = await Coupon.query().where('code', payload.coupon).first()
 
       if (coupon && coupon.is_valid) {
-        await coupon.related('carts').sync([payload.cart], false)
+        const cart = await coupon.related('carts').query().where('id', payload.cart).first()
+
+        await cart?.merge({ couponId: coupon.id }).save()
 
         response.status(200).json({
           coupon: {

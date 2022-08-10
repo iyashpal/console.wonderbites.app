@@ -1,6 +1,6 @@
 import Cart from './Cart'
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Coupon extends BaseModel {
   @column({ isPrimary: true })
@@ -33,8 +33,8 @@ export default class Coupon extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => Cart)
-  public carts: ManyToMany<typeof Cart>
+  @hasMany(() => Cart)
+  public carts: HasMany<typeof Cart>
 
   @computed()
   public get discount () {
