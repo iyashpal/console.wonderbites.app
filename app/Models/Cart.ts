@@ -1,9 +1,6 @@
-import User from './User'
-import Coupon from './Coupon'
-import Product from './Product'
 import { DateTime } from 'luxon'
-import Ingredient from './Ingredient'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { User, Coupon, Product, Ingredient } from '.'
+import { BaseModel, BelongsTo, belongsTo, column, hasOne, HasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
@@ -17,6 +14,9 @@ export default class Cart extends BaseModel {
 
   @column()
   public ipAddress: string
+
+  @column()
+  public couponId: number
 
   @column()
   public status: number
@@ -34,10 +34,13 @@ export default class Cart extends BaseModel {
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'qty', 'cart_product_id'],
+    pivotColumns: ['id', 'qty', 'product_id'],
     pivotTimestamps: true,
   })
   public ingredients: ManyToMany<typeof Ingredient>
+
+  @hasOne(() => Coupon)
+  public coupon: HasOne<typeof Coupon>
 
   @manyToMany(() => Coupon, {
     pivotColumns: ['id'],
