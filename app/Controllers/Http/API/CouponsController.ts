@@ -1,4 +1,4 @@
-import Coupon from 'App/Models/Coupon'
+import { Coupon } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
 import CreateCouponValidator from 'App/Validators/Coupon/CreateValidator'
