@@ -1,8 +1,5 @@
-import User from './User'
-import Product from './Product'
-import Address from './Address'
 import { DateTime } from 'luxon'
-import Ingredient from './Ingredient'
+import { User, Product, Address, Ingredient, Coupon } from '.'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
@@ -35,6 +32,9 @@ export default class Order extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
+
+  @belongsTo(() => Coupon)
+  public coupon: BelongsTo<typeof Coupon>
 
   @manyToMany(() => Product)
   public products: ManyToMany<typeof Product>
