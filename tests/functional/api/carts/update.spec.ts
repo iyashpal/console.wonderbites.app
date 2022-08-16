@@ -271,6 +271,38 @@ test.group('API [carts.update]', (group) => {
     assert.equal(1, ingredients.length)
   }).tags(['@carts', '@carts.update'])
 
+  test('It can add products and ingredients to cart.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('cart').create()
+
+    const product = await ProductFactory.create()
+
+    const ingredient = await IngredientFactory.create()
+
+    const request = await client.put(route('api.carts.update'))
+      // @ts-ignore
+      .guard('api').loginAs(user).json({
+        action: 'SYNC',
+        products: {
+          [product.id]: { qty: 1 },
+        },
+        ingredients: {
+          [ingredient.id]: { product_id: product?.id, qty: 1 },
+        },
+      })
+
+    const { products, ingredients } = request.body()
+
+    request.assertStatus(200)
+
+    request.assertBodyContains({
+      products: [{ id: product.id, name: product.name }],
+      ingredients: [{ id: ingredient.id, name: ingredient.name }],
+    })
+
+    assert.equal(1, products.length)
+    assert.equal(1, ingredients.length)
+  }).tags(['@carts', '@carts.update'])
+
   test('It can remove products ingredients on removal of product from cart.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('cart').create()
 
