@@ -17,7 +17,7 @@ Route.group(() => {
     Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
 
     // Endpoint to create user orders.
-    Route.resource('orders', 'OrdersController').apiOnly().only(['show'])
+    Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
 
     // Endpoint to create wishlists.
     Route.get('wishlists', 'WishlistsController.show').as('wishlists.show')

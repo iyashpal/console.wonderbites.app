@@ -1,11 +1,6 @@
-import Cart from './Cart'
-import Address from './Address'
-import Product from './Product'
 import { DateTime } from 'luxon'
-import Wishlist from './Wishlist'
-import Wonderpoint from './Wonderpoint'
 import Hash from '@ioc:Adonis/Core/Hash'
-import Notification from './Notification'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order } from '.'
 import {
   BaseModel, beforeSave, BelongsTo, belongsTo, column, computed, hasMany, HasMany, HasOne, hasOne,
 } from '@ioc:Adonis/Lucid/Orm'
@@ -103,6 +98,9 @@ export default class User extends BaseModel {
    */
   @hasOne(() => Wishlist)
   public wishlist: HasOne<typeof Wishlist>
+
+  @hasMany(() => Order)
+  public orders: HasMany<typeof Order>
 
   /**
    * Relation to user wonderpoints.
