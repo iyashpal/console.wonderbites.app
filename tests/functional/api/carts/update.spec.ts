@@ -1,7 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { CartFactory, IngredientFactory, ProductFactory, UserFactory } from 'Database/factories'
-import { CartProduct } from 'App/Models/Pivot'
 
 test.group('API [carts.update]', (group) => {
   /**
