@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
-import { CartIngredient } from '.'
 import { Cart, Product } from '..'
-import { BaseModel, beforeDelete, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class CartProduct extends BaseModel {
   public static table = 'cart_product'
