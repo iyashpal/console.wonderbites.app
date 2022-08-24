@@ -46,13 +46,13 @@ export default class CartsController {
     const cart = await this.cart(request, auth.use('api').user!)
 
     // Add products to cart.
-    if (request.input('action') === 'SYNC') {
-      await this.syncToCart(request, cart)
+    if (request.input('action') === 'ADD') {
+      await this.addToCart(request, cart)
     }
 
     // Remove products from cart.
-    if (request.input('action') === 'DETACH') {
-      await this.detachFromCart(request, cart)
+    if (request.input('action') === 'REMOVE') {
+      await this.removeFromCart(request, cart)
     }
 
     await cart.load('ingredients')
@@ -96,7 +96,7 @@ export default class CartsController {
    * @param request RequestContract
    * @param cart Cart
    */
-  protected async syncToCart (request: RequestContract, cart: Cart) {
+  protected async addToCart (request: RequestContract, cart: Cart) {
     // Add products to cart
     if (request.input('products')) {
       await cart.related('products').sync(request.input('products'), false)
@@ -114,7 +114,7 @@ export default class CartsController {
    * @param request RequestContract
    * @param cart Cart
    */
-  protected async detachFromCart (request: RequestContract, cart: Cart) {
+  protected async removeFromCart (request: RequestContract, cart: Cart) {
     // Remove products from cart.
     if (request.input('products')) {
       await cart.related('products').detach(request.input('products'))

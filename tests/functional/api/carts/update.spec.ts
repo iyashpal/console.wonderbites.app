@@ -15,7 +15,7 @@ test.group('API [carts.update]', (group) => {
     const product = await ProductFactory.create()
 
     let response = await client.put(route('api.carts.update')).json({
-      action: 'SYNC',
+      action: 'ADD',
       products: {
         [product.id]: { qty: 5 },
       },
@@ -54,7 +54,7 @@ test.group('API [carts.update]', (group) => {
 
     response = await client.put(route('api.carts.update'))
       .json({
-        action: 'DETACH',
+        action: 'REMOVE',
         products: [product.id],
       })
 
@@ -74,7 +74,7 @@ test.group('API [carts.update]', (group) => {
     const product = await ProductFactory.create()
 
     let response = await client.put(route('api.carts.update')).loginAs(user).json({
-      action: 'SYNC',
+      action: 'ADD',
       products: {
         [product.id]: { qty: 5 },
       },
@@ -120,7 +120,7 @@ test.group('API [carts.update]', (group) => {
 
       // @ts-ignore
       .loginAs(user).json({
-        action: 'DETACH',
+        action: 'REMOVE',
         products: [product.id],
       })
 
@@ -138,7 +138,7 @@ test.group('API [carts.update]', (group) => {
     const product = await ProductFactory.create()
 
     const response = await client.put(route('api.carts.update')).json({
-      action: 'SYNC',
+      action: 'ADD',
       products: {
         [product.id]: { qty: 5 },
       },
@@ -163,7 +163,7 @@ test.group('API [carts.update]', (group) => {
     const product = await ProductFactory.create()
 
     const postData = {
-      action: 'SYNC',
+      action: 'ADD',
       products: {
         [product.id]: { qty: 5 },
       },
@@ -203,7 +203,7 @@ test.group('API [carts.update]', (group) => {
     const product = await ProductFactory.create()
 
     const postData = {
-      action: 'SYNC',
+      action: 'ADD',
       products: {
         [product.id]: { qty: 5 },
       },
@@ -251,7 +251,7 @@ test.group('API [carts.update]', (group) => {
     const request = await client.put(route('api.carts.update'))
       // @ts-ignore
       .guard('api').loginAs(user).json({
-        action: 'SYNC',
+        action: 'ADD',
         ingredients: {
           [ingredient.id]: { product_id: product?.id },
         },
@@ -280,7 +280,7 @@ test.group('API [carts.update]', (group) => {
     const request = await client.put(route('api.carts.update'))
       // @ts-ignore
       .guard('api').loginAs(user).json({
-        action: 'SYNC',
+        action: 'ADD',
         products: {
           [product.id]: { qty: 1 },
         },
@@ -314,7 +314,7 @@ test.group('API [carts.update]', (group) => {
     const request = await client.put(route('api.carts.update'))
       // @ts-ignore
       .guard('api').loginAs(user).json({
-        action: 'SYNC',
+        action: 'ADD',
         ingredients: {
           [ingredient.id]: { product_id: product.id },
         },
@@ -333,7 +333,7 @@ test.group('API [carts.update]', (group) => {
     assert.equal(1, ingredients.length)
 
     const detachData = {
-      action: 'DETACH',
+      action: 'REMOVE',
       products: [product.id],
     }
     const removeRequest = await client.put(route('api.carts.update'))
