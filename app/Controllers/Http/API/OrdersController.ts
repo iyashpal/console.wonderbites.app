@@ -1,8 +1,8 @@
-import { Order } from 'App/Models'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {Order} from 'App/Models'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class OrdersController {
-  public async index ({ auth, request, response }: HttpContextContract) {
+  public async index ({auth, request, response}: HttpContextContract) {
     const user = await auth.use('api').authenticate()
     try {
       const orders = await user.related('orders').query()
@@ -27,11 +27,11 @@ export default class OrdersController {
 
       response.json(orders)
     } catch (error) {
-      response.badRequest({ message: 'Server error' })
+      response.badRequest({message: 'Server error'})
     }
   }
 
-  public async show ({ params, request, response }: HttpContextContract) {
+  public async show ({params, request, response}: HttpContextContract) {
     try {
       const order = await Order.query()
         // Load products if it is requested
@@ -44,7 +44,7 @@ export default class OrdersController {
           ])),
         ])
 
-        // Load order coupon if requested 
+        // Load order coupon if requested
         .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
 
         // Load order coupon if requested
@@ -60,7 +60,7 @@ export default class OrdersController {
 
       response.json(order)
     } catch (error) {
-      response.notFound({ message: 'Not found' })
+      response.notFound({message: 'Not found'})
     }
   }
 }
