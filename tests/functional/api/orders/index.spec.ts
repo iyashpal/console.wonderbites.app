@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { OrderFactory, UserFactory } from 'Database/factories'
+import { IngredientFactory, OrderFactory, UserFactory } from 'Database/factories'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -8,14 +8,14 @@ test.group('API [orders.index]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('unauthenticated user can not access the orders history.', async ({ client, route }) => {
+  test('it can not allow access to unauthenticated users.', async ({ client, route }) => {
     const request = await client.get(route('api.orders.index'))
 
     request.assertStatus(401)
     request.assertBodyContains({ message: 'Unauthenticated' })
   }).tags(['@orders', '@orders.index'])
 
-  test('authenticated user can access the orders history.', async ({ client, route }) => {
+  test('it can allow the access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const request = await client.get(route('api.orders.index'))
@@ -26,7 +26,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({ data: [] })
   }).tags(['@orders', '@orders.index'])
 
-  test('it should contain the list of orders.', async ({ client, route }) => {
+  test('it can list the orders.', async ({ client, route }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
     const orders = await OrderFactory.merge({ userId: user.id, addressId: address.id }).createMany(10)
@@ -36,10 +36,15 @@ test.group('API [orders.index]', (group) => {
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
-    request.assertBodyContains({ data: orders.map(({ id }) => ({ id })) })
+    request.assertBodyContains({
+      data: orders.map(({ id, userId, addressId, ipAddress, paymentMethod, note, status }) => ({
+        id, user_id: userId, address_id: addressId,
+        ip_address: ipAddress, payment_method: paymentMethod, note, status,
+      })),
+    })
   }).tags(['@orders', '@orders.index'])
 
-  test('it should limit the list of orders.', async ({ client, route, assert }) => {
+  test('it can limit the list of orders.', async ({ client, route, assert }) => {
     let limit = 10
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
@@ -63,7 +68,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({ meta: { current_page: 2 }, data: orders.map(({ id }) => ({ id })).slice(limit) })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain products.', async ({ client, route, assert }) => {
+  test('it can list the orders with products.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
     const orders = await OrderFactory.with('products', 3)
@@ -86,7 +91,7 @@ test.group('API [orders.index]', (group) => {
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain products with media.', async ({ client, route, assert }) => {
+  test('it can list the orders with products and product images.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
     const orders = await OrderFactory
@@ -108,54 +113,56 @@ test.group('API [orders.index]', (group) => {
       data: orders.map(({ id, products }) => ({
         id,
         products: products.map(({ id, name, media }) => ({
-          id,
-          name,
+          id, name,
           media: media.map(({ id, title, caption, filePath }) => ({ id, title, caption, file_path: filePath })),
         })),
       })),
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain products and ingredients.', async ({ client, route, assert }) => {
+  test('it can list the orders with ingredients.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
-    const orders = await OrderFactory
-      .with('products', 3, product => product.with('ingredients', 10))
+    const ingredients = await IngredientFactory.createMany(5)
+    const orders = await OrderFactory.with('products', 1)
+      .with('ingredients', 3, builder => builder.pivotAttributes({ product_id: 1 }))
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
     orders.map(async (order) => {
+      let data = {}
+      ingredients.map(({ id }) => {
+        data[id] = { product_id: 1 }
+      })
 
+      await order.related('ingredients').attach(data)
+
+      await order.load('ingredients')
     })
 
-    const qs = { with: ['order.products', 'order.products.media'] }
+    const qs = { with: ['order.ingredients'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
+
     const { data } = request.body()
 
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id, products }) => ({
-        id,
-        products: products.map(({ id, name, media }) => ({
-          id,
-          name,
-          media: media.map(({ id, title, caption, filePath }) => ({
-            id,
-            title,
-            caption,
-            file_path: filePath,
-          })),
+      data: orders.map(({ id, userId, addressId, ipAddress, paymentMethod, note, status, ingredients }) => ({
+        id, user_id: userId, address_id: addressId,
+        ip_address: ipAddress, payment_method: paymentMethod, note, status,
+        ingredients: ingredients.map(({ id, name, description, price, status }) => ({
+          id, name, description, price, status,
         })),
       })),
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain address.', async ({ client, route, assert }) => {
+  test('it can list the orders with address.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [{ id: addressID }] = user.addresses
     const orders = await OrderFactory
@@ -186,72 +193,100 @@ test.group('API [orders.index]', (group) => {
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain products and ingredients.', async ({ client, route, assert }) => {
+  test('it can list orders with coupon.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
-    const orders = await OrderFactory
-      .with('products', 3, product => product.with('ingredients', 10))
+    const orders = await OrderFactory.with('products', 1).with('coupon')
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const qs = { with: ['order.products', 'order.products.media'] }
+    const qs = { with: ['order.coupon'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
+
     const { data } = request.body()
 
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id, products }) => ({
-        id,
-        products: products.map(({ id, name, media }) => ({
-          id,
-          name,
-          media: media.map(({ id, title, caption, filePath }) => ({
-            id,
-            title,
-            caption,
-            file_path: filePath,
-          })),
-        })),
-      })),
+      data: orders.map(({ id, coupon }) => ({ id, coupon_id: coupon.id, coupon: { id: coupon.id } })),
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('list of orders should contain products and ingredients.', async ({ client, route, assert }) => {
+  test('it can list orders with user.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
-    const orders = await OrderFactory
-      .with('products', 3, product => product.with('ingredients', 10))
+    const orders = await OrderFactory.with('products', 1)
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const qs = { with: ['order.products', 'order.products.media'] }
+    const qs = { with: ['order.user'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
+
     const { data } = request.body()
 
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id, products }) => ({
+      data: orders.map(({ id }) => ({ id, user_id: user.id, user: { id: user.id } })),
+    })
+  }).tags(['@orders', '@orders.index'])
+
+  test('it can list orders with products, address, coupon, user & ingredients.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('addresses').create()
+    const [address] = user.addresses
+    const ingredients = await IngredientFactory.createMany(5)
+    const orders = await OrderFactory.with('coupon')
+      .with('products', 3, product => product.with('media', 10))
+      .merge({ userId: user.id, addressId: address.id }).createMany(1)
+
+    orders.map(async (order) => {
+      let data = {}
+      ingredients.map(({ id }) => {
+        data[id] = { product_id: 1 }
+      })
+
+      await order.related('ingredients').attach(data)
+
+      await order.load('ingredients')
+    })
+
+    const qs = {
+      with: [
+        'order.ingredients', 'order.products', 'order.products.media', 'order.user', 'order.address', 'order.coupon',
+      ],
+    }
+
+    const request = await client.get(route('api.orders.index', {}, { qs }))
+      // @ts-ignore
+      .guard('api').loginAs(user)
+
+    request.assertStatus(200)
+
+    const { data } = request.body()
+
+    assert.equal(data.length, 1)
+
+    request.assertBodyContains({
+      data: orders.map(({ id, products, ingredients, coupon }) => ({
         id,
-        products: products.map(({ id, name, media }) => ({
-          id,
-          name,
-          media: media.map(({ id, title, caption, filePath }) => ({
-            id,
-            title,
-            caption,
-            file_path: filePath,
-          })),
+        products: products.map(({ id, media }) => ({
+          id, media: media.map(({ id }) => ({ id })),
         })),
+        ingredients: ingredients.map(({ id }) => ({ id })),
+        coupon_id: coupon.id,
+        coupon: { id: coupon.id },
+        address_id: address.id,
+        address: { id: address.id },
+        user_id: user.id,
+        user: { id: user.id },
       })),
     })
   }).tags(['@orders', '@orders.index'])
