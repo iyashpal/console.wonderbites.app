@@ -9,7 +9,9 @@ export default class Reviews extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 
-      table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
+      table.string('reviewable_type')
+
+      table.bigInteger('reviewable_id').unsigned().notNullable()
 
       table.integer('rating').unsigned().notNullable().defaultTo(0)
 
@@ -20,9 +22,9 @@ export default class Reviews extends BaseSchema {
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
-      table.timestamp('deleted_at', { useTz: true })
+      table.timestamp('created_at', {useTz: true})
+      table.timestamp('updated_at', {useTz: true})
+      table.timestamp('deleted_at', {useTz: true})
     })
   }
 

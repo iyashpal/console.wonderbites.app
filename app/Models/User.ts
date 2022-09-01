@@ -1,12 +1,12 @@
-import { DateTime } from 'luxon'
+import {DateTime} from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order } from '.'
+import {Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review} from '.'
 import {
   BaseModel, beforeSave, BelongsTo, belongsTo, column, computed, hasMany, HasMany, HasOne, hasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
-  @column({ isPrimary: true })
+  @column({isPrimary: true})
   public id: number
 
   @column()
@@ -24,7 +24,7 @@ export default class User extends BaseModel {
   @column()
   public imagePath: string
 
-  @column({ serializeAs: null })
+  @column({serializeAs: null})
   public password: string
 
   @column()
@@ -39,10 +39,10 @@ export default class User extends BaseModel {
   @column()
   public language: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({autoCreate: true})
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -50,8 +50,8 @@ export default class User extends BaseModel {
 
   /**
    * Hash user password before saving to database.
-   * 
-   * @param user 
+   *
+   * @param user
    */
   @beforeSave()
   public static async hashPassword (user: User) {
@@ -90,8 +90,14 @@ export default class User extends BaseModel {
   /**
    * Relation to active cart of the user.
    */
-  @hasOne(() => Cart, { onQuery: query => query.where('status', 1) })
+  @hasOne(() => Cart, {onQuery: query => query.where('status', 1)})
   public cart: HasOne<typeof Cart>
+
+  /**
+   * Relation to user reviews.
+   */
+  @hasMany(() => Review)
+  public reviews: HasMany<typeof Review>
 
   /**
    * Relation to wishlist of user.
