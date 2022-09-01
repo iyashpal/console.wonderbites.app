@@ -19,7 +19,7 @@ export default class Orders extends BaseSchema {
 
       table.text('note').nullable()
 
-      table.integer('status').defaultTo(0)
+      table.integer('status').defaultTo(0).comment('UPCOMING=0;PREPARING=1;DELIVERED=2;CANCELED=3;')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

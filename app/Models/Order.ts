@@ -1,9 +1,17 @@
-import { DateTime } from 'luxon'
-import { User, Product, Address, Ingredient, Coupon } from '.'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {DateTime} from 'luxon'
+import {User, Product, Address, Ingredient, Coupon, Review} from '.'
+import {BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
-  @column({ isPrimary: true })
+  public static readonly UPCOMING: number = 0
+
+  public static readonly PREPARING: number = 1
+
+  public static readonly DELIVERED: number = 2
+
+  public static readonly CANCELED: number = 3
+
+  @column({isPrimary: true})
   public id: number
 
   @column()
@@ -27,6 +35,15 @@ export default class Order extends BaseModel {
   @column()
   public status: number
 
+  @column.dateTime({autoCreate: true})
+  public createdAt: DateTime
+
+  @column.dateTime({autoCreate: true, autoUpdate: true})
+  public updatedAt: DateTime
+
+  @column.dateTime()
+  public deletedAt: DateTime
+
   @belongsTo(() => Address)
   public address: BelongsTo<typeof Address>
 
@@ -42,12 +59,6 @@ export default class Order extends BaseModel {
   @manyToMany(() => Ingredient)
   public ingredients: ManyToMany<typeof Ingredient>
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
-
-  @column.dateTime()
-  public deletedAt: DateTime
+  @hasMany(() => Review)
+  public reviews: HasMany<typeof Review>
 }

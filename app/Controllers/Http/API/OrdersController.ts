@@ -22,6 +22,13 @@ export default class OrdersController {
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
         // Load order user if they are requested.
         .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+        // Load orders by the status provided.
+        .match(
+          [request.input('status') === 'upcoming', query => query.where('status', Order.UPCOMING)],
+          [request.input('status') === 'preparing', query => query.where('status', Order.PREPARING)],
+          [request.input('status') === 'delivered', query => query.where('status', Order.DELIVERED)],
+          [request.input('status') === 'canceled', query => query.where('status', Order.CANCELED)],
+        )
         // Paginate orders
         .paginate(request.input('page', 1), request.input('limit', 10))
 
