@@ -1,7 +1,7 @@
-import {DateTime} from 'luxon'
-import {BelongsTo, belongsTo, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
-import {BaseModel, column, computed, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
-import {Cart, Category, Ingredient, Media, Order, Review, User, Wishlist} from 'App/Models'
+import { DateTime } from 'luxon'
+import { BelongsTo, belongsTo, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { Cart, Category, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 
 export default class Product extends BaseModel {
   /**
@@ -9,7 +9,7 @@ export default class Product extends BaseModel {
    */
   public serializeExtras = true
 
-  @column({isPrimary: true})
+  @column({ isPrimary: true })
   public id: number
 
   @column()
@@ -39,10 +39,10 @@ export default class Product extends BaseModel {
   @column.dateTime()
   public publishedAt: DateTime | null
 
-  @column.dateTime({autoCreate: true})
+  @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({autoCreate: true, autoUpdate: true})
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -66,7 +66,11 @@ export default class Product extends BaseModel {
   @manyToMany(() => Order)
   public orders: ManyToMany<typeof Order>
 
-  @hasMany(() => Review)
+  @hasMany(() => Review, {
+    localKey: 'id',
+    foreignKey: 'typeId',
+    onQuery: query => query.where('type', 'Product'),
+  })
   public reviews: HasMany<typeof Review>
 
   @manyToMany(() => Wishlist)
@@ -79,6 +83,6 @@ export default class Product extends BaseModel {
    */
   @computed()
   public get thumbnail () {
-    return this.imagePath ? `/uploads/${this.imagePath}` : '/images/placeholders/product.png'
+    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/product.png'
   }
 }

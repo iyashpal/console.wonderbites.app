@@ -1,29 +1,31 @@
-import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {Review} from 'App/Models'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { Review } from 'App/Models'
 
 export default class ReviewsController {
-  public async index ({request, response}: HttpContextContract) {
+  public async index ({ request, response }: HttpContextContract) {
     const reviews = await Review.query()
+      .match([request.input('with', []).includes('review.user'), query => query.preload('user')])
+      .match([request.input('with', []).includes('review.product'), query => query.preload('product')])
       .paginate(request.input('page', 1), request.input('limit', 10))
 
     response.json(reviews)
   }
 
-  public async create ({}: HttpContextContract) {
+  public async create ({ }: HttpContextContract) {
   }
 
-  public async store ({}: HttpContextContract) {
+  public async store ({ }: HttpContextContract) {
   }
 
-  public async show ({}: HttpContextContract) {
+  public async show ({ }: HttpContextContract) {
   }
 
-  public async edit ({}: HttpContextContract) {
+  public async edit ({ }: HttpContextContract) {
   }
 
-  public async update ({}: HttpContextContract) {
+  public async update ({ }: HttpContextContract) {
   }
 
-  public async destroy ({}: HttpContextContract) {
+  public async destroy ({ }: HttpContextContract) {
   }
 }

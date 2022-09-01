@@ -1,19 +1,23 @@
-import {DateTime} from 'luxon'
-import {Order, Product, User} from 'App/Models'
-import {BaseModel, BelongsTo, belongsTo, column} from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
+import { Order, Product, User } from 'App/Models'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Review extends BaseModel {
-  @column({isPrimary: true})
+  public static readonly DRAFT = 0
+
+  public static readonly PUBLISHED = 1
+
+  @column({ isPrimary: true })
   public id: number
 
   @column()
   public userId: number
 
   @column()
-  public reviewableId: number
+  public typeId: number
 
   @column()
-  public reviewableType: string
+  public type: string
 
   @column()
   public rating: number
@@ -24,10 +28,13 @@ export default class Review extends BaseModel {
   @column()
   public body: string
 
-  @column.dateTime({autoCreate: true})
+  @column()
+  public status: number
+
+  @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({autoCreate: true, autoUpdate: true})
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -36,15 +43,6 @@ export default class Review extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @belongsTo(() => Product, {
-    foreignKey: 'reviewable_id',
-    onQuery: (query) => query.where('reviewable_type', 'Product'),
-  })
+  @belongsTo(() => Product, { foreignKey: 'typeId' })
   public product: BelongsTo<typeof Product>
-
-  @belongsTo(() => Order, {
-    foreignKey: 'reviewable_id',
-    onQuery: (query) => query.where('reviewable_type', 'Product'),
-  })
-  public order: BelongsTo<typeof Order>
 }
