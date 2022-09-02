@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { ReviewFactory } from 'Database/factories'
+import { ProductFactory, ReviewFactory } from 'Database/factories'
 
 test.group('API [products.show]', (group) => {
   /**
@@ -17,7 +17,7 @@ test.group('API [products.show]', (group) => {
     request.assertStatus(200)
   }).tags(['@reviews', '@reviews.index'])
 
-  test('it can list the reviews', async ({ client, route, assert }) => {
+  test('it can list the reviews.', async ({ client, route, assert }) => {
     const reviews = await ReviewFactory.with('user').apply('typeProduct').createMany(1)
 
     const request = await client.get(route('api.reviews.index'))
@@ -59,6 +59,24 @@ test.group('API [products.show]', (group) => {
 
     request.assertBodyContains({
       data: reviews.map(({ id, product }) => ({ id: id, type_id: product.id, product: { id: product.id } })),
+    })
+  }).tags(['@reviews', '@reviews.index'])
+
+  test('it can list reviews based on product identifier.', async ({ client, route, assert }) => {
+    const product = await ProductFactory.create()
+    const reviews = [
+      ...await ReviewFactory.with('user').merge({ type: 'Product', typeId: product.id }).createMany(6),
+      ...await ReviewFactory.with('user').with('product').createMany(4),
+    ]
+
+    const request = await client.get(route('api.reviews.index', {}, { qs: { product: product.id } }))
+
+    assert.equal(request.body().data.length, 6)
+
+    request.assertStatus(200)
+
+    request.assertBodyContains({
+      data: reviews.filter((review) => review.typeId === product.id).map(({ id }) => ({ id })),
     })
   }).tags(['@reviews', '@reviews.index'])
 })

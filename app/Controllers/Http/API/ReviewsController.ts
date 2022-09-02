@@ -6,6 +6,10 @@ export default class ReviewsController {
     const reviews = await Review.query()
       .match([request.input('with', []).includes('review.user'), query => query.preload('user')])
       .match([request.input('with', []).includes('review.product'), query => query.preload('product')])
+      .match([
+        request.input('product', null),
+        query => query.where('type_id', request.input('product')).where('type', 'Product'),
+      ])
       .paginate(request.input('page', 1), request.input('limit', 10))
 
     response.json(reviews)
