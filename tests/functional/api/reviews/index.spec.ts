@@ -25,7 +25,7 @@ test.group('API [products.show]', (group) => {
 
     request.assertStatus(200)
 
-    request.dumpBody()
+    // request.dumpBody()
 
     // request.assertBodyContains({
     //   data: [],
