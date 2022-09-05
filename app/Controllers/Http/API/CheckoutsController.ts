@@ -33,6 +33,11 @@ export default class CheckoutsController {
           paymentMethod: attrs.payment_method,
         })
 
+        if (order.id) {
+          // Delete the cart if the order created.
+          await Cart.query().where('id', attrs.cart).delete()
+        }
+
         await order.related('products').attach(this.cartProducts(cart.products))
 
         await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
@@ -58,7 +63,7 @@ export default class CheckoutsController {
   public cartProducts (items: any[]) {
     const products = {}
 
-    items.forEach(product => (products[product.id] = { qty: product.$extras.pivot_qty }))
+    items.forEach(product => (products[product.id] = { qty: product.$extras.pivot_qty, price: product.price }))
 
     return products
   }
@@ -67,7 +72,9 @@ export default class CheckoutsController {
     const ingredients = {}
 
     items.map((ingredient) => (ingredients[ingredient.id] = {
-      qty: ingredient.$extras.pivot_qty, product_id: ingredient.$extras.pivot_product_id,
+      price: ingredient.price,
+      qty: ingredient.$extras.pivot_qty,
+      product_id: ingredient.$extras.pivot_product_id,
     }))
 
     return ingredients

@@ -13,6 +13,8 @@ export default class OrderProduct extends BaseSchema {
 
       table.integer('qty').unsigned().notNullable().defaultTo(1)
 
+      table.integer('price').unsigned().notNullable().defaultTo(0)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
