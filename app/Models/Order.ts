@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { User, Product, Address, Ingredient, Coupon, Review } from '.'
-import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { User, Product, Address, Ingredient, Coupon } from '.'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
   public static readonly UPCOMING: number = 0
