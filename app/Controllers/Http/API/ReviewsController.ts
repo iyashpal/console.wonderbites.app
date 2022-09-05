@@ -1,5 +1,6 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Review } from 'App/Models'
+import CreateValidator from 'App/Validators/Review/CreateValidator'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ReviewsController {
   public async index ({ request, response }: HttpContextContract) {
@@ -18,7 +19,18 @@ export default class ReviewsController {
   public async create ({ }: HttpContextContract) {
   }
 
-  public async store ({ }: HttpContextContract) {
+  public async store ({ request, auth, response }: HttpContextContract) {
+    try {
+      const user = auth.use('api').user
+
+      const attributes = await request.validate(CreateValidator)
+
+      const review = await user?.related('reviews').create(attributes)
+
+      response.json(review)
+    } catch (error) {
+      response.unprocessableEntity(error)
+    }
   }
 
   public async show ({ }: HttpContextContract) {

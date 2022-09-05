@@ -4,8 +4,6 @@ import Factory from '@ioc:Adonis/Lucid/Factory'
 
 export default Factory.define(Review, ({ faker }) => {
   return {
-    userId: 0,
-    typeId: 0,
     type: 'Product',
     rating: 5,
     title: faker.lorem.sentence(),
