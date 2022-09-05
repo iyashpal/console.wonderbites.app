@@ -1,4 +1,4 @@
-import { Coupon } from 'App/Models'
+import { Cart, Coupon } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
 import CreateCouponValidator from 'App/Validators/Coupon/CreateValidator'
@@ -102,7 +102,7 @@ export default class CouponsController {
       const coupon = await Coupon.query().where('code', payload.coupon).first()
 
       if (coupon && coupon.is_valid) {
-        const cart = await coupon.related('carts').query().where('id', payload.cart).first()
+        const cart = await Cart.query().where('id', payload.cart).first()
 
         await cart?.merge({ couponId: coupon.id }).save()
 
