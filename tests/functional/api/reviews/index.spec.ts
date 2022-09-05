@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { ProductFactory, ReviewFactory } from 'Database/factories'
 
-test.group('API [products.show]', (group) => {
+test.group('API [reviews.index]', (group) => {
   /**
    * 🚀 Setup Global transaction for every test in this group.
    */

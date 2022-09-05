@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Order, Product, User } from 'App/Models'
+import { Product, User } from 'App/Models'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Review extends BaseModel {
