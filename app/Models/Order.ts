@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { User, Product, Address, Ingredient, Coupon } from '.'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { User, Product, Address, Ingredient, Coupon, Review } from '.'
+import { column, belongsTo, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, HasMany, ManyToMany, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
   public static readonly UPCOMING: number = 0
@@ -58,4 +59,10 @@ export default class Order extends BaseModel {
 
   @manyToMany(() => Ingredient)
   public ingredients: ManyToMany<typeof Ingredient>
+
+  @hasMany(() => Review, {
+    foreignKey: 'typeId',
+    onQuery: query => query.where('type', 'Order'),
+    })
+  public reviews: HasMany<typeof Review>
 }

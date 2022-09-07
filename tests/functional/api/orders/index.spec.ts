@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { Order } from 'App/Models'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { IngredientFactory, OrderFactory, UserFactory } from 'Database/factories'
+import { IngredientFactory, OrderFactory, ReviewFactory, UserFactory } from 'Database/factories'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -271,28 +271,74 @@ test.group('API [orders.index]', (group) => {
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('it can list orders with products, address, coupon, user & ingredients.', async ({ client, route, assert }) => {
+  test('it can list orders with reviews.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
-    const ingredients = await IngredientFactory.createMany(5)
-    const orders = await OrderFactory.with('coupon')
-      .with('products', 3, product => product.with('media', 10))
-      .merge({ userId: user.id, addressId: address.id }).createMany(1)
+    const order = await OrderFactory.with('products', 1)
+      .merge({ userId: user.id, addressId: address.id }).create()
 
-    orders.map(async (order) => {
-      let data = {}
-      ingredients.map(({ id }) => {
-        data[id] = { product_id: 1 }
-      })
+    const merge: { type: string, typeId: number, userId: number }[] = []
 
-      await order.related('ingredients').attach(data)
+    for (let i = 0; i < 10; i++) {
+      merge.push({ type: 'Order', typeId: order.id, userId: user.id })
+    }
 
-      await order.load('ingredients')
+    const reviews = await ReviewFactory.merge(merge).createMany(10)
+
+    const qs = { with: ['order.reviews'] }
+
+    const request = await client.get(route('api.orders.index', {}, { qs }))
+      // @ts-ignore
+      .guard('api').loginAs(user)
+
+    request.assertStatus(200)
+
+    const { data } = request.body()
+
+    assert.equal(data.length, 1)
+
+    request.assertBodyContains({
+      data: [{
+        id: order.id,
+        reviews: reviews.map(({ id }) => ({ id })),
+      }],
     })
+  }).tags(['@orders', '@orders.index'])
+
+  test('it can list orders with products, address, coupon, user etc.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('addresses').create()
+
+    const [address] = user.addresses
+
+    const ingredients = await IngredientFactory.createMany(5)
+
+    const order = await OrderFactory.with('coupon')
+      .with('products', 3, product => product.with('media', 10))
+      .merge({ userId: user.id, addressId: address.id }).create()
+
+    const merge: { type: string, typeId: number, userId: number }[] = []
+
+    for (let i = 0; i < 10; i++) {
+      merge.push({ type: 'Order', typeId: order.id, userId: user.id })
+    }
+
+    const reviews = await ReviewFactory.merge(merge).createMany(10)
+
+    const [product] = order.products
+
+    let ingredientData = {}
+    ingredients.map(({ id }) => {
+      ingredientData[id] = { product_id: product.id, qty: 4 }
+    })
+
+    await order.related('ingredients').attach(ingredientData)
+
+    await order.load('ingredients')
 
     const qs = {
       with: [
-        'order.ingredients', 'order.products', 'order.products.media', 'order.user', 'order.address', 'order.coupon',
+        'order.ingredients', 'order.products', 'order.products.media', 'order.user',
+        'order.address', 'order.coupon', 'order.reviews',
       ],
     }
 
@@ -307,19 +353,20 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 1)
 
     request.assertBodyContains({
-      data: orders.map(({ id, products, ingredients, coupon }) => ({
-        id,
-        products: products.map(({ id, media }) => ({
+      data: [{
+        id: order.id,
+        user_id: user.id,
+        user: { id: user.id },
+        address_id: address.id,
+        coupon_id: order.coupon.id,
+        address: { id: address.id },
+        coupon: { id: order.coupon.id },
+        reviews: reviews.map(({ id }) => ({ id })),
+        products: order.products.map(({ id, media }) => ({
           id, media: media.map(({ id }) => ({ id })),
         })),
         ingredients: ingredients.map(({ id }) => ({ id })),
-        coupon_id: coupon.id,
-        coupon: { id: coupon.id },
-        address_id: address.id,
-        address: { id: address.id },
-        user_id: user.id,
-        user: { id: user.id },
-      })),
+      }],
     })
   }).tags(['@orders', '@orders.index'])
 })

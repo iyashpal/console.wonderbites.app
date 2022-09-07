@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Order from 'App/Models/Order'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import { AddressFactory, CouponFactory, IngredientFactory, ProductFactory, UserFactory } from '.'
+import { AddressFactory, CouponFactory, IngredientFactory, ProductFactory, ReviewFactory, UserFactory } from '.'
 
 export default Factory.define(Order, ({ faker }) => ({
   userId: 0,
@@ -15,6 +15,7 @@ export default Factory.define(Order, ({ faker }) => ({
 }))
   .relation('user', () => UserFactory)
   .relation('coupon', () => CouponFactory)
+  .relation('reviews', () => ReviewFactory)
   .relation('address', () => AddressFactory)
   .relation('products', () => ProductFactory)
   .relation('ingredients', () => IngredientFactory)

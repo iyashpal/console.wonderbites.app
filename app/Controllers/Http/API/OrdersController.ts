@@ -14,14 +14,16 @@ export default class OrdersController {
             query => query.preload('media'),
           ])),
         ])
-        // Load order ingredients if they are requested.
-        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
-        // Load order coupons if they are requested.
-        .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
-        // Load order address if they are requested.
-        .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
         // Load order user if they are requested.
         .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+        // Load order coupons if they are requested.
+        .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
+        // Load order reviews if requested.
+        .match([request.input('with', []).includes('order.reviews'), query => query.preload('reviews')])
+        // Load order address if they are requested.
+        .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
+        // Load order ingredients if they are requested.
+        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
         // Load orders by the status provided.
         .match(
           [request.input('status') === 'upcoming', query => query.where('status', Order.UPCOMING)],
@@ -57,16 +59,19 @@ export default class OrdersController {
         ])
 
         // Load order coupon if requested
-        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
+        .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
 
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
+
+        // Load order reviews if requested.
+        .match([request.input('with', []).includes('order.reviews'), query => query.preload('reviews')])
 
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
 
         // Load order coupon if requested
-        .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
 
         .where('id', params.id).firstOrFail()
 
