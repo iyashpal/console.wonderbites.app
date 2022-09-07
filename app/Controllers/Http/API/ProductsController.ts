@@ -13,53 +13,38 @@ export default class ProductsController {
     }
   }
 
-  public async create ({ }: HttpContextContract) { }
-
-  public async store ({ request, response }: HttpContextContract) {
-    try {
-      const validate = await request.validate({
-        schema: schema.create({
-          name: schema.string({ trim: true }, [rules.maxLength(255)]),
-          category_id: schema.number.optional(),
-          short_description: schema.string({ trim: true }, [rules.maxLength(255)]),
-          description: schema.string({ trim: true }, [rules.maxLength(255)]),
-          calories: schema.string({ trim: true }, [rules.maxLength(255)]),
-          price: schema.string({ trim: true }, [rules.maxLength(20)]),
-          image_path: schema.string({ trim: true }, [rules.maxLength(255)]),
-          status: schema.number.optional(),
-        }),
-      })
-
-      const product = await Product.create(validate)
-
-      response.status(200).json(product)
-    } catch (error) {
-      response.badRequest(error.messages)
-    }
-  }
-
-  public async show ({ params: { id }, auth, response }) {
+  public async show ({ request, params: { id }, auth, response }) {
     try {
       const user = await auth.use('api').user
 
-      const product = await Product.findOrFail(id)
-
-      await product.load(loader => {
-        loader.load('media', (query) => query.select('id', 'file_path'))
-          .load('wishlists', (builder) => {
-            if (user?.id) {
-              builder.where('user_id', user.id)
-            }
-          })
-      })
+      const product = await Product.query()
+        // Load product media if requested.
+        .match([
+          request.input('with', []).includes('product.media'),
+          query => query.preload('media'),
+        ])
+        // Load product ingredients if requested.
+        .match([
+          request.input('with', []).includes('product.ingredients'),
+          query => query.preload('ingredients'),
+        ])
+        // Load product reviews if requested.
+        .match([
+          request.input('with', []).includes('product.reviews'),
+          query => query.preload('reviews'),
+        ])
+        // Load wishlist data if requested.
+        .match([
+          user?.id && request.input('with', []).includes('product.wishlist'),
+          query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
+        ])
+        .where('id', id).firstOrFail()
 
       response.status(200).json(product)
     } catch (error) {
       response.unauthorized({ message: error.message })
     }
   }
-
-  public async edit ({ }: HttpContextContract) { }
 
   public async update ({ }: HttpContextContract) { }
 

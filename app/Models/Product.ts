@@ -70,7 +70,7 @@ export default class Product extends BaseModel {
     localKey: 'id',
     foreignKey: 'typeId',
     onQuery: query => query.where('type', 'Product'),
-  })
+    })
   public reviews: HasMany<typeof Review>
 
   @manyToMany(() => Wishlist)
