@@ -85,20 +85,4 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertBodyContains({ messages: { body: ['Body is required.'] } })
   }).tags(['@reviews', '@reviews.store'])
-
-  test('it can validate the review rating before submitting the review.', async ({ client, route }) => {
-    const user = await UserFactory.create()
-
-    const product = await ProductFactory.create()
-
-    const review = await ReviewFactory.merge({ typeId: product.id, body: '' }).make()
-
-    const request = await client.post(route('api.reviews.store'))
-      // @ts-ignore
-      .guard('api').loginAs(user).json(review.toObject())
-
-    request.assertStatus(422)
-
-    request.assertBodyContains({ messages: { rating: ['Rating field is required.'] } })
-  }).tags(['@reviews', '@reviews.store'])
 })

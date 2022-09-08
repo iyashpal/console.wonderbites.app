@@ -18,7 +18,9 @@ test.group('API [reviews.index]', (group) => {
   }).tags(['@reviews', '@reviews.index'])
 
   test('it can list the reviews.', async ({ client, route, assert }) => {
-    const reviews = await ReviewFactory.with('user').apply('typeProduct').createMany(1)
+    const product = await ProductFactory.create()
+
+    const reviews = await ReviewFactory.with('user').merge({ typeId: product.id }).createMany(1)
 
     const request = await client.get(route('api.reviews.index'))
 
@@ -32,7 +34,10 @@ test.group('API [reviews.index]', (group) => {
   }).tags(['@reviews', '@reviews.index'])
 
   test('it can list the reviews with author.', async ({ client, route, assert }) => {
-    const reviews = await ReviewFactory.with('user').createMany(10)
+    const product = await ProductFactory.create()
+
+    const reviews = await ReviewFactory.with('user').merge({ typeId: product.id }).createMany(10)
+
     await reviews.map(async review => await review.load('user'))
 
     const request = await client.get(route('api.reviews.index', {}, { qs: { with: ['review.user'] } }))

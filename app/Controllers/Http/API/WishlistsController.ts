@@ -40,12 +40,12 @@ export default class WishlistsController {
     )
 
     // Add products to cart.
-    if (request.input('action') === 'SYNC') {
+    if (request.input('action') === 'ADD') {
       await this.syncToWishlist(request, wishlist)
     }
 
     // Remove products from cart.
-    if (request.input('action') === 'DETACH') {
+    if (request.input('action') === 'REMOVE') {
       await this.detachFromWishlist(request, wishlist)
     }
 

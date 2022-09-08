@@ -20,7 +20,7 @@ test.group('API [wishlists.update]', (group) => {
       // @ts-ignore
       .loginAs(user)
 
-      .json({ action: 'SYNC', products: { [product.id]: { qty: 3 } } })
+      .json({ action: 'ADD', products: { [product.id]: { qty: 3 } } })
 
     response.assertStatus(200)
 
@@ -43,7 +43,7 @@ test.group('API [wishlists.update]', (group) => {
       // @ts-ignore
       .loginAs(user)
 
-      .json({ action: 'DETACH', products: [product.id] })
+      .json({ action: 'REMOVE', products: [product.id] })
 
     response.assertStatus(200)
 
@@ -63,7 +63,7 @@ test.group('API [wishlists.update]', (group) => {
       // @ts-ignore
       .loginAs(user)
 
-      .json({ action: 'SYNC', products: { [product.id]: { qty: 5 } } })
+      .json({ action: 'ADD', products: { [product.id]: { qty: 5 } } })
 
     response.assertStatus(200)
 
@@ -93,7 +93,7 @@ test.group('API [wishlists.update]', (group) => {
       // @ts-ignore
       .loginAs(user)
 
-      .json({ action: 'SYNC', products: { [product.id]: { qty: 3 } } })
+      .json({ action: 'ADD', products: { [product.id]: { qty: 3 } } })
 
     response.assertStatus(200)
 
