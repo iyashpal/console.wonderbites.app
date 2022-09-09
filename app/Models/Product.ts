@@ -57,13 +57,19 @@ export default class Product extends BaseModel {
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>
 
-  @manyToMany(() => Ingredient)
+  @manyToMany(() => Ingredient, {
+    pivotColumns: ['id', 'ingredient_id', 'product_id', 'is_required', 'is_optional', 'is_addon'],
+    pivotTimestamps: true,
+    })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Cart)
   public carts: ManyToMany<typeof Cart>
 
-  @manyToMany(() => Order)
+  @manyToMany(() => Order, {
+    pivotColumns: ['id', 'price'],
+    pivotTimestamps: true,
+    })
   public orders: ManyToMany<typeof Order>
 
   @hasMany(() => Review, {

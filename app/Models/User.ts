@@ -1,12 +1,11 @@
-import {DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import {Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review} from '.'
-import {
-  BaseModel, beforeSave, BelongsTo, belongsTo, column, computed, hasMany, HasMany, HasOne, hasOne,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review } from '.'
+import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
-  @column({isPrimary: true})
+  @column({ isPrimary: true })
   public id: number
 
   @column()
@@ -24,7 +23,7 @@ export default class User extends BaseModel {
   @column()
   public imagePath: string
 
-  @column({serializeAs: null})
+  @column({ serializeAs: null })
   public password: string
 
   @column()
@@ -39,10 +38,10 @@ export default class User extends BaseModel {
   @column()
   public language: string
 
-  @column.dateTime({autoCreate: true})
+  @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({autoCreate: true, autoUpdate: true})
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -84,13 +83,13 @@ export default class User extends BaseModel {
   @hasMany(() => Notification, {
     foreignKey: 'notifiableId',
     onQuery: query => query.where('notifiable_type', 'User'),
-  })
+    })
   public notifications: HasMany<typeof Notification>
 
   /**
    * Relation to active cart of the user.
    */
-  @hasOne(() => Cart, {onQuery: query => query.where('status', 1)})
+  @hasOne(() => Cart, { onQuery: query => query.where('status', 1) })
   public cart: HasOne<typeof Cart>
 
   /**
@@ -121,6 +120,6 @@ export default class User extends BaseModel {
   public get avatar () {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
-    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
+    return `https://unavatar.io/${ name }?fallback=https://ui-avatars.com/api?name=${ name }&color=7F9CF4&background=EBF4FF&format=svg`
   }
 }

@@ -3,9 +3,10 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class OrdersController {
   public async index ({ auth, request, response }: HttpContextContract) {
-    const user = await auth.use('api').authenticate()
+    const user = auth.use('api').user!
     try {
       const orders = await user.related('orders').query()
+
         // Load order products if they are requested
         .match([
           request.input('with', []).includes('order.products'),
@@ -14,16 +15,22 @@ export default class OrdersController {
             query => query.preload('media'),
           ])),
         ])
+
         // Load order user if they are requested.
         .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+
         // Load order coupons if they are requested.
         .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
+
         // Load order reviews if requested.
         .match([request.input('with', []).includes('order.reviews'), query => query.preload('reviews')])
+
         // Load order address if they are requested.
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
+
         // Load order ingredients if they are requested.
         .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
+
         // Load orders by the status provided.
         .match(
           [request.input('status') === 'upcoming', query => query.where('status', Order.UPCOMING)],
@@ -32,10 +39,8 @@ export default class OrdersController {
           [request.input('status') === 'canceled', query => query.where('status', Order.CANCELED)],
         )
         // group orders
-        .orderBy(
-          request.input('orderBy', 'created_at'),
-          request.input('order', 'desc')
-        )
+        .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
+
         // Paginate orders
         .paginate(request.input('page', 1), request.input('limit', 50))
 
@@ -55,6 +60,10 @@ export default class OrdersController {
             // Load product media if it is requested in query string.
             request.input('with', []).includes('order.products.media'),
             query => query.preload('media'),
+          ]).match([
+            // Load product ingredients if it is requested in query string.
+            request.input('with', []).includes('order.products.ingredients'),
+            query => query.preload('ingredients'),
           ])),
         ])
 
@@ -70,7 +79,7 @@ export default class OrdersController {
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
 
-        // Load order coupon if requested
+        // Load order ingredients if requested
         .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
 
         .where('id', params.id).firstOrFail()

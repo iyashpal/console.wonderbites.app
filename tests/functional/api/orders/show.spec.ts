@@ -154,14 +154,21 @@ test.group('API [orders.show]', (group) => {
 
   test('it can show the order with products, address, coupon, user etc.', async ({ client, route }) => {
     const user = await UserFactory.with('addresses', 2).create()
+
     const [address] = user.addresses
+
     const product = await ProductFactory.with('media', 5).with('ingredients', 3).create()
+
     const order = await OrderFactory.with('coupon').merge({ userId: user.id, addressId: address.id }).create()
+
     await order.related('products').attach([product.id])
+
     const merge: { typeId: number, type: string, userId: number }[] = []
+
     for (let i = 0; i < 10; i++) {
       merge.push({ typeId: order.id, type: 'Order', userId: user.id })
     }
+
     const reviews = await ReviewFactory.merge(merge).createMany(10)
 
     const ingredients = {}
@@ -174,8 +181,9 @@ test.group('API [orders.show]', (group) => {
 
     const qs = {
       with: [
-        'order.user', 'order.address', 'order.coupon', 'order.products',
-        'order.products.media', 'order.ingredients', 'order.reviews',
+        'order.user', 'order.address',
+        'order.coupon', 'order.products', 'order.products.media',
+        'order.ingredients', 'order.reviews', 'order.products.ingredients',
       ],
     }
 
@@ -194,7 +202,11 @@ test.group('API [orders.show]', (group) => {
       coupon_id: order.couponId,
       coupon: { id: order.coupon.id },
       reviews: reviews.map(({ id }) => ({ id })),
-      products: [{ id: product.id, media: product.media.map(({ id }) => ({ id })) }],
+      products: [{
+        id: product.id,
+        media: product.media.map(({ id }) => ({ id })),
+        ingredients: product.ingredients.map(({ id }) => ({ id })),
+      }],
       ingredients: product.ingredients.map(({ id }) => ({ id })),
     })
   }).tags(['@orders', '@orders.show'])

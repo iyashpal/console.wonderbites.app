@@ -63,6 +63,6 @@ export default class Order extends BaseModel {
   @hasMany(() => Review, {
     foreignKey: 'typeId',
     onQuery: query => query.where('type', 'Order'),
-    })
+  })
   public reviews: HasMany<typeof Review>
 }
