@@ -1,5 +1,4 @@
 import Cuisine from 'App/Models/Cuisine'
-// import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CuisinesController {
@@ -8,9 +7,20 @@ export default class CuisinesController {
    * 
    * @param param0 HttpContextContract 
    */
-  public async index ({ response }: HttpContextContract) {
+  public async index ({ request, response }: HttpContextContract) {
     try {
-      const cuisines = await Cuisine.query().where('type', 'Cuisine').preload('categories')
+      const cuisines = await Cuisine.query()
+        .match([
+          request.input('with', []).includes('cuisines.categories'),
+          query => query.preload('categories'),
+        ])
+        .match([
+          request.input('limit'),
+          async (query) => await query.paginate(
+            request.input('page', 1),
+            request.input('limit', 10)
+          ),
+        ])
 
       response.status(200).json(cuisines)
     } catch (error) {
@@ -18,39 +28,7 @@ export default class CuisinesController {
     }
   }
 
-  /**
-   * Store a newly created resource in storage.
-   * 
-   * @param param0 HttpContextContract
-   */
-  public async store({ }: HttpContextContract) {
-    // try {
-    //   const validate = await request.validate({
-
-    //     schema: schema.create({
-
-    //       name: schema.string({ trim: true }, [rules.maxLength(255)]),
-
-    //       description: schema.string({ trim: true }, [rules.maxLength(255)]),
-
-    //       status: schema.number.optional(),
-
-    //     }),
-    //   })
-
-    //   const cuisine = await Cuisine.create(validate)
-
-    //   response.status(200).json(cuisine)
-    // } catch (error) {
-    //   response.badRequest(error.messages)
-    // }
-  }
-
   public async show ({ }: HttpContextContract) { }
-
-  public async edit ({ }: HttpContextContract) { }
-
-  public async update ({ }: HttpContextContract) { }
 
   public async destroy ({ }: HttpContextContract) { }
 }

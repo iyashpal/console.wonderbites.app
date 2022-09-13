@@ -45,11 +45,11 @@ Route.group(() => {
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
 
     // Cart coupons endpoints.
-    Route.resource('coupons', 'CouponsController').apiOnly().middleware({'*': ['api.auth']})
+    Route.resource('coupons', 'CouponsController').apiOnly().middleware({ '*': ['api.auth'] })
 
     Route.resource('categories', 'CategoriesController')
 
-    Route.resource('cuisines', 'CuisinesController')
+    Route.resource('cuisines', 'CuisinesController').apiOnly().only(['index'])
 
     //Route.resource('blogs', 'BlogsController').as('blogs')
     Route.get('blogs', 'BlogsController.index').as('blogs')

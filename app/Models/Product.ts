@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BelongsTo, belongsTo, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { Cart, Category, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 
@@ -91,4 +91,12 @@ export default class Product extends BaseModel {
   public get thumbnail () {
     return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/product.png'
   }
+
+  public static reviewColumns = scope((query) => query)
+  // query.as(name)
+  // query.raw(
+  //   'SELECT SUM(rating) AS reviews_star FROM reviews WHERE type_id=products.id'
+  // ).raw(
+  //   'SELECT COUNT(*) AS reviews_count FROM reviews WHERE type_id=products.id'
+  // ))
 }
