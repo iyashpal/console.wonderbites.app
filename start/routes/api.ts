@@ -49,7 +49,7 @@ Route.group(() => {
 
     Route.resource('categories', 'CategoriesController')
 
-    Route.resource('cuisines', 'CuisinesController').apiOnly().only(['index'])
+    Route.resource('cuisines', 'CuisinesController').apiOnly().only(['index', 'show'])
 
     //Route.resource('blogs', 'BlogsController').as('blogs')
     Route.get('blogs', 'BlogsController.index').as('blogs')

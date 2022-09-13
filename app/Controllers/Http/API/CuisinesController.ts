@@ -28,7 +28,18 @@ export default class CuisinesController {
     }
   }
 
-  public async show ({ }: HttpContextContract) { }
+  public async show ({ request, response, params: { id } }: HttpContextContract) {
+    try {
+      const cuisine = await Cuisine.query()
+        .match([
+          request.input('with', []).includes('cuisine.categories'),
+          query => query.preload('categories'),
+        ])
+        .where('id', id).firstOrFail()
 
-  public async destroy ({ }: HttpContextContract) { }
+      response.status(200).json(cuisine)
+    } catch (error) {
+      response.badRequest(error.messages)
+    }
+  }
 }
