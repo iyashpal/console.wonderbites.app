@@ -28,7 +28,7 @@ export default class CartsController {
 
     const cart = await this.cart(request, auth.use('api').user!)
 
-    await cart.load('products', (builder) => builder.preload('media'))
+    await cart.load('products', (builder) => builder.preload('media').orderBy('id'))
 
     await cart.load('ingredients')
 
@@ -57,7 +57,7 @@ export default class CartsController {
 
     await cart.load('ingredients')
 
-    await cart.load('products', (builder) => builder.preload('media'))
+    await cart.load('products', (builder) => builder.preload('media').orderBy('id'))
 
     response.json(cart)
   }
