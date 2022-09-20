@@ -41,48 +41,19 @@ Route.group(() => {
     Route.get('cart', 'CartsController.show').as('carts.show')
     Route.route('cart', ['PUT', 'Patch'], 'CartsController.update').as('carts.update')
 
-    // Apply coupon to a checkout
+    // Cart coupons endpoints.
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
     Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
-
-    // Cart coupons endpoints.
     Route.resource('coupons', 'CouponsController').apiOnly().middleware({ '*': ['api.auth'] })
 
-    Route.resource('categories', 'CategoriesController')
+    Route.resource('categories', 'CategoriesController').apiOnly()
 
     Route.resource('cuisines', 'CuisinesController').apiOnly().only(['index', 'show'])
 
-    //Route.resource('blogs', 'BlogsController').as('blogs')
-    Route.get('blogs', 'BlogsController.index').as('blogs')
+    Route.resource('testimonials', 'TestimonialsController').apiOnly()
 
-    Route.get('blogs/:slug', 'BlogsController.showBlogBySlug').as('blogslug')
+    Route.resource('banners', 'BannersController').apiOnly()
 
-    //Route.resource('blogs', 'BlogsController').as('blogs')
-
-    Route.resource('testimonials', 'TestimonialsController').as('testimonials')
-
-    Route.resource('banners', 'BannersController')
-
-    Route.resource('teams', 'TeamsController').as('teams')
-
-    Route.get('about', 'HomeController.about').as('about')
-
-    Route.resource('products', 'ProductsController')
-
-    Route.get('getcart', 'CartsController.getcart').as('getcart')
-
-    Route.get('terms', 'HomeController.terms').as('terms')
-
-    Route.get('privacy_policy', 'HomeController.privacy_policy').as('privacy_policy')
-
-    Route.get('content_policy', 'HomeController.content_policy').as('content_policy')
-
-    Route.get('settings', 'HomeController.settings').as('settings')
-
-    Route.get('my_subscriptions', 'HomeController.my_subscriptions').as('my_subscriptions')
-
-    Route.post('job-apply', 'JobApplicationsController.apply').as('jobapply')
-
-    Route.post('contacts', 'ContactsController.send').as('contacts')
+    Route.resource('products', 'ProductsController').apiOnly()
   })
 }).prefix('/api').as('api').namespace('App/Controllers/Http/API')
