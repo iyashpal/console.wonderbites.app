@@ -52,8 +52,6 @@ Route.group(() => {
 
     Route.resource('testimonials', 'TestimonialsController').apiOnly()
 
-    Route.resource('banners', 'BannersController').apiOnly()
-
     Route.resource('products', 'ProductsController').apiOnly()
   })
 }).prefix('/api').as('api').namespace('App/Controllers/Http/API')

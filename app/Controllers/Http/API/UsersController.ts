@@ -4,9 +4,6 @@ export default class UsersController {
   public async index ({ }: HttpContextContract) {
   }
 
-  public async store ({ }: HttpContextContract) {
-  }
-
   /**
    * Display the specified resource.
    *

@@ -8,7 +8,7 @@ export default class CheckoutsController {
   protected response: object = {}
 
   public async process ({ auth, response, request }: HttpContextContract) {
-    this.user = await auth.use('api').authenticate()
+    this.user = auth.use('api').user!
 
     try {
       const attrs = await request.validate(ProcessValidator)

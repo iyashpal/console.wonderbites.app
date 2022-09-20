@@ -62,13 +62,6 @@ export default class CategoriesController {
   }
 
   /**
-   * Store a newly created resource in storage.
-   *
-   * @param param0 HttpContextContract
-   */
-  public async store ({ }: HttpContextContract) { }
-
-  /**
    * Display the specified resource.
    *
    * @param param0 HttpContextContract
@@ -99,11 +92,5 @@ export default class CategoriesController {
     } catch (error) {
       response.notFound({ message: 'Category Not Found' })
     }
-  }
-
-  public async update ({ }: HttpContextContract) {
-  }
-
-  public async destroy ({ }: HttpContextContract) {
   }
 }

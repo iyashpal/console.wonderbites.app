@@ -36,10 +36,6 @@ export default class WonderpointsController {
 
   public async show ({ }: HttpContextContract) { }
 
-  public async update ({ }: HttpContextContract) { }
-
-  public async destroy ({ }: HttpContextContract) { }
-
   /**
    * Avail user's available wonderpoints.
    * 
