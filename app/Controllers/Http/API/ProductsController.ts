@@ -9,19 +9,32 @@ export default class ProductsController {
       const products = await Product.query()
         // Load wishlist data if requested.
         .match([
-          user?.id && request.input('with', []).includes('product.wishlist'),
+          user?.id && request.input('with', []).includes('products.wishlist'),
           query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
         ])
         // Load product media if requested.
         .match([
-          request.input('with', []).includes('product.media'),
+          request.input('with', []).includes('products.media'),
           query => query.preload('media'),
         ])
         // Load product ingredients if requested.
         .match([
-          request.input('with', []).includes('product.ingredients'),
+          request.input('with', []).includes('products.ingredients'),
           query => query.preload('ingredients'),
         ])
+        // Load product reviews if requested.
+        .match([
+          request.input('with', []).includes('products.reviews'),
+          query => query.preload('reviews'),
+        ])
+        // Load product from a keyword
+        .match([
+          request.input('search', null),
+          query => query.whereLike('name', `%${ request.input('search') }%`)
+            .orWhereLike('description', `%${ request.input('search') }%`),
+        ])
+        .orderBy('id', 'desc')
+        .paginate(request.input('page'), request.input('limit', 10))
 
       response.status(200).json(products)
     } catch (error) {
@@ -31,7 +44,7 @@ export default class ProductsController {
 
   public async show ({ request, params: { id }, auth, response }) {
     try {
-      const user = auth.use('api').user!
+      const user = auth.use('api').user
 
       const product = await Product.query()
         // Load product media if requested.
@@ -51,7 +64,7 @@ export default class ProductsController {
         ])
         // Load wishlist data if requested.
         .match([
-          user.id && request.input('with', []).includes('product.wishlist'),
+          user?.id && request.input('with', []).includes('product.wishlist'),
           query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
         ])
         .where('id', id).firstOrFail()
