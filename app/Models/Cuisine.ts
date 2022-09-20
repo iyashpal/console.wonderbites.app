@@ -1,6 +1,6 @@
-import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { Category } from '.'
 import { DateTime } from 'luxon'
-import Category from './Category'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cuisine extends BaseModel {
   @column({ isPrimary: true })
@@ -29,6 +29,6 @@ export default class Cuisine extends BaseModel {
 
   @computed()
   public get thumbnail () {
-    return this.imagePath ? `/uploads/${this.imagePath}` : '/images/placeholders/cuisine.png'
+    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/cuisine.png'
   }
 }

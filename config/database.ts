@@ -77,6 +77,9 @@ const databaseConfig: DatabaseConfig = {
       },
       healthCheck: false,
       debug: false,
+      seeders: {
+        paths: ['./database/seeders/BaseSeeder'],
+      },
     },
 
   },
