@@ -43,6 +43,7 @@ Route.group(() => {
 
     // Apply coupon to a checkout
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
+    Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
 
     // Cart coupons endpoints.
     Route.resource('coupons', 'CouponsController').apiOnly().middleware({ '*': ['api.auth'] })

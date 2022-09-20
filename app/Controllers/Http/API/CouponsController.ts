@@ -3,6 +3,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
 import CreateCouponValidator from 'App/Validators/Coupon/CreateValidator'
 import UpdateCouponValidator from 'App/Validators/Coupon/UpdateValidator'
+import RemoveCouponValidator from 'App/Validators/Coupon/RemoveValidator'
 
 export default class CouponsController {
   /**
@@ -119,6 +120,20 @@ export default class CouponsController {
       if (coupon && coupon.is_expired) {
         response.status(422).json({ messages: { coupon: ['Coupon code is expired.'] } })
       }
+    } catch (error) {
+      response.status(422).json(error)
+    }
+  }
+
+  public async remove ({ request, response }: HttpContextContract) {
+    try {
+      const payload = await request.validate(RemoveCouponValidator)
+
+      const cart = await Cart.query().where('id', payload.cart).first()
+
+      await cart?.merge({ couponId: null }).save()
+
+      response.status(200).json(cart)
     } catch (error) {
       response.status(422).json(error)
     }

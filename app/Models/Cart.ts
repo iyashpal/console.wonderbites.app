@@ -16,7 +16,7 @@ export default class Cart extends BaseModel {
   public ipAddress: string
 
   @column()
-  public couponId: number
+  public couponId: number | null
 
   @column()
   public status: number
@@ -30,13 +30,13 @@ export default class Cart extends BaseModel {
   @manyToMany(() => Product, {
     pivotColumns: ['id', 'qty'],
     pivotTimestamps: true,
-  })
+    })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient, {
     pivotColumns: ['id', 'qty', 'product_id'],
     pivotTimestamps: true,
-  })
+    })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @hasOne(() => Coupon)
@@ -45,6 +45,6 @@ export default class Cart extends BaseModel {
   @manyToMany(() => Coupon, {
     pivotColumns: ['id'],
     pivotTimestamps: true,
-  })
+    })
   public coupons: ManyToMany<typeof Coupon>
 }
