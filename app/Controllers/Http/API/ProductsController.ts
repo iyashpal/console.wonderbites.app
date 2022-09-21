@@ -27,6 +27,7 @@ export default class ProductsController {
           request.input('with', []).includes('products.reviews'),
           query => query.preload('reviews'),
         ])
+        // Calculate reviews average if requested.
         .match([
           request.input('with', []).includes('products.reviews-avg'),
           query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
@@ -71,6 +72,7 @@ export default class ProductsController {
           user?.id && request.input('with', []).includes('product.wishlist'),
           query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
         ])
+        // Calculate reviews average if requested.
         .match([
           request.input('with', []).includes('product.reviews-avg'),
           query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
