@@ -105,6 +105,24 @@ test.group('API [products.show]', (group) => {
     })
   }).tags(['@products', '@products.show'])
 
+  test('It can show product with reviews total average.', async ({ client, route }) => {
+    const product = await ProductFactory.with('reviews', 9, query => query.with('user')).create()
+
+    const totalReviewsSum = product.reviews.map(({ rating }) => rating).reduce((prev, curr) => prev + curr, 0)
+
+    const productReviewsAvg = totalReviewsSum / product.reviews.length
+
+    const $response = await client.get(route('api.products.show', product, { qs: { with: ['product.reviews-avg'] } }))
+
+    $response.assertStatus(200)
+    $response.assertBodyContains({
+      id: product.id,
+      meta: {
+        averate_rating: productReviewsAvg,
+      },
+    })
+  }).tags(['@products', '@products.show'])
+
   test('it can load the product\'s availability in wishlist of the user.', async ({ client, route }) => {
     const user = await UserFactory.create()
 

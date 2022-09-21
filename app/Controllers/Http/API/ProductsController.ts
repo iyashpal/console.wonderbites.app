@@ -27,6 +27,10 @@ export default class ProductsController {
           request.input('with', []).includes('products.reviews'),
           query => query.preload('reviews'),
         ])
+        .match([
+          request.input('with', []).includes('products.reviews-avg'),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+        ])
         // Load product from a keyword
         .match([
           request.input('search', null),
@@ -66,6 +70,10 @@ export default class ProductsController {
         .match([
           user?.id && request.input('with', []).includes('product.wishlist'),
           query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
+        ])
+        .match([
+          request.input('with', []).includes('product.reviews-avg'),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
         ])
         .where('id', id).firstOrFail()
 
