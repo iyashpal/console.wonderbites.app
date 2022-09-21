@@ -1478,6 +1478,13 @@
     youch "^3.2.1"
     youch-terminal "^2.1.5"
 
+"@japa/expect-type@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@japa/expect-type/-/expect-type-1.0.1.tgz#27dd325a9e777dab9f5bcfad4742a76a28f1b109"
+  integrity sha512-eBh2iLyDH1uNh/3uwj8qvo5En/c6tyVObgXRunTlyyPCyV/vGv+AUx3hdgeeUy+wwv9eK3am9gbjraxnSxMCLw==
+  dependencies:
+    expect-type "^0.14.2"
+
 "@japa/preset-adonis@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@japa/preset-adonis/-/preset-adonis-1.1.1.tgz#53ad002d3917e77515eb3ae17dd4dc8b5515428d"
@@ -4881,6 +4888,11 @@ expand-brackets@^2.1.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+expect-type@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/expect-type/-/expect-type-0.14.2.tgz#3924d0e596455a9b27af48e8a99c582cdd4506eb"
+  integrity sha512-ed3+tr5ujbIYXZ8Pl/VgIphwJQ0q5tBLGGdn7Zvwt1WyPBRX83xjT5pT77P/GkuQbctx0K2ZNSSan7eruJqTCQ==
 
 express@^4.17.3:
   version "4.17.3"
