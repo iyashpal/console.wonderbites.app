@@ -32,6 +32,13 @@ export default class ProductsController {
           request.input('with', []).includes('products.reviews-avg'),
           query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
         ])
+
+        // Filter products based on categories.
+        .match([
+          request.input('categories', []).length,
+          query => query.whereHas('categories', (builder) => builder
+            .whereInPivot('category_id', request.input('categories', []))),
+        ])
         // Load product from a keyword
         .match([
           request.input('search', null),

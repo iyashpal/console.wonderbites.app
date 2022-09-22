@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { ProductFactory, ReviewFactory, UserFactory, WishlistFactory } from 'Database/factories'
+import { CategoryFactory, ProductFactory, ReviewFactory, UserFactory, WishlistFactory } from 'Database/factories'
 
 test.group('API [products.index]', (group) => {
   group.each.setup(async () => {
@@ -235,4 +235,99 @@ test.group('API [products.index]', (group) => {
       ],
     })
   }).tags(['@products', '@products.index'])
+
+  test('it can list products based on selected categories.', async ({ client, route }) => {
+    const [PA, PB, PC, PD, PE, PF, PG, PH, PI, PJ] = await ProductFactory.createMany(10)
+    const [CA, CB, CC, CD, CE, CF, CG, CH, CI, CJ] = await CategoryFactory.createMany(10)
+
+    await PA.related('categories').attach([CA.id, CB.id])
+    await PF.related('categories').attach([CA.id, CB.id])
+
+    let qs = { categories: [CA.id, CB.id] }
+
+    let $response = await client.get(route('api.products.index', {}, { qs }))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: [
+        { id: PA.id }, { id: PF.id }
+      ],
+      meta: { total: 2 },
+    })
+
+    await PB.related('categories').attach([CA.id, CB.id, CC.id, CD.id])
+    await PG.related('categories').attach([CA.id, CB.id, CC.id, CD.id])
+
+    qs = { categories: [CA.id, CB.id, CC.id, CD.id] }
+
+    $response = await client.get(route('api.products.index', {}, { qs }))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: [
+        { id: PA.id }, { id: PF.id },
+        { id: PB.id }, { id: PG.id },
+      ],
+      meta: { total: 4 },
+    })
+
+    await PC.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id])
+    await PH.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id])
+
+    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id] }
+
+    $response = await client.get(route('api.products.index', {}, { qs }))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: [
+        { id: PA.id }, { id: PF.id },
+        { id: PB.id }, { id: PG.id },
+        { id: PC.id }, { id: PH.id },
+      ],
+      meta: { total: 6 },
+    })
+
+    await PD.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id])
+    await PI.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id])
+
+    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id] }
+
+    $response = await client.get(route('api.products.index', {}, { qs }))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: [
+        { id: PA.id }, { id: PF.id },
+        { id: PB.id }, { id: PG.id },
+        { id: PC.id }, { id: PH.id },
+        { id: PD.id }, { id: PI.id },
+      ],
+      meta: { total: 8 },
+    })
+
+    await PE.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id])
+    await PJ.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id])
+
+    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id] }
+
+    $response = await client.get(route('api.products.index', {}, { qs }))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: [
+        { id: PA.id }, { id: PF.id },
+        { id: PB.id }, { id: PG.id },
+        { id: PC.id }, { id: PH.id },
+        { id: PD.id }, { id: PI.id },
+        { id: PE.id }, { id: PJ.id },
+      ],
+      meta: { total: 10 },
+    })
+  })
 })
