@@ -67,7 +67,7 @@ export default class Product extends BaseModel {
   public carts: ManyToMany<typeof Cart>
 
   @manyToMany(() => Order, {
-    pivotColumns: ['id', 'price'],
+    pivotColumns: ['id', 'price', 'qty'],
     pivotTimestamps: true,
     })
   public orders: ManyToMany<typeof Order>

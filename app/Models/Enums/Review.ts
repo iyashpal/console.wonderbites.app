@@ -1,6 +1,4 @@
-enum Review {
+export enum ReviewStatus {
   DRAFT = 0,
   PUBLISHED = 1,
 }
-
-export default Review

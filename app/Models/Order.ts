@@ -54,7 +54,10 @@ export default class Order extends BaseModel {
   @belongsTo(() => Coupon)
   public coupon: BelongsTo<typeof Coupon>
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotColumns: ['id', 'qty', 'price'],
+    pivotTimestamps: true,
+    })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient)
