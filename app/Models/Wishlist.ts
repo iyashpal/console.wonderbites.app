@@ -1,7 +1,5 @@
-import User from './User'
-import Product from './Product'
 import { DateTime } from 'luxon'
-import Ingredient from './Ingredient'
+import { User, Product, Ingredient } from '.'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 export default class Wishlist extends BaseModel {
   @column({ isPrimary: true })
@@ -19,7 +17,7 @@ export default class Wishlist extends BaseModel {
   @manyToMany(() => Product, {
     pivotColumns: ['qty'],
     pivotTimestamps: true,
-  })
+    })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient)

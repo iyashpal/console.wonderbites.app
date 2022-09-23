@@ -10,7 +10,7 @@ export default class AddressesController {
    * @param param0 HttpContextContract
    * @return {JSON}
    */
-  public async index ({ auth, response }: HttpContextContract) {
+  public async index ({ auth, response }: HttpContextContract): Promise<void> {
     const user = auth.use('api').user!
 
     await user.load('addresses')
@@ -23,7 +23,7 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async store ({ auth, request, response }: HttpContextContract) {
+  public async store ({ auth, request, response }: HttpContextContract): Promise<void> {
     const user = auth.use('api').user!
 
     try {
@@ -49,7 +49,7 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ response, params }: HttpContextContract) {
+  public async show ({ response, params }: HttpContextContract): Promise<void> {
     try {
       const address = await Address.findOrFail(params.id)
 
@@ -66,7 +66,7 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async update ({ auth, response, params, request }: HttpContextContract) {
+  public async update ({ auth, response, params, request }: HttpContextContract): Promise<void> {
     try {
       const user = auth.use('api').user!
 
@@ -96,7 +96,7 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async destroy ({ response, params }: HttpContextContract) {
+  public async destroy ({ response, params }: HttpContextContract): Promise<void> {
     const address = await Address.findOrFail(params.id)
 
     await address.delete().then(() => {

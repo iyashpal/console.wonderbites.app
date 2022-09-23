@@ -1,9 +1,5 @@
-import Blog from './Blog'
 import { DateTime } from 'luxon'
-import Cuisine from './Cuisine'
-import Product from './Product'
-import OpeningPosition from './OpeningPosition'
-import Ingredient from 'App/Models/Ingredient'
+import { Cuisine, Product, Ingredient } from '.'
 import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
@@ -65,12 +61,6 @@ export default class Category extends BaseModel {
 
   @manyToMany(() => Ingredient, { pivotTable: 'category_ingredient' })
   public ingredients: ManyToMany<typeof Ingredient>
-
-  @manyToMany(() => Blog, { pivotTable: 'blog_category' })
-  public blog: ManyToMany<typeof Blog>
-
-  @manyToMany(() => OpeningPosition, { pivotTable: 'job_category' })
-  public openingposition: ManyToMany<typeof OpeningPosition>
 
   /**
    * Query scope for different types of categories.

@@ -1,6 +1,6 @@
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {User} from '.'
 import { DateTime } from 'luxon'
-import User from './User'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Wonderpoint extends BaseModel {
   @column({ isPrimary: true })

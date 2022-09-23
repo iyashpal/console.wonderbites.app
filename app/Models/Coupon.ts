@@ -1,4 +1,4 @@
-import Cart from './Cart'
+import { Cart } from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 
@@ -39,10 +39,10 @@ export default class Coupon extends BaseModel {
   @computed()
   public get discount () {
     if (this.discountType === 'price') {
-      return `$${this.discountValue}`
+      return `$${ this.discountValue }`
     }
 
-    return `${this.discountValue}%`
+    return `${ this.discountValue }%`
   }
 
   @computed()

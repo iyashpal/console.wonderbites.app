@@ -1,4 +1,4 @@
-import Product from './Product'
+import { Product } from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
