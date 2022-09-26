@@ -18,11 +18,27 @@ export default class Notification extends BaseModel {
   public data: JSON
 
   @column.dateTime()
-  public readAt: DateTime
+  public readAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  public async markAsRead (this: Notification) {
+    await this.merge({ readAt: DateTime.now() }).save()
+  }
+
+  public async markAsUnread (this: Notification) {
+    await this.merge({ readAt: null }).save()
+  }
+
+  public get read () {
+    return Boolean(this.readAt)
+  }
+
+  public get unread () {
+    return !this.readAt
+  }
 }

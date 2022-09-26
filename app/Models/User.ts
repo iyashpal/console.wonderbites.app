@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review, Feedback } from '.'
 import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review, Feedback } from '.'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -81,6 +81,7 @@ export default class User extends BaseModel {
    * Relation to user notifications.
    */
   @hasMany(() => Notification, {
+    localKey: 'id',
     foreignKey: 'notifiableId',
     onQuery: query => query.where('notifiable_type', 'User'),
   })
@@ -124,5 +125,24 @@ export default class User extends BaseModel {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
     return `https://unavatar.io/${ name }?fallback=https://ui-avatars.com/api?name=${ name }&color=7F9CF4&background=EBF4FF&format=svg`
+  }
+
+  public async notify () {
+    //
+  }
+
+  public async readNotifications (this: User) {
+    return this.related('notifications').query()
+      .whereNotNull('readAt').orderBy('createdAt', 'desc')
+  }
+
+  public async unreadNotifications (this: User) {
+    return this.related('notifications').query()
+      .whereNull('readAt').orderBy('createdAt', 'desc')
+  }
+
+  public async markNotificationsAsRead (this: User) {
+    return this.related('notifications').query()
+      .whereNull('readAt').update({ readAt: DateTime.now().toSQL() })
   }
 }
