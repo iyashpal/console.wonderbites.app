@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review } from '.'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review, Feedback } from '.'
 import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
@@ -83,7 +83,7 @@ export default class User extends BaseModel {
   @hasMany(() => Notification, {
     foreignKey: 'notifiableId',
     onQuery: query => query.where('notifiable_type', 'User'),
-    })
+  })
   public notifications: HasMany<typeof Notification>
 
   /**
@@ -112,6 +112,9 @@ export default class User extends BaseModel {
    */
   @hasMany(() => Wonderpoint)
   public wonderpoints: HasMany<typeof Wonderpoint>
+
+  @hasMany(() => Feedback)
+  public feedbacks: HasMany<typeof Feedback>
 
   /**
    * User avatar attribute.

@@ -1,15 +1,25 @@
+import { Feedback } from 'App/Models'
+import CreateValidator from 'App/Validators/Feedback/CreateValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class FeedbacksController {
   public async index ({ }: HttpContextContract) { }
 
-  public async create ({ }: HttpContextContract) { }
+  public async store ({ auth, request, response }: HttpContextContract) {
+    const user = auth.use('api').user!
 
-  public async store ({ }: HttpContextContract) { }
+    try {
+      const args = await request.validate(CreateValidator)
+
+      const feedback = await user.related('feedbacks').create(args)
+
+      response.json(feedback)
+    } catch (error) {
+      response.unprocessableEntity(error)
+    }
+  }
 
   public async show ({ }: HttpContextContract) { }
-
-  public async edit ({ }: HttpContextContract) { }
 
   public async update ({ }: HttpContextContract) { }
 

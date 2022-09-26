@@ -30,6 +30,8 @@ Route.group(() => {
     // Endpoints to Wonderpoints
     Route.resource('wonderpoints', 'WonderpointsController').apiOnly().only(['index', 'store'])
     Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('wonderpoints.avail')
+
+    Route.resource('feedbacks', 'FeedbacksController').apiOnly()
   }).middleware('api.auth')
 
   /**
