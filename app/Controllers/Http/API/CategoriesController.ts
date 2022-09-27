@@ -7,30 +7,61 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async index ({ response, request }: HttpContextContract) {
+  public async index ({ auth, response, request }: HttpContextContract) {
+    const user = auth.use('api').user!
+
     try {
       // Nested conditional query to load the categories data.
-      const queryOnRequestInput = (query) => query.match(
-        [
-          // Load products if it is requested in query string.
+      const queryOnRequestInput = (query) => query
+
+        // Load products if it is requested in query string.
+        .match([
           request.input('with', []).includes('category.products'),
-          query => query.preload('products', (builder) => builder.match([
+          query => query.preload('products', (builder) => builder
             // Load product media if it is requested in query string.
-            request.input('with', []).includes('category.products.media'),
-            query => query.preload('media'),
-          ])),
-        ],
-        [
-          // Load ingredients if it is requested in query string.
+            .match([
+              request.input('with', []).includes('category.products.media'),
+              query => query.preload('media'),
+            ])
+            // Load product ingredients if requested.
+            .match([
+              request.input('with', []).includes('category.products.ingredients'),
+              query => query.preload('ingredients'),
+            ])
+            // Load product reviews if requested.
+            .match([
+              request.input('with', []).includes('category.products.reviews'),
+              query => query.preload('reviews'),
+            ])
+            .match([
+              request.input('with', []).includes('category.products.reviews-avg'),
+              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+            ])
+            // Load wishlist data if requested.
+            .match([
+              user?.id && request.input('with', []).includes('category.products.wishlist'),
+              query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
+            ])
+            // Load product from a keyword
+            .match([
+              request.input('search', null),
+              query => query.whereLike('name', `%${ request.input('search') }%`)
+                .orWhereLike('description', `%${ request.input('search') }%`),
+            ])
+          ),
+        ])
+
+        // Load ingredients if it is requested in query string.
+        .match([
           request.input('with', []).includes('category.ingredients'),
           query => query.preload('ingredients'),
-        ],
-        [
-          // Load cuisines if it is requested in query string.
+        ])
+
+        // Load cuisines if it is requested in query string.
+        .match([
           request.input('with', []).includes('category.cuisines'),
           query => query.preload('cuisines'),
-        ],
-      )
+        ])
 
       const category = await Category.query().match(
         [
@@ -68,25 +99,28 @@ export default class CategoriesController {
    */
   public async show ({ response, params: { id }, request }: HttpContextContract) {
     try {
-      const category = await Category.findOrFail(id)
+      // const category = await Category.findOrFail(id)
+      const category = await Category.query()
 
-      // Load products when endpoint contains with attribute.
-      if (request.input('with', []).includes('products')) {
-        await category.load('products', (builder) => builder.match([
-          request.input('with', []).includes('products.media'),
-          query => query.preload('media'),
-        ]))
-      }
-
-      // Load ingredients when endpoint contains with attribute.
-      if (request.input('with', []).includes('ingredients')) {
-        await category.load('ingredients')
-      }
-
-      // Load cuisines when endpoint contains with attribute.
-      if (request.input('with', []).includes('cuisines')) {
-        await category.load('cuisines')
-      }
+        // Load products when endpoint contains with attribute.
+        .match([
+          request.input('with', []).includes('products'),
+          query => query.preload('products', builder => builder.match([
+            request.input('with', []).includes('products.media'),
+            query => query.preload('media'),
+          ])),
+        ])
+        // Load ingredients when endpoint contains with attribute.
+        .match([
+          request.input('with', []).includes('ingredients'),
+          query => query.preload('ingredients'),
+        ])
+        // Load cuisines when endpoint contains with attribute.
+        .match([
+          request.input('with', []).includes('cuisines'),
+          query => query.preload('cuisines'),
+        ])
+        .where('id', id).firstOrFail()
 
       response.status(200).json(category)
     } catch (error) {

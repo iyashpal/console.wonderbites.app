@@ -57,7 +57,7 @@ test.group('API [categories.index]', (group) => {
     }])
   }).tags(['@categories', '@categories.index'])
 
-  test('it should contain the list of media under products.', async ({ client, route }) => {
+  test('it contains the list of products with media under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
     const category = await CategoryFactory.create()
     const media = await MediaFactory.createMany(5)
@@ -85,6 +85,177 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it contains the list of products with ingredients under it', async ({ client, route }) => {
+    const product = await ProductFactory.with('ingredients', 5).create()
+    const category = await CategoryFactory.create()
+
+    await category.related('products').attach([product.id])
+
+    const queryString = {
+      type: 'product', with: [
+        'category.products',
+        'category.products.media',
+        'category.products.ingredients',
+      ],
+    }
+
+    const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      products: [
+        {
+          id: product.id,
+          name: product.name,
+          ingredients: product.ingredients.map(
+            ({ id, name, description, price }) => ({ id, name, description, price })
+          ),
+        },
+      ],
+    }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it contains the list of products with reviews under it', async ({ client, route }) => {
+    const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
+    const category = await CategoryFactory.create()
+
+    await category.related('products').attach([product.id])
+
+    const queryString = {
+      type: 'product', with: [
+        'category.products',
+        'category.products.media',
+        'category.products.reviews',
+      ],
+    }
+
+    const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      products: [
+        {
+          id: product.id,
+          name: product.name,
+          reviews: product.reviews.map(
+            ({ id, title }) => ({ id, title })
+          ),
+        },
+      ],
+    }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it contains the list of products with reviews average rating under it', async ({ client, route }) => {
+    const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
+    const category = await CategoryFactory.create()
+
+    await product.loadAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating'))
+
+    await category.related('products').attach([product.id])
+
+    const queryString = {
+      type: 'product', with: [
+        'category.products',
+        'category.products.media',
+        'category.products.reviews-avg',
+      ],
+    }
+
+    const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      products: [
+        {
+          id: product.id,
+          name: product.name,
+          meta: {
+            average_rating: product.$extras.average_rating,
+          },
+        },
+      ],
+    }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it contains the list of products with wishlist under it', async ({ client, route }) => {
+    const category = await CategoryFactory.create()
+    const user = await UserFactory.with('wishlist').create()
+    const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
+
+    await user.wishlist.related('products').attach([product.id])
+
+    await product.loadAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating'))
+
+    await category.related('products').attach([product.id])
+
+    const queryString = {
+      type: 'product',
+      with: [
+        'category.products',
+        'category.products.media',
+        'category.products.wishlist',
+        'category.products.reviews-avg',
+      ],
+    }
+
+    const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
+      // @ts-ignore
+      .guard('api').loginAs(user)
+
+    request.assertStatus(200)
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      products: [
+        {
+          id: product.id,
+          name: product.name,
+          wishlists: [{ id: user.wishlist.id }],
+        },
+      ],
+    }])
+  }).tags(['@categories', '@categories.index'])
+
+  test('it contains the list of products searched by custom keyword under it', async ({ client, route, assert }) => {
+    const category = await CategoryFactory.create()
+    const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
+
+    await category.related('products').attach([product.id])
+
+    const queryString = {
+      type: 'product',
+      search: 'search keyword',
+      with: [
+        'category.products',
+        'category.products.search',
+      ],
+    }
+
+    const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
+
+    request.assertStatus(200)
+
+    const [c] = request.body()
+
+    request.assertBodyContains([{
+      id: category.id,
+      name: category.name,
+      products: [],
+    }])
+
+    assert.equal(0, c.products.length)
   }).tags(['@categories', '@categories.index'])
 
   test('it should list only given type of categories.', async ({ client, route, assert }) => {
