@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Cart, Ingredient, Product } from '../'
+import { Cart, Ingredient, Product } from '..'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class CartIngredient extends BaseModel {
@@ -30,6 +30,6 @@ export default class CartIngredient extends BaseModel {
   @belongsTo(() => Product, {
     localKey: 'id',
     foreignKey: 'productId',
-  })
+    })
   public product: BelongsTo<typeof Product>
 }

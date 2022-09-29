@@ -10,21 +10,24 @@ export default class ProductWishlist extends BaseModel {
   @column()
   public productId: number
 
-  @belongsTo(() => Product)
-  public product: BelongsTo<typeof Product>
-
   @column()
   public wishlistId: number
 
-  @belongsTo(() => Wishlist)
-  public wishlist: BelongsTo<typeof Wishlist>
-
   @column()
   public qty: number
+
+  @column()
+  public price: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Wishlist)
+  public wishlist: BelongsTo<typeof Wishlist>
+
+  @belongsTo(() => Product)
+  public product: BelongsTo<typeof Product>
 }

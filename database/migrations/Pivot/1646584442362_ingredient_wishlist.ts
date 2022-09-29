@@ -15,6 +15,8 @@ export default class IngredientWishlist extends BaseSchema {
 
       table.integer('qty').unsigned().notNullable().defaultTo(1)
 
+      table.integer('price').unsigned().defaultTo(0)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

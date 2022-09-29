@@ -1,7 +1,6 @@
-import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
-import Ingredient from '../Ingredient'
-import Wishlist from '../Wishlist'
+import { Wishlist, Ingredient } from '..'
+import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class IngridientWishlist extends BaseModel {
   @column({ isPrimary: true })
@@ -10,18 +9,24 @@ export default class IngridientWishlist extends BaseModel {
   @column()
   public ingridientId: number
 
-  @belongsTo(() => Ingredient)
-  public ingridient: BelongsTo<typeof Ingredient>
-
   @column()
   public wishlistId: number
 
-  @belongsTo(() => Wishlist)
-  public wishlist: BelongsTo<typeof Wishlist>
+  @column()
+  public price: number
+
+  @column()
+  public qty: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Wishlist)
+  public wishlist: BelongsTo<typeof Wishlist>
+
+  @belongsTo(() => Ingredient)
+  public ingridient: BelongsTo<typeof Ingredient>
 }
