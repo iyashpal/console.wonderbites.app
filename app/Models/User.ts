@@ -84,7 +84,7 @@ export default class User extends BaseModel {
     localKey: 'id',
     foreignKey: 'notifiableId',
     onQuery: query => query.where('notifiable_type', 'User'),
-    })
+  })
   public notifications: HasMany<typeof Notification>
 
   /**
@@ -124,7 +124,7 @@ export default class User extends BaseModel {
   public get avatar () {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
-    return `https://unavatar.io/${ name }?fallback=https://ui-avatars.com/api?name=${ name }&color=7F9CF4&background=EBF4FF&format=svg`
+    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
   }
 
   public async notify () {

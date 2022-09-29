@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import UpdateValidator from 'App/Validators/API/User/UpdateValidator'
 
 export default class UsersController {
   public async index ({ }: HttpContextContract) {
@@ -20,17 +21,18 @@ export default class UsersController {
   public async update ({ auth, request, response }: HttpContextContract) {
     const user = auth.use('api').user!
 
-    const image = request.file('image_path')
+    try {
+      const payload = await request.validate(UpdateValidator)
 
-    if (image) {
-      await image.moveToDisk('./')
+      if (payload.imagePath) {
+        await payload.imagePath?.moveToDisk('avatars')
+      }
+
+      await user.merge({ ...payload, imagePath: payload.imagePath ? payload.imagePath.fileName : user.imagePath })
+        .save().then(user => response.ok(user))
+    } catch (error) {
+      response.unprocessableEntity(error)
     }
-
-    await user.merge({
-      firstName: request.input('firstName') ? request.input('firstName') : user.firstName,
-      lastName: request.input('lastName') ? request.input('lastName') : user.lastName,
-      imagePath: image ? image!.fileName : user.imagePath,
-    }).save().then((user) => response.status(200).json(user))
   }
 
   public async destroy ({ }: HttpContextContract) {
@@ -44,8 +46,16 @@ export default class UsersController {
   public async auth ({ auth, response }: HttpContextContract) {
     const user = auth.use('api').user!
 
-    await user.load('addresses')
+    try {
+      await user.load('addresses')
 
-    response.status(200).json(user)
+      response.status(200).json(user)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
+
+  public async avatar () {
+
   }
 }
