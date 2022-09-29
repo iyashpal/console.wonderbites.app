@@ -97,7 +97,9 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ response, params: { id }, request }: HttpContextContract) {
+  public async show ({ auth, response, params: { id }, request }: HttpContextContract) {
+    const user = auth.use('api').user!
+
     try {
       // const category = await Category.findOrFail(id)
       const category = await Category.query()
@@ -108,7 +110,33 @@ export default class CategoriesController {
           query => query.preload('products', builder => builder.match([
             request.input('with', []).includes('products.media'),
             query => query.preload('media'),
-          ])),
+          ])
+            // Load product ingredients if requested.
+            .match([
+              request.input('with', []).includes('products.ingredients'),
+              query => query.preload('ingredients'),
+            ])
+            // Load product reviews if requested.
+            .match([
+              request.input('with', []).includes('products.reviews'),
+              query => query.preload('reviews'),
+            ])
+            .match([
+              request.input('with', []).includes('products.reviews-avg'),
+              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+            ])
+            // Load wishlist data if requested.
+            .match([
+              user?.id && request.input('with', []).includes('products.wishlist'),
+              query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
+            ])
+            // Load product from a keyword
+            .match([
+              request.input('search', null),
+              query => query.whereLike('name', `%${ request.input('search') }%`)
+                .orWhereLike('description', `%${ request.input('search') }%`),
+            ])
+          ),
         ])
         // Load ingredients when endpoint contains with attribute.
         .match([

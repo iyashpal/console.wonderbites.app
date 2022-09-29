@@ -39,12 +39,12 @@ export default class WishlistsController {
       { ipAddress: request.ip() } // Save payload
     )
 
-    // Add products to cart.
+    // Add products to wishlist.
     if (request.input('action') === 'ADD') {
       await this.syncToWishlist(request, wishlist)
     }
 
-    // Remove products from cart.
+    // Remove products from wishlist.
     if (request.input('action') === 'REMOVE') {
       await this.detachFromWishlist(request, wishlist)
     }
@@ -56,18 +56,18 @@ export default class WishlistsController {
   }
 
   /**
-   * Synchronize products with cart.
+   * Synchronize products with wishlist.
    *
    * @param request RequestContract
-   * @param cart Cart
+   * @param wishlist wishlist
    */
   protected async syncToWishlist (request: RequestContract, wishlist: Wishlist) {
-    // Add products to cart
+    // Add products to wishlist
     if (request.input('products')) {
       await wishlist.related('products').sync(request.input('products'), false)
     }
 
-    // Add ingredients to cart
+    // Add ingredients to wishlist
     if (request.input('ingredients')) {
       await wishlist.related('ingredients').sync(request.input('ingredients'), false)
     }
@@ -80,12 +80,12 @@ export default class WishlistsController {
    * @param wishlist Wishlist
    */
   protected async detachFromWishlist (request: RequestContract, wishlist: Wishlist) {
-    // Remove products from cart.
+    // Remove products from wishlist.
     if (request.input('products')) {
       await wishlist.related('products').detach(request.input('products'))
     }
 
-    // Remove products from cart.
+    // Remove products from wishlist.
     if (request.input('ingredients')) {
       await wishlist.related('ingredients').detach(request.input('ingredients'))
     }
