@@ -1,5 +1,6 @@
 import { Order } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { OrderStatus } from 'App/Models/Enums/Order'
 
 export default class OrdersController {
   public async index ({ auth, request, response }: HttpContextContract) {
@@ -87,6 +88,26 @@ export default class OrdersController {
       response.json(order)
     } catch (error) {
       response.notFound({ message: 'Not found' })
+    }
+  }
+
+  /**
+   * Cancel user orders.
+   * 
+   * @param param0 {HttpContextContract}
+   */
+  public async cancel ({ auth, params: { id }, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    try {
+      const order = await user.related('orders').query().where('id', id).firstOrFail()
+
+      console.log(order.createdAt.diffNow().minutes)
+
+      await order.merge({ status: OrderStatus.CANCELED }).save()
+        .then(order => response.ok(order))
+    } catch (error) {
+      response.notFound(error)
     }
   }
 }

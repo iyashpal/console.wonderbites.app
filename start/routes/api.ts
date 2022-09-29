@@ -20,6 +20,7 @@ Route.group(() => {
 
     // Endpoint to create user orders.
     Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
+    Route.put('orders/:id/cancel', 'OrdersController.cancel').as('orders.cancel')
 
     Route.resource('reviews', 'ReviewsController').apiOnly().only(['store'])
 
