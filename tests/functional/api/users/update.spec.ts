@@ -8,6 +8,14 @@ test.group('API [users.update]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
+  test('it can not allow unauthenticated users to update the profile.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const $response = await client.put(route('api.users.update', user))
+
+    $response.assertStatus(401)
+  })
+
   test('it can not allow user to update their profile without first name.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
