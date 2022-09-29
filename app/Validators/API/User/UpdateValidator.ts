@@ -44,5 +44,8 @@ export default class UpdateValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'firstName.required': 'First name is required.',
+    'lastName.required': 'Last name is required.',
+  }
 }
