@@ -8,7 +8,7 @@ export default class WishlistsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({ auth, response, request }: HttpContextContract) {
+  public async show({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
@@ -31,7 +31,7 @@ export default class WishlistsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({ auth, response, request }: HttpContextContract) {
+  public async update({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
@@ -61,7 +61,7 @@ export default class WishlistsController {
    * @param request RequestContract
    * @param wishlist wishlist
    */
-  protected async syncToWishlist (request: RequestContract, wishlist: Wishlist) {
+  protected async syncToWishlist(request: RequestContract, wishlist: Wishlist) {
     // Add products to wishlist
     if (request.input('products')) {
       await wishlist.related('products').sync(request.input('products'), false)
@@ -79,7 +79,7 @@ export default class WishlistsController {
    * @param request RequestContract
    * @param wishlist Wishlist
    */
-  protected async detachFromWishlist (request: RequestContract, wishlist: Wishlist) {
+  protected async detachFromWishlist(request: RequestContract, wishlist: Wishlist) {
     // Remove products from wishlist.
     if (request.input('products')) {
       await wishlist.related('products').detach(request.input('products'))
