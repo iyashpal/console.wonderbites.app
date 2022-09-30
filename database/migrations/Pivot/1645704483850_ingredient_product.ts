@@ -11,6 +11,10 @@ export default class IngredientProduct extends BaseSchema {
 
       table.bigInteger('product_id').unsigned().references('products.id').onDelete('CASCADE')
 
+      table.string('qty').defaultTo(1)
+
+      table.string('max_quantity').defaultTo(0)
+
       table.boolean('is_required').defaultTo(true)
 
       table.boolean('is_optional').defaultTo(false)

@@ -6,6 +6,7 @@ export default Factory.define(User, ({ faker }) => {
   return {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
+    imagePath: faker.image.imageUrl(),
     mobile: faker.phone.number('+91 ##########'),
     email: faker.internet.email(),
     password: 'Welcome@123!',

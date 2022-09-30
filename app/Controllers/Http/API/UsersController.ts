@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import AvatarValidator from 'App/Validators/API/User/AvatarValidator'
 import UpdateValidator from 'App/Validators/API/User/UpdateValidator'
 
 export default class UsersController {
@@ -55,7 +56,30 @@ export default class UsersController {
     }
   }
 
-  public async avatar () {
-    // 
+  /**
+   * Update or remove the user avatar.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async avatar ({ auth, request, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    try {
+      const payload = await request.validate(AvatarValidator)
+
+      if (payload.avatar) {
+        await payload.avatar?.moveToDisk('avatars')
+
+        await user.merge({ imagePath: payload.avatar.fileName }).save().then(user => {
+          response.json(user)
+        })
+      } else {
+        await user.merge({ imagePath: null }).save().then(user => {
+          response.json(user)
+        })
+      }
+    } catch (error) {
+      response.unprocessableEntity(error)
+    }
   }
 }

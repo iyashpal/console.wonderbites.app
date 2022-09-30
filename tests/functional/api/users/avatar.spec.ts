@@ -16,7 +16,7 @@ test.group('API [users.avatar]', (group) => {
     $response.assertBodyContains({ message: 'Unauthenticated' })
   }).tags(['@users', '@users.avatar'])
 
-  test('it can not allow users to update avatar without update action.', async ({ client, route }) => {
+  test('it can not allow users to remove avatar', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.avatar'))
@@ -24,5 +24,7 @@ test.group('API [users.avatar]', (group) => {
       .guard('api').loginAs(user).json({ action: 'REMOVE' })
 
     $response.assertStatus(200)
+
+    $response.assertBodyContains({ image_path: null })
   })
 })
