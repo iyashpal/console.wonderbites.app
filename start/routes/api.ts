@@ -28,6 +28,7 @@ Route.group(() => {
     // Endpoint to create wishlists.
     Route.get('wishlists', 'WishlistsController.show').as('wishlists.show')
     Route.put('wishlists', 'WishlistsController.update').as('wishlists.update')
+    Route.put('wishlists/clean', 'WishlistsController.clean').as('wishlists.clean')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
 

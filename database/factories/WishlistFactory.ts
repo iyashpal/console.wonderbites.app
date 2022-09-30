@@ -1,6 +1,6 @@
 import Wishlist from 'App/Models/Wishlist'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import { UserFactory } from '.'
+import { IngredientFactory, ProductFactory, UserFactory } from '.'
 
 export default Factory.define(Wishlist, ({ faker }) => {
   return {
@@ -8,4 +8,6 @@ export default Factory.define(Wishlist, ({ faker }) => {
   }
 })
   .relation('user', () => UserFactory)
+  .relation('products', () => ProductFactory)
+  .relation('ingredients', () => IngredientFactory)
   .build()

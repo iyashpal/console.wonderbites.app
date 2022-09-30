@@ -4,6 +4,32 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class WishlistsController {
   /**
+   * Remove everything from wishlist.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async clean ({ auth, request, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    try {
+      const wishlist = await user.related('wishlist').firstOrCreate(
+        { userId: user.id }, // Search payload
+        { ipAddress: request.ip() } // Save payload
+      )
+
+      await wishlist.related('products').sync([])
+      await wishlist.related('ingredients').sync([])
+
+      await wishlist.load('products')
+      await wishlist.load('ingredients')
+
+      response.json(wishlist)
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
+
+  /**
    * Show user wishlist.
    *
    * @param param0 HttpContextContract Request payload
