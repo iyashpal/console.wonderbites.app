@@ -7,7 +7,8 @@ Route.group(() => {
   Route.group(() => {
     // Get the authenticated user.
     Route.get('users/auth', 'UsersController.auth').as('users.auth')
-
+    // Add or remove the user avatar.
+    Route.put('users/avatar', 'UsersController.avatar').as('users.avatar')
     // Endpoints to user operations.
     Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])
 

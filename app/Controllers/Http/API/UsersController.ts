@@ -56,6 +56,6 @@ export default class UsersController {
   }
 
   public async avatar () {
-
+    // 
   }
 }
