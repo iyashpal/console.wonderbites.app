@@ -34,8 +34,6 @@ test.group('API [orders.update]', (group) => {
     })
       .with('products', 5, query => query.with('ingredients', 5)).create()
 
-    await new Promise((resolve) => setTimeout(resolve, 60000))
-
     const $response = await client.put(route('api.orders.cancel', order))
       // @ts-ignore
       .guard('api').loginAs(user)
