@@ -70,13 +70,10 @@ export default class UsersController {
       if (payload.avatar) {
         await payload.avatar?.moveToDisk('avatars')
 
-        await user.merge({ imagePath: payload.avatar.fileName }).save().then(user => {
-          response.json(user)
-        })
+        await user.merge({ imagePath: payload.avatar.fileName })
+          .save().then(user => response.json(user))
       } else {
-        await user.merge({ imagePath: null }).save().then(user => {
-          response.json(user)
-        })
+        await user.merge({ imagePath: null }).save().then(user => response.json(user))
       }
     } catch (error) {
       response.unprocessableEntity(error)
