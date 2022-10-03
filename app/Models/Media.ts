@@ -1,6 +1,6 @@
 import { Product } from '.'
 import { DateTime } from 'luxon'
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Media extends BaseModel {
   @column({ isPrimary: true })
@@ -26,4 +26,9 @@ export default class Media extends BaseModel {
 
   @manyToMany(() => Product)
   public products: ManyToMany<typeof Product>
+
+  @computed()
+  public get file_url () {
+    return `/uploads/${this.filePath}`
+  }
 }
