@@ -27,23 +27,27 @@ export default class ProductsController {
           request.input('with', []).includes('products.reviews'),
           query => query.preload('reviews'),
         ])
-        // Calculate reviews average if requested.
-        .match([
-          request.input('with', []).includes('products.reviews-avg'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
-        ])
-
         // Filter products based on categories.
         .match([
           request.input('categories', []).length,
           query => query.whereHas('categories', (builder) => builder
             .whereInPivot('category_id', request.input('categories', []))),
         ])
+        // Load product reviews count
+        .match([
+          request.input('withCount', []).includes('products.reviews'),
+          query => query.withCount('reviews'),
+        ])
+        // Calculate reviews average if requested.
+        .match([
+          request.input('withAvg', []).includes('products.reviews'),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
+        ])
         // Load product from a keyword
         .match([
           request.input('search', null),
-          query => query.whereLike('name', `%${ request.input('search') }%`)
-            .orWhereLike('description', `%${ request.input('search') }%`),
+          query => query.whereLike('name', `%${request.input('search')}%`)
+            .orWhereLike('description', `%${request.input('search')}%`),
         ])
         .orderBy('id', 'desc')
         .paginate(request.input('page'), request.input('limit', 10))
@@ -79,9 +83,14 @@ export default class ProductsController {
           user?.id && request.input('with', []).includes('product.wishlist'),
           query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
         ])
+        // Load product reviews count
+        .match([
+          request.input('withCount', []).includes('product.reviews'),
+          query => query.withCount('reviews'),
+        ])
         // Calculate reviews average if requested.
         .match([
-          request.input('with', []).includes('product.reviews-avg'),
+          request.input('withAvg', []).includes('product.reviews'),
           query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
         ])
         .where('id', id).firstOrFail()
