@@ -30,7 +30,7 @@ export default class ProductsController {
         // Calculate reviews average if requested.
         .match([
           request.input('with', []).includes('products.reviews-avg'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
         ])
 
         // Filter products based on categories.
@@ -82,7 +82,7 @@ export default class ProductsController {
         // Calculate reviews average if requested.
         .match([
           request.input('with', []).includes('product.reviews-avg'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
         ])
         .where('id', id).firstOrFail()
 
