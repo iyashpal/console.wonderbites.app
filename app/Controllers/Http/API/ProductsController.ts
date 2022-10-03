@@ -41,7 +41,7 @@ export default class ProductsController {
         // Calculate reviews average if requested.
         .match([
           request.input('withAvg', []).includes('products.reviews'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
         ])
         // Load product from a keyword
         .match([
@@ -91,7 +91,7 @@ export default class ProductsController {
         // Calculate reviews average if requested.
         .match([
           request.input('withAvg', []).includes('product.reviews'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('average_rating')),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
         ])
         .where('id', id).firstOrFail()
 
