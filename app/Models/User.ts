@@ -83,7 +83,7 @@ export default class User extends BaseModel {
   @hasMany(() => Notification, {
     localKey: 'id',
     foreignKey: 'notifiableId',
-    onQuery: query => query.where('notifiable_type', 'User'),
+    onQuery: query => query.where('notifiableType', 'User'),
     })
   public notifications: HasMany<typeof Notification>
 

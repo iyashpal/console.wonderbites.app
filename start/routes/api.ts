@@ -11,8 +11,8 @@ Route.group(() => {
     Route.put('users/avatar', 'UsersController.avatar').as('users.avatar')
     // Endpoints to user operations.
     Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])
-
-    Route.get('notifications', 'NotificationsController.index').as('notifications.index')
+    // User notifications endpoints
+    Route.resource('notifications', 'NotificationsController').apiOnly().only(['index', 'update'])
 
     // Resources endpoints to user addresses.
     Route.resource('addresses', 'AddressesController')

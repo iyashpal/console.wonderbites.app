@@ -1,5 +1,6 @@
+import { User } from '.'
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Notification extends BaseModel {
   @column({ isPrimary: true })
@@ -25,6 +26,12 @@ export default class Notification extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    localKey: 'notifiableId',
+    foreignKey: 'id',
+    })
+  public notifiable: BelongsTo<typeof User>
 
   public async markAsRead (this: Notification) {
     await this.merge({ readAt: DateTime.now() }).save()
