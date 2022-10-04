@@ -34,8 +34,8 @@ export default class CategoriesController {
               query => query.preload('reviews'),
             ])
             .match([
-              request.input('with', []).includes('category.products.reviews-avg'),
-              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+              request.input('withAvg', []).includes('category.products.reviews'),
+              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
             ])
             // Load wishlist data if requested.
             .match([
@@ -122,8 +122,8 @@ export default class CategoriesController {
               query => query.preload('reviews'),
             ])
             .match([
-              request.input('with', []).includes('products.reviews-avg'),
-              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('averate_rating')),
+              request.input('withAvg', []).includes('products.reviews'),
+              query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
             ])
             // Load wishlist data if requested.
             .match([
