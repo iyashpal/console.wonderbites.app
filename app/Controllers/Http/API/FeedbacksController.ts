@@ -1,4 +1,3 @@
-import { Feedback } from 'App/Models'
 import CreateValidator from 'App/Validators/Feedback/CreateValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
