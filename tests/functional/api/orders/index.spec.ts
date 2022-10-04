@@ -2,6 +2,7 @@ import { Order } from 'App/Models'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { IngredientFactory, OrderFactory, ReviewFactory, UserFactory } from 'Database/factories'
+import { OrderStatus } from 'App/Models/Enums/Order'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -46,10 +47,10 @@ test.group('API [orders.index]', (group) => {
   }).tags(['@orders', '@orders.index'])
 
   test('it can list the orders by status - "{name}".').with([
-    { name: 'upcoming', status: Order.UPCOMING },
-    { name: 'preparing', status: Order.PREPARING },
-    { name: 'delivered', status: Order.DELIVERED },
-    { name: 'canceled', status: Order.CANCELED },
+    { name: 'upcoming', status: OrderStatus.UPCOMING },
+    { name: 'preparing', status: OrderStatus.PREPARING },
+    { name: 'delivered', status: OrderStatus.DELIVERED },
+    { name: 'canceled', status: OrderStatus.CANCELED },
   ]).run(async ({ client, route, assert }, order) => {
     const user = await UserFactory.with('addresses').create()
     const [address] = user.addresses
@@ -270,21 +271,17 @@ test.group('API [orders.index]', (group) => {
     })
   }).tags(['@orders', '@orders.index'])
 
-  test('it can list orders with reviews.', async ({ client, route, assert }) => {
+  test('it can list orders with review.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('addresses').create()
+
     const [address] = user.addresses
+
     const order = await OrderFactory.with('products', 1)
       .merge({ userId: user.id, addressId: address.id }).create()
 
-    const merge: { type: string, typeId: number, userId: number }[] = []
+    const review = await ReviewFactory.merge({ type: 'Order', typeId: order.id, userId: user.id }).create()
 
-    for (let i = 0; i < 10; i++) {
-      merge.push({ type: 'Order', typeId: order.id, userId: user.id })
-    }
-
-    const reviews = await ReviewFactory.merge(merge).createMany(10)
-
-    const qs = { with: ['order.reviews'] }
+    const qs = { with: ['order.review'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       // @ts-ignore
@@ -299,7 +296,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({
       data: [{
         id: order.id,
-        reviews: reviews.map(({ id }) => ({ id })),
+        review: { id: review.id },
       }],
     })
   }).tags(['@orders', '@orders.index'])
@@ -315,13 +312,7 @@ test.group('API [orders.index]', (group) => {
       .with('products', 3, product => product.with('media', 10))
       .merge({ userId: user.id, addressId: address.id }).create()
 
-    const merge: { type: string, typeId: number, userId: number }[] = []
-
-    for (let i = 0; i < 10; i++) {
-      merge.push({ type: 'Order', typeId: order.id, userId: user.id })
-    }
-
-    const reviews = await ReviewFactory.merge(merge).createMany(10)
+    const review = await ReviewFactory.merge({ type: 'Order', typeId: order.id, userId: user.id }).create()
 
     const [product] = order.products
 
@@ -337,7 +328,7 @@ test.group('API [orders.index]', (group) => {
     const qs = {
       with: [
         'order.ingredients', 'order.products', 'order.products.media', 'order.user',
-        'order.address', 'order.coupon', 'order.reviews',
+        'order.address', 'order.coupon', 'order.review',
       ],
     }
 
@@ -360,7 +351,7 @@ test.group('API [orders.index]', (group) => {
         coupon_id: order.coupon.id,
         address: { id: address.id },
         coupon: { id: order.coupon.id },
-        reviews: reviews.map(({ id }) => ({ id })),
+        review: { id: review.id },
         products: order.products.map(({ id, media }) => ({
           id, media: media.map(({ id }) => ({ id })),
         })),

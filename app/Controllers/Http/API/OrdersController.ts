@@ -1,6 +1,6 @@
 import { Order } from 'App/Models'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { OrderStatus } from 'App/Models/Enums/Order'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class OrdersController {
   public async index ({ auth, request, response }: HttpContextContract) {
@@ -24,7 +24,7 @@ export default class OrdersController {
         .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
 
         // Load order reviews if requested.
-        .match([request.input('with', []).includes('order.reviews'), query => query.preload('reviews')])
+        .match([request.input('with', []).includes('order.review'), query => query.preload('review')])
 
         // Load order address if they are requested.
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
@@ -34,10 +34,10 @@ export default class OrdersController {
 
         // Load orders by the status provided.
         .match(
-          [request.input('status') === 'upcoming', query => query.where('status', Order.UPCOMING)],
-          [request.input('status') === 'preparing', query => query.where('status', Order.PREPARING)],
-          [request.input('status') === 'delivered', query => query.where('status', Order.DELIVERED)],
-          [request.input('status') === 'canceled', query => query.where('status', Order.CANCELED)],
+          [request.input('status') === 'upcoming', query => query.where('status', OrderStatus.UPCOMING)],
+          [request.input('status') === 'preparing', query => query.where('status', OrderStatus.PREPARING)],
+          [request.input('status') === 'delivered', query => query.where('status', OrderStatus.DELIVERED)],
+          [request.input('status') === 'canceled', query => query.where('status', OrderStatus.CANCELED)],
         )
         // group orders
         .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
@@ -75,7 +75,7 @@ export default class OrdersController {
         .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
 
         // Load order reviews if requested.
-        .match([request.input('with', []).includes('order.reviews'), query => query.preload('reviews')])
+        .match([request.input('with', []).includes('order.review'), query => query.preload('review')])
 
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])

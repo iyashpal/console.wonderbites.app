@@ -15,7 +15,7 @@ export default Factory.define(Order, ({ faker }) => ({
 }))
   .relation('user', () => UserFactory)
   .relation('coupon', () => CouponFactory)
-  .relation('reviews', () => ReviewFactory)
+  .relation('review', () => ReviewFactory)
   .relation('address', () => AddressFactory)
   .relation('products', () => ProductFactory)
   .relation('ingredients', () => IngredientFactory)
