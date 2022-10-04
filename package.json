@@ -21,7 +21,7 @@
     "@adonisjs/assembler": "^5.8.1",
     "@babel/core": "^7.19.1",
     "@babel/preset-env": "^7.19.1",
-    "@japa/expect-type": "^1.0.1",
+    "@japa/expect": "^2.0.1",
     "@japa/preset-adonis": "^1.1.1",
     "@japa/runner": "^2.1.1",
     "@symfony/webpack-encore": "^4.0.0",
