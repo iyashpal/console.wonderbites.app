@@ -13,7 +13,7 @@ export default class IngredientProduct extends BaseSchema {
 
       table.string('qty').defaultTo(1)
 
-      table.string('max_quantity').defaultTo(0)
+      table.string('maximum').defaultTo(0)
 
       table.boolean('is_required').defaultTo(true)
 
