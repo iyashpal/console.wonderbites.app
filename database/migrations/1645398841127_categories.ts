@@ -15,8 +15,6 @@ export default class Categories extends BaseSchema {
 
       table.text('description').nullable()
 
-      table.text('image_path').nullable()
-
       table.integer('status').defaultTo(1)
 
       /**

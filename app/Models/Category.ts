@@ -19,9 +19,6 @@ export default class Category extends BaseModel {
   public description: string
 
   @column()
-  public imagePath: string
-
-  @column()
   public status: number
 
   @column.dateTime({ autoCreate: true })
