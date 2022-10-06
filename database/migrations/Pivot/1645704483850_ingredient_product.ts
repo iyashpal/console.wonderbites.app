@@ -11,15 +11,19 @@ export default class IngredientProduct extends BaseSchema {
 
       table.bigInteger('product_id').unsigned().references('products.id').onDelete('CASCADE')
 
-      table.string('qty').defaultTo(1)
+      table.bigInteger('price').defaultTo(1)
 
-      table.string('maximum').defaultTo(0)
+      table.bigInteger('quantity').defaultTo(1)
 
-      table.boolean('is_required').defaultTo(true)
+      table.bigInteger('max_quantity').defaultTo(1)
 
-      table.boolean('is_optional').defaultTo(false)
+      table.boolean('is_locked').defaultTo(true)
+        .comment('It cannot be modified.')
 
-      table.boolean('is_addon').defaultTo(false)
+      table.boolean('is_required').defaultTo(false)
+        .comment('Quantity can be increased or decreased but it cannot be removed.')
+
+      table.boolean('is_optional').defaultTo(false).comment('It can be removed.')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

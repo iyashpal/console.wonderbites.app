@@ -17,6 +17,12 @@ export default class Ingredients extends BaseSchema {
 
       table.integer('price').unsigned().notNullable().defaultTo(0)
 
+      table.string('unit')
+
+      table.string('quantity')
+
+      table.string('max_quantity')
+
       table.integer('status').defaultTo(1)
 
       /**

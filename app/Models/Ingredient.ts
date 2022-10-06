@@ -12,22 +12,28 @@ export default class Ingredient extends BaseModel {
   public id: number
 
   @column()
-  public name: string
-
-  @column()
   public userId: number
 
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  @column()
+  public name: string
 
   @column()
   public description: string
 
   @column()
+  public imagePath: string
+
+  @column()
   public price: string
 
   @column()
-  public imagePath: string
+  public unit: string
+
+  @column()
+  public quantity: number
+
+  @column()
+  public maxQuantity: number
 
   @column()
   public status: number
@@ -40,6 +46,9 @@ export default class Ingredient extends BaseModel {
 
   @column.dateTime()
   public deletedAt: DateTime
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @manyToMany(() => Category)
   public categories: ManyToMany<typeof Category>

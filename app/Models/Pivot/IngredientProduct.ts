@@ -9,18 +9,36 @@ export default class IngredientProduct extends BaseModel {
   @column()
   public ingredientId: number
 
-  @belongsTo(() => Ingredient)
-  public ingredient: BelongsTo<typeof Ingredient>
-
   @column()
   public productId: number
 
-  @belongsTo(() => Product)
-  public product: BelongsTo<typeof Product>
+  @column()
+  public price: number
+
+  @column()
+  public quantity: number
+
+  @column()
+  public maxQuantity: number
+
+  @column()
+  public isLocked: boolean
+
+  @column()
+  public isRequired: boolean
+
+  @column()
+  public isOptional: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Ingredient)
+  public ingredient: BelongsTo<typeof Ingredient>
+
+  @belongsTo(() => Product)
+  public product: BelongsTo<typeof Product>
 }
