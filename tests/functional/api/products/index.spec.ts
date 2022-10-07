@@ -61,7 +61,7 @@ test.group('API [products.index]', (group) => {
 
       $response.assertBodyContains({
         data: products
-          .filter(({ name, description }) => name.includes(`${ search }`) || description.includes(`${ search }`))
+          .filter(({ name, description }) => name.includes(`${search}`) || description.includes(`${search}`))
           .map((product) => ({ id: product.id })),
       })
     })
@@ -114,6 +114,38 @@ test.group('API [products.index]', (group) => {
     })
   }).tags(['@products', '@products.index'])
 
+  test('it can list the products with ingredients and ingredients categories.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const products = await ProductFactory.with('media', 3).with('ingredients', 4).createMany(10)
+    const category = await CategoryFactory.merge({ type: 'Ingredient' }).create()
+
+    await category.related('ingredients').attach(
+      products.map(product => product.ingredients.map(({ id }) => id)).flat()
+    )
+
+    const qs = { with: ['products.ingredients', 'products.ingredients.categories'] }
+
+    const $response = await client.get(route('api.products.index', {}, { qs }))
+      // @ts-ignore
+      .guard('api').loginAs(user)
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        ingredients: product.ingredients.map(({ id }) => ({
+          id,
+          categories: [{ id: category.id }],
+        })),
+      })),
+    })
+  }).tags(['@products', '@products.index'])
+
   test('It can list the products with reviews.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
@@ -148,7 +180,7 @@ test.group('API [products.index]', (group) => {
 
     const totalAvgRating = ratingCount / product.reviews.length
 
-    const qs = { with: ['products.reviews', 'products.reviews-avg'] }
+    const qs = { with: ['products.reviews'], withAvg: ['products.reviews'] }
 
     const $response = await client.get(route('api.products.index', {}, { qs }))
 
@@ -160,7 +192,7 @@ test.group('API [products.index]', (group) => {
           id: product.id,
           reviews: product.reviews.map(({ id, title }) => ({ id, title })),
           meta: {
-            averate_rating: totalAvgRating,
+            reviews_avg: totalAvgRating,
           },
         },
       ],
@@ -251,7 +283,7 @@ test.group('API [products.index]', (group) => {
 
     $response.assertBodyContains({
       data: [
-        { id: PA.id }, { id: PF.id }
+        { id: PA.id }, { id: PF.id },
       ],
       meta: { total: 2 },
     })

@@ -48,6 +48,16 @@ export default class Product extends BaseModel {
   @column.dateTime()
   public deletedAt: DateTime
 
+  /**
+   * Get product default thumbnail based on imagePath column value.
+   *
+   * @returns {String}
+   */
+  @computed()
+  public get thumbnail () {
+    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/product.png'
+  }
+
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
@@ -58,7 +68,7 @@ export default class Product extends BaseModel {
   public categories: ManyToMany<typeof Category>
 
   @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'ingredient_id', 'product_id', 'is_required', 'is_optional', 'is_addon'],
+    pivotColumns: ['id', 'ingredient_id', 'product_id', 'is_locked', 'is_required', 'is_optional'],
     pivotTimestamps: true,
     })
   public ingredients: ManyToMany<typeof Ingredient>
@@ -81,14 +91,4 @@ export default class Product extends BaseModel {
 
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
-
-  /**
-   * Get product default thumbnail based on imagePath column value.
-   *
-   * @returns {String}
-   */
-  @computed()
-  public get thumbnail () {
-    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/product.png'
-  }
 }

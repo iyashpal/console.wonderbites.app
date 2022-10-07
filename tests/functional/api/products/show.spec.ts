@@ -112,13 +112,13 @@ test.group('API [products.show]', (group) => {
 
     const productReviewsAvg = totalReviewsSum / product.reviews.length
 
-    const $response = await client.get(route('api.products.show', product, { qs: { with: ['product.reviews-avg'] } }))
+    const $response = await client.get(route('api.products.show', product, { qs: { withAvg: ['product.reviews'] } }))
 
     $response.assertStatus(200)
     $response.assertBodyContains({
       id: product.id,
       meta: {
-        averate_rating: productReviewsAvg,
+        reviews_avg: productReviewsAvg,
       },
     })
   }).tags(['@products', '@products.show'])

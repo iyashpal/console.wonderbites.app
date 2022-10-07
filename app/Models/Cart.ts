@@ -41,10 +41,4 @@ export default class Cart extends BaseModel {
 
   @hasOne(() => Coupon)
   public coupon: HasOne<typeof Coupon>
-
-  @manyToMany(() => Coupon, {
-    pivotColumns: ['id'],
-    pivotTimestamps: true,
-    })
-  public coupons: ManyToMany<typeof Coupon>
 }

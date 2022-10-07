@@ -102,8 +102,6 @@ export default class OrdersController {
     try {
       const order = await user.related('orders').query().where('id', id).firstOrFail()
 
-      console.log(order.createdAt.diffNow().minutes)
-
       await order.merge({ status: OrderStatus.CANCELED }).save()
         .then(order => response.ok(order))
     } catch (error) {

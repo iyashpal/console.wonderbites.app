@@ -16,7 +16,7 @@ export default class CheckoutsController {
       // Load and validate cart by the requested cart id
       const cart = await Cart.query()
         .where('id', attrs.cart).where('user_id', this.user.id)
-        .preload('ingredients').preload('products').preload('coupons').firstOrFail()
+        .preload('ingredients').preload('products').firstOrFail()
 
       // Load and validate the order address by request requested address id
       const address = await await Address.query()

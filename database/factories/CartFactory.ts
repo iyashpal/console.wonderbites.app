@@ -10,7 +10,6 @@ export default Factory.define(Cart, ({ faker }) => {
   }
 })
   .relation('user', () => UserFactory)
-  .relation('coupons', () => CouponFactory)
   .relation('products', () => ProductFactory)
   .relation('ingredients', () => IngredientFactory)
   .build()

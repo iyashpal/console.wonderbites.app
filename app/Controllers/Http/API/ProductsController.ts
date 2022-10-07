@@ -20,7 +20,10 @@ export default class ProductsController {
         // Load product ingredients if requested.
         .match([
           request.input('with', []).includes('products.ingredients'),
-          query => query.preload('ingredients'),
+          query => query.preload('ingredients', query => query.match([
+            request.input('with', []).includes('products.ingredients.categories'),
+            query => query.preload('categories'),
+          ])),
         ])
         // Load product reviews if requested.
         .match([
@@ -71,7 +74,10 @@ export default class ProductsController {
         // Load product ingredients if requested.
         .match([
           request.input('with', []).includes('product.ingredients'),
-          query => query.preload('ingredients'),
+          query => query.preload('ingredients', query => query.match([
+            request.input('with', []).includes('product.ingredients.categories'),
+            query => query.preload('categories'),
+          ])),
         ])
         // Load product reviews if requested.
         .match([

@@ -113,7 +113,7 @@ test.group('API [categories.index]', (group) => {
           id: product.id,
           name: product.name,
           ingredients: product.ingredients.map(
-            ({ id, name, description, price }) => ({ id, name, description, price })
+            ({ id, name, description }) => ({ id, name, description })
           ),
         },
       ],

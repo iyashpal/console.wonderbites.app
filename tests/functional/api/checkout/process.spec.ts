@@ -24,7 +24,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -54,7 +54,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -83,7 +83,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -113,7 +113,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -142,7 +142,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -172,7 +172,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -201,7 +201,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -241,7 +241,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.related('coupons').attach([coupon.id])
+    await user.cart.merge({ couponId: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 

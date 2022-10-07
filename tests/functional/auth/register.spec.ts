@@ -202,12 +202,21 @@ test.group('Auth register', (group) => {
     const user = await UserFactory.make()
 
     const response = await client.post(route('api.register')).accept('json').json({
-      ...user.toJSON(),
+      first_name: 'Yash',
+      last_name: 'Pal',
+      mobile: '0123456789',
+      email: 'yash@brandsonify.com',
       password: user.password,
       password_confirmation: user.password,
     })
 
     response.assertStatus(200)
-    response.assertBodyContains(user.toJSON())
+
+    response.assertBodyContains({
+      first_name: 'Yash',
+      last_name: 'Pal',
+      mobile: '0123456789',
+      email: 'yash@brandsonify.com',
+    })
   })
 })
