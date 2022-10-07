@@ -1,6 +1,6 @@
 import Cart from 'App/Models/Cart'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import { CouponFactory, IngredientFactory, ProductFactory, UserFactory } from '.'
+import { IngredientFactory, ProductFactory, UserFactory } from '.'
 
 export default Factory.define(Cart, ({ faker }) => {
   return {
