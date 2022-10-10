@@ -15,6 +15,8 @@ export default class IngredientProduct extends BaseSchema {
 
       table.bigInteger('quantity').defaultTo(1)
 
+      table.bigInteger('min_quantity').defaultTo(1)
+
       table.bigInteger('max_quantity').defaultTo(1)
 
       table.boolean('is_locked').defaultTo(true)

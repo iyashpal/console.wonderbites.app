@@ -21,7 +21,9 @@ export default class Ingredients extends BaseSchema {
 
       table.string('quantity')
 
-      table.string('max_quantity')
+      table.bigInteger('min_quantity').defaultTo(1)
+
+      table.bigInteger('max_quantity').defaultTo(1)
 
       table.integer('status').defaultTo(1)
 

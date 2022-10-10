@@ -19,6 +19,9 @@ export default class IngredientProduct extends BaseModel {
   public quantity: number
 
   @column()
+  public minQuantity: number
+
+  @column()
   public maxQuantity: number
 
   @column()
