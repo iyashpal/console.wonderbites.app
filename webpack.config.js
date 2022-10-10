@@ -159,7 +159,9 @@ Encore.configureDevServerOptions((options) => {
 Encore.enableSassLoader()
 // Encore.enableLessLoader()
 // Encore.enableStylusLoader()
-Encore.enableTypeScriptLoader()
+Encore.enableTypeScriptLoader(options => {
+  options.configFile = 'tsconfig.vue.json'
+})
 
 /*
 |--------------------------------------------------------------------------
