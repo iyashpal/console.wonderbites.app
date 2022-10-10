@@ -8,8 +8,8 @@ export default class LoginController {
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
-  public async show ({ inertia }: HttpContextContract) {
-    return await inertia.render('Auth/Login')
+  public async show ({ view }: HttpContextContract) {
+    return await view.render('auth/login')
   }
 
   public async login ({ auth, request, response, session }: HttpContextContract) {

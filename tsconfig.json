@@ -32,28 +32,21 @@
       "Database/*": [
         "./database/*"
       ],
-      "VueApp/*": [
-        "resources/vue/*"
-      ],
-      "Scss/*": [
-        "./resources/scss/*"
-      ]
     },
     "types": [
       "@adonisjs/core",
       "@adonisjs/repl",
-      "@adonisjs/session",
       "@adonisjs/view",
-      "@adonisjs/shield",
-      "@japa/preset-adonis/build/adonis-typings",
-      "@adonisjs/lucid",
       "@adonisjs/auth",
       "@adonisjs/mail",
-      "@adonisjs/lucid-slugify",
-      "@adonisjs/bouncer",
-      "@eidellev/inertia-adonisjs",
-      "@adonisjs/limiter",
+      "@adonisjs/lucid",
       "@adonisjs/redis",
+      "@adonisjs/shield",
+      "@adonisjs/session",
+      "@adonisjs/bouncer",
+      "@adonisjs/limiter",
+      "@adonisjs/lucid-slugify",
+      "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/route-model-binding/build/adonis-typings"
     ]
   }

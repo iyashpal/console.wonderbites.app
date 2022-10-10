@@ -1,5 +1,5 @@
 {
-  "name": "admin.wonderbites.com",
+  "name": "api.wonderbites.com",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -19,32 +19,14 @@
   ],
   "devDependencies": {
     "@adonisjs/assembler": "^5.8.1",
-    "@babel/core": "^7.19.1",
-    "@babel/preset-env": "^7.19.1",
     "@japa/expect": "^2.0.1",
     "@japa/preset-adonis": "^1.1.1",
     "@japa/runner": "^2.1.1",
-    "@symfony/webpack-encore": "^4.0.0",
-    "@tailwindcss/forms": "^0.5.3",
-    "@vue/compiler-sfc": "^3.2.38",
     "adonis-preset-ts": "^2.1.0",
-    "autoprefixer": "10.4.5",
     "eslint": "^8.23.0",
     "eslint-plugin-adonis": "^2.1.0",
-    "pinia": "^2.0.21",
     "pino-pretty": "^9.1.0",
-    "postcss-loader": "^7.0.1",
-    "redaxios": "^0.5.1",
-    "sass": "^1.54.8",
-    "sass-loader": "^13.0.2",
-    "sqlite3": "^5.0.11",
-    "tailwindcss": "^3.1.8",
-    "ts-loader": "^9.3.1",
     "typescript": "^4.8.2",
-    "vue": "^3.2.38",
-    "vue-loader": "^17.0.0",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0",
     "youch": "^3.2.1",
     "youch-terminal": "^2.1.5"
   },
@@ -63,10 +45,6 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.1.0",
     "@adonisjs/view": "^6.2.0",
-    "@eidellev/inertia-adonisjs": "^7.1.0",
-    "@inertiajs/inertia": "^0.11.0",
-    "@inertiajs/inertia-vue3": "^0.6.0",
-    "@inertiajs/progress": "^0.2.7",
     "aws-sdk": "^2.1209.0",
     "luxon": "^3.0.3",
     "mjml": "^4.13.0",
@@ -75,9 +53,7 @@
     "phc-bcrypt": "^1.0.7",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.21"
-  },
-  "browserslist": [
-    "defaults"
-  ]
+    "source-map-support": "^0.5.21",
+    "sqlite3": "^5.0.11"
+  }
 }

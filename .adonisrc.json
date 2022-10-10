@@ -24,29 +24,22 @@
     "./start/routes",
     "./start/kernel",
     "./start/bouncer",
-    {
-      "file": "./start/inertia",
-      "environment": [
-        "web"
-      ]
-    },
     "./start/limiter"
   ],
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "@adonisjs/session",
     "@adonisjs/view",
-    "@adonisjs/shield",
-    "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/mail",
-    "@adonisjs/attachment-lite",
-    "@adonisjs/lucid-slugify",
-    "@adonisjs/bouncer",
-    "@eidellev/inertia-adonisjs",
-    "@adonisjs/limiter",
     "@adonisjs/redis",
+    "@adonisjs/lucid",
+    "@adonisjs/shield",
+    "@adonisjs/bouncer",
+    "@adonisjs/limiter",
+    "@adonisjs/session",
+    "@adonisjs/lucid-slugify",
+    "@adonisjs/attachment-lite",
     "@adonisjs/route-model-binding/build/providers/RmbProvider"
   ],
   "metaFiles": [

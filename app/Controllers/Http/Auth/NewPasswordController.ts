@@ -1,4 +1,3 @@
-import PasswordReset from 'App/Models/PasswordReset'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -9,10 +8,8 @@ export default class NewPasswordController {
      * @param param0 HttpContextContract
      * @returns ViewRendererContract
      */
-  public async create ({ inertia, params }: HttpContextContract) {
-    const token = await PasswordReset.findBy('token', params.token)
-
-    return inertia.render('Auth/ResetPassword', { email: token?.email, token: token?.token })
+  public async create ({ params }: HttpContextContract) {
+    // 
   }
 
   public async store ({ request, response }: HttpContextContract) {

@@ -10,8 +10,8 @@ export default class PasswordResetLinksController {
    * @param param0 HttpContextContract
    * @returns ViewRendererContract
    */
-  public async create ({ inertia }: HttpContextContract) {
-    return inertia.render('Auth/ForgotPassword')
+  public async create ({ }: HttpContextContract) {
+    // 
   }
 
   /**
