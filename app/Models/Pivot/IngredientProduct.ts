@@ -33,6 +33,9 @@ export default class IngredientProduct extends BaseModel {
   @column()
   public isOptional: boolean
 
+  @column()
+  public isRemoveOnly: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

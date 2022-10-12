@@ -19,13 +19,15 @@ export default class IngredientProduct extends BaseSchema {
 
       table.bigInteger('max_quantity').defaultTo(1)
 
-      table.boolean('is_locked').defaultTo(true)
+      table.boolean('is_locked').defaultTo(false)
         .comment('It cannot be modified.')
 
       table.boolean('is_required').defaultTo(false)
         .comment('Quantity can be increased or decreased but it cannot be removed.')
 
-      table.boolean('is_optional').defaultTo(false).comment('It can be removed.')
+      table.boolean('is_optional').defaultTo(true).comment('It can be removed.')
+
+      table.boolean('is_remove_only').defaultTo(false).comment('It can be removed but can not be added again.')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

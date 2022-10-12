@@ -68,7 +68,9 @@ export default class Product extends BaseModel {
   public categories: ManyToMany<typeof Category>
 
   @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'max_quantity', 'min_quantity', 'is_locked', 'is_required', 'is_optional'],
+    pivotColumns: [
+    'id', 'price', 'max_quantity', 'min_quantity', 'is_locked', 'is_required', 'is_optional', 'is_remove_only'
+    ],
     pivotTimestamps: true,
     })
   public ingredients: ManyToMany<typeof Ingredient>
