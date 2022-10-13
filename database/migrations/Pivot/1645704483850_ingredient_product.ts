@@ -27,8 +27,6 @@ export default class IngredientProduct extends BaseSchema {
 
       table.boolean('is_optional').defaultTo(true).comment('It can be removed.')
 
-      table.boolean('is_remove_only').defaultTo(false).comment('It can be removed but can not be added again.')
-
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
