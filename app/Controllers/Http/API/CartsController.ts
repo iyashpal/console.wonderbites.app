@@ -1,8 +1,8 @@
 import { User, Cart } from 'App/Models'
+import { types } from '@ioc:Adonis/Core/Helpers'
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { isNull, isUndefined } from '@poppinss/utils/build/src/Helpers/types'
 
 export default class CartsController {
   /**
@@ -10,11 +10,11 @@ export default class CartsController {
    * 
    * @param auth {AuthContract}
    */
-  private async authenticate (auth: AuthContract) {
+  private async authenticate (auth: AuthContract): Promise<User | undefined> {
     await auth.use('api').check()
 
     if (auth.use('api').isLoggedIn) {
-      await auth.use('api').authenticate()
+      return auth.use('api').user!
     }
   }
 
@@ -24,13 +24,44 @@ export default class CartsController {
    * @param param0 HttpContextContract Request payload
    */
   public async show ({ request, auth, response }: HttpContextContract) {
-    await this.authenticate(auth)
+    const user = await this.authenticate(auth)
 
-    const cart = await this.cart(request, auth.use('api').user!)
+    const { id } = await this.cart(request, user)
 
-    await cart.load('products', (builder) => builder.preload('media').orderBy('id'))
-
-    await cart.load('ingredients')
+    const cart = await Cart.query()
+      .match([
+        request.input('with', []).includes('cart.user'),
+        query => query.preload('user'),
+      ])
+      .match([
+        request.input('with', []).includes('cart.coupon'),
+        query => query.preload('coupon'),
+      ])
+      .match([
+        request.input('with', []).includes('cart.products'),
+        query => query.preload('products', products => products
+          .match([
+            request.input('with', []).includes('cart.products.media'),
+            query => query.preload('media'),
+          ])
+        ),
+      ])
+      .match([
+        request.input('with', []).includes('cart.ingredients'),
+        query => query.preload('ingredients', query => query.match([
+          request.input('with', []).includes('cart.ingredients.categories'),
+          query => query.preload('categories'),
+        ])),
+      ])
+      .match([
+        request.input('withCount', []).includes('cart.products'),
+        query => query.withCount('products'),
+      ])
+      .match([
+        request.input('withCount', []).includes('cart.ingredients'),
+        query => query.withCount('ingredients'),
+      ])
+      .where('id', id).first()
 
     response.json(cart)
   }
@@ -41,9 +72,9 @@ export default class CartsController {
    * @param param0 {HttpContextContract} Request payload.
    */
   public async update ({ auth, request, response }: HttpContextContract) {
-    await this.authenticate(auth)
+    const user = await this.authenticate(auth)
 
-    const cart = await this.cart(request, auth.use('api').user!)
+    const cart = await this.cart(request, user)
 
     // Add products to cart.
     if (request.input('action') === 'ADD') {
@@ -69,12 +100,12 @@ export default class CartsController {
    * @param user User
    * @returns Cart
    */
-  protected async cart (request: RequestContract, user: User): Promise<Cart> {
-    if (isNull(user) || isUndefined(user)) {
+  protected async cart (request: RequestContract, user: User | undefined): Promise<Cart> {
+    if (types.isNull(user) || types.isUndefined(user)) {
       const guestCart = await Cart.query().whereNull('user_id')
         .where('ip_address', request.ip()).first()
 
-      if (isNull(guestCart)) {
+      if (types.isNull(guestCart)) {
         return await Cart.create({ ipAddress: request.ip() })
       }
 
@@ -83,7 +114,7 @@ export default class CartsController {
 
     await user.load('cart')
 
-    if (isNull(user.cart)) {
+    if (types.isNull(user.cart)) {
       return await user.related('cart').create({ ipAddress: request.ip() })
     }
 
