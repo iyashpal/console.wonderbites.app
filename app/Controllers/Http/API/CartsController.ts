@@ -39,7 +39,7 @@ export default class CartsController {
       ])
       .match([
         request.input('with', []).includes('cart.products'),
-        query => query.preload('products', products => products
+        query => query.preload('products', products => products.orderBy('id', 'asc')
           .match([
             request.input('with', []).includes('cart.products.media'),
             query => query.preload('media'),
