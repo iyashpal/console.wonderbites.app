@@ -34,7 +34,7 @@
     "@adonisjs/attachment-lite": "^1.0.7",
     "@adonisjs/auth": "^8.2.2",
     "@adonisjs/bouncer": "^2.3.0",
-    "@adonisjs/core": "^5.8.7",
+    "@adonisjs/core": "^5.8.8",
     "@adonisjs/limiter": "^1.0.1",
     "@adonisjs/lucid": "^18.2.0",
     "@adonisjs/lucid-slugify": "^2.2.1",
