@@ -15,6 +15,8 @@ export default class CartIngredient extends BaseSchema {
 
       table.integer('qty').notNullable().defaultTo(1)
 
+      table.integer('price').notNullable().defaultTo(0)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

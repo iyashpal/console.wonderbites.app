@@ -15,6 +15,12 @@ export default class CartIngredient extends BaseModel {
   @column()
   public productId: number
 
+  @column()
+  public price: number
+
+  @column()
+  public qty: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
