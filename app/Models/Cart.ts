@@ -34,7 +34,7 @@ export default class Cart extends BaseModel {
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'qty', 'product_id'],
+    pivotColumns: ['id', 'qty', 'price', 'product_id'],
     pivotTimestamps: true,
     })
   public ingredients: ManyToMany<typeof Ingredient>
