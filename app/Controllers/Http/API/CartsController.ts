@@ -1,67 +1,18 @@
 import { User, Cart } from 'App/Models'
 import { types } from '@ioc:Adonis/Core/Helpers'
-import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CartsController {
-  /**
-   * Authenticate the user.
-   * 
-   * @param auth {AuthContract}
-   */
-  private async authenticate (auth: AuthContract): Promise<User | undefined> {
-    await auth.use('api').check()
-
-    if (auth.use('api').isLoggedIn) {
-      return auth.use('api').user!
-    }
-  }
-
   /**
    * Show logged-in/guest user cart.
    *
    * @param param0 HttpContextContract Request payload
    */
   public async show ({ request, auth, response }: HttpContextContract) {
-    const user = await this.authenticate(auth)
+    const user = auth.use('api').user!
 
-    const { id } = await this.cart(request, user)
-
-    const cart = await Cart.query()
-      .match([
-        request.input('with', []).includes('cart.user'),
-        query => query.preload('user'),
-      ])
-      .match([
-        request.input('with', []).includes('cart.coupon'),
-        query => query.preload('coupon'),
-      ])
-      .match([
-        request.input('with', []).includes('cart.products'),
-        query => query.preload('products', products => products.orderBy('id', 'asc')
-          .match([
-            request.input('with', []).includes('cart.products.media'),
-            query => query.preload('media'),
-          ])
-        ),
-      ])
-      .match([
-        request.input('with', []).includes('cart.ingredients'),
-        query => query.preload('ingredients', query => query.match([
-          request.input('with', []).includes('cart.ingredients.categories'),
-          query => query.preload('categories'),
-        ])),
-      ])
-      .match([
-        request.input('withCount', []).includes('cart.products'),
-        query => query.withCount('products'),
-      ])
-      .match([
-        request.input('withCount', []).includes('cart.ingredients'),
-        query => query.withCount('ingredients'),
-      ])
-      .where('id', id).first()
+    const cart = await this.cartWithRequestedData(request, await this.cart(request, user))
 
     response.json(cart)
   }
@@ -72,9 +23,9 @@ export default class CartsController {
    * @param param0 {HttpContextContract} Request payload.
    */
   public async update ({ auth, request, response }: HttpContextContract) {
-    const user = await this.authenticate(auth)
+    const user = auth.use('api').user!
 
-    const cart = await this.cart(request, user)
+    let cart = await this.cart(request, user)
 
     // Add products to cart.
     if (request.input('action') === 'ADD') {
@@ -86,15 +37,11 @@ export default class CartsController {
       await this.removeFromCart(request, cart)
     }
 
-    await cart.load('ingredients')
-
-    await cart.load('products', (builder) => builder.preload('media').orderBy('id'))
-
-    response.json(cart)
+    response.json(await this.cartWithRequestedData(request, cart))
   }
 
   /**
-   * Get cart of current loggedin/guest user.
+   * Get cart of current logged-in/guest user.
    *
    * @param request RequestContract
    * @param user User
@@ -157,5 +104,49 @@ export default class CartsController {
     if (request.input('ingredients')) {
       await cart.related('ingredients').detach(request.input('ingredients'))
     }
+  }
+
+  /**
+   * Get the cart with requested data.
+   * 
+   * @param request RequestContract
+   * @param cart Cart
+   * @returns Cart
+   */
+  protected async cartWithRequestedData (request: RequestContract, cart: Cart) {
+    return await Cart.query()
+      .match([
+        request.input('with', []).includes('cart.user'),
+        query => query.preload('user'),
+      ])
+      .match([
+        request.input('with', []).includes('cart.coupon'),
+        query => query.preload('coupon'),
+      ])
+      .match([
+        request.input('with', []).includes('cart.products'),
+        query => query.preload('products', products => products.orderBy('id', 'asc')
+          .match([
+            request.input('with', []).includes('cart.products.media'),
+            query => query.preload('media'),
+          ])
+        ),
+      ])
+      .match([
+        request.input('with', []).includes('cart.ingredients'),
+        query => query.preload('ingredients', query => query.match([
+          request.input('with', []).includes('cart.ingredients.categories'),
+          query => query.preload('categories'),
+        ])),
+      ])
+      .match([
+        request.input('withCount', []).includes('cart.products'),
+        query => query.withCount('products'),
+      ])
+      .match([
+        request.input('withCount', []).includes('cart.ingredients'),
+        query => query.withCount('ingredients'),
+      ])
+      .where('id', cart.id).first()
   }
 }
