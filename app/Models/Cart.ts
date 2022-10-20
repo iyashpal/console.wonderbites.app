@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { User, Coupon, Product, Ingredient } from '.'
-import { BaseModel, BelongsTo, belongsTo, column, hasOne, HasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
