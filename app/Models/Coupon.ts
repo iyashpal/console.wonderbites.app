@@ -39,7 +39,7 @@ export default class Coupon extends BaseModel {
   @computed()
   public get discount () {
     if (this.discountType === 'price') {
-      return `$${ this.discountValue }`
+      return `${ this.discountValue }L`
     }
 
     return `${ this.discountValue }%`

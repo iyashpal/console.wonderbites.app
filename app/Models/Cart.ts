@@ -39,6 +39,6 @@ export default class Cart extends BaseModel {
     })
   public ingredients: ManyToMany<typeof Ingredient>
 
-  @hasOne(() => Coupon)
-  public coupon: HasOne<typeof Coupon>
+  @belongsTo(() => Coupon)
+  public coupon: BelongsTo<typeof Coupon>
 }
