@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@adonisjs/attachment-lite": "^1.0.7",
-    "@adonisjs/auth": "^8.2.2",
+    "@adonisjs/auth": "^8.2.3",
     "@adonisjs/bouncer": "^2.3.0",
     "@adonisjs/core": "^5.8.8",
     "@adonisjs/limiter": "^1.0.1",
@@ -46,7 +46,7 @@
     "@adonisjs/shield": "^7.1.0",
     "@adonisjs/view": "^6.2.0",
     "aws-sdk": "^2.1209.0",
-    "luxon": "^3.0.3",
+    "luxon": "^3.0.4",
     "mjml": "^4.13.0",
     "pg": "^8.8.0",
     "phc-argon2": "^1.1.3",
@@ -54,6 +54,6 @@
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21",
-    "sqlite3": "^5.0.11"
+    "sqlite3": "^5.1.2"
   }
 }

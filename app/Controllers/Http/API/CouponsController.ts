@@ -111,8 +111,8 @@ export default class CouponsController {
           coupon: {
             id: coupon.id,
             code: coupon.code,
-            discountType: coupon.discountType,
-            discountValue: coupon.discountValue,
+            discount_type: coupon.discountType,
+            discount_value: coupon.discountValue,
           },
         })
       }
