@@ -52,7 +52,10 @@ export default class Order extends BaseModel {
     })
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Ingredient)
+  @manyToMany(() => Ingredient, {
+    pivotColumns: ['id', 'qty', 'price', 'product_id'],
+    pivotTimestamps: true
+    })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @hasOne(() => Review, {
