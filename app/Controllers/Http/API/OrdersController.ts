@@ -64,7 +64,11 @@ export default class OrdersController {
           ]).match([
             // Load product ingredients if it is requested in query string.
             request.input('with', []).includes('order.products.ingredients'),
-            query => query.preload('ingredients'),
+            query => query.preload('ingredients', builder => builder.match([
+              // Load product ingredients categories
+              request.input('with', []).includes('order.products.ingredients.categories'),
+              query => query.preload('categories'),
+            ])),
           ])),
         ])
 
@@ -74,14 +78,21 @@ export default class OrdersController {
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
 
-        // Load order reviews if requested.
+        // Load order reviews if requested
         .match([request.input('with', []).includes('order.review'), query => query.preload('review')])
 
         // Load order coupon if requested
         .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
 
         // Load order ingredients if requested
-        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
+        .match([
+          request.input('with', []).includes('order.ingredients'),
+          query => query.preload('ingredients', builder => builder.match([
+            // Load ingredients categories if requested.
+            request.input('with', []).includes('order.ingredients.categories'),
+            query => query.preload('categories'),
+          ])),
+        ])
 
         .where('id', params.id).firstOrFail()
 
