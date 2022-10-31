@@ -15,7 +15,6 @@ test.group('API [coupons.show]', (group) => {
 
     const response = await client.get(route('api.coupons.show', { id: coupon.id })).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(200)
@@ -31,7 +30,6 @@ test.group('API [coupons.show]', (group) => {
     const user = await UserFactory.create()
 
     const response = await client.get(route('api.coupons.show', { id: 15 })).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(400)

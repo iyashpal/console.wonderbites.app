@@ -19,7 +19,6 @@ test.group('API [wonderpoints.avail]', (group) => {
   test('Authenticated users can avail the wonderpoints.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const response = await client.get(route('api.wonderpoints.avail')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     response.assertBodyContains({ wonderpoints: 0 })
@@ -39,7 +38,6 @@ test.group('API [wonderpoints.avail]', (group) => {
     const totalPoints = wonderpoints.reduce((value, wonderpoint) => value + wonderpoint.points, 0)
 
     const wonderpointsResponse = await client.get(route('api.wonderpoints.avail')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     wonderpointsResponse.assertBodyContains({ wonderpoints: totalPoints })
@@ -52,7 +50,6 @@ test.group('API [wonderpoints.avail]', (group) => {
     }).create()
 
     const redeemedResponse = await client.get(route('api.wonderpoints.avail')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     redeemedResponse.assertBodyContains({ wonderpoints: totalPoints - redeemedWonderpoint.points })
@@ -68,14 +65,12 @@ test.group('API [wonderpoints.avail]', (group) => {
     ]).createMany(3)
 
     const redeemResponse = await client.post(route('api.wonderpoints.store')).guard('api')
-      // @ts-ignore
       .loginAs(user).accept('json')
       .json({ event: 'Login', action: 'redeem', points: 100, extras: { cart_id: 1 } })
 
     redeemResponse.assertBodyContains({ points: 100 })
 
     const availResponse = await client.get(route('api.wonderpoints.avail')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     availResponse.assertBodyContains({ wonderpoints: 50 })

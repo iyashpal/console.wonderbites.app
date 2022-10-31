@@ -23,7 +23,6 @@ test.group('Auth logout', (group) => {
     const user = await UserFactory.create()
 
     const response = await client.post(route('api.logout')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(200)

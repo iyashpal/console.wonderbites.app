@@ -24,7 +24,6 @@ test.group('API [categories.index]', (group) => {
     assert.containsSubset(guestRequest.body(), categories.map(({ id, type, name }) => ({ id, type, name })))
 
     const authRequest = await client.get(route('api.categories.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     authRequest.assertStatus(200)
@@ -210,7 +209,6 @@ test.group('API [categories.index]', (group) => {
     }
 
     const request = await client.get(route('api.categories.index', {}, { qs: queryString }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)

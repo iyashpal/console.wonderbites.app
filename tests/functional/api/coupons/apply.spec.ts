@@ -24,8 +24,8 @@ test.group('API [coupons.apply]', (group) => {
       coupon: {
         id: coupon.id,
         code: coupon.code,
-        discountType: coupon.discountType,
-        discountValue: coupon.discountValue,
+        discount_type: coupon.discountType,
+        discount_value: coupon.discountValue,
       },
     })
   }).tags(['@coupons', '@coupons.apply'])
@@ -50,7 +50,6 @@ test.group('API [coupons.apply]', (group) => {
     const cart = await CartFactory.merge({ userId: user.id }).create()
 
     const response = await client.post(route('api.coupons.apply')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
       .json({ coupon: 'MONDAY_MORNING', cart: cart.id })

@@ -17,7 +17,6 @@ test.group('API [wishlists.update]', (group) => {
 
     const response = await client.put(route('api.wishlists.update')).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
       .json({ action: 'ADD', products: { [product.id]: { qty: 3 } } })
@@ -40,7 +39,6 @@ test.group('API [wishlists.update]', (group) => {
 
     const response = await client.put(route('api.wishlists.update')).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
       .json({ action: 'REMOVE', products: [product.id] })
@@ -60,7 +58,6 @@ test.group('API [wishlists.update]', (group) => {
 
     const response = await client.put(route('api.wishlists.update')).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
       .json({ action: 'ADD', products: { [product.id]: { qty: 5 } } })
@@ -90,7 +87,6 @@ test.group('API [wishlists.update]', (group) => {
 
     const response = await client.put(route('api.wishlists.update')).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
       .json({ action: 'ADD', products: { [product.id]: { qty: 3 } } })

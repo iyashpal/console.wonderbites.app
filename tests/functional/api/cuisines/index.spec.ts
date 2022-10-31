@@ -17,7 +17,6 @@ test.group('API [cuisines.index]', (group) => {
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const $response = await client.get(route('api.cuisines.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)

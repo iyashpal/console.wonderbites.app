@@ -14,7 +14,6 @@ test.group('API [coupons.store]', (group) => {
     const coupon = await (await CouponFactory.make()).toObject()
 
     const response = await client.post(route('api.coupons.store')).guard('api')
-      // @ts-ignore
       .loginAs(user).json(coupon)
 
     response.assertStatus(200)

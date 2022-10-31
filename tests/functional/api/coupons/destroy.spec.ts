@@ -16,7 +16,6 @@ test.group('API [coupons.destroy]', (group) => {
 
     const response = await client.delete(route('api.coupons.destroy', { id: coupon.id })).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(200)

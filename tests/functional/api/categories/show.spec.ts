@@ -25,7 +25,6 @@ test.group('API [categories.show]', (group) => {
     })
 
     const authRequest = await client.get(route('api.categories.show', category))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     authRequest.assertStatus(200)

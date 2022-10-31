@@ -35,7 +35,6 @@ test.group('API [orders.update]', (group) => {
       .with('products', 5, query => query.with('ingredients', 5)).create()
 
     const $response = await client.put(route('api.orders.cancel', order))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)

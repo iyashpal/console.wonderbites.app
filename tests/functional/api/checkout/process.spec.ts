@@ -37,7 +37,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: user.addresses[0].id,
@@ -67,7 +66,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         address: user.addresses[0].id,
         payment_method: 'COD',
@@ -96,7 +94,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: 5,
         address: user.addresses[0].id,
@@ -126,7 +123,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         payment_method: 'COD',
@@ -155,7 +151,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: 52,
@@ -185,7 +180,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: user.addresses[0].id,
@@ -214,7 +208,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: address.id,
@@ -254,7 +247,6 @@ test.group('API [checkout.process]', (group) => {
     await user.cart.related('ingredients').attach(cartIngredients)
 
     const request = await client.post(route('api.checkouts.process'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: address.id,

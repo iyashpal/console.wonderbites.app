@@ -35,7 +35,6 @@ test.group('API [wishlists.show]', (group) => {
 
     const response = await client.get(route('api.wishlists.show'))
 
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     response.assertStatus(200)

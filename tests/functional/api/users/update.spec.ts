@@ -20,7 +20,6 @@ test.group('API [users.update]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ lastName: 'Pal' })
 
     $response.assertStatus(422)
@@ -31,7 +30,6 @@ test.group('API [users.update]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ firstName: 'Yash' })
 
     $response.assertStatus(422)
@@ -43,7 +41,6 @@ test.group('API [users.update]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ firstName: 'Yash', lastName: 'Pal' })
 
     $response.assertStatus(200)

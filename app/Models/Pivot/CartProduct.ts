@@ -17,6 +17,9 @@ export default class CartProduct extends BaseModel {
   @column()
   public productId: number
 
+  @column()
+  public price: number
+
   @belongsTo(() => Product)
   public product: BelongsTo<typeof Product>
 

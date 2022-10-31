@@ -17,7 +17,6 @@ test.group('API [products.show]', (group) => {
     const product = await ProductFactory.create()
 
     const $response = await client.get(route('api.products.show', product))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertBodyContains({
@@ -46,7 +45,6 @@ test.group('API [products.show]', (group) => {
     const qs = { with: ['product.media'] }
 
     const $response = await client.get(route('api.products.show', product, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertBodyContains({
@@ -70,7 +68,6 @@ test.group('API [products.show]', (group) => {
     const qs = { with: ['product.ingredients'] }
 
     const $response = await client.get(route('api.products.show', product, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertBodyContains({
@@ -135,7 +132,6 @@ test.group('API [products.show]', (group) => {
     const qs = { with: ['product.wishlist'] }
 
     const $response = await client.get(route('api.products.show', product, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertBodyContains({
@@ -167,7 +163,6 @@ test.group('API [products.show]', (group) => {
     const qs = { with: ['product.wishlist', 'product.media', 'product.ingredients', 'product.reviews'] }
 
     const $response = await client.get(route('api.products.show', product, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertBodyContains({

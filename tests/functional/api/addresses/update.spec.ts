@@ -17,7 +17,6 @@ test.group('API [addresses.update]', (group) => {
     const addressData = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.put(route('api.addresses.update', { id: 50 }))
-      // @ts-ignore
       .guard('api').loginAs(user).json(addressData)
 
     request.assertStatus(404)
@@ -43,7 +42,6 @@ test.group('API [addresses.update]', (group) => {
     const addressData = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.put(route('api.addresses.update', address))
-      // @ts-ignore
       .guard('api').loginAs(user).json(addressData)
 
     request.assertStatus(200)
@@ -58,7 +56,6 @@ test.group('API [addresses.update]', (group) => {
     })
 
     const addressRequest = await client.get(route('api.addresses.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     addressRequest.assertStatus(200)
@@ -83,7 +80,6 @@ test.group('API [addresses.update]', (group) => {
     const addressData = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.put(route('api.addresses.update', address))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...addressData, is_default: true })
 
     request.assertStatus(200)
@@ -98,7 +94,6 @@ test.group('API [addresses.update]', (group) => {
     })
 
     const userRequest = await client.get(route('api.users.auth', user))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     userRequest.assertStatus(200)

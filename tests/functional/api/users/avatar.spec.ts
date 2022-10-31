@@ -20,7 +20,6 @@ test.group('API [users.avatar]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.avatar'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ action: 'REMOVE' })
 
     $response.assertStatus(200)

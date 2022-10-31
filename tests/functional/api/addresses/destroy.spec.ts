@@ -24,9 +24,7 @@ test.group('API [addresses.destroy]', (group) => {
   test('logged in users can delete address.', async ({ client, route }) => {
     const address = await AddressFactory.with('user').create()
 
-    const request = await client.delete(route('api.addresses.destroy', address))
-      // @ts-ignore
-      .guard('api').loginAs(address.user)
+    const request = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(address.user)
 
     request.assertStatus(200)
 

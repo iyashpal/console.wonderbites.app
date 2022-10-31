@@ -20,7 +20,6 @@ test.group('API [feedbacks.store]', (group) => {
     const feedback = await FeedbackFactory.make()
 
     const $response = await client.post(route('api.feedbacks.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(feedback.toJSON())
 
     $response.assertStatus(200)
@@ -39,7 +38,6 @@ test.group('API [feedbacks.store]', (group) => {
     const feedback = await FeedbackFactory.merge({ experience: '' }).make()
 
     const $response = await client.post(route('api.feedbacks.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(feedback.toJSON())
 
     $response.assertStatus(422)
@@ -53,7 +51,6 @@ test.group('API [feedbacks.store]', (group) => {
     const feedback = await FeedbackFactory.merge({ body: '' }).make()
 
     const $response = await client.post(route('api.feedbacks.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(feedback.toJSON())
 
     $response.assertStatus(422)
@@ -67,7 +64,6 @@ test.group('API [feedbacks.store]', (group) => {
     const feedback = await FeedbackFactory.merge({ source: '' }).with('user').make()
 
     const $response = await client.post(route('api.feedbacks.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(feedback.toJSON())
 
     $response.assertStatus(422)

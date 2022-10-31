@@ -67,6 +67,7 @@ declare module '@ioc:Adonis/Addons/Auth' {
     web: {
       implementation: SessionGuardContract<'user', 'web'>
       config: SessionGuardConfig<'user'>
+      client: SessionClientContract<'user'>
     }
     /*
     |--------------------------------------------------------------------------
@@ -80,6 +81,7 @@ declare module '@ioc:Adonis/Addons/Auth' {
     api: {
       implementation: OATGuardContract<'user', 'api'>
       config: OATGuardConfig<'user'>
+      client: OATClientContract<'user'>
     }
     /*
     |--------------------------------------------------------------------------
@@ -93,6 +95,7 @@ declare module '@ioc:Adonis/Addons/Auth' {
     basic: {
       implementation: BasicAuthGuardContract<'user', 'basic'>
       config: BasicAuthGuardConfig<'user'>
+      client: BasicAuthClientContract<'user'>
     }
   }
 }

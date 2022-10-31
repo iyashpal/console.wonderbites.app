@@ -16,7 +16,6 @@ test.group('API [addresses.show]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).create()
 
     const request = await client.get(route('api.addresses.show', address))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -28,7 +27,6 @@ test.group('API [addresses.show]', (group) => {
     const user = await UserFactory.create()
 
     const request = await client.get(route('api.addresses.show', { id: 50 }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(404)

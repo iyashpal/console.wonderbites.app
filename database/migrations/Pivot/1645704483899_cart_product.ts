@@ -11,6 +11,8 @@ export default class CartProduct extends BaseSchema {
 
       table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
 
+      table.bigInteger('price').unsigned().notNullable().defaultTo(0)
+
       table.integer('qty').unsigned().notNullable().defaultTo(1)
 
       /**

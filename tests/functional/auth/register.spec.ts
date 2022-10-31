@@ -183,7 +183,6 @@ test.group('Auth register', (group) => {
     const User = await UserFactory.create()
 
     const response = await client.post(route('api.register')).guard('api')
-      // @ts-ignore
       .loginAs(User)
 
     response.assertStatus(401)

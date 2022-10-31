@@ -15,7 +15,6 @@ test.group('API [coupons.index]', (group) => {
 
     const response = await client.get(route('api.coupons.index')).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(200)

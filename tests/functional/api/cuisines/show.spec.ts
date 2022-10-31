@@ -27,7 +27,6 @@ test.group('API [cuisines.show]', (group) => {
     const cuisine = await CuisineFactory.create()
 
     const $response = await client.get(route('api.cuisines.show', cuisine))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)

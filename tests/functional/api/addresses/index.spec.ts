@@ -23,7 +23,6 @@ test.group('API [addresses.index]', (group) => {
     const user = await UserFactory.create()
 
     const request = await client.get(route('api.addresses.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -39,7 +38,6 @@ test.group('API [addresses.index]', (group) => {
     ]).createMany(3)
 
     const request = await client.get(route('api.addresses.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)

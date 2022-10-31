@@ -27,7 +27,6 @@ test.group('Api [reviews.store]', (group) => {
     const review = await ReviewFactory.merge({ typeId: product.id }).make()
 
     const request = await client.post(route('api.reviews.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(review.toObject())
 
     request.assertStatus(200)
@@ -46,7 +45,6 @@ test.group('Api [reviews.store]', (group) => {
     const review = await ReviewFactory.make()
 
     const request = await client.post(route('api.reviews.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(review.toObject())
 
     request.assertStatus(422)
@@ -62,7 +60,6 @@ test.group('Api [reviews.store]', (group) => {
     const review = await ReviewFactory.merge({ typeId: product.id, title: '' }).make()
 
     const request = await client.post(route('api.reviews.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(review.toObject())
 
     request.assertStatus(422)
@@ -78,7 +75,6 @@ test.group('Api [reviews.store]', (group) => {
     const review = await ReviewFactory.merge({ typeId: product.id, body: '' }).make()
 
     const request = await client.post(route('api.reviews.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(review.toObject())
 
     request.assertStatus(422)

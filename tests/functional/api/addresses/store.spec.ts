@@ -27,7 +27,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, firstName: null })
 
     request.assertStatus(422)
@@ -42,7 +41,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, firstName: string.generateRandom(256) })
 
     request.assertStatus(422)
@@ -57,7 +55,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, lastName: null })
 
     request.assertStatus(422)
@@ -72,7 +69,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, lastName: string.generateRandom(256) })
 
     request.assertStatus(422)
@@ -87,7 +83,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, street: null })
 
     request.assertStatus(422)
@@ -102,7 +97,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, street: string.generateRandom(256) })
 
     request.assertStatus(422)
@@ -117,7 +111,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, city: null })
 
     request.assertStatus(422)
@@ -132,7 +125,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, city: string.generateRandom(256) })
 
     request.assertStatus(422)
@@ -147,7 +139,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, phone: null })
 
     request.assertStatus(422)
@@ -162,7 +153,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, phone: string.generateRandom(21) })
 
     request.assertStatus(422)
@@ -177,7 +167,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, phone: null })
 
     request.assertStatus(422)
@@ -192,7 +181,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, type: null })
 
     request.assertStatus(422)
@@ -208,7 +196,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json(address)
 
     request.assertStatus(200)
@@ -223,7 +210,6 @@ test.group('API [addresses.store]', (group) => {
     })
 
     const addressRequest = await client.get(route('api.addresses.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     addressRequest.assertStatus(200)
@@ -238,7 +224,7 @@ test.group('API [addresses.store]', (group) => {
         phone: address.phone,
       },
     ])
-  }).tags(['@addresses', '@addresses.index', '@addresses.store'])
+  }).tags(['@addresses', '@addresses.index', '@addresses.store', '@addresses.debug'])
 
   test('creating new address can be set as default.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -246,7 +232,6 @@ test.group('API [addresses.store]', (group) => {
     const address = await AddressFactory.merge({ userId: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ ...address, is_default: true })
 
     request.assertStatus(200)
@@ -263,7 +248,6 @@ test.group('API [addresses.store]', (group) => {
     const defaultAddress = request.body()
 
     const userRequest = await client.get(route('api.users.auth'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     userRequest.assertStatus(200)

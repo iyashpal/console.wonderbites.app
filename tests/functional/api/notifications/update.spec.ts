@@ -23,7 +23,6 @@ test.group('API [notifications.update]', (group) => {
     const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ action: 'unread' })
 
     $response.assertStatus(200)
@@ -34,7 +33,6 @@ test.group('API [notifications.update]', (group) => {
     const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ action: 'read' })
 
     $response.assertStatus(200)
@@ -49,7 +47,6 @@ test.group('API [notifications.update]', (group) => {
     const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ action: 'unread' })
 
     $response.assertStatus(200)

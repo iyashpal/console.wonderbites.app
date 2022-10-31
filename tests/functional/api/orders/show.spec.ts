@@ -31,7 +31,6 @@ test.group('API [orders.show]', (group) => {
       .create()
 
     const request = await client.get(route('api.orders.show', order))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -50,7 +49,6 @@ test.group('API [orders.show]', (group) => {
     await order.related('products').attach([product.id])
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.products'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -73,7 +71,6 @@ test.group('API [orders.show]', (group) => {
     const qs = { with: ['order.products', 'order.products.media'] }
 
     const request = await client.get(route('api.orders.show', order, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -96,7 +93,6 @@ test.group('API [orders.show]', (group) => {
     await order.related('ingredients').attach(ingredients)
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.ingredients'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -113,7 +109,6 @@ test.group('API [orders.show]', (group) => {
       .create()
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.coupon'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -130,7 +125,6 @@ test.group('API [orders.show]', (group) => {
       .create()
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.address'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -144,7 +138,6 @@ test.group('API [orders.show]', (group) => {
     const order = await OrderFactory.merge({ userId: user.id, addressId: address.id }).create()
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.user'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -182,7 +175,6 @@ test.group('API [orders.show]', (group) => {
     }
 
     const request = await client.get(route('api.orders.show', order, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)

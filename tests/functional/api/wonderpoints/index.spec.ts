@@ -26,7 +26,6 @@ test.group('API [wonderpoints.index]', (group) => {
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index')).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     // response.dumpBody()
@@ -53,7 +52,6 @@ test.group('API [wonderpoints.index]', (group) => {
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'earned' } })).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)
@@ -68,7 +66,6 @@ test.group('API [wonderpoints.index]', (group) => {
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeemed' } })).guard('api')
-      // @ts-ignore
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)

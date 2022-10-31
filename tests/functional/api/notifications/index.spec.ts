@@ -19,7 +19,6 @@ test.group('API [notifications.index]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.get(route('api.notifications.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)
@@ -33,7 +32,6 @@ test.group('API [notifications.index]', (group) => {
     const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.get(route('api.notifications.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)

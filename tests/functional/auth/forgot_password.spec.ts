@@ -6,7 +6,6 @@ test.group('Auth forgot password', () => {
   test('Logged in users can not request the password reset link.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const response = await client.post(route('api.password.email'))
-      // @ts-ignore
       .guard('api').loginAs(user).json({ email: user.email }).accept('json')
 
     response.assertBodyContains({ message: 'unauthorized access' })

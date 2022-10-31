@@ -15,7 +15,6 @@ test.group('API [coupons.update]', (group) => {
 
     const response = await client.put(route('api.coupons.update', { id: coupon.id })).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
       .json({
         ...(await coupon.toObject()),
@@ -49,7 +48,6 @@ test.group('API [coupons.update]', (group) => {
 
     const response = await client.put(route('api.coupons.update', { id: 15 })).guard('api')
 
-      // @ts-ignore
       .loginAs(user)
 
     response.assertStatus(400)

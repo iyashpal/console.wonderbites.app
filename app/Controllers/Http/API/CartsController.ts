@@ -29,6 +29,7 @@ export default class CartsController {
 
     // Add products to cart.
     if (request.input('action') === 'ADD') {
+      await this.cleanCartBeforeUpdate(request, cart)
       await this.addToCart(request, cart)
     }
 
@@ -97,12 +98,21 @@ export default class CartsController {
     if (request.input('products')) {
       await cart.related('products').detach(request.input('products'))
 
-      await cart.related('ingredients').query().whereIn('product_id', request.input('products')).delete()
+      await cart.related('ingredients').query()
+        .whereInPivot('product_id', request.input('products')).delete()
     }
 
     // Remove ingredients from cart.
     if (request.input('ingredients')) {
       await cart.related('ingredients').detach(request.input('ingredients'))
+    }
+  }
+
+  protected async cleanCartBeforeUpdate (request: RequestContract, cart: Cart) {
+    if (Object.keys(request.input('ingredients', [])).length > 0) {
+      await cart.related('ingredients').query()
+        .whereInPivot('product_id', Object.keys(request.input('products', [])))
+        .delete()
     }
   }
 

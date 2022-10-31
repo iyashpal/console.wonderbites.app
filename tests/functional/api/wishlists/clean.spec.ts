@@ -20,7 +20,6 @@ test.group('API [wishlists.clean]', (group) => {
     const user = await UserFactory.with('wishlist', 1, query => query.with('products', 5)).create()
 
     const $response = await client.put(route('api.wishlists.clean'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)

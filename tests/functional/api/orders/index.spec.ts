@@ -21,7 +21,6 @@ test.group('API [orders.index]', (group) => {
     const user = await UserFactory.create()
 
     const request = await client.get(route('api.orders.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -34,7 +33,6 @@ test.group('API [orders.index]', (group) => {
     const orders = await OrderFactory.merge({ userId: user.id, addressId: address.id }).createMany(10)
 
     const request = await client.get(route('api.orders.index'))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -61,7 +59,6 @@ test.group('API [orders.index]', (group) => {
     const orders = (await Order.all()).filter(({ status }) => status === order.status)
 
     const request = await client.get(route('api.orders.index', {}, { qs: { status: order.name } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -83,7 +80,6 @@ test.group('API [orders.index]', (group) => {
     const orders = await OrderFactory.merge({ userId: user.id, addressId: address.id }).createMany(20)
 
     let request = await client.get(route('api.orders.index', {}, { qs: { limit } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -92,7 +88,6 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({ meta: { current_page: 1 }, data: orders.map(({ id }) => ({ id })).slice(0, limit) })
 
     request = await client.get(route('api.orders.index', {}, { qs: { limit, page: 2 } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -107,7 +102,6 @@ test.group('API [orders.index]', (group) => {
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
     const request = await client.get(route('api.orders.index', {}, { qs: { with: ['order.products'] } }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -133,7 +127,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.products', 'order.products.media'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -174,7 +167,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.ingredients'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -205,7 +197,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.address'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -234,7 +225,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.coupon'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -257,7 +247,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.user'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -284,7 +273,6 @@ test.group('API [orders.index]', (group) => {
     const qs = { with: ['order.review'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -333,7 +321,6 @@ test.group('API [orders.index]', (group) => {
     }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
-      // @ts-ignore
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
