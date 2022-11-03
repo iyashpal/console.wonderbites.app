@@ -1,7 +1,8 @@
-import { User, Cart } from 'App/Models'
+import { User, Cart, Product } from 'App/Models'
 import { types } from '@ioc:Adonis/Core/Helpers'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { mapKeys, mapValues } from 'lodash'
 
 export default class CartsController {
   /**
@@ -30,6 +31,7 @@ export default class CartsController {
     // Add products to cart.
     if (request.input('action') === 'ADD') {
       await this.cleanCartBeforeUpdate(request, cart)
+
       await this.addToCart(request, cart)
     }
 
@@ -37,6 +39,40 @@ export default class CartsController {
     if (request.input('action') === 'REMOVE') {
       await this.removeFromCart(request, cart)
     }
+
+    response.json(await this.cartWithRequestedData(request, cart))
+  }
+
+  /**
+   * Add products to cart without customization.
+   *
+   * @param param0 {HttpContextContract} Request payload.
+   */
+  public async quick ({ auth, request, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    let cart = await this.cart(request, user)
+
+    await Product.findOrFail(request.input('products'))
+      .then(async product => {
+        await product?.load('ingredients')
+
+        let mappedIngredients = mapValues(
+          mapKeys(
+            product?.ingredients.map(ingredient => ({
+              id: ingredient.id,
+              product_id: product.id,
+              qty: ingredient.$extras.pivot_min_quantity,
+              price: ingredient.$extras.pivot_price,
+            })), (data) => data.id
+          ),
+          data => ({ product_id: data.product_id, qty: data.qty, price: data.price})
+        )
+
+        await cart.related('products').attach([product.id])
+
+        await cart.related('ingredients').attach(mappedIngredients)
+      })
 
     response.json(await this.cartWithRequestedData(request, cart))
   }
@@ -108,7 +144,14 @@ export default class CartsController {
     }
   }
 
+  /**
+   * Remove all ingredients from cart if the request is to update the cart.
+   * 
+   * @param request RequestContract
+   * @param cart Cart
+   */
   protected async cleanCartBeforeUpdate (request: RequestContract, cart: Cart) {
+    // Clean ingredients only when we have ingredients in the list.
     if (Object.keys(request.input('ingredients', [])).length > 0) {
       await cart.related('ingredients').query()
         .whereInPivot('product_id', Object.keys(request.input('products', [])))
