@@ -19,7 +19,7 @@ export default class CheckoutsController {
         .preload('ingredients').preload('products').firstOrFail()
 
       // Load and validate the order address by request requested address id
-      const address = await await Address.query()
+      const address = await Address.query()
         .where('id', attrs.address).where('user_id', this.user.id).firstOrFail()
 
       try {

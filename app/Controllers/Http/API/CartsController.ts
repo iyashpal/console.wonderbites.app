@@ -1,8 +1,8 @@
-import { User, Cart, Product } from 'App/Models'
+import { mapKeys, mapValues } from 'lodash'
 import { types } from '@ioc:Adonis/Core/Helpers'
+import { User, Cart, Product } from 'App/Models'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { mapKeys, mapValues } from 'lodash'
 
 export default class CartsController {
   /**
@@ -119,7 +119,7 @@ export default class CartsController {
 
     // Add ingredients to cart
     if (request.input('ingredients')) {
-      await cart.related('ingredients').sync(request.input('ingredients'), false)
+      await cart.related('ingredients').attach(request.input('ingredients'))
     }
   }
 
