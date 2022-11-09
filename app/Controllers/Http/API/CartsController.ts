@@ -185,7 +185,12 @@ export default class CartsController {
           ])
           .match([
             request.input('with', []).includes('cart.products.ingredients'),
-            query => query.preload('ingredients'),
+            query => query.preload('ingredients', ingredients => ingredients
+              .match([
+                request.input('with', []).includes('cart.products.ingredients.categories'),
+                builder => builder.preload('categories'),
+              ])
+            ),
           ])
         ),
       ])
