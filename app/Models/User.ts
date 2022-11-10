@@ -124,7 +124,9 @@ export default class User extends BaseModel {
   public get avatar () {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
-    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
+    let avatar = `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
+
+    return this.imagePath !== '' ? this.imagePath : avatar
   }
 
   public async notify () {
