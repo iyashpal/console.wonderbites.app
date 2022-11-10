@@ -13,7 +13,7 @@ export default class AddressesController {
   public async index ({ auth, response }: HttpContextContract): Promise<void> {
     const user = auth.use('api').user!
 
-    await user.load('addresses')
+    await user.load('addresses', query => query.orderBy('created_at', 'desc'))
 
     response.status(200).json(user.addresses)
   }
