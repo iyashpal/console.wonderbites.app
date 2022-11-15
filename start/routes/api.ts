@@ -26,7 +26,7 @@ Route.group(() => {
     Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
     Route.put('orders/:id/cancel', 'OrdersController.cancel').as('orders.cancel')
 
-    Route.resource('reviews', 'ReviewsController').apiOnly().only(['store'])
+    Route.resource('reviews', 'ReviewsController').apiOnly().only(['store', 'update'])
 
     // Endpoint to create wishlists.
     Route.get('wishlists', 'WishlistsController.show').as('wishlists.show')

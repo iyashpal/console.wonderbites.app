@@ -23,9 +23,10 @@ export default class UpdateValidator {
    *    ```
    */
   public schema = schema.create({
-    user_id: schema.number(),
-    product_id: schema.number(),
+    userId: schema.number.optional(),
+    typeId: schema.number.optional(),
     rating: schema.number(),
+    type: schema.string.optional({ trim: true }),
     title: schema.string({ trim: true }),
     body: schema.string({ trim: true }),
   })
@@ -43,7 +44,7 @@ export default class UpdateValidator {
    */
   public messages = {
     'user_id.required': 'User ID field is required.',
-    'product_id.required': 'Product ID field is required.',
+    'typeId.required': 'Type ID field is required.',
     'rating.required': 'Rating field is required.',
     'title.required': 'Title is required.',
     'body.required': 'Body is required.',

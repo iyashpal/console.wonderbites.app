@@ -126,7 +126,7 @@ export default class User extends BaseModel {
 
     let avatar = `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
 
-    return this.imagePath !== '' ? this.imagePath : avatar
+    return this.imagePath !== '' ? `http://localhost:3333/uploads/${this.imagePath}` : avatar
   }
 
   public async notify () {

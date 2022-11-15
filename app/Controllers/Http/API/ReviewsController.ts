@@ -1,5 +1,6 @@
 import { Review } from 'App/Models'
 import CreateValidator from 'App/Validators/Review/CreateValidator'
+import UpdateValidator from 'App/Validators/Review/UpdateValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ReviewsController {
@@ -52,7 +53,20 @@ export default class ReviewsController {
     response.json(review)
   }
 
-  public async update ({ }: HttpContextContract) {
+  public async update ({ request, response, auth, params }: HttpContextContract) {
+    try {
+      const user = auth.use('api').user!
+
+      const attributes = await request.validate(UpdateValidator)
+
+      console.log(params)
+
+      const review = await Review.findOrFail(params.id)
+
+      response.json(review.merge(attributes).save())
+    } catch (error) {
+
+    }
   }
 
   public async destroy ({ }: HttpContextContract) {

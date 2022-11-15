@@ -11,10 +11,16 @@ export default class OrdersController {
         // Load order products if they are requested
         .match([
           request.input('with', []).includes('order.products'),
-          query => query.preload('products', (builder) => builder.match([
-            request.input('with', []).includes('order.products.media'),
-            query => query.preload('media'),
-          ])),
+          query => query.preload('products', (builder) => builder
+            .match([
+              request.input('with', []).includes('order.products.media'),
+              query => query.preload('media'),
+            ])
+            .match([
+              request.input('with', []).includes('order.product.review'),
+              query => query.preload('review', builder => builder.where('user_id', user.id)),
+            ])
+          ),
         ])
 
         // Load order user if they are requested.

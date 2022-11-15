@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BelongsTo, belongsTo, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { Cart, Category, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 
@@ -86,6 +86,13 @@ export default class Product extends BaseModel {
     pivotTimestamps: true,
     })
   public orders: ManyToMany<typeof Order>
+
+  @hasOne(() => Review, {
+    localKey: 'id',
+    foreignKey: 'typeId',
+    onQuery: query => query.where('type', 'Product')
+    })
+  public review: HasOne<typeof Review>
 
   @hasMany(() => Review, {
     localKey: 'id',
