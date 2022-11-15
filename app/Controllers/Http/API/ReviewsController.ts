@@ -53,19 +53,17 @@ export default class ReviewsController {
     response.json(review)
   }
 
-  public async update ({ request, response, auth, params }: HttpContextContract) {
+  public async update ({ request, response, params }: HttpContextContract) {
     try {
-      const user = auth.use('api').user!
-
       const attributes = await request.validate(UpdateValidator)
-
-      console.log(params)
 
       const review = await Review.findOrFail(params.id)
 
-      response.json(review.merge(attributes).save())
-    } catch (error) {
+      review.merge(attributes).save()
 
+      response.json(review)
+    } catch (error) {
+      response.unprocessableEntity(error)
     }
   }
 
