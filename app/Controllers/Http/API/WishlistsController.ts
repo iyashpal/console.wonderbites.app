@@ -4,32 +4,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class WishlistsController {
   /**
-   * Remove everything from wishlist.
-   * 
-   * @param param0 HttpContextContract
-   */
-  public async clean ({ auth, request, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
-    try {
-      const wishlist = await user.related('wishlist').firstOrCreate(
-        { userId: user.id }, // Search payload
-        { ipAddress: request.ip() } // Save payload
-      )
-
-      await wishlist.related('products').sync([])
-      await wishlist.related('ingredients').sync([])
-
-      await wishlist.load('products')
-      await wishlist.load('ingredients')
-
-      response.json(wishlist)
-    } catch (error) {
-      response.badRequest(error)
-    }
-  }
-
-  /**
    * Show user wishlist.
    *
    * @param param0 HttpContextContract Request payload
@@ -47,9 +21,8 @@ export default class WishlistsController {
         builder.select('id')
       })
     })
-    await wishlist.load('ingredients')
 
-    response.json(wishlist)
+    response.json(await this.wishlistWithRequestedData(request, wishlist.id))
   }
 
   /**
@@ -75,10 +48,71 @@ export default class WishlistsController {
       await this.detachFromWishlist(request, wishlist)
     }
 
-    await wishlist.load('products')
-    await wishlist.load('ingredients')
+    response.json(await this.wishlistWithRequestedData(request, wishlist.id))
+  }
 
-    response.json(wishlist)
+  /**
+   * Remove everything from wishlist.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async clean ({ auth, request, response }: HttpContextContract) {
+    const user = auth.use('api').user!
+
+    try {
+      const wishlist = await user.related('wishlist').firstOrCreate(
+        { userId: user.id }, // Search payload
+        { ipAddress: request.ip() } // Save payload
+      )
+
+      await wishlist.related('products').sync([])
+      await wishlist.related('ingredients').sync([])
+
+      response.json(await this.wishlistWithRequestedData(request, wishlist.id))
+    } catch (error) {
+      response.badRequest(error)
+    }
+  }
+
+  /**
+   * Get the wishlist requested data.
+   * 
+   * @param request RequestContract
+   * @param id number
+   * @returns Wishlist
+   */
+  protected async wishlistWithRequestedData (request: RequestContract, id: number) {
+    return await Wishlist.query().match([
+      request.input('with', []).includes('wishlist.products'),
+      query => query.preload('products', builder => builder
+        // Load product media if requested.
+        .match([
+          request.input('with', []).includes('wishlist.products.media'),
+          query => query.preload('media'),
+        ])
+
+        // Load product reviews if requested.
+        .match([
+          request.input('with', []).includes('wishlist.products.reviews'),
+          query => query.preload('reviews'),
+        ])
+
+        // Load product reviews count
+        .match([
+          request.input('withCount', []).includes('wishlist.products.reviews'),
+          query => query.withCount('reviews'),
+        ])
+
+        // Calculate reviews average if requested.
+        .match([
+          request.input('withAvg', []).includes('wishlist.products.reviews'),
+          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
+        ])
+      ),
+    ]).match([
+      request.input('with', []).includes('wishlist.ingredients'),
+      query => query.preload('ingredients'),
+    ]).where('id', id).first()
   }
 
   /**
