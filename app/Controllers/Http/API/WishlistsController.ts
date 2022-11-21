@@ -91,6 +91,12 @@ export default class WishlistsController {
           query => query.preload('media'),
         ])
 
+        // Load product ingredients if requested.
+        .match([
+          request.input('with', []).includes('wishlist.products.ingredients'),
+          query => query.preload('ingredients'),
+        ])
+
         // Load product reviews if requested.
         .match([
           request.input('with', []).includes('wishlist.products.reviews'),
