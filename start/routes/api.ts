@@ -65,4 +65,17 @@ Route.group(() => {
 
     Route.resource('products', 'ProductsController').apiOnly()
   })
+
+  /**
+   * Routes that are statically setup.
+   */
+  Route.group(() => {
+    Route.get('about', 'StaticsController.about').as('about')
+
+    Route.get('privacy-policy', 'StaticsController.privacyPolicy').as('privacyPolicy')
+
+    Route.get('content-policy', 'StaticsController.contentPolicy').as('contentPolicy')
+
+    Route.get('terms-of-services', 'StaticsController.termsOfServices').as('termsOfServices')
+  }).prefix('/static').as('static')
 }).prefix('/api').as('api').namespace('App/Controllers/Http/API')
