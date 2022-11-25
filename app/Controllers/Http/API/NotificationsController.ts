@@ -6,7 +6,7 @@ export default class NotificationsController {
   public async index ({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user!
     try {
-      const notifications = await user.related('notifications').query()
+      let notifications = await user.notifications()
         .paginate(request.input('page', 1), request.input('limit', 10))
 
       response.json(notifications)
@@ -22,7 +22,7 @@ export default class NotificationsController {
 
     try {
       const payload = await request.validate(UpdateValidator)
-      const notification = await user.related('notifications').query().where('id', params.id).firstOrFail()
+      const notification = await user.notifications().where('id', params.id).firstOrFail()
 
       await notification.merge({ readAt: payload.action === 'read' ? DateTime.now() : null })
         .save().then(notification => response.json(notification))

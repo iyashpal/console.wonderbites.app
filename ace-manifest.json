@@ -1,47 +1,24 @@
 {
   "commands": {
-    "migration:fresh": {
+    "make:notification": {
       "settings": {
-        "loadApp": true
+        "loadApp": false,
+        "stayAlive": false
       },
-      "commandPath": "@adonisjs/lucid/build/commands/Migration/Fresh",
-      "commandName": "migration:fresh",
-      "description": "Drop all tables and re-migrate the database",
-      "args": [],
-      "aliases": [],
-      "flags": [
+      "commandPath": "./commands/MakeNotification",
+      "commandName": "make:notification",
+      "description": "Make a new notification class",
+      "args": [
         {
-          "name": "connection",
-          "propertyName": "connection",
           "type": "string",
-          "description": "Define a custom database connection",
-          "alias": "c"
-        },
-        {
-          "name": "force",
-          "propertyName": "force",
-          "type": "boolean",
-          "description": "Explicitly force command to run in production"
-        },
-        {
-          "name": "seed",
-          "propertyName": "seed",
-          "type": "boolean",
-          "description": "Run seeders"
-        },
-        {
-          "name": "drop-views",
-          "propertyName": "dropViews",
-          "type": "boolean",
-          "description": "Drop all views"
-        },
-        {
-          "name": "drop-types",
-          "propertyName": "dropTypes",
-          "type": "boolean",
-          "description": "Drop all custom types (Postgres only)"
+          "propertyName": "name",
+          "name": "name",
+          "required": true,
+          "description": "Name of the notification class"
         }
-      ]
+      ],
+      "aliases": [],
+      "flags": []
     },
     "dump:rcfile": {
       "settings": {},
@@ -512,6 +489,49 @@
           "propertyName": "seed",
           "type": "boolean",
           "description": "Run seeders"
+        }
+      ]
+    },
+    "migration:fresh": {
+      "settings": {
+        "loadApp": true
+      },
+      "commandPath": "@adonisjs/lucid/build/commands/Migration/Fresh",
+      "commandName": "migration:fresh",
+      "description": "Drop all tables and re-migrate the database",
+      "args": [],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "connection",
+          "propertyName": "connection",
+          "type": "string",
+          "description": "Define a custom database connection",
+          "alias": "c"
+        },
+        {
+          "name": "force",
+          "propertyName": "force",
+          "type": "boolean",
+          "description": "Explicitly force command to run in production"
+        },
+        {
+          "name": "seed",
+          "propertyName": "seed",
+          "type": "boolean",
+          "description": "Run seeders"
+        },
+        {
+          "name": "drop-views",
+          "propertyName": "dropViews",
+          "type": "boolean",
+          "description": "Drop all views"
+        },
+        {
+          "name": "drop-types",
+          "propertyName": "dropTypes",
+          "type": "boolean",
+          "description": "Drop all custom types (Postgres only)"
         }
       ]
     },

@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Notification, Order, Review, Feedback } from '.'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback } from '.'
+import Notifiable from 'App/Features/Notification/Notifiable'
 
-export default class User extends BaseModel {
+export default class User extends Notifiable {
   @column({ isPrimary: true })
   public id: number
 
@@ -78,16 +79,6 @@ export default class User extends BaseModel {
   public products: HasMany<typeof Product>
 
   /**
-   * Relation to user notifications.
-   */
-  @hasMany(() => Notification, {
-    localKey: 'id',
-    foreignKey: 'notifiableId',
-    onQuery: query => query.where('notifiableType', 'User'),
-    })
-  public notifications: HasMany<typeof Notification>
-
-  /**
    * Relation to active cart of the user.
    */
   @hasOne(() => Cart, { onQuery: query => query.where('status', 1) })
@@ -127,24 +118,5 @@ export default class User extends BaseModel {
     let avatar = `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
 
     return this.imagePath !== '' ? `http://localhost:3333/uploads/${this.imagePath}` : avatar
-  }
-
-  public async notify () {
-    //
-  }
-
-  public async readNotifications (this: User) {
-    return this.related('notifications').query()
-      .whereNotNull('readAt').orderBy('createdAt', 'desc')
-  }
-
-  public async unreadNotifications (this: User) {
-    return this.related('notifications').query()
-      .whereNull('readAt').orderBy('createdAt', 'desc')
-  }
-
-  public async markNotificationsAsRead (this: User) {
-    return this.related('notifications').query()
-      .whereNull('readAt').update({ readAt: DateTime.now().toSQL() })
   }
 }

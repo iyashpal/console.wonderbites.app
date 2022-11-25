@@ -5,7 +5,7 @@ export default class Notifications extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.bigIncrements('id')
+      table.bigIncrements('id').primary()
 
       table.string('type').notNullable()
 
@@ -15,14 +15,14 @@ export default class Notifications extends BaseSchema {
 
       table.jsonb('data').notNullable()
 
-      table.timestamp('read_at', { useTz: true }).nullable()
-
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('created_at', { useTz: true })
+      table.timestamp('read_at', { useTz: true }).nullable()
 
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamp('created_at', { useTz: true }).notNullable()
+
+      table.timestamp('updated_at', { useTz: true }).notNullable()
     })
   }
 

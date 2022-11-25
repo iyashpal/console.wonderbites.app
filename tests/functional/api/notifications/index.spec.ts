@@ -13,7 +13,7 @@ test.group('API [notifications.index]', (group) => {
 
     $response.assertStatus(401)
     $response.assertBodyContains({ message: 'Unauthenticated' })
-  }).tags(['@notifications', '@notifications.index'])
+  }).tags(['@notifications', '@notifications.index', '@notifications.index'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -24,7 +24,7 @@ test.group('API [notifications.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({})
-  }).tags(['@notifications', '@notifications.index'])
+  }).tags(['@notifications', '@notifications.index.debug'])
 
   test('it can access user notifications.', async ({ client, route }) => {
     const user = await UserFactory.create()
