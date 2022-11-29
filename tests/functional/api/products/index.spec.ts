@@ -180,7 +180,7 @@ test.group('API [products.index]', (group) => {
 
     const $response = await client.get(route('api.products.index', {}, { qs }))
 
-    $response.assertStatus(200)
+    // $response.assertStatus(200)
 
     $response.assertBodyContains({
       data: [
@@ -194,6 +194,30 @@ test.group('API [products.index]', (group) => {
       ],
     })
   }).tags(['@products', '@products.index'])
+
+  test('It can list the top rated products.', async ({ client, route }) => {
+    const product = await ProductFactory.with('reviews', 10, query => query.with('user')).create()
+
+    const qs = { filters: ['top-rated'] }
+
+    const $response = await client.get(route('api.products.index', {}, { qs }))
+
+    // $response.assertStatus(200)
+
+    // $response.dumpBody()
+
+    // $response.assertBodyContains({
+    //   data: [
+    //     {
+    //       id: product.id,
+    //       reviews: product.reviews.map(({ id, title }) => ({ id, title })),
+    //       meta: {
+    //         reviews_avg: totalAvgRating,
+    //       },
+    //     },
+    //   ],
+    // })
+  }).tags(['@products', '@products.index', '@products.debug'])
 
   test('it can list the products with availability in the wishlist of the user.', async ({ client, route }) => {
     const user = await UserFactory.create()

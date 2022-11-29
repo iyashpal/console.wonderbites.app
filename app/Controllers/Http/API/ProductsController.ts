@@ -1,59 +1,27 @@
 import { Product } from 'App/Models'
+import { ProductQuery } from 'App/Helpers/Database'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProductsController {
+  /**
+   * Get the list of products.
+   * 
+   * @param param0 HttpContextContract
+   */
   public async index ({ request, response, auth }: HttpContextContract) {
     try {
       const user = auth.use('api').user!
 
-      const products = await Product.query()
-        // Load wishlist data if requested.
-        .match([
-          user?.id && request.input('with', []).includes('products.wishlist'),
-          query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
-        ])
-        // Load product media if requested.
-        .match([
-          request.input('with', []).includes('products.media'),
-          query => query.preload('media'),
-        ])
-        // Load product ingredients if requested.
-        .match([
-          request.input('with', []).includes('products.ingredients'),
-          query => query.preload('ingredients', query => query.match([
-            request.input('with', []).includes('products.ingredients.categories'),
-            query => query.preload('categories'),
-          ])),
-        ])
-        // Load product reviews if requested.
-        .match([
-          request.input('with', []).includes('products.reviews'),
-          query => query.preload('reviews'),
-        ])
-        // Filter products based on categories.
-        .match([
-          request.input('categories', []).length,
-          query => query.whereHas('categories', (builder) => builder
-            .whereInPivot('category_id', request.input('categories', []))),
-        ])
-        // Load product reviews count
-        .match([
-          request.input('withCount', []).includes('products.reviews'),
-          query => query.withCount('reviews'),
-        ])
-        // Calculate reviews average if requested.
-        .match([
-          request.input('withAvg', []).includes('products.reviews'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
-        ])
-        // Load product from a keyword
-        .match([
-          request.input('search', null),
-          query => query.whereLike('name', `%${request.input('search')}%`)
-            .orWhereLike('description', `%${request.input('search')}%`),
-        ])
-        .orderBy('id', 'desc')
-        .paginate(request.input('page'), request.input('limit', 10))
+      const QueryBuilder = (new ProductQuery(request))
+        .asUser(user)
+        .qsPrefix('products')
+        .withCounts(['reviews'])
+        .withAggregates(['reviews'])
+        .withFilters(['by-categories', 'search', 'top-rated'])
+        .withPreloads(['user-wishlist', 'media', 'reviews', 'ingredients'])
+
+      const products = await QueryBuilder.$query
+        .orderBy('id', 'desc').paginate(request.input('page'), request.input('limit', 10))
 
       response.status(200).json(products)
     } catch (error) {
@@ -61,45 +29,24 @@ export default class ProductsController {
     }
   }
 
-  public async show ({ request, params: { id }, auth, response }) {
+  /**
+   * Get the product details.
+   * 
+   * @param param0 HttpContextContract
+   */
+  public async show ({ request, params: { id }, auth, response }: HttpContextContract) {
     try {
-      const user = auth.use('api').user
+      const user = auth.use('api').user!
 
-      const product = await Product.query()
-        // Load product media if requested.
-        .match([
-          request.input('with', []).includes('product.media'),
-          query => query.preload('media'),
-        ])
-        // Load product ingredients if requested.
-        .match([
-          request.input('with', []).includes('product.ingredients'),
-          query => query.preload('ingredients', query => query.match([
-            request.input('with', []).includes('product.ingredients.categories'),
-            query => query.preload('categories'),
-          ])),
-        ])
-        // Load product reviews if requested.
-        .match([
-          request.input('with', []).includes('product.reviews'),
-          query => query.preload('reviews'),
-        ])
-        // Load wishlist data if requested.
-        .match([
-          user?.id && request.input('with', []).includes('product.wishlist'),
-          query => query.preload('wishlists', builder => builder.where('user_id', user.id)),
-        ])
-        // Load product reviews count
-        .match([
-          request.input('withCount', []).includes('product.reviews'),
-          query => query.withCount('reviews'),
-        ])
-        // Calculate reviews average if requested.
-        .match([
-          request.input('withAvg', []).includes('product.reviews'),
-          query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
-        ])
-        .where('id', id).firstOrFail()
+      const QueryBuilder = (new ProductQuery(request))
+        .asUser(user)
+        .qsPrefix('product')
+        .withCounts(['reviews'])
+        .withAggregates(['reviews'])
+        .withFilters(['by-categories', 'search', 'top-rated'])
+        .withPreloads(['user-wishlist', 'media', 'reviews', 'ingredients'])
+
+      const product = await QueryBuilder.$query.where('id', id).firstOrFail()
 
       response.status(200).json(product)
     } catch (error) {
@@ -107,6 +54,11 @@ export default class ProductsController {
     }
   }
 
+  /**
+   * Toggle the product categories.
+   * 
+   * @param param0 HttpContextContract
+   */
   public async toggleCategory ({ params: { id }, response, request }: HttpContextContract) {
     const product = await Product.findOrFail(id)
 
