@@ -1,8 +1,8 @@
 import { Query } from '.'
 import { Product } from 'App/Models'
+import Database from '@ioc:Adonis/Lucid/Database'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
-import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class ProductQuery extends Query {
   public $query: ModelQueryBuilderContract<typeof Product, Product>
@@ -98,32 +98,19 @@ export default class ProductQuery extends Query {
     return this
   }
 
+  /**
+   * Filter products based on rating.
+   * 
+   * @returns ProductQuery
+   */
   protected filterTopRated () {
-    console.log('-------------------------------------------------------------------------------------------------')
-    // this.$query
-    // console.log(this.$query)
-    // const abc = Database.from('products')
-    //   .select('*', Database.from('reviews').avg('rating').where('type', 'Product')
-    //     .whereRaw('type_id=`products`.`id`').as('avg_reviews')
-    //   ).as('products')
-    // Database.raw('')
-    // console.log(Database.from(abc).select('*').where('products.avg_reviews', '>=', 5).toQuery())
-    // this.$query.whereHas('reviews', builder => builder)
-    // console.log(this.$query.select(
-    //   Database.from('reviews').avg('rating').where('type', 'Product')
-    //  .where('type_id', 'products.id').as('avg_rating')
-    // ).toQuery())
-    // Database.from('reviews')
-    // console.log(this.$query.withAggregate('reviews', builder => builder.avg('rating').as('average_rate')).toQuery())
-    // console.log(this.$query.whereHas('reviews', builder => builder).toQuery())
-    // this.$query.withAggregate('reviews')
-    console.log('-------------------------------------------------------------------------------------------------')
-    // this.$query.match([
-    //   this.$request.input('filters', []).includes('top-rated'),
-    //   query => query.whereHas('reviews', (builder) => {
-    //     builder.avg('rating').as('reviews_rating').where('reviews_rating', '>=', 5)
-    //   }),
-    // ])
+    const AvgReviews = Database.from('reviews')
+      .avg('rating').where('type', 'Product')
+      .whereRaw('type_id=`products`.`id`').as('avg_reviews')
+
+    this.$query
+      .from(Database.from('products').select('*', AvgReviews).as('products'))
+      .where('products.avg_reviews', '>=', 5)
 
     return this
   }

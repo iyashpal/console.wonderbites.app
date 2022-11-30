@@ -196,28 +196,34 @@ test.group('API [products.index]', (group) => {
   }).tags(['@products', '@products.index'])
 
   test('It can list the top rated products.', async ({ client, route }) => {
-    const product = await ProductFactory.with('reviews', 10, query => query.with('user')).create()
+    const user = await UserFactory.create()
+    const ProductA = await ProductFactory.create()
+    const ProductB = await ProductFactory.create()
+
+    await ReviewFactory.merge([
+      {type: 'Product', typeId: ProductA.id, rating: 5, userId: user.id},
+      {type: 'Product', typeId: ProductA.id, rating: 5, userId: user.id},
+      {type: 'Product', typeId: ProductA.id, rating: 5, userId: user.id},
+      {type: 'Product', typeId: ProductA.id, rating: 5, userId: user.id},
+      {type: 'Product', typeId: ProductA.id, rating: 5, userId: user.id},
+    ]).createMany(5)
+
+    await ReviewFactory.merge([
+      {type: 'Product', typeId: ProductB.id, rating: 3, userId: user.id},
+      {type: 'Product', typeId: ProductB.id, rating: 3, userId: user.id},
+      {type: 'Product', typeId: ProductB.id, rating: 3, userId: user.id},
+      {type: 'Product', typeId: ProductB.id, rating: 3, userId: user.id},
+      {type: 'Product', typeId: ProductB.id, rating: 3, userId: user.id},
+    ]).createMany(5)
 
     const qs = { filters: ['top-rated'] }
 
     const $response = await client.get(route('api.products.index', {}, { qs }))
 
-    // $response.assertStatus(200)
+    $response.assertStatus(200)
 
-    // $response.dumpBody()
-
-    // $response.assertBodyContains({
-    //   data: [
-    //     {
-    //       id: product.id,
-    //       reviews: product.reviews.map(({ id, title }) => ({ id, title })),
-    //       meta: {
-    //         reviews_avg: totalAvgRating,
-    //       },
-    //     },
-    //   ],
-    // })
-  }).tags(['@products', '@products.index', '@products.debug'])
+    $response.assertBodyContains({ data: [{id: ProductA.id}]})
+  }).tags(['@products', '@products.index'])
 
   test('it can list the products with availability in the wishlist of the user.', async ({ client, route }) => {
     const user = await UserFactory.create()

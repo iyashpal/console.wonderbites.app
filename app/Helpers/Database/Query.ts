@@ -45,7 +45,11 @@ export default abstract class Query {
    */
   public withPreloads (preloads: string[]) {
     for (let preload of preloads) {
-      this[string.camelCase(`preload-${preload}`)]()
+      try {
+        this[string.camelCase(`preload-${preload}`)]()
+      } catch (error) {
+        continue
+      }
     }
 
     return this
@@ -59,7 +63,11 @@ export default abstract class Query {
    */
   public withFilters (filters: string[]) {
     for (let filter of filters) {
-      this[string.camelCase(`filter-${filter}`)]()
+      try {
+        this[string.camelCase(`filter-${filter}`)]()
+      } catch (error) {
+        continue
+      }
     }
 
     return this
@@ -73,7 +81,11 @@ export default abstract class Query {
    */
   public withCounts (counts: string[]) {
     for (let count of counts) {
-      this[string.camelCase(`count-${count}`)]()
+      try {
+        this[string.camelCase(`count-${count}`)]()
+      } catch (error) {
+        continue
+      }
     }
 
     return this
@@ -87,7 +99,11 @@ export default abstract class Query {
    */
   public withAggregates (aggregates: string[]) {
     for (let aggregate of aggregates) {
-      this[string.camelCase(`aggregate-${aggregate}`)]()
+      try {
+        this[string.camelCase(`aggregate-${aggregate}`)]()
+      } catch (error) {
+        continue
+      }
     }
 
     return this
