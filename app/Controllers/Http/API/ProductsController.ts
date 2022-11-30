@@ -12,15 +12,11 @@ export default class ProductsController {
     try {
       const user = auth.use('api').user!
 
-      const QueryBuilder = (new ProductQuery(request))
+      let QueryBuilder = (new ProductQuery(request))
         .asUser(user)
-        .qsPrefix('products')
-        .withCounts(['reviews'])
-        .withAggregates(['reviews'])
-        .withFilters(['by-categories', 'search', 'top-rated'])
-        .withPreloads(['user-wishlist', 'media', 'reviews', 'ingredients'])
+        .resolveQueryWithPrefix('products')
 
-      const products = await QueryBuilder.$query
+      const products = await QueryBuilder.query()
         .orderBy('id', 'desc').paginate(request.input('page'), request.input('limit', 10))
 
       response.status(200).json(products)

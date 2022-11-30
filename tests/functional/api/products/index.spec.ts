@@ -18,6 +18,8 @@ test.group('API [products.index]', (group) => {
 
     $response.assertStatus(200)
 
+    $response.dumpBody()
+
     $response.assertBodyContains({
       data: products.map((product) => ({
         id: product.id,
@@ -26,7 +28,7 @@ test.group('API [products.index]', (group) => {
         description: product.description,
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@products', '@products.index', '@products.debug'])
 
   test('it can allow access to un-authenticated user.', async ({ client, route }) => {
     const products = await ProductFactory.createMany(10)

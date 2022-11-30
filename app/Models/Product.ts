@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed, HasMany, hasMany, scope } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Category, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
+import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { Cart, Category, ExtraField, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 import { BelongsTo, belongsTo, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Product extends BaseModel {
@@ -101,10 +101,13 @@ export default class Product extends BaseModel {
     })
   public reviews: HasMany<typeof Review>
 
+  @hasMany(() => ExtraField, {
+    localKey: 'id',
+    foreignKey: 'relationID',
+    onQuery: query => query.where('relation', 'Product')
+    })
+  public extraFields: HasMany<typeof ExtraField>
+
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
-
-  public static topRated = scope((query) => {
-    query.select()
-  })
 }

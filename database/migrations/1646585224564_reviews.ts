@@ -9,9 +9,9 @@ export default class Reviews extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
 
-      table.string('type')
+      table.string('reviewable')
 
-      table.bigInteger('type_id').unsigned().notNullable()
+      table.bigInteger('reviewable_id').unsigned().notNullable()
 
       table.integer('rating').unsigned().notNullable().defaultTo(0)
 
