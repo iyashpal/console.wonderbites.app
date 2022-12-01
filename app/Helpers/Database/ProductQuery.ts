@@ -13,6 +13,8 @@ export default class ProductQuery extends Query {
 
     this.$query = Product.query()
 
+    this.$counts.push(...['Reviews'])
+
     this.$aggregates.push(...['Reviews'])
 
     this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients'])
@@ -35,7 +37,6 @@ export default class ProductQuery extends Query {
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   protected preloadUserWishlist (): ProductQuery {
-    console.log('wishlist')
     this.$query.match([
       this.user().id && this.input('with', []).includes(this.qs('wishlist')),
       query => query.preload('wishlists', builder => builder.where('user_id', this.user().id ?? 0)),
@@ -49,7 +50,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected preloadMedia (): ProductQuery {
-    console.log('media')
     this.$query.match([
       this.input('with', []).includes(this.qs('media')),
       query => query.preload('media'),
@@ -64,7 +64,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected preloadReviews (): ProductQuery {
-    console.log('reviews')
     this.$query.match([
       this.input('with', []).includes(this.qs('reviews')),
       query => query.preload('reviews'),
@@ -79,7 +78,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected preloadIngredients (): ProductQuery {
-    console.log('ingredients')
     this.$query.match([
       this.input('with', []).includes(this.qs('ingredients')),
       query => query.preload('ingredients', builder => builder.match([
@@ -97,7 +95,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected filterInCategories (): ProductQuery {
-    console.log('categories')
     this.$query.match([
       this.input('inCategories', []).length,
       query => query.whereHas('categories', (builder) => builder
@@ -113,7 +110,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected filterSearch (): ProductQuery {
-    console.log('search')
     this.$query.match([
       this.input('search', null),
       query => query.whereLike('name', `%${this.input('search')}%`)
@@ -129,7 +125,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected filterTopRated () {
-    console.log('toprated')
     this.$query.match([
       this.input('filters', []).includes('top-rated'),
       query => {
@@ -152,7 +147,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected filterTodaysPick () {
-    console.log('todays-pick')
     this.$query.match([
       this.input('filters', []).includes(ExtraFieldName.TODAYS_PICK),
       query => query.whereHas('extraFields', builder => builder
@@ -168,7 +162,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected filterPopular () {
-    console.log('popular')
     this.$query.match([
       this.input('filters', []).includes(ExtraFieldName.POPULAR),
       query => query.whereHas('extraFields', builder => builder
@@ -184,7 +177,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected countReviews (): ProductQuery {
-    console.log('count reviews')
     this.$query.match([
       this.input('withCount', []).includes(this.qs('reviews')),
       query => query.withCount('reviews'),
@@ -199,7 +191,6 @@ export default class ProductQuery extends Query {
    * @returns ProductQuery
    */
   protected aggregateReviews (): ProductQuery {
-    console.log('aggr reviews')
     this.$query.match([
       this.input('withAvg', []).includes(this.qs('reviews')),
       query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),

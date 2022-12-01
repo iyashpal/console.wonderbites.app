@@ -10,13 +10,13 @@ export default abstract class Query {
 
   protected $prefix: string
 
-  protected $filters: string[]
+  protected $filters: string[] = []
 
-  protected $counts: string[]
+  protected $counts: string[] = []
 
-  protected $preloads: string[]
+  protected $preloads: string[] = []
 
-  protected $aggregates: string[]
+  protected $aggregates: string[] = []
 
   constructor (
     protected $request: RequestContract
@@ -56,16 +56,14 @@ export default abstract class Query {
    * @returns ProductQuery
    */
   public resolveQuery () {
-    this.withCounts(['reviews'])
+    return this
+      .withCounts(this.$counts)
       .withFilters(this.$filters)
       .withPreloads(this.$preloads)
       .withAggregates(this.$aggregates)
-
-    return this
   }
 
   public resolveQueryWithPrefix (prefix: string) {
-    console.log('this is testing')
     // Set the query string prefix.
     this.qsPrefix(prefix)
 

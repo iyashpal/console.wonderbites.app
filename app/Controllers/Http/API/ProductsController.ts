@@ -12,12 +12,10 @@ export default class ProductsController {
     try {
       const user = auth.use('api').user!
 
-      let QueryBuilder = (new ProductQuery(request))
+      const products = await (new ProductQuery(request))
         .asUser(user)
         .resolveQueryWithPrefix('products')
-
-      const products = await QueryBuilder.query()
-        .orderBy('id', 'desc').paginate(request.input('page'), request.input('limit', 10))
+        .query().orderBy('id', 'desc').paginate(request.input('page'), request.input('limit', 10))
 
       response.status(200).json(products)
     } catch (error) {
