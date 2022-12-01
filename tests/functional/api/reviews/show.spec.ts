@@ -14,7 +14,7 @@ test.group('API [reviews.show]', (group) => {
   test('it can access the review details.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.with('user').merge({ typeId: product.id }).create()
+    const review = await ReviewFactory.with('user').merge({ reviewableId: product.id }).create()
 
     const request = await client.get(route('api.reviews.show', review))
 
@@ -24,14 +24,14 @@ test.group('API [reviews.show]', (group) => {
       id: review.id,
       title: review.title,
       body: review.body,
-      type_id: product.id,
+      reviewable_id: product.id,
     })
   }).tags(['@reviews', '@reviews.show'])
 
   test('it can access the review user details.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.with('user').merge({ typeId: product.id }).create()
+    const review = await ReviewFactory.with('user').merge({ reviewableId: product.id }).create()
 
     const request = await client.get(route('api.reviews.show', review, { qs: { with: ['review.user'] } }))
 
@@ -42,7 +42,7 @@ test.group('API [reviews.show]', (group) => {
       title: review.title,
       body: review.body,
       user_id: review.userId,
-      type_id: product.id,
+      reviewable_id: product.id,
       user: {
         id: review.user.id,
       },
@@ -52,7 +52,7 @@ test.group('API [reviews.show]', (group) => {
   test('it can access the review product details.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.with('user').merge({ typeId: product.id }).create()
+    const review = await ReviewFactory.with('user').merge({ reviewableId: product.id }).create()
 
     const request = await client.get(route('api.reviews.show', review, { qs: { with: ['review.product'] } }))
 
@@ -63,7 +63,7 @@ test.group('API [reviews.show]', (group) => {
       title: review.title,
       body: review.body,
       user_id: review.userId,
-      type_id: product.id,
+      reviewable_id: product.id,
       product: {
         id: product.id,
       },
@@ -73,7 +73,7 @@ test.group('API [reviews.show]', (group) => {
   test('it can access the review product details with images.', async ({ client, route }) => {
     const product = await ProductFactory.with('media', 3).create()
 
-    const review = await ReviewFactory.with('user').merge({ typeId: product.id }).create()
+    const review = await ReviewFactory.with('user').merge({ reviewableId: product.id }).create()
 
     const qs = { with: ['review.product', 'review.product.media'] }
 
@@ -86,7 +86,7 @@ test.group('API [reviews.show]', (group) => {
       title: review.title,
       body: review.body,
       user_id: review.userId,
-      type_id: product.id,
+      reviewable_id: product.id,
       product: {
         id: product.id,
         media: product.media.map(({ id }) => ({ id })),
@@ -97,7 +97,7 @@ test.group('API [reviews.show]', (group) => {
   test('it can access the review user and product details with images.', async ({ client, route }) => {
     const product = await ProductFactory.with('media', 3).create()
 
-    const review = await ReviewFactory.with('user').merge({ typeId: product.id }).create()
+    const review = await ReviewFactory.with('user').merge({ reviewableId: product.id }).create()
 
     const qs = { with: ['review.user', 'review.product', 'review.product.media'] }
 
@@ -113,7 +113,7 @@ test.group('API [reviews.show]', (group) => {
       user: {
         id: review.user.id,
       },
-      type_id: product.id,
+      reviewable_id: product.id,
       product: {
         id: product.id,
         media: product.media.map(({ id }) => ({ id })),

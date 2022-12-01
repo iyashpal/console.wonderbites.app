@@ -87,25 +87,13 @@ export default class Product extends BaseModel {
     })
   public orders: ManyToMany<typeof Order>
 
-  @hasOne(() => Review, {
-    localKey: 'id',
-    foreignKey: 'typeId',
-    onQuery: query => query.where('type', 'Product')
-    })
+  @hasOne(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})
   public review: HasOne<typeof Review>
 
-  @hasMany(() => Review, {
-    localKey: 'id',
-    foreignKey: 'typeId',
-    onQuery: query => query.where('type', 'Product'),
-    })
+  @hasMany(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})
   public reviews: HasMany<typeof Review>
 
-  @hasMany(() => ExtraField, {
-    localKey: 'id',
-    foreignKey: 'relationID',
-    onQuery: query => query.where('relation', 'Product')
-    })
+  @hasMany(() => ExtraField, {foreignKey: 'relationId', onQuery: query => query.where('relation', 'Product')})
   public extraFields: HasMany<typeof ExtraField>
 
   @manyToMany(() => Wishlist)

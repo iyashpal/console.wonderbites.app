@@ -129,8 +129,8 @@ export default class ProductQuery extends Query {
       this.input('filters', []).includes('top-rated'),
       query => {
         let AvgReviews = Database.from('reviews')
-          .avg('rating').where('type', 'Product')
-          .whereRaw('type_id=`products`.`id`').as('avg_reviews')
+          .avg('rating').where('reviewable', 'Product')
+          .whereRaw('reviewable_id=`products`.`id`').as('avg_reviews')
 
         return query.from(Database.from('products')
           .select('*', AvgReviews).as('products'))

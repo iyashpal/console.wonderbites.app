@@ -58,9 +58,6 @@ export default class Order extends BaseModel {
     })
   public ingredients: ManyToMany<typeof Ingredient>
 
-  @hasOne(() => Review, {
-    foreignKey: 'typeId',
-    onQuery: query => query.where('type', 'Order'),
-    })
+  @hasOne(() => Review, { foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Order')})
   public review: HasOne<typeof Review>
 }

@@ -82,10 +82,10 @@ test.group('API [products.show]', (group) => {
   test('It can load the product reviews.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const merge: { typeId: number }[] = []
+    const merge: { reviewableId: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({ typeId: product.id })
+      merge.push({ reviewableId: product.id })
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)
@@ -150,10 +150,10 @@ test.group('API [products.show]', (group) => {
 
     const product = await ProductFactory.with('media', 3).with('ingredients', 4).create()
 
-    const merge: { typeId: number }[] = []
+    const merge: { reviewableId: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({ typeId: product.id })
+      merge.push({ reviewableId: product.id })
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)

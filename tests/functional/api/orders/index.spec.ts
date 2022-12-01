@@ -268,7 +268,7 @@ test.group('API [orders.index]', (group) => {
     const order = await OrderFactory.with('products', 1)
       .merge({ userId: user.id, addressId: address.id }).create()
 
-    const review = await ReviewFactory.merge({ type: 'Order', typeId: order.id, userId: user.id }).create()
+    const review = await ReviewFactory.merge({ reviewable: 'Order', reviewableId: order.id, userId: user.id }).create()
 
     const qs = { with: ['order.review'] }
 
@@ -300,7 +300,7 @@ test.group('API [orders.index]', (group) => {
       .with('products', 3, product => product.with('media', 10))
       .merge({ userId: user.id, addressId: address.id }).create()
 
-    const review = await ReviewFactory.merge({ type: 'Order', typeId: order.id, userId: user.id }).create()
+    const review = await ReviewFactory.merge({ reviewable: 'Order', reviewableId: order.id, userId: user.id }).create()
 
     const [product] = order.products
 

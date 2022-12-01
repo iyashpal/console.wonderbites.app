@@ -4,7 +4,7 @@ import Factory from '@ioc:Adonis/Lucid/Factory'
 
 export default Factory.define(Review, ({ faker }) => {
   return {
-    type: 'Product',
+    reviewable: 'Product',
     rating: faker.datatype.number({min: 1, max: 5}),
     title: faker.lorem.sentence(),
     body: faker.lorem.paragraph(6),
@@ -13,5 +13,5 @@ export default Factory.define(Review, ({ faker }) => {
 })
   .relation('user', () => UserFactory)
   .relation('product', () => ProductFactory)
-  .state('typeProduct', review => review.type = 'Product')
+  .state('typeProduct', review => review.reviewable = 'Product')
   .build()

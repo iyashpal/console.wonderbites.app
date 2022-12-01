@@ -32,15 +32,10 @@ export default class ProductsController {
     try {
       const user = auth.use('api').user!
 
-      const QueryBuilder = (new ProductQuery(request))
+      const product = await (new ProductQuery(request))
         .asUser(user)
-        .qsPrefix('product')
-        .withCounts(['reviews'])
-        .withAggregates(['reviews'])
-        .withFilters(['by-categories', 'search', 'top-rated'])
-        .withPreloads(['user-wishlist', 'media', 'reviews', 'ingredients'])
-
-      const product = await QueryBuilder.$query.where('id', id).firstOrFail()
+        .resolveQueryWithPrefix('product')
+        .query().where('id', id).firstOrFail()
 
       response.status(200).json(product)
     } catch (error) {

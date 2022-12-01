@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Product, User } from 'App/Models'
+import { Order, Product, User } from 'App/Models'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Review extends BaseModel {
@@ -14,10 +14,10 @@ export default class Review extends BaseModel {
   public userId: number
 
   @column()
-  public typeId: number
+  public reviewableId: number
 
   @column()
-  public type: string
+  public reviewable: string
 
   @column()
   public rating: number
@@ -43,6 +43,9 @@ export default class Review extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @belongsTo(() => Product, { foreignKey: 'typeId' })
+  @belongsTo(() => Product, { foreignKey: 'reviewableId' })
   public product: BelongsTo<typeof Product>
+
+  @belongsTo(() => Order, { foreignKey: 'reviewableId' })
+  public order: BelongsTo<typeof Order>
 }

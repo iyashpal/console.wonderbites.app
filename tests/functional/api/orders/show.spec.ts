@@ -156,7 +156,7 @@ test.group('API [orders.show]', (group) => {
 
     await order.related('products').attach([product.id])
 
-    const review = await ReviewFactory.merge({ typeId: order.id, type: 'Order', userId: user.id }).create()
+    const review = await ReviewFactory.merge({ reviewableId: order.id, reviewable: 'Order', userId: user.id }).create()
 
     const ingredients = {}
 
