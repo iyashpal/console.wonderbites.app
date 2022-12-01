@@ -30,6 +30,19 @@
     "@poppinss/utils" "^4.0.4"
     semver "^7.3.7"
 
+"@adonisjs/application@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/application/-/application-5.3.0.tgz#905d6e9fc4094c9cdc47bcbc1b887ab6ebf90c3c"
+  integrity sha512-AruZZXMgOdmmRxJEHUbXoqhgRavPfhkeIR2nQtGyxbn0PCNjqlGraq8ypuLINY1J+wNuH2tt0xCS98EDeMdTOQ==
+  dependencies:
+    "@adonisjs/config" "^3.0.9"
+    "@adonisjs/env" "^3.0.9"
+    "@adonisjs/fold" "^8.2.0"
+    "@adonisjs/logger" "^4.1.5"
+    "@adonisjs/profiler" "^6.0.9"
+    "@poppinss/utils" "^5.0.0"
+    semver "^7.3.8"
+
 "@adonisjs/assembler@^5.8.1":
   version "5.8.1"
   resolved "https://registry.yarnpkg.com/@adonisjs/assembler/-/assembler-5.8.1.tgz#24c259665fe82b20852bf951c82186444edfac98"
@@ -98,26 +111,33 @@
   dependencies:
     "@poppinss/utils" "^4.0.2"
 
-"@adonisjs/core@^5.8.8":
-  version "5.8.8"
-  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.8.8.tgz#2bc3d377310363c9c63cf996ae02c3760eab4823"
-  integrity sha512-A+sN7QmMdMXYluh4iYgK+3qyYN8eOE1TjuKEJeOMpCIXf3rA/t2ilB57oHpyxJz359u946tKKsoDB82KTqGIRQ==
+"@adonisjs/config@^3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@adonisjs/config/-/config-3.0.9.tgz#125742fc99624841950092f07173fc9e61549e38"
+  integrity sha512-f+wzrc+0HLvhJyYGEMV2QTHtyJ8sI3PKvH9h/baW/iF8UO3KF+llHH0Cf3/M5dYnpdz9rnmj0VtdTaIDfxrgGg==
+  dependencies:
+    "@poppinss/utils" "^5.0.0"
+
+"@adonisjs/core@^5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/core/-/core-5.9.0.tgz#cd5a1ea938a920ff82d9644386c9d53b70b027b8"
+  integrity sha512-32zG9EW0t0Ck0cMzlwD0+z3GJG7k/gZz6P0+h+s8N1N7fHxGixrKs7W7lT3OcIvk0NsuIw1tUPAU7fAWytHEqA==
   dependencies:
     "@adonisjs/ace" "^11.3.1"
-    "@adonisjs/application" "^5.2.5"
+    "@adonisjs/application" "^5.3.0"
     "@adonisjs/bodyparser" "^8.1.7"
     "@adonisjs/drive" "^2.3.0"
     "@adonisjs/encryption" "^4.0.8"
     "@adonisjs/events" "^7.2.1"
-    "@adonisjs/hash" "^7.1.1"
+    "@adonisjs/hash" "^7.2.2"
     "@adonisjs/http-server" "^5.12.0"
     "@adonisjs/validator" "^12.4.1"
-    "@poppinss/cliui" "^3.0.4"
+    "@poppinss/cliui" "^3.0.5"
     "@poppinss/manager" "^5.0.2"
     "@poppinss/utils" "^5.0.0"
     fs-extra "^10.1.0"
     macroable "^7.0.2"
-    memfs "^3.4.7"
+    memfs "^3.4.12"
     serve-static "^1.15.0"
     stringify-attributes "^2.0.0"
 
@@ -163,14 +183,14 @@
   dependencies:
     "@poppinss/utils" "^4.0.4"
 
-"@adonisjs/hash@^7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@adonisjs/hash/-/hash-7.1.1.tgz#c23ebd791e6cd5f7be901ffbef5075f8d70fc7c6"
-  integrity sha512-Oso6uIbgkNfqh4LM+m1IlDs6D+KvuLXia0pOyUR3GUwc6oRfrfVwaaONZI0+LWsNBfKPs5kRjxEq/Rq6m+VkeQ==
+"@adonisjs/hash@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@adonisjs/hash/-/hash-7.2.2.tgz#ca94ec4713176aa835985e09dbed7d97c532ee94"
+  integrity sha512-qJxFX8jNH+5+jxckIIvz2y9pMt59ueT50a4B5kUe/68g5iC7UdwKmMos+tj5Pnm5hRFfwKXbtIQBGd+Bb87+2Q==
   dependencies:
     "@phc/format" "^1.0.0"
     "@poppinss/manager" "^5.0.2"
-    "@poppinss/utils" "^4.0.4"
+    "@poppinss/utils" "^5.0.0"
 
 "@adonisjs/http-server@^5.12.0":
   version "5.12.0"
@@ -222,6 +242,16 @@
     abstract-logging "^2.0.1"
     pino "^6.14.0"
 
+"@adonisjs/logger@^4.1.5":
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/@adonisjs/logger/-/logger-4.1.5.tgz#4fbce11fb0914a5188d00c32f674cbdc87f6ccc6"
+  integrity sha512-JMINhXp/6VW0y4e86luyM8vbBzV4Y5F4IzVklMObCu/SwiaCbp5bgx9Z6QOHiGVW8SFVlRF1KlwLq8pAifjTpQ==
+  dependencies:
+    "@poppinss/utils" "^5.0.0"
+    "@types/pino" "^6.3.12"
+    abstract-logging "^2.0.1"
+    pino "^6.14.0"
+
 "@adonisjs/lucid-slugify@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@adonisjs/lucid-slugify/-/lucid-slugify-2.2.1.tgz#20a70cf6ddf3c8a27d88abdad1bdbd6634cd454a"
@@ -230,20 +260,20 @@
     "@poppinss/utils" "^4.0.4"
     nanoid "^3.3.4"
 
-"@adonisjs/lucid@^18.2.0":
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/@adonisjs/lucid/-/lucid-18.2.0.tgz#aa496f1b3e58d7a5de610f45d35791b4562f142e"
-  integrity sha512-lF6+euwM5sOvpaUy+de+lfMKWjzpRFCvTbko+36bOz9IbUilQtnO3pzPNf7uTj5XUalFTICpVAzw8b8beQtb3g==
+"@adonisjs/lucid@^18.3.0":
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/lucid/-/lucid-18.3.0.tgz#f491e03c4db2231b0c87a1a1daa7b0cb0902121b"
+  integrity sha512-EgLgwP/VkTdOjA4MvnXjZmXGJl1qQVpGe4D/bCZqyO4859LZ/kHZ5a4VXe5+b2Nk4QDWF8uYq0MbSMDGskZr1Q==
   dependencies:
-    "@faker-js/faker" "^7.5.0"
+    "@faker-js/faker" "^7.6.0"
     "@poppinss/hooks" "^5.0.3"
     "@poppinss/utils" "^5.0.0"
     fast-deep-equal "^3.1.3"
     igniculus "^1.5.0"
     knex "^2.3.0"
     knex-dynamic-connection "^3.0.0"
-    luxon "^3.0.3"
-    macroable "^7.0.1"
+    luxon "^3.1.0"
+    macroable "^7.0.2"
     pretty-hrtime "^1.0.3"
     qs "^6.11.0"
     slash "^3.0.0"
@@ -272,14 +302,14 @@
     "@poppinss/utils" "^4.0.3"
     jest-worker "^27.5.1"
 
-"@adonisjs/redis@^7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@adonisjs/redis/-/redis-7.3.1.tgz#2d9a76e5c4b0d3dc68c0a32503ac4e5e335c6059"
-  integrity sha512-0bFn5Q9QqaMBXYYCTgChVmxShEDkNCCjTLmtgBopup0AmoyPTLQXZhW131FB2ww32WvRrX9QfEgRWm4JQiB8NQ==
+"@adonisjs/redis@^7.3.2":
+  version "7.3.2"
+  resolved "https://registry.yarnpkg.com/@adonisjs/redis/-/redis-7.3.2.tgz#197207f9205f8656bf5c5646e41b9dcd47d9e80f"
+  integrity sha512-rTzJbR+WuoRX+U/BgjloM+blyRSVvInA+iy3i0f/vxknQP2TQ2cg88vuHinEXoCdxPgAfdSy0AkVhsq3HCHgSw==
   dependencies:
-    "@poppinss/utils" "^4.0.4"
+    "@poppinss/utils" "^5.0.0"
     "@types/ioredis" "^4.28.10"
-    ioredis "^5.0.5"
+    ioredis "^5.2.3"
 
 "@adonisjs/repl@^3.1.11":
   version "3.1.11"
@@ -452,10 +482,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@faker-js/faker@^7.5.0":
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.5.0.tgz#8e8265f65f5b68d2a57886d59b03788eeb676264"
-  integrity sha512-8wNUCCUHvfvI0gQpDUho/3gPzABffnCn5um65F8dzQ86zz6dlt4+nmAA7PQUc8L+eH+9RgR/qzy5N/8kN0Ozdw==
+"@faker-js/faker@^7.6.0":
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.6.0.tgz#9ea331766084288634a9247fcd8b84f16ff4ba07"
+  integrity sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==
 
 "@gar/promisify@^1.0.1":
   version "1.1.3"
@@ -628,10 +658,25 @@
   resolved "https://registry.yarnpkg.com/@kdf/salt/-/salt-2.0.1.tgz#2d355a764524fa85217609addc376084b71de385"
   integrity sha512-1RBY7HcGYuWBm0+4ygjdRerN+mhpuT5picGB6+azqUXsz/IZljegrKkeHRiV6wuxY8n4HrxOuw8ou7JuGxRWdQ==
 
-"@mapbox/node-pre-gyp@^1.0.0", "@mapbox/node-pre-gyp@^1.0.8":
+"@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.9.tgz#09a8781a3a036151cdebbe8719d6f8b25d4058bc"
   integrity sha512-aDF3S3rK9Q2gey/WAttUlISduDItz5BU3306M9Eyv6/oS40aMprnopshtlKTykxRNIBEZuRMaZAnbrQ4QtKGyw==
+  dependencies:
+    detect-libc "^2.0.0"
+    https-proxy-agent "^5.0.0"
+    make-dir "^3.1.0"
+    node-fetch "^2.6.7"
+    nopt "^5.0.0"
+    npmlog "^5.0.1"
+    rimraf "^3.0.2"
+    semver "^7.3.5"
+    tar "^6.1.11"
+
+"@mapbox/node-pre-gyp@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz#8e6735ccebbb1581e5a7e652244cadc8a844d03c"
+  integrity sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA==
   dependencies:
     detect-libc "^2.0.0"
     https-proxy-agent "^5.0.0"
@@ -724,10 +769,10 @@
     pretty-hrtime "^1.0.3"
     string-width "^4.2.2"
 
-"@poppinss/cliui@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@poppinss/cliui/-/cliui-3.0.4.tgz#4fb5eefcdb806ded7f11b0e475720b12b7b3cdc9"
-  integrity sha512-oiXGNRGnC4oPAthMqUKtatsr1934z9iRI4uw4AQCjHtRs0EeuqrfGYdcYMSGZsz/xknKomyydYKLy3UlS2kx5A==
+"@poppinss/cliui@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@poppinss/cliui/-/cliui-3.0.5.tgz#e8936c0248abe7083bbaced06dae70e810694f3f"
+  integrity sha512-9TCwhJ6hQDAv7LWredEQL7eSA97kQ/i5Td80T7InV9z9rOXT8keywAM0pSvTUS01bwCeiZQVoT4r/G67DRiPJA==
   dependencies:
     "@poppinss/colors" "^3.0.3"
     cli-boxes "^3.0.0"
@@ -1407,14 +1452,14 @@ are-we-there-yet@^3.0.0:
     delegates "^1.0.0"
     readable-stream "^3.6.0"
 
-argon2@^0.28.4:
-  version "0.28.5"
-  resolved "https://registry.yarnpkg.com/argon2/-/argon2-0.28.5.tgz#0c8d6366c389bae3194c89baf4011721a644ded4"
-  integrity sha512-kGFCctzc3VWmR1aCOYjNgvoTmVF5uVBUtWlXCKKO54d1K+31zRz45KAcDIqMo2746ozv/52d25nfEekitaXP0w==
+argon2@^0.30.2:
+  version "0.30.2"
+  resolved "https://registry.yarnpkg.com/argon2/-/argon2-0.30.2.tgz#b308a039d6d0cda5a3c47cbddd12685f033c33fa"
+  integrity sha512-RBbXTUsrJUQH259/72CCJxQa0hV961pV4PyZ7R1czGkArSsQP4DToCS2axmNfHywXaBNEMPWMW6rM82EArulYA==
   dependencies:
-    "@mapbox/node-pre-gyp" "^1.0.8"
+    "@mapbox/node-pre-gyp" "^1.0.10"
     "@phc/format" "^1.0.0"
-    node-addon-api "^4.3.0"
+    node-addon-api "^5.0.0"
 
 argparse@^1.0.7:
   version "1.0.10"
@@ -1529,10 +1574,10 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-aws-sdk@^2.1209.0:
-  version "2.1209.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1209.0.tgz#fd7b9efd4047ab6b45bba2c890529d4c296a4b85"
-  integrity sha512-m4Dd0HtyKeKBjwzP9rhe+NcmsRKR0wW+QXfpepu6vgXYhmcJuOB9TLUoeB7jiNDPimmwU+KxtL6eonRfeFhANw==
+aws-sdk@^2.1265.0:
+  version "2.1265.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1265.0.tgz#ec034b10126d7c81242b2501567cb4d5179a4e61"
+  integrity sha512-PcW3VAxatnOgSwdENkXpFAKnE6P5GJeI7yxjEhjHSLXFyOzQZQZIT5NMCs7B25nB6iACzxizjKaYbU0kNA/8/Q==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -1577,13 +1622,13 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-bcrypt@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-5.0.1.tgz#f1a2c20f208e2ccdceea4433df0c8b2c54ecdf71"
-  integrity sha512-9BTgmrhZM2t1bNuDtrtIMVSmmxZBrJ71n8Wg+YgdjHuIWYF7SjjmCPZFB+/5i/o/PIeRpwVJR3P+NrpIItUjqw==
+bcrypt@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/bcrypt/-/bcrypt-5.1.0.tgz#bbb27665dbc400480a524d8991ac7434e8529e17"
+  integrity sha512-RHBS7HI5N5tEnGTmtR/pppX0mmDSBpQ4aCBsj7CEQfYXDcO74A8sIBYcJMuCsis2E81zDxeENYhv66oZwLiA+Q==
   dependencies:
-    "@mapbox/node-pre-gyp" "^1.0.0"
-    node-addon-api "^3.1.0"
+    "@mapbox/node-pre-gyp" "^1.0.10"
+    node-addon-api "^5.0.0"
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -3832,10 +3877,10 @@ interpret@^2.2.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
 
-ioredis@^5.0.5:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.2.2.tgz#212467e04f6779b4e0e800cece7bb7d3d7b546d2"
-  integrity sha512-wryKc1ur8PcCmNwfcGkw5evouzpbDXxxkMkzPK8wl4xQfQf7lHe11Jotell5ikMVAtikXJEu/OJVaoV51BggRQ==
+ioredis@^5.2.3:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.2.4.tgz#9e262a668bc29bae98f2054c1e0d7efd86996b96"
+  integrity sha512-qIpuAEt32lZJQ0XyrloCRdlEdUUNGG9i0UOk6zgzK6igyudNWqEBxfH6OlbnOOoBBvr1WB02mm8fR55CnikRng==
   dependencies:
     "@ioredis/commands" "^1.1.1"
     cluster-key-slot "^1.1.0"
@@ -4586,6 +4631,11 @@ luxon@^3.0.4:
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.0.4.tgz#d179e4e9f05e092241e7044f64aaa54796b03929"
   integrity sha512-aV48rGUwP/Vydn8HT+5cdr26YYQiUZ42NM6ToMoaGKwYfWbfLeRkEu1wXWMHBZT6+KyLfcbbtVcoQFCbbPjKlw==
 
+luxon@^3.1.0, luxon@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.1.1.tgz#b492c645b2474fb86f3bd3283213846b99c32c1e"
+  integrity sha512-Ah6DloGmvseB/pX1cAmjbFvyU/pKuwQMQqz7d0yvuDlVYLTs2WeDHQMpC8tGjm1da+BriHROW/OEIT/KfYg6xw==
+
 macroable@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/macroable/-/macroable-7.0.1.tgz#bd487a3b95f17e3fbf96e1e659fd4bfd194a05f6"
@@ -4687,6 +4737,13 @@ mem@^8.1.1:
   dependencies:
     map-age-cleaner "^0.1.3"
     mimic-fn "^3.1.0"
+
+memfs@^3.4.12:
+  version "3.4.12"
+  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.4.12.tgz#d00f8ad8dab132dc277c659dc85bfd14b07d03bd"
+  integrity sha512-BcjuQn6vfqP+k100e0E9m61Hyqa//Brp+I3f0OBmN0ATHlFA8vx3Lt8z57R3u2bPqe3WGDBC+nF72fTH7isyEw==
+  dependencies:
+    fs-monkey "^1.0.3"
 
 memfs@^3.4.7:
   version "3.4.7"
@@ -5326,15 +5383,15 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
-node-addon-api@^3.1.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-3.2.1.tgz#81325e0a2117789c0128dab65e7e38f07ceba161"
-  integrity sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==
-
-node-addon-api@^4.2.0, node-addon-api@^4.3.0:
+node-addon-api@^4.2.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-4.3.0.tgz#52a1a0b475193e0928e98e0426a0d1254782b77f"
   integrity sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==
+
+node-addon-api@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-5.0.0.tgz#7d7e6f9ef89043befdb20c1989c905ebde18c501"
+  integrity sha512-CvkDw2OEnme7ybCykJpVcKH+uAOLV2qLqiyla128dN9TkEWfrYmxG6C2boDe5KcNQqZF3orkqzGgOMvZ/JNekA==
 
 node-emoji@^1.11.0:
   version "1.11.0"
@@ -5836,24 +5893,24 @@ pgpass@1.x:
   dependencies:
     split2 "^4.1.0"
 
-phc-argon2@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/phc-argon2/-/phc-argon2-1.1.3.tgz#9cfac7544518e092c086648c2abd398b61f9101b"
-  integrity sha512-RMvqQ60/CfOQv0TuSdyQ1voGbHvOdCCtcphHA6bUlxphh0iNEOHdO+YJE+jsz5V6gc78TmJreOQxV8BOC74f2w==
+phc-argon2@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/phc-argon2/-/phc-argon2-1.1.4.tgz#3310e2a70027c8c2c7bc8222c5c01ce915f47c26"
+  integrity sha512-iZGWarpCNY71Cu+Os5dsJPIUmuHb4EOC6wtnAfjRIPJ2SJ/MZ2ADLdrqqVw6GBeMmCT/EMMuyKRYG/ldIL2kOQ==
   dependencies:
     "@kdf/salt" "^2.0.1"
     "@phc/format" "^1.0.0"
-    argon2 "^0.28.4"
+    argon2 "^0.30.2"
     tsse "^2.0.0"
 
-phc-bcrypt@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/phc-bcrypt/-/phc-bcrypt-1.0.7.tgz#8ca74a35569206dd35bc7d07cda600f1c87acb7f"
-  integrity sha512-seNphgu9x8NgzpemlweNsxvcyH0bqJSjNEz1+d3mRCicZ6ucFzmASaNhUiGkpZ8KltTIWz4/ppB3UEhl8OctGA==
+phc-bcrypt@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/phc-bcrypt/-/phc-bcrypt-1.0.8.tgz#4e0970e4c05a452d3867a48b1765817ac6fbef95"
+  integrity sha512-k2Q1J+K4KOf47Uee7fqGFiu1nWKCqd17ks44U/WUHOZ4UvR2iRvkPpZtMQBLGbD82Ows/s+DiNhAMBOj7jPnrQ==
   dependencies:
     "@kdf/salt" "^2.0.1"
     "@phc/format" "^1.0.0"
-    bcrypt "^5.0.1"
+    bcrypt "^5.1.0"
     tsse "^2.0.0"
 
 picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.3, picomatch@^2.3.1:
@@ -6403,6 +6460,13 @@ semver@^7.3.5, semver@^7.3.7:
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
+  dependencies:
+    lru-cache "^6.0.0"
+
+semver@^7.3.8:
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
+  integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
   dependencies:
     lru-cache "^6.0.0"
 
