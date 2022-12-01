@@ -15,7 +15,9 @@ test.group('API [wishlists.update]', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const response = await client.put(route('api.wishlists.update')).guard('api')
+    const qs = { with: ['wishlist.products'] }
+
+    const response = await client.put(route('api.wishlists.update', {}, {qs})).guard('api')
 
       .loginAs(user)
 
@@ -36,8 +38,8 @@ test.group('API [wishlists.update]', (group) => {
   test('User can remove product from his wishlist', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
-
-    const response = await client.put(route('api.wishlists.update')).guard('api')
+    const qs = { with: ['wishlist.products'] }
+    const response = await client.put(route('api.wishlists.update', {}, {qs})).guard('api')
 
       .loginAs(user)
 
@@ -55,12 +57,12 @@ test.group('API [wishlists.update]', (group) => {
     const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
-
-    const response = await client.put(route('api.wishlists.update')).guard('api')
+    const qs = { with: ['wishlist.products'] }
+    const response = await client.put(route('api.wishlists.update', {}, {qs})).guard('api')
 
       .loginAs(user)
 
-      .json({ action: 'ADD', products: { [product.id]: { qty: 5 } } })
+      .json({ action: 'ADD', products: { [product.id]: { qty: 4 } } })
 
     response.assertStatus(200)
 
@@ -69,7 +71,7 @@ test.group('API [wishlists.update]', (group) => {
         {
           id: product.id,
           meta: {
-            pivot_qty: 5,
+            pivot_qty: 4,
             pivot_product_id: product.id,
           },
         },
@@ -77,15 +79,15 @@ test.group('API [wishlists.update]', (group) => {
     })
   }).tags(['@wishlists', '@wishlists.update'])
 
-  test('User can increase the wishlist product quantity.', async ({ client, route }) => {
+  test('User can decrease the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
-
     const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
 
-    const response = await client.put(route('api.wishlists.update')).guard('api')
+    const qs = { with: ['wishlist.products'] }
+    const response = await client.put(route('api.wishlists.update', {}, {qs})).guard('api')
 
       .loginAs(user)
 

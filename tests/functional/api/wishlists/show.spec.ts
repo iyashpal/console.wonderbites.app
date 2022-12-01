@@ -32,8 +32,8 @@ test.group('API [wishlists.show]', (group) => {
     const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
 
     wishlist.related('products').attach(products.map(({ id }) => id))
-
-    const response = await client.get(route('api.wishlists.show'))
+    const qs = {with: ['wishlist.products']}
+    const response = await client.get(route('api.wishlists.show', {}, {qs}))
 
       .guard('api').loginAs(user)
 
