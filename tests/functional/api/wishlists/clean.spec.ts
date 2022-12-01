@@ -18,8 +18,8 @@ test.group('API [wishlists.clean]', (group) => {
 
   test('it can allow access to clean the user wishlist.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('wishlist', 1, query => query.with('products', 5)).create()
-
-    const $response = await client.put(route('api.wishlists.clean'))
+    const qs = {with: ['wishlist.products', 'wishlist.ingredients']}
+    const $response = await client.put(route('api.wishlists.clean', {}, { qs }))
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)
