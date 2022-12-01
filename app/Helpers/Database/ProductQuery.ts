@@ -98,7 +98,7 @@ export default class ProductQuery extends Query {
     this.$query.match([
       this.input('inCategories', []).length,
       query => query.whereHas('categories', (builder) => builder
-        .whereInPivot('category_id', this.input('categories', []))),
+        .whereInPivot('category_id', this.input('inCategories', []))),
     ])
 
     return this

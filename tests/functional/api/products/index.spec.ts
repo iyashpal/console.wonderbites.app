@@ -299,23 +299,21 @@ test.group('API [products.index]', (group) => {
     await PA.related('categories').attach([CA.id, CB.id])
     await PF.related('categories').attach([CA.id, CB.id])
 
-    let qs = { categories: [CA.id, CB.id] }
+    let qs = { inCategories: [CA.id, CB.id] }
 
     let $response = await client.get(route('api.products.index', {}, { qs }))
 
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      data: [
-        { id: PA.id }, { id: PF.id },
-      ],
+      data: [{ id: PA.id }, { id: PF.id }],
       meta: { total: 2 },
     })
 
     await PB.related('categories').attach([CA.id, CB.id, CC.id, CD.id])
     await PG.related('categories').attach([CA.id, CB.id, CC.id, CD.id])
 
-    qs = { categories: [CA.id, CB.id, CC.id, CD.id] }
+    qs = { inCategories: [CA.id, CB.id, CC.id, CD.id] }
 
     $response = await client.get(route('api.products.index', {}, { qs }))
 
@@ -332,7 +330,7 @@ test.group('API [products.index]', (group) => {
     await PC.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id])
     await PH.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id])
 
-    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id] }
+    qs = { inCategories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id] }
 
     $response = await client.get(route('api.products.index', {}, { qs }))
 
@@ -350,7 +348,7 @@ test.group('API [products.index]', (group) => {
     await PD.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id])
     await PI.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id])
 
-    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id] }
+    qs = { inCategories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id] }
 
     $response = await client.get(route('api.products.index', {}, { qs }))
 
@@ -369,7 +367,7 @@ test.group('API [products.index]', (group) => {
     await PE.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id])
     await PJ.related('categories').attach([CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id])
 
-    qs = { categories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id] }
+    qs = { inCategories: [CA.id, CB.id, CC.id, CD.id, CE.id, CF.id, CG.id, CH.id, CI.id, CJ.id] }
 
     $response = await client.get(route('api.products.index', {}, { qs }))
 
