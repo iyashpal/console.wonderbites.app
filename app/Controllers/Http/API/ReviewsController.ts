@@ -16,7 +16,7 @@ export default class ReviewsController {
       ])
       .match([
         request.input('product', null),
-        query => query.where('type_id', request.input('product')).where('type', 'Product'),
+        query => query.where('reviewable_id', request.input('product')).where('reviewable', 'Product'),
       ])
       .paginate(request.input('page', 1), request.input('limit', 10))
 

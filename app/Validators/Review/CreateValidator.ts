@@ -25,9 +25,9 @@ export default class CreateValidator {
    */
   public schema = schema.create({
     userId: schema.number.optional(),
-    typeId: schema.number(),
+    reviewableId: schema.number(),
     rating: schema.number(),
-    type: schema.string({ trim: true }),
+    reviewable: schema.string({ trim: true }),
     title: schema.string({ trim: true }),
     body: schema.string({ trim: true }),
   })
@@ -45,7 +45,7 @@ export default class CreateValidator {
    */
   public messages = {
     'user_id.required': 'User ID field is required.',
-    'typeId.required': 'Type ID field is required.',
+    'reviewableId.required': 'Reviewable ID field is required.',
     'rating.required': 'Rating field is required.',
     'title.required': 'Title is required.',
     'body.required': 'Body is required.',
