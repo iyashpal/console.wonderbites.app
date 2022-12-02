@@ -64,6 +64,8 @@ Route.group(() => {
     Route.resource('testimonials', 'TestimonialsController').apiOnly()
 
     Route.resource('products', 'ProductsController').apiOnly()
+
+    Route.resource('advertisements', 'AdvertisementsController').apiOnly()
   })
 
   /**
