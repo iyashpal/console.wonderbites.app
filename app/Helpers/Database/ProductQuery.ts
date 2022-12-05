@@ -1,4 +1,4 @@
-import { Query } from '.'
+import { Query } from './index'
 import { Product } from 'App/Models'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { RequestContract } from '@ioc:Adonis/Core/Request'

@@ -88,7 +88,7 @@ export default abstract class Query {
   /**
    * Define the user preloads.
    * 
-   * @param filters string[]
+   * @param preloads string[]
    * @returns ProductQuery
    */
   public withPreloads (preloads: string[]) {
