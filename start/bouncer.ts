@@ -54,4 +54,34 @@ export const { actions } = Bouncer
 | NOTE: Always export the "policies" const from this file
 |****************************************************************
 */
-export const { policies } = Bouncer.registerPolicies({})
+export const { policies } = Bouncer.registerPolicies({
+
+  AddressPolicy: () => import('App/Policies/AddressPolicy'),
+  AdvertisementPolicy: () => import('App/Policies/AdvertisementPolicy'),
+
+  CartPolicy: () => import('App/Policies/CartPolicy'),
+  CategoryPolicy: () => import('App/Policies/CategoryPolicy'),
+  CouponPolicy: () => import('App/Policies/CouponPolicy'),
+  CuisinePolicy: () => import('App/Policies/CuisinePolicy'),
+
+  ExtraFieldPolicy: () => import('App/Policies/ExtraFieldPolicy'),
+
+  FeedbackPolicy: () => import('App/Policies/FeedbackPolicy'),
+
+  IngredientPolicy: () => import('App/Policies/IngredientPolicy'),
+
+  MediaPolicy: () => import('App/Policies/MediaPolicy'),
+
+  NotificationPolicy: () => import('App/Policies/NotificationPolicy'),
+
+  OrderPolicy: () => import('App/Policies/OrderPolicy'),
+
+  ProductPolicy: () => import('App/Policies/ProductPolicy'),
+
+  ReviewPolicy: () => import('App/Policies/ReviewPolicy'),
+
+  UserPolicy: () => import('App/Policies/UserPolicy'),
+
+  WishlistPolicy: () => import('App/Policies/WishlistPolicy'),
+  WonderpointPolicy: () => import('App/Policies/WonderpointPolicy'),
+})
