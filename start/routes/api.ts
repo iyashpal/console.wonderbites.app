@@ -65,7 +65,7 @@ Route.group(() => {
 
     Route.resource('products', 'ProductsController').apiOnly()
 
-    Route.resource('advertisements', 'AdvertisementsController').apiOnly()
+    Route.resource('advertisements', 'AdvertisementsController').apiOnly().only(['index', 'show'])
   })
 
   /**
