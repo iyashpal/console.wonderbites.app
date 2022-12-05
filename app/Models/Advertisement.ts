@@ -1,6 +1,7 @@
-import {User} from '.'
+import { User } from '.'
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
+import { AdvertisementOptions, AdvertisementStatus } from './Enums/Advertisement'
 
 export default class Advertisement extends BaseModel {
   @column({ isPrimary: true })
@@ -19,7 +20,7 @@ export default class Advertisement extends BaseModel {
   public imagePath: string
 
   @column()
-  public options: object
+  public options: AdvertisementOptions
 
   @column()
   public status: string
@@ -32,4 +33,6 @@ export default class Advertisement extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
+
+  public static withActive = scope(query => query.where('status', AdvertisementStatus.ACTIVE))
 }

@@ -1,15 +1,23 @@
-import { Advertisement } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import AdvertisementQuery from 'App/Helpers/Database/AdvertisementQuery'
 
 export default class AdvertisementsController {
-  public async index ({ response }: HttpContextContract) {
-    const advertisements = await Advertisement.all()
+  public async index ({ request, response }: HttpContextContract) {
+    const advertisements = await (new AdvertisementQuery(request))
+
+      .resolveQueryWithPrefix('advertisements')
+
+      .query()
 
     response.json(advertisements)
   }
 
-  public async show ({ params, response }: HttpContextContract) {
-    const advertisement = await Advertisement.query().where('id', params.id)
+  public async show ({request, params, response }: HttpContextContract) {
+    const advertisement = await (new AdvertisementQuery(request))
+
+      .resolveQueryWithPrefix('advertisement')
+
+      .query().where('id', params.id).firstOrFail()
 
     response.json(advertisement)
   }

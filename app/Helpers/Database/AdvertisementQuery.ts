@@ -10,6 +10,10 @@ export default class AdvertisementQuery extends Query {
     super($request)
 
     this.$query = Advertisement.query()
+
+    this.$preloads.push(...['User'])
+
+    this.$filters.push(...['Status', 'Location'])
   }
 
   /**
@@ -19,5 +23,47 @@ export default class AdvertisementQuery extends Query {
    */
   public query (): ModelQueryBuilderContract<typeof Advertisement, Advertisement> {
     return this.$query
+  }
+
+  /**
+   * Preload the advertisements with creator data.
+   * 
+   * @returns AdvertisementQuery
+   */
+  protected preloadUser (): this {
+    this.$query.match([
+      this.input('with', []).includes(this.qs('user')),
+      query => query.preload('user'),
+    ])
+
+    return this
+  }
+
+  /**
+   * Filter advertisements by status.
+   * 
+   * @returns AdvertisementQuery
+   */
+  protected filterStatus (): this {
+    this.$query.match([
+      this.input('filters', []).includes(this.qs('status.active')),
+      query => query.apply(scopes => scopes.withActive()),
+    ])
+
+    return this
+  }
+
+  /**
+   * Filter the advertisements based on page location.
+   * 
+   * @returns AdvertisementQuery
+   */
+  protected filterLocation (): this {
+    this.$query.match([
+      this.input('location'),
+      query => query.whereJson('options', {location: this.input('location')}),
+    ])
+
+    return this
   }
 }
