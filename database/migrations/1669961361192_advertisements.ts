@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('title')
       table.text('description').nullable()
       table.string('image_path').nullable()
-      table.json('options').nullable()
+      table.jsonb('options').nullable()
       table.string('status').defaultTo('active')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
