@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { AddressFactory } from 'Database/factories'
+import { AddressFactory, UserFactory } from 'Database/factories'
 
 test.group('API [addresses.destroy]', (group) => {
   /**
@@ -28,6 +28,21 @@ test.group('API [addresses.destroy]', (group) => {
 
     request.assertStatus(200)
 
+    request.dumpBody()
+
     request.assertBodyContains({ deleted: true })
   }).tags(['@addresses', '@addresses.destroy'])
+
+  test('it can not allow others to delete someone\'s address.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+    const address = await AddressFactory.with('user').create()
+
+    const request = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(user)
+
+    // request.assertStatus(200)
+
+    request.dumpBody()
+
+    // request.assertBodyContains({ deleted: true })
+  }).tags(['@addresses', '@addresses.destroy', '@addresses.debug'])
 })

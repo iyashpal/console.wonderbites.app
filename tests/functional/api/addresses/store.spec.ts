@@ -224,7 +224,7 @@ test.group('API [addresses.store]', (group) => {
         phone: address.phone,
       },
     ])
-  }).tags(['@addresses', '@addresses.index', '@addresses.store', '@addresses.debug'])
+  }).tags(['@addresses', '@addresses.index', '@addresses.store'])
 
   test('creating new address can be set as default.', async ({ client, route }) => {
     const user = await UserFactory.create()

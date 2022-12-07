@@ -2,6 +2,7 @@ import Address from 'App/Models/Address'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateAddressValidator from 'App/Validators/Address/CreateValidator'
 import UpdateAddressValidator from 'App/Validators/Address/UpdateValidator'
+import JsonException from 'App/Exceptions/JsonException'
 
 export default class AddressesController {
   /**
@@ -10,12 +11,17 @@ export default class AddressesController {
    * @param param0 HttpContextContract
    * @return {JSON}
    */
-  public async index ({ auth, response }: HttpContextContract): Promise<void> {
+  public async index ({ bouncer, auth, response }: HttpContextContract): Promise<void> {
     const user = auth.use('api').user!
+    try {
+      await bouncer.with('AddressPolicy').authorize('viewList')
 
-    await user.load('addresses', query => query.orderBy('created_at', 'desc'))
+      await user.load('addresses', query => query.orderBy('created_at', 'desc'))
 
-    response.status(200).json(user.addresses)
+      response.status(200).json(user.addresses)
+    } catch (error) {
+
+    }
   }
 
   /**
@@ -96,13 +102,19 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async destroy ({ response, params }: HttpContextContract): Promise<void> {
-    const address = await Address.findOrFail(params.id)
+  public async destroy ({ bouncer, response, params }: HttpContextContract): Promise<void> {
+    try {
+      const address = await Address.findOrFail(params.id)
 
-    await address.delete().then(() => {
-      response.status(200).json({ deleted: true })
-    }).catch(error => {
-      response.badRequest(error)
-    })
+      await bouncer.with('AddressPolicy').authorize('delete', address)
+
+      await address.delete().then(() => {
+        response.status(200).json({ deleted: true })
+      }).catch(error => {
+        response.badRequest(error)
+      })
+    } catch (error) {
+      throw new JsonException(error.message, error.status, error.name)
+    }
   }
 }

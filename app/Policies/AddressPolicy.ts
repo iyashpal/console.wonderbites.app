@@ -1,6 +1,6 @@
-import { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
 import User from 'App/Models/User'
 import Address from 'App/Models/Address'
+import { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
 
 export default class AddressPolicy extends BasePolicy {
   /**
