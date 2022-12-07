@@ -1,8 +1,8 @@
 import Address from 'App/Models/Address'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateAddressValidator from 'App/Validators/Address/CreateValidator'
 import UpdateAddressValidator from 'App/Validators/Address/UpdateValidator'
-import JsonException from 'App/Exceptions/JsonException'
 
 export default class AddressesController {
   /**
@@ -12,15 +12,16 @@ export default class AddressesController {
    * @return {JSON}
    */
   public async index ({ bouncer, auth, response }: HttpContextContract): Promise<void> {
-    const user = auth.use('api').user!
     try {
-      await bouncer.with('AddressPolicy').authorize('viewList')
+      const user = auth.use('api').user!
 
-      await user.load('addresses', query => query.orderBy('created_at', 'desc'))
+      await bouncer.forUser(user).with('AddressPolicy').authorize('viewList')
 
-      response.status(200).json(user.addresses)
+      const addresses = await Address.query().where('user_id', user.id).orderBy('created_at', 'desc')
+
+      response.status(200).json(addresses)
     } catch (error) {
-
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -30,9 +31,9 @@ export default class AddressesController {
    * @param param0 HttpContextContract
    */
   public async store ({ auth, request, response }: HttpContextContract): Promise<void> {
-    const user = auth.use('api').user!
-
     try {
+      const user = auth.use('api').user!
+
       const attributes = await request.validate(CreateAddressValidator)
 
       const address = await user.related('addresses').create(attributes)
@@ -45,8 +46,7 @@ export default class AddressesController {
       // Send response
       response.status(200).json(address)
     } catch (error) {
-      // console.log(error.messages)
-      response.unprocessableEntity(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -55,15 +55,21 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ response, params }: HttpContextContract): Promise<void> {
+  public async show ({auth, bouncer, request, response, params }: HttpContextContract): Promise<void> {
     try {
-      const address = await Address.findOrFail(params.id)
+      const user = auth.use('api').user!
 
-      await address.load('user')
+      const address = await Address.query()
+        .match([
+          request.input('with', []).includes('address.user'),
+          query => query.preload('user'),
+        ]).where('id', params.id).firstOrFail()
 
-      response.status(200).json(address.toObject())
+      await bouncer.forUser(user).with('AddressPolicy').authorize('view', address)
+
+      response.status(200).json(address)
     } catch (error) {
-      response.notFound({ message: 'Page not found' })
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -72,28 +78,26 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async update ({ auth, response, params, request }: HttpContextContract): Promise<void> {
+  public async update ({ auth, bouncer, response, params, request }: HttpContextContract): Promise<void> {
     try {
       const user = auth.use('api').user!
 
       const address = await Address.findOrFail(params.id)
 
-      try {
-        const validated = await request.validate(UpdateAddressValidator)
+      await bouncer.forUser(user).with('AddressPolicy').authorize('update', address)
 
-        await address.merge(validated).save()
+      const validated = await request.validate(UpdateAddressValidator)
 
-        // Check if the address is default for logged-in user.
-        if (request.all()?.is_default === true) {
-          await user.merge({ addressId: address.id }).save()
-        }
+      await address.merge(validated).save()
 
-        response.status(200).json(address)
-      } catch (error) {
-        response.badRequest(error)
+      // Check if the address is default for logged-in user.
+      if (request.all()?.is_default === true) {
+        await user.merge({ addressId: address.id }).save()
       }
+
+      response.status(200).json(address)
     } catch (error) {
-      response.notFound({ message: 'Page not found' })
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -102,19 +106,19 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async destroy ({ bouncer, response, params }: HttpContextContract): Promise<void> {
+  public async destroy ({auth, bouncer, response, params }: HttpContextContract): Promise<void> {
     try {
+      const user = auth.use('api').user!
+
       const address = await Address.findOrFail(params.id)
 
-      await bouncer.with('AddressPolicy').authorize('delete', address)
+      await bouncer.forUser(user).with('AddressPolicy').authorize('delete', address)
 
-      await address.delete().then(() => {
-        response.status(200).json({ deleted: true })
-      }).catch(error => {
-        response.badRequest(error)
-      })
+      await address.delete()
+
+      response.status(200).json({ deleted: true })
     } catch (error) {
-      throw new JsonException(error.message, error.status, error.name)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 }

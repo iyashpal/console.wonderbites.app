@@ -20,8 +20,6 @@ test.group('API [addresses.update]', (group) => {
       .guard('api').loginAs(user).json(addressData)
 
     request.assertStatus(404)
-
-    request.assertBodyContains({ message: 'Page not found' })
   }).tags(['@addresses', '@addresses.update'])
 
   test('guest users are not allowed to update address.', async ({ client, route }) => {
@@ -34,19 +32,29 @@ test.group('API [addresses.update]', (group) => {
     request.assertBodyContains({ message: 'Unauthenticated' })
   }).tags(['@addresses', '@addresses.update'])
 
-  test('logged in users can update address.', async ({ client, route }) => {
+  test('it can not allow a user to update other\'s address', async ({ client, route }) => {
+    const user = await UserFactory.create()
+    const address = await AddressFactory.with('user').create()
+
+    const $response = await client.put(route('api.addresses.update', address))
+      .guard('api').loginAs(user).json(address.toJSON())
+
+    $response.assertStatus(403)
+  }).tags(['@addresses', '@addresses.update'])
+
+  test('it can allow logged in users to update address.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const address = await AddressFactory.merge({ userId: user.id }).create()
 
     const addressData = await AddressFactory.merge({ userId: user.id }).make()
 
-    const request = await client.put(route('api.addresses.update', address))
+    const $response = await client.put(route('api.addresses.update', address))
       .guard('api').loginAs(user).json(addressData)
 
-    request.assertStatus(200)
+    $response.assertStatus(200)
 
-    request.assertBodyContains({
+    $response.assertBodyContains({
       first_name: addressData.firstName,
       last_name: addressData.lastName,
       type: addressData.type,
@@ -54,22 +62,6 @@ test.group('API [addresses.update]', (group) => {
       city: addressData.city,
       phone: addressData.phone,
     })
-
-    const addressRequest = await client.get(route('api.addresses.index'))
-      .guard('api').loginAs(user)
-
-    addressRequest.assertStatus(200)
-
-    addressRequest.assertBodyContains([
-      {
-        first_name: addressData.firstName,
-        last_name: addressData.lastName,
-        type: addressData.type,
-        street: addressData.street,
-        city: addressData.city,
-        phone: addressData.phone,
-      },
-    ])
   }).tags(['@addresses', '@addresses.update'])
 
   test('updating existing address can be set as default.', async ({ client, route }) => {

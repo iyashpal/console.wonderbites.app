@@ -14,35 +14,32 @@ test.group('API [addresses.destroy]', (group) => {
   test('guest users cannot delete address.', async ({ client, route }) => {
     const address = await AddressFactory.with('user').create()
 
-    const request = await client.delete(route('api.addresses.destroy', address))
+    const $response = await client.delete(route('api.addresses.destroy', address))
 
-    request.assertStatus(401)
+    $response.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthenticated' })
   }).tags(['@addresses', '@addresses.destroy'])
 
-  test('logged in users can delete address.', async ({ client, route }) => {
-    const address = await AddressFactory.with('user').create()
+  test('it allows users to delete their addresses.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+    const address = await AddressFactory.merge({userId: user.id}).create()
 
-    const request = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(address.user)
+    const $response = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(user)
 
-    request.assertStatus(200)
+    $response.assertStatus(200)
 
-    request.dumpBody()
-
-    request.assertBodyContains({ deleted: true })
+    $response.assertBodyContains({ deleted: true })
   }).tags(['@addresses', '@addresses.destroy'])
 
   test('it can not allow others to delete someone\'s address.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const address = await AddressFactory.with('user').create()
 
-    const request = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(user)
+    const $response = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(user)
 
-    // request.assertStatus(200)
+    $response.assertStatus(403)
 
-    request.dumpBody()
-
-    // request.assertBodyContains({ deleted: true })
-  }).tags(['@addresses', '@addresses.destroy', '@addresses.debug'])
+    $response.assertBodyContains({ name: 'AuthorizationException' })
+  }).tags(['@addresses', '@addresses.destroy'])
 })

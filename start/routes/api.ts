@@ -18,7 +18,7 @@ Route.group(() => {
     Route.resource('notifications', 'NotificationsController').apiOnly().only(['index', 'update'])
 
     // Resources endpoints to user addresses.
-    Route.resource('addresses', 'AddressesController')
+    Route.resource('addresses', 'AddressesController').apiOnly()
 
     Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
 

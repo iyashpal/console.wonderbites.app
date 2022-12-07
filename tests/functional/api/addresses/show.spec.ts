@@ -30,7 +30,16 @@ test.group('API [addresses.show]', (group) => {
       .guard('api').loginAs(user)
 
     request.assertStatus(404)
+  }).tags(['@addresses', '@addresses.show'])
 
-    request.assertBodyContains({ message: 'Page not found' })
+  test('it can not allow a user to see other\'s address.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const address = await AddressFactory.with('user').create()
+
+    const request = await client.get(route('api.addresses.show', address))
+      .guard('api').loginAs(user)
+
+    request.assertStatus(403)
   }).tags(['@addresses', '@addresses.show'])
 })
