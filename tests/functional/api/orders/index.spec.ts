@@ -101,7 +101,7 @@ test.group('API [orders.index]', (group) => {
     const orders = await OrderFactory.with('products', 3)
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const request = await client.get(route('api.orders.index', {}, { qs: { with: ['order.products'] } }))
+    const request = await client.get(route('api.orders.index', {}, { qs: { with: ['orders.products'] } }))
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
@@ -124,7 +124,7 @@ test.group('API [orders.index]', (group) => {
       .with('products', 3, product => product.with('media', 10))
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const qs = { with: ['order.products', 'order.products.media'] }
+    const qs = { with: ['orders.products', 'orders.products.media'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -164,7 +164,7 @@ test.group('API [orders.index]', (group) => {
       await order.load('ingredients')
     })
 
-    const qs = { with: ['order.ingredients'] }
+    const qs = { with: ['orders.ingredients'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -194,7 +194,7 @@ test.group('API [orders.index]', (group) => {
 
     orders.map(async (order) => await order.load('address'))
 
-    const qs = { with: ['order.address'] }
+    const qs = { with: ['orders.address'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -222,7 +222,7 @@ test.group('API [orders.index]', (group) => {
     const orders = await OrderFactory.with('products', 1).with('coupon')
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const qs = { with: ['order.coupon'] }
+    const qs = { with: ['orders.coupon'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -244,7 +244,7 @@ test.group('API [orders.index]', (group) => {
     const orders = await OrderFactory.with('products', 1)
       .merge({ userId: user.id, addressId: address.id }).createMany(10)
 
-    const qs = { with: ['order.user'] }
+    const qs = { with: ['orders.user'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -270,7 +270,7 @@ test.group('API [orders.index]', (group) => {
 
     const review = await ReviewFactory.merge({ reviewable: 'Order', reviewableId: order.id, userId: user.id }).create()
 
-    const qs = { with: ['order.review'] }
+    const qs = { with: ['orders.review'] }
 
     const request = await client.get(route('api.orders.index', {}, { qs }))
       .guard('api').loginAs(user)
@@ -315,8 +315,8 @@ test.group('API [orders.index]', (group) => {
 
     const qs = {
       with: [
-        'order.ingredients', 'order.products', 'order.products.media', 'order.user',
-        'order.address', 'order.coupon', 'order.review',
+        'orders.ingredients', 'orders.products', 'orders.products.media', 'orders.user',
+        'orders.address', 'orders.coupon', 'orders.review',
       ],
     }
 

@@ -22,7 +22,7 @@ test.group('API [orders.update]', (group) => {
 
     $response.assertStatus(401)
     $response.assertBodyContains({ message: 'Unauthenticated' })
-  }).tags(['@orders', '@orders.cancel'])
+  }).tags(['@orders', '@orders.update', '@orders.cancel'])
 
   test('it can allow user to cancel the order.', async ({ client, route }) => {
     const user = await UserFactory.with('addresses', 1).create()
@@ -40,5 +40,5 @@ test.group('API [orders.update]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ id: order.id, status: OrderStatus.CANCELED })
-  }).tags(['@orders', '@orders.cancel'])
+  }).tags(['@orders', '@orders.update', '@orders.cancel'])
 })
