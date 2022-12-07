@@ -1,110 +1,45 @@
 import { Order } from 'App/Models'
 import { OrderStatus } from 'App/Models/Enums/Order'
+import OrderQuery from 'App/Helpers/Database/OrderQuery'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class OrdersController {
-  public async index ({ auth, request, response }: HttpContextContract) {
-    const user = auth.use('api').user!
+  public async index ({ bouncer, auth, request, response }: HttpContextContract) {
     try {
-      const orders = await user.related('orders').query()
+      const user = auth.use('api').user!
 
-        // Load order products if they are requested
-        .match([
-          request.input('with', []).includes('order.products'),
-          query => query.preload('products', (builder) => builder
-            .match([
-              request.input('with', []).includes('order.products.media'),
-              query => query.preload('media'),
-            ])
-            .match([
-              request.input('with', []).includes('order.product.review'),
-              query => query.preload('review', builder => builder.where('user_id', user.id)),
-            ])
-          ),
-        ])
+      await bouncer.forUser(user).with('OrderPolicy').authorize('viewList')
 
-        // Load order user if they are requested.
-        .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+      const orders = await (new OrderQuery(request))
+        .resolveQueryWithPrefix('orders')
+        .query()
 
-        // Load order coupons if they are requested.
-        .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
-
-        // Load order reviews if requested.
-        .match([request.input('with', []).includes('order.review'), query => query.preload('review')])
-
-        // Load order address if they are requested.
-        .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
-
-        // Load order ingredients if they are requested.
-        .match([request.input('with', []).includes('order.ingredients'), query => query.preload('ingredients')])
-
-        // Load orders by the status provided.
-        .match(
-          [request.input('status') === 'upcoming', query => query.where('status', OrderStatus.UPCOMING)],
-          [request.input('status') === 'preparing', query => query.where('status', OrderStatus.PREPARING)],
-          [request.input('status') === 'delivered', query => query.where('status', OrderStatus.DELIVERED)],
-          [request.input('status') === 'canceled', query => query.where('status', OrderStatus.CANCELED)],
-        )
-        // group orders
+        .where('user_id', user.id)
         .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
-
-        // Paginate orders
         .paginate(request.input('page', 1), request.input('limit', 50))
 
-      response.json(orders)
+      response.status(200).json(orders)
     } catch (error) {
-      response.badRequest({ message: 'Server error' })
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
-  public async show ({ params, request, response }: HttpContextContract) {
+  public async show ({ auth, params, bouncer, request, response }: HttpContextContract) {
     try {
-      const order = await Order.query()
-        // Load products if it is requested
-        .match([
-          request.input('with', []).includes('order.products'),
-          query => query.preload('products', (builder) => builder.match([
-            // Load product media if it is requested in query string.
-            request.input('with', []).includes('order.products.media'),
-            query => query.preload('media'),
-          ]).match([
-            // Load product ingredients if it is requested in query string.
-            request.input('with', []).includes('order.products.ingredients'),
-            query => query.preload('ingredients', builder => builder.match([
-              // Load product ingredients categories
-              request.input('with', []).includes('order.products.ingredients.categories'),
-              query => query.preload('categories'),
-            ])),
-          ])),
-        ])
+      const user = auth.use('api').user
 
-        // Load order coupon if requested
-        .match([request.input('with', []).includes('order.user'), query => query.preload('user')])
+      const order = await (new OrderQuery(request))
 
-        // Load order coupon if requested
-        .match([request.input('with', []).includes('order.coupon'), query => query.preload('coupon')])
+        .resolveQueryWithPrefix('order')
 
-        // Load order reviews if requested
-        .match([request.input('with', []).includes('order.review'), query => query.preload('review')])
+        .query().where('id', params.id).firstOrFail()
 
-        // Load order coupon if requested
-        .match([request.input('with', []).includes('order.address'), query => query.preload('address')])
+      await bouncer.forUser(user).with('OrderPolicy').authorize('view', order)
 
-        // Load order ingredients if requested
-        .match([
-          request.input('with', []).includes('order.ingredients'),
-          query => query.preload('ingredients', builder => builder.match([
-            // Load ingredients categories if requested.
-            request.input('with', []).includes('order.ingredients.categories'),
-            query => query.preload('categories'),
-          ])),
-        ])
-
-        .where('id', params.id).firstOrFail()
-
-      response.json(order)
+      response.status(200).json(order)
     } catch (error) {
-      response.notFound({ message: 'Not found' })
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -113,16 +48,19 @@ export default class OrdersController {
    * 
    * @param param0 {HttpContextContract}
    */
-  public async cancel ({ auth, params: { id }, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
+  public async cancel ({ auth, bouncer, params: { id }, response }: HttpContextContract) {
     try {
-      const order = await user.related('orders').query().where('id', id).firstOrFail()
+      const user = auth.use('api').user!
 
-      await order.merge({ status: OrderStatus.CANCELED }).save()
-        .then(order => response.ok(order))
+      const order = await Order.query().where('id', id).firstOrFail()
+
+      await bouncer.forUser(user).with('OrderPolicy').authorize('update', order)
+
+      const canceledOrder = await order.merge({ status: OrderStatus.CANCELED }).save()
+
+      response.ok(canceledOrder)
     } catch (error) {
-      response.notFound(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 }
