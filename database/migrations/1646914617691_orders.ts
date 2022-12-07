@@ -7,7 +7,7 @@ export default class Orders extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
 
-      table.bigInteger('user_id').unsigned().notNullable().references('users.id').onDelete('CASCADE')
+      table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('CASCADE')
 
       table.bigInteger('address_id').unsigned().notNullable().references('addresses.id').onDelete('RESTRICT')
 
