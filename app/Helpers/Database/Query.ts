@@ -163,7 +163,7 @@ export default abstract class Query {
    * @returns string
    */
   public qs (value: string = ''): string {
-    return this.$prefix ? `${this.$prefix}.${value}`: value
+    return this.$prefix ? `${this.$prefix}.${value}` : value
   }
 
   /**
