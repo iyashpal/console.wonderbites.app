@@ -55,15 +55,13 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({auth, bouncer, request, response, params }: HttpContextContract): Promise<void> {
+  public async show ({ auth, bouncer, request, response, params }: HttpContextContract): Promise<void> {
     try {
       const user = auth.use('api').user!
 
       const address = await Address.query()
-        .match([
-          request.input('with', []).includes('address.user'),
-          query => query.preload('user'),
-        ]).where('id', params.id).firstOrFail()
+        .match([request.input('with', []).includes('address.user'), query => query.preload('user')])
+        .where('id', params.id).firstOrFail()
 
       await bouncer.forUser(user).with('AddressPolicy').authorize('view', address)
 
@@ -106,7 +104,7 @@ export default class AddressesController {
    *
    * @param param0 HttpContextContract
    */
-  public async destroy ({auth, bouncer, response, params }: HttpContextContract): Promise<void> {
+  public async destroy ({ auth, bouncer, response, params }: HttpContextContract): Promise<void> {
     try {
       const user = auth.use('api').user!
 
