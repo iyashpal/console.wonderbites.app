@@ -20,7 +20,14 @@ export default class Order extends BaseModel {
   public options: object
 
   @column()
-  public deliverTo: object
+  public deliverTo: {
+    first_name: string,
+    last_name: string,
+    street: string,
+    city: string,
+    phone: string,
+    email: string,
+  }
 
   @column()
   public note: string
