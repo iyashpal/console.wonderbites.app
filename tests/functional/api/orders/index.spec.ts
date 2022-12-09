@@ -49,11 +49,10 @@ test.group('API [orders.index]', (group) => {
     { name: 'delivered', status: OrderStatus.DELIVERED },
     { name: 'canceled', status: OrderStatus.CANCELED },
   ]).run(async ({ client, route, assert }, order) => {
-    const user = await UserFactory.with('addresses').create()
-    const [address] = user.addresses
-    await OrderFactory.merge({ userId: user.id, addressId: address.id }).createMany(6)
+    const user = await UserFactory.create()
+    await OrderFactory.merge({ userId: user.id }).createMany(6)
 
-    await OrderFactory.merge({ userId: user.id, addressId: address.id, status: order.status }).createMany(3)
+    await OrderFactory.merge({ userId: user.id, status: order.status }).createMany(3)
 
     const orders = (await Order.all()).filter(({ status }) => status === order.status)
 
@@ -65,9 +64,9 @@ test.group('API [orders.index]', (group) => {
     assert.equal(request.body().data.length, orders.length)
 
     request.assertBodyContains({
-      data: orders.map(({ id, userId, addressId, ipAddress, paymentMethod, note, status }) => ({
-        id, user_id: userId, address_id: addressId,
-        ip_address: ipAddress, payment_method: paymentMethod, note, status,
+      data: orders.map(({ id, userId, ipAddress, deliverTo, options, note, status }) => ({
+        id, user_id: userId, deliver_to: deliverTo,
+        ip_address: ipAddress, options: options, note, status,
       })),
     })
   }).tags(['@orders', '@orders.index'])
