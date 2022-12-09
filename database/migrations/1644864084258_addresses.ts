@@ -19,6 +19,8 @@ export default class Addresses extends BaseSchema {
 
       table.string('phone').notNullable()
 
+      table.string('email').nullable()
+
       table.json('location')
 
       table.string('type').notNullable().comment('Could be \'Home\', \'Office\', \'Other\'')

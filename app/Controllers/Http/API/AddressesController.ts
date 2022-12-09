@@ -36,7 +36,7 @@ export default class AddressesController {
 
       const attributes = await request.validate(CreateAddressValidator)
 
-      const address = await user.related('addresses').create(attributes)
+      const address = await user.related('addresses').create({...attributes, email: user.email})
 
       // Check if the address is default for logged-in user.
       if (request.all()?.is_default === true) {

@@ -28,6 +28,9 @@ export default class Address extends BaseModel {
   public phone: string
 
   @column()
+  public email: string | null
+
+  @column()
   public location: object
 
   @column()
