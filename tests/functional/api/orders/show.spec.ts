@@ -9,10 +9,10 @@ test.group('API [orders.show]', (group) => {
   })
 
   test('it can not allow access to unauthenticated users.', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: user.addresses[0].id })
+      .merge({ userId: user.id })
       .with('coupon')
       .create()
 
@@ -24,10 +24,10 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: user.addresses[0].id })
+      .merge({ userId: user.id })
       .create()
 
     const request = await client.get(route('api.orders.show', order))
@@ -39,11 +39,11 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with products', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: user.addresses[0].id })
+      .merge({ userId: user.id })
       .with('coupon').create()
 
     await order.related('products').attach([product.id])
@@ -57,11 +57,11 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with products and product images.', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
     const product = await ProductFactory.with('media', 5).create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: user.addresses[0].id })
+      .merge({ userId: user.id })
       .with('coupon').create()
 
     await product.load('media')
@@ -82,12 +82,12 @@ test.group('API [orders.show]', (group) => {
 
   test('it can show the order with ingredients', async ({ client, route }) => {
     const ingredients = {}
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
     const product = await ProductFactory.with('ingredients', 3).create()
 
     product.ingredients.map(ingredient => ingredients[ingredient.id] = { product_id: product.id })
 
-    const order = await OrderFactory.merge({ userId: user.id, addressId: user.addresses[0].id }).create()
+    const order = await OrderFactory.merge({ userId: user.id }).create()
 
     await order.related('products').attach([product.id])
     await order.related('ingredients').attach(ingredients)
@@ -101,10 +101,10 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with coupon.', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
+    const user = await UserFactory.create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: user.addresses[0].id })
+      .merge({ userId: user.id })
       .with('coupon')
       .create()
 
@@ -117,11 +117,10 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with address', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
-    const address = user.addresses[0]
+    const user = await UserFactory.create()
 
     const order = await OrderFactory
-      .merge({ userId: user.id, addressId: address.id })
+      .merge({ userId: user.id })
       .create()
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.address'] } }))
@@ -129,13 +128,12 @@ test.group('API [orders.show]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains({ id: order.id, address: { id: address.id } })
+    request.assertBodyContains({ id: order.id, deliver_to: JSON.stringify(order.deliverTo) })
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with user', async ({ client, route }) => {
-    const user = await UserFactory.with('addresses', 2).create()
-    const [address] = user.addresses
-    const order = await OrderFactory.merge({ userId: user.id, addressId: address.id }).create()
+    const user = await UserFactory.create()
+    const order = await OrderFactory.merge({ userId: user.id}).create()
 
     const request = await client.get(route('api.orders.show', order, { qs: { with: ['order.user'] } }))
       .guard('api').loginAs(user)
@@ -146,13 +144,11 @@ test.group('API [orders.show]', (group) => {
   }).tags(['@orders', '@orders.show'])
 
   test('it can show the order with products, address, coupon, user etc.', async ({ client, route, assert }) => {
-    const user = await UserFactory.with('addresses', 2).create()
-
-    const [address] = user.addresses
+    const user = await UserFactory.create()
 
     const product = await ProductFactory.with('media', 5).with('ingredients', 3).create()
 
-    const order = await OrderFactory.with('coupon').merge({ userId: user.id, addressId: address.id }).create()
+    const order = await OrderFactory.with('coupon').merge({ userId: user.id }).create()
 
     await order.related('products').attach([product.id])
 
@@ -183,8 +179,7 @@ test.group('API [orders.show]', (group) => {
       id: order.id,
       user_id: user.id,
       user: { id: user.id },
-      address_id: address.id,
-      address: { id: address.id },
+      deliver_to: JSON.stringify(order.deliverTo),
       coupon_id: order.couponId,
       coupon: { id: order.coupon.id },
       review: { id: review.id },
