@@ -9,13 +9,13 @@ export default class Orders extends BaseSchema {
 
       table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('CASCADE')
 
-      table.bigInteger('address_id').unsigned().notNullable().references('addresses.id').onDelete('RESTRICT')
-
       table.bigInteger('coupon_id').unsigned().nullable().references('coupons.id').onDelete('RESTRICT')
 
       table.string('ip_address').nullable()
 
-      table.string('payment_method').notNullable()
+      table.jsonb('options').notNullable()
+
+      table.jsonb('deliver_to').notNullable()
 
       table.text('note').nullable()
 

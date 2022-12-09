@@ -1,4 +1,4 @@
-import { Address, Cart, Order, User } from 'App/Models'
+import { Cart, Order, User } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/Checkouts/ProcessValidator'
 
@@ -18,19 +18,15 @@ export default class CheckoutsController {
         .where('id', attrs.cart).where('user_id', this.user.id)
         .preload('ingredients').preload('products').firstOrFail()
 
-      // Load and validate the order address by request requested address id
-      const address = await Address.query()
-        .where('id', attrs.address).where('user_id', this.user.id).firstOrFail()
-
       try {
         // Create order from cart details.
         let order = await Order.create({
           note: attrs.note,
           userId: this.user.id,
-          addressId: address.id,
+          deliverTo: attrs.address,
           couponId: cart.couponId,
           ipAddress: cart.ipAddress,
-          paymentMethod: attrs.payment_method,
+          options: attrs.options,
         })
 
         if (order.id) {
@@ -46,7 +42,6 @@ export default class CheckoutsController {
         response.json(
           await Order.query()
             .preload('user')
-            .preload('address')
             .preload('products')
             .preload('ingredients')
             .where('id', order.id)

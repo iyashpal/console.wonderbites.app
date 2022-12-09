@@ -28,13 +28,26 @@ export default class ProcessValidator {
       rules.required(),
       rules.exists({ table: 'carts', column: 'id' }),
     ]),
-    address: schema.number([
-      rules.required(),
-      rules.exists({ table: 'addresses', column: 'id' }),
-    ]),
-    payment_method: schema.string({ trim: true }, [
-      rules.required(),
-    ]),
+    address: schema.object([rules.required()])
+      .members({
+        first_name: schema.string({trim: true}, [rules.required()]),
+        last_name: schema.string.optional({trim: true}),
+        street: schema.string({trim: true}, [rules.required()]),
+        city: schema.string({trim: true}, [rules.required()]),
+        contact: schema.string({trim: true}, [rules.required()]),
+        location: schema.object()
+          .members({
+            lat: schema.string.optional({trim: true}),
+            lng: schema.string.optional({trim: true}),
+          }),
+      }),
+    options: schema.object([rules.required()])
+      .members({
+        payment: schema.object([rules.required()])
+          .members({
+            mode: schema.string({trim: true}),
+          }),
+      }),
     note: schema.string.optional({trim: true}),
   })
 

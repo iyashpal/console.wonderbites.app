@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { User, Product, Address, Ingredient, Coupon, Review } from '.'
+import { User, Product, Ingredient, Coupon, Review } from '.'
 import { BelongsTo, ManyToMany, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import { column, belongsTo, manyToMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 
@@ -11,16 +11,16 @@ export default class Order extends BaseModel {
   public userId: number
 
   @column()
-  public addressId: number
-
-  @column()
   public couponId: number | null
 
   @column()
   public ipAddress: string
 
   @column()
-  public paymentMethod: string
+  public options: object
+
+  @column()
+  public deliverTo: object
 
   @column()
   public note: string
@@ -36,9 +36,6 @@ export default class Order extends BaseModel {
 
   @column.dateTime()
   public deletedAt: DateTime
-
-  @belongsTo(() => Address)
-  public address: BelongsTo<typeof Address>
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
