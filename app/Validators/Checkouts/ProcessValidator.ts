@@ -34,7 +34,8 @@ export default class ProcessValidator {
         last_name: schema.string.optional({trim: true}),
         street: schema.string({trim: true}, [rules.required()]),
         city: schema.string({trim: true}, [rules.required()]),
-        contact: schema.string({trim: true}, [rules.required()]),
+        phone: schema.string({ trim: true }, [rules.required()]),
+        email: schema.string.optional({trim: true}),
         location: schema.object()
           .members({
             lat: schema.string.optional({trim: true}),

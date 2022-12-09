@@ -5,7 +5,14 @@ import { CouponFactory, IngredientFactory, ProductFactory, ReviewFactory, UserFa
 
 export default Factory.define(Order, ({ faker }) => ({
   userId: 0,
-  deliverTo: {},
+  deliverTo: {
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    street: faker.address.streetAddress(),
+    city: faker.address.cityName(),
+    phone: faker.phone.number(),
+    email: faker.internet.email(),
+  },
   options: {payment: { mode: 'COD' }},
   ipAddress: faker.internet.ip(),
   note: faker.lorem.paragraph(),
