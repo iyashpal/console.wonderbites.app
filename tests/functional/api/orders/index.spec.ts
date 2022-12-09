@@ -29,17 +29,16 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list the orders.', async ({ client, route }) => {
     const user = await UserFactory.with('addresses').create()
-    const [address] = user.addresses
-    const orders = await OrderFactory.merge({ userId: user.id, addressId: address.id }).createMany(10)
+    const orders = await OrderFactory.merge({ userId: user.id }).createMany(10)
 
     const request = await client.get(route('api.orders.index'))
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
     request.assertBodyContains({
-      data: orders.map(({ id, userId, addressId, ipAddress, paymentMethod, note, status }) => ({
-        id, user_id: userId, address_id: addressId,
-        ip_address: ipAddress, payment_method: paymentMethod, note, status,
+      data: orders.map(({ id, userId, deliverTo, ipAddress, options, note, status }) => ({
+        id, user_id: userId, deliver_to: JSON.stringify(deliverTo),
+        ip_address: ipAddress, options: JSON.stringify(options), note, status,
       })),
     })
   }).tags(['@orders', '@orders.index'])
