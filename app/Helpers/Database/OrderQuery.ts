@@ -18,7 +18,7 @@ export default class OrderQuery extends Query {
 
     this.$aggregates.push(...[])
 
-    this.$preloads.push(...['Products', 'Ingredients', 'User', 'Coupon', 'Review', 'Address'])
+    this.$preloads.push(...['Products', 'Ingredients', 'User', 'Coupon', 'Review'])
 
     this.$filters.push(...['Status'])
   }
@@ -126,20 +126,6 @@ export default class OrderQuery extends Query {
     this.$query.match([
       this.input('with', []).includes(this.qs('review')),
       orders => orders.preload('review'),
-    ])
-
-    return this
-  }
-
-  /**
-   * Preload the user address.
-   * 
-   * @returns OrderQuery
-   */
-  protected preloadAddress (): this {
-    this.$query.match([
-      this.input('with', []).includes(this.qs('address')),
-      orders => orders.preload('address'),
     ])
 
     return this
