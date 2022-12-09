@@ -10,16 +10,18 @@ test.group('API [checkout.process]', (group) => {
   })
 
   test('un-authenticated user can not process checkout.', async ({ client, route }) => {
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
 
-    request.assertStatus(401)
+    $response.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthenticated' })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('authenticated user can process checkout.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
 
+    const [address] = user.addresses
+
     const product = await ProductFactory.with('ingredients', 3).create()
 
     const coupon = await CouponFactory.create()
@@ -36,19 +38,44 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('ingredients').attach(cartIngredients)
 
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: user.addresses[0].id,
-        payment_method: 'COD',
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: { payment: { mode: 'COD' } },
+        note: 'Test note for the order',
       })
 
-    request.assertStatus(200)
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      deliver_to: JSON.stringify({
+        first_name: address.firstName,
+        last_name: address.lastName,
+        street: address.street,
+        city: address.city,
+        phone: address.phone,
+        email: address.email,
+        location: address.location,
+      }),
+      options: JSON.stringify({ payment: { mode: 'COD' } }),
+      note: 'Test note for the order',
+    })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without cart.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
 
+    const [address] = user.addresses
+
     const product = await ProductFactory.with('ingredients', 3).create()
 
     const coupon = await CouponFactory.create()
@@ -65,18 +92,30 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('ingredients').attach(cartIngredients)
 
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
-        address: user.addresses[0].id,
-        payment_method: 'COD',
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: {payment: {mode: 'COD'}},
       })
 
-    request.assertStatus(422)
+    $response.assertStatus(422)
+
+    $response.assertBodyContains({messages: { cart: ['required validation failed']}})
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without invalid cart.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
 
+    const [address] = user.addresses
+
     const product = await ProductFactory.with('ingredients', 3).create()
 
     const coupon = await CouponFactory.create()
@@ -93,18 +132,28 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('ingredients').attach(cartIngredients)
 
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: 5,
-        address: user.addresses[0].id,
-        payment_method: 'COD',
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: {payment: {mode: 'COD'}},
       })
 
-    request.assertStatus(422)
+    $response.assertStatus(422)
+
+    $response.assertBodyContains({ messages: {cart: ['exists validation failure']}})
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without address.', async ({ client, route }) => {
-    const user = await UserFactory.with('cart').with('addresses').create()
+    const user = await UserFactory.with('cart').create()
 
     const product = await ProductFactory.with('ingredients', 3).create()
 
@@ -122,150 +171,168 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.related('ingredients').attach(cartIngredients)
 
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        payment_method: 'COD',
+        options: {payment: {mode: 'COD'}},
       })
 
-    request.assertStatus(422)
+    $response.assertStatus(422)
+
+    $response.assertBodyContains({
+      messages: { address: ['required validation failed']},
+    })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout with a invalid address.', async ({ client, route }) => {
-    const user = await UserFactory.with('cart').with('addresses').create()
-
-    const product = await ProductFactory.with('ingredients', 3).create()
+    const user = await UserFactory
+      .with('cart', 1, cart => cart.with('products', 5))
+      .with('addresses')
+      .create()
 
     const coupon = await CouponFactory.create()
 
     await user.cart.merge({ couponId: coupon.id }).save()
 
-    await user.cart.related('products').attach([product.id])
-
-    const cartIngredients = {}
-
-    product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { product_id: product.id }
-    })
-
-    await user.cart.related('ingredients').attach(cartIngredients)
-
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: 52,
-        payment_method: 'COD',
+        address: 55,
+        options: {payment: {mode: 'COD'}},
       })
 
-    request.assertStatus(422)
+    $response.assertStatus(422)
+
+    $response.assertBodyContains({messages: { address: [ 'object validation failed' ] }})
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without payment method.', async ({ client, route }) => {
-    const user = await UserFactory.with('cart').with('addresses').create()
+    const user = await UserFactory
+      .with('cart', 1, cart => cart.with('products', 5))
+      .with('addresses').create()
 
-    const product = await ProductFactory.with('ingredients', 3).create()
+    const [address] = user.addresses
 
     const coupon = await CouponFactory.create()
 
     await user.cart.merge({ couponId: coupon.id }).save()
 
-    await user.cart.related('products').attach([product.id])
-
-    const cartIngredients = {}
-
-    product.ingredients.map(({ id }) => {
-      cartIngredients[id] = { product_id: product.id }
-    })
-
-    await user.cart.related('ingredients').attach(cartIngredients)
-
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: user.addresses[0].id,
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: { payment: {} },
       })
 
-    request.assertStatus(422)
+    $response.assertStatus(422)
+
+    $response.assertBodyContains({
+      messages: {'options.payment.mode': ['required validation failed']},
+    })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user can process checkout with cash on delivery.', async ({ client, route }) => {
-    const user = await UserFactory.with('cart').with('addresses').create()
-
-    const product = await ProductFactory.with('ingredients', 3).create()
+    const user = await UserFactory
+      .with('cart', 1, cart => cart.with('products', 5))
+      .with('addresses').create()
 
     const coupon = await CouponFactory.create()
 
     await user.cart.merge({ couponId: coupon.id }).save()
 
-    await user.cart.related('products').attach([product.id])
+    const [address] = user.addresses
 
-    const cartIngredients = {}
+    const qs = {with: ['checkout.products', 'checkout.user']}
 
-    const address = user.addresses[0]
-
-    product.ingredients.map(({ id }) => (cartIngredients[id] = { product_id: product.id }))
-
-    await user.cart.related('ingredients').attach(cartIngredients)
-
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process', {}, {qs}))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: address.id,
-        payment_method: 'COD',
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: {payment: {mode: 'COD'}},
       })
 
-    request.assertStatus(200)
+    $response.assertStatus(200)
 
-    request.assertBodyContains({
+    $response.assertBodyContains({
       user_id: user.id,
-      payment_method: 'COD',
-      address_id: address.id,
-      products: [{ id: product.id, name: product.name }],
-      ingredients: product.ingredients.map(({ id, name }) => ({ id, name })),
-      address: { id: address.id, first_name: address.firstName, last_name: address.lastName },
+      options: JSON.stringify({payment: {mode: 'COD'}}),
+      products: user.cart.products.map(({ id, name }) => ({id, name})),
+      deliver_to: JSON.stringify({
+        first_name: address.firstName,
+        last_name: address.lastName,
+        street: address.street,
+        city: address.city,
+        phone: address.phone,
+        email: address.email,
+        location: address.location,
+      }),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('it can delete the cart on order creation from the referenced cart.', async ({ client, route, assert }) => {
-    const user = await UserFactory.with('cart').with('addresses').create()
-
-    const product = await ProductFactory.with('ingredients', 3).create()
+    const user = await UserFactory
+      .with('cart', 1, cart => cart.with('products', 5))
+      .with('addresses').create()
 
     const coupon = await CouponFactory.create()
 
     await user.cart.merge({ couponId: coupon.id }).save()
 
-    await user.cart.related('products').attach([product.id])
+    const [address] = user.addresses
 
-    const cartIngredients = {}
+    const qs = {with: ['checkout.products', 'checkout.user']}
 
-    const address = user.addresses[0]
-
-    product.ingredients.map(({ id }) => (cartIngredients[id] = { product_id: product.id }))
-
-    await user.cart.related('ingredients').attach(cartIngredients)
-
-    const request = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process', {}, {qs}))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: address.id,
-        payment_method: 'COD',
+        address: {
+          first_name: address.firstName,
+          last_name: address.lastName,
+          street: address.street,
+          city: address.city,
+          phone: address.phone,
+          email: address.email,
+          location: address.location,
+        },
+        options: {payment: {mode: 'COD'}},
       })
 
     const cart = await Cart.query().where('id', user.cart.id).first()
 
-    assert.notEqual(user.cart.id, cart?.id)
+    assert.isUndefined(cart?.id)
 
-    request.assertStatus(200)
+    $response.assertStatus(200)
 
-    request.assertBodyContains({
+    $response.assertBodyContains({
       user_id: user.id,
-      payment_method: 'COD',
-      address_id: address.id,
-      products: [{ id: product.id, name: product.name }],
-      ingredients: product.ingredients.map(({ id, name }) => ({ id, name })),
-      address: { id: address.id, first_name: address.firstName, last_name: address.lastName },
+      options: JSON.stringify({payment: {mode: 'COD'}}),
+      products: user.cart.products.map(({ id, name}) => ({id, name})),
+      deliver_to: JSON.stringify({
+        first_name: address.firstName,
+        last_name: address.lastName,
+        street: address.street,
+        city: address.city,
+        phone: address.phone,
+        email: address.email,
+        location: address.location,
+      }),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
   }).tags(['@checkout', '@checkouts.process'])

@@ -1,6 +1,8 @@
 import { Cart, Order, User } from 'App/Models'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/Checkouts/ProcessValidator'
+import OrderQuery from 'App/Helpers/Database/OrderQuery'
 
 export default class CheckoutsController {
   protected user: User
@@ -8,9 +10,9 @@ export default class CheckoutsController {
   protected response: object = {}
 
   public async process ({ auth, response, request }: HttpContextContract) {
-    this.user = auth.use('api').user!
-
     try {
+      this.user = auth.use('api').user!
+
       const attrs = await request.validate(ProcessValidator)
 
       // Load and validate cart by the requested cart id
@@ -18,40 +20,31 @@ export default class CheckoutsController {
         .where('id', attrs.cart).where('user_id', this.user.id)
         .preload('ingredients').preload('products').firstOrFail()
 
-      try {
-        // Create order from cart details.
-        let order = await Order.create({
-          note: attrs.note,
-          userId: this.user.id,
-          deliverTo: attrs.address,
-          couponId: cart.couponId,
-          ipAddress: cart.ipAddress,
-          options: attrs.options,
-        })
+      // Create order from cart details.
+      let order = await Order.create({
+        note: attrs.note,
+        userId: this.user.id,
+        deliverTo: attrs.address,
+        couponId: cart.couponId,
+        ipAddress: cart.ipAddress,
+        options: attrs.options,
+      })
 
-        if (order.id) {
-          // Delete the cart if the order created.
-          await Cart.query().where('id', attrs.cart).delete()
-        }
-
-        await order.related('products').attach(this.cartProducts(cart.products))
-
-        await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
-
-        // Send order in response with all associated data.
-        response.json(
-          await Order.query()
-            .preload('user')
-            .preload('products')
-            .preload('ingredients')
-            .where('id', order.id)
-            .first()
-        )
-      } catch (error) {
-        response.badRequest({ message: 'Something went wrong' })
+      if (order.id) {
+        // Delete the cart if the order created.
+        await Cart.query().where('id', attrs.cart).delete()
       }
+
+      await order.related('products').attach(this.cartProducts(cart.products))
+
+      await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
+
+      // Send order in response with all associated data.
+      response.ok(
+        await (new OrderQuery(request)).resolveQueryWithPrefix('checkout').query().where('id', order.id).firstOrFail()
+      )
     } catch (error) {
-      response.unprocessableEntity(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
