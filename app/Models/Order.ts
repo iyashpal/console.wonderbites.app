@@ -22,11 +22,15 @@ export default class Order extends BaseModel {
   @column()
   public deliverTo: {
     first_name: string,
-    last_name: string,
+    last_name?: string,
     street: string,
     city: string,
     phone: string,
-    email: string,
+    email?: string,
+    location?: {
+      lat?: string,
+      lng?: string,
+    }
   }
 
   @column()
