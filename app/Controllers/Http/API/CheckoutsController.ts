@@ -1,48 +1,46 @@
-import { Cart, Order, User } from 'App/Models'
+import { Cart, Order } from 'App/Models'
+import OrderQuery from 'App/Helpers/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/Checkouts/ProcessValidator'
-import OrderQuery from 'App/Helpers/Database/OrderQuery'
 
 export default class CheckoutsController {
-  protected user: User
-
-  protected response: object = {}
-
   public async process ({ auth, response, request }: HttpContextContract) {
     try {
-      this.user = auth.use('api').user!
+      const user = auth.use('api').user!
 
       const attrs = await request.validate(ProcessValidator)
 
       // Load and validate cart by the requested cart id
       const cart = await Cart.query()
-        .where('id', attrs.cart).where('user_id', this.user.id)
+        .where('id', attrs.cart)
+        .match([user, query => query.where('user_id', user.id)])
         .preload('ingredients').preload('products').firstOrFail()
 
       // Create order from cart details.
       let order = await Order.create({
         note: attrs.note,
-        userId: this.user.id,
+        userId: user?.id ?? null,
         deliverTo: attrs.address,
         couponId: cart.couponId,
         ipAddress: cart.ipAddress,
         options: attrs.options,
       })
 
+      await order.related('products').attach(this.cartProducts(cart.products))
+
+      await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
+
       if (order.id) {
         // Delete the cart if the order created.
         await Cart.query().where('id', attrs.cart).delete()
       }
 
-      await order.related('products').attach(this.cartProducts(cart.products))
-
-      await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
+      const data = await (new OrderQuery(request)).resolveQueryWithPrefix('checkout')
+        .query().where('id', order.id).firstOrFail()
 
       // Send order in response with all associated data.
-      response.ok(
-        await (new OrderQuery(request)).resolveQueryWithPrefix('checkout').query().where('id', order.id).firstOrFail()
-      )
+      response.ok(data)
     } catch (error) {
       (new ExceptionResponse(response, error)).resolve()
     }

@@ -20,8 +20,6 @@ Route.group(() => {
     // Resources endpoints to user addresses.
     Route.resource('addresses', 'AddressesController').apiOnly()
 
-    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
-
     // Endpoint to create user orders.
     Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
     Route.put('orders/:id/cancel', 'OrdersController.cancel').as('orders.cancel')
@@ -66,6 +64,8 @@ Route.group(() => {
     Route.resource('products', 'ProductsController').apiOnly()
 
     Route.resource('advertisements', 'AdvertisementsController').apiOnly().only(['index', 'show'])
+
+    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
   })
 
   /**

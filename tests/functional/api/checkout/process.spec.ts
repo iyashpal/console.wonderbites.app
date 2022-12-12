@@ -1,7 +1,7 @@
 import { Cart } from 'App/Models'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { CouponFactory, ProductFactory, UserFactory } from 'Database/factories'
+import { AddressFactory, CartFactory, CouponFactory, ProductFactory, UserFactory } from 'Database/factories'
 
 test.group('API [checkout.process]', (group) => {
   group.each.setup(async () => {
@@ -9,12 +9,17 @@ test.group('API [checkout.process]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('un-authenticated user can not process checkout.', async ({ client, route }) => {
-    const $response = await client.post(route('api.checkouts.process'))
+  test('un-authenticated user can access process checkout.', async ({ client, route }) => {
+    const cart = await CartFactory.create()
+    const address = await AddressFactory.with('user').create()
 
-    $response.assertStatus(401)
+    const $response = await client.post(route('api.checkouts.process')).json({
+      cart: cart.id,
+      address: address.serializedForCheckout,
+      options: { payment: { mode: 'COD' } },
+    })
 
-    $response.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertStatus(200)
   }).tags(['@checkout', '@checkouts.process'])
 
   test('authenticated user can process checkout.', async ({ client, route }) => {
@@ -41,31 +46,15 @@ test.group('API [checkout.process]', (group) => {
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
-        options: { payment: { mode: 'COD' } },
         note: 'Test note for the order',
+        options: { payment: { mode: 'COD' } },
+        address: address.serializedForCheckout,
       })
 
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      deliver_to: JSON.stringify({
-        first_name: address.firstName,
-        last_name: address.lastName,
-        street: address.street,
-        city: address.city,
-        phone: address.phone,
-        email: address.email,
-        location: address.location,
-      }),
+      deliver_to: JSON.stringify(address.serializedForCheckout),
       options: JSON.stringify({ payment: { mode: 'COD' } }),
       note: 'Test note for the order',
     })
@@ -94,21 +83,13 @@ test.group('API [checkout.process]', (group) => {
 
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
-        options: {payment: {mode: 'COD'}},
+        options: { payment: { mode: 'COD' } },
+        address: address.serializedForCheckout,
       })
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({messages: { cart: ['required validation failed']}})
+    $response.assertBodyContains({ messages: { cart: ['required validation failed'] } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without invalid cart.', async ({ client, route }) => {
@@ -135,21 +116,13 @@ test.group('API [checkout.process]', (group) => {
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: 5,
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
-        options: {payment: {mode: 'COD'}},
+        address: address.serializedForCheckout,
+        options: { payment: { mode: 'COD' } },
       })
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: {cart: ['exists validation failure']}})
+    $response.assertBodyContains({ messages: { cart: ['exists validation failure'] } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without address.', async ({ client, route }) => {
@@ -174,13 +147,13 @@ test.group('API [checkout.process]', (group) => {
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        options: {payment: {mode: 'COD'}},
+        options: { payment: { mode: 'COD' } },
       })
 
     $response.assertStatus(422)
 
     $response.assertBodyContains({
-      messages: { address: ['required validation failed']},
+      messages: { address: ['required validation failed'] },
     })
   }).tags(['@checkout', '@checkouts.process'])
 
@@ -198,12 +171,12 @@ test.group('API [checkout.process]', (group) => {
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         address: 55,
-        options: {payment: {mode: 'COD'}},
+        options: { payment: { mode: 'COD' } },
       })
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({messages: { address: [ 'object validation failed' ] }})
+    $response.assertBodyContains({ messages: { address: ['object validation failed'] } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without payment method.', async ({ client, route }) => {
@@ -220,22 +193,14 @@ test.group('API [checkout.process]', (group) => {
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
         options: { payment: {} },
+        address: address.serializedForCheckout,
       })
 
     $response.assertStatus(422)
 
     $response.assertBodyContains({
-      messages: {'options.payment.mode': ['required validation failed']},
+      messages: { 'options.payment.mode': ['required validation failed'] },
     })
   }).tags(['@checkout', '@checkouts.process'])
 
@@ -250,38 +215,22 @@ test.group('API [checkout.process]', (group) => {
 
     const [address] = user.addresses
 
-    const qs = {with: ['checkout.products', 'checkout.user']}
+    const qs = { with: ['checkout.products', 'checkout.user'] }
 
-    const $response = await client.post(route('api.checkouts.process', {}, {qs}))
+    const $response = await client.post(route('api.checkouts.process', {}, { qs }))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
-        options: {payment: {mode: 'COD'}},
+        address: address.serializedForCheckout,
+        options: { payment: { mode: 'COD' } },
       })
 
     $response.assertStatus(200)
 
     $response.assertBodyContains({
       user_id: user.id,
-      options: JSON.stringify({payment: {mode: 'COD'}}),
-      products: user.cart.products.map(({ id, name }) => ({id, name})),
-      deliver_to: JSON.stringify({
-        first_name: address.firstName,
-        last_name: address.lastName,
-        street: address.street,
-        city: address.city,
-        phone: address.phone,
-        email: address.email,
-        location: address.location,
-      }),
+      options: JSON.stringify({ payment: { mode: 'COD' } }),
+      products: user.cart.products.map(({ id, name }) => ({ id, name })),
+      deliver_to: JSON.stringify(address.serializedForCheckout),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
   }).tags(['@checkout', '@checkouts.process'])
@@ -297,21 +246,13 @@ test.group('API [checkout.process]', (group) => {
 
     const [address] = user.addresses
 
-    const qs = {with: ['checkout.products', 'checkout.user']}
+    const qs = { with: ['checkout.products', 'checkout.user'] }
 
-    const $response = await client.post(route('api.checkouts.process', {}, {qs}))
+    const $response = await client.post(route('api.checkouts.process', {}, { qs }))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
-        address: {
-          first_name: address.firstName,
-          last_name: address.lastName,
-          street: address.street,
-          city: address.city,
-          phone: address.phone,
-          email: address.email,
-          location: address.location,
-        },
-        options: {payment: {mode: 'COD'}},
+        address: address.serializedForCheckout,
+        options: { payment: { mode: 'COD' } },
       })
 
     const cart = await Cart.query().where('id', user.cart.id).first()
@@ -322,17 +263,9 @@ test.group('API [checkout.process]', (group) => {
 
     $response.assertBodyContains({
       user_id: user.id,
-      options: JSON.stringify({payment: {mode: 'COD'}}),
-      products: user.cart.products.map(({ id, name}) => ({id, name})),
-      deliver_to: JSON.stringify({
-        first_name: address.firstName,
-        last_name: address.lastName,
-        street: address.street,
-        city: address.city,
-        phone: address.phone,
-        email: address.email,
-        location: address.location,
-      }),
+      options: JSON.stringify({ payment: { mode: 'COD' } }),
+      deliver_to: JSON.stringify(address.serializedForCheckout),
+      products: user.cart.products.map(({ id, name }) => ({ id, name })),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
   }).tags(['@checkout', '@checkouts.process'])

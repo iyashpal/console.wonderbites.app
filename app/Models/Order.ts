@@ -8,7 +8,7 @@ export default class Order extends BaseModel {
   public id: number
 
   @column()
-  public userId: number
+  public userId: number | null
 
   @column()
   public couponId: number | null

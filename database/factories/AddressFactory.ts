@@ -9,13 +9,14 @@ export default Factory.define(Address, ({ faker }) => {
     street: faker.address.street(),
     city: faker.address.city(),
     phone: faker.phone.number(),
+    email: faker.internet.email(),
     location: { lat: faker.address.latitude(), lng: faker.address.longitude() },
     type: 'home',
   }
 })
   .relation('user', () => UserFactory)
   .state('home', (address) => address.type = 'home')
-  .state('office', (address) => address.type = 'office')
   .state('other', (address) => address.type = 'other')
+  .state('office', (address) => address.type = 'office')
   .state('no_location', (address) => address.location = {})
   .build()
