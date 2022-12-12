@@ -20,6 +20,7 @@
   ],
   "devDependencies": {
     "@adonisjs/assembler": "^5.8.1",
+    "@adonisjs/vite-plugin-adonis": "^1.0.0-beta.0",
     "@japa/expect": "^2.0.1",
     "@japa/preset-adonis": "^1.1.1",
     "@japa/runner": "^2.1.1",
