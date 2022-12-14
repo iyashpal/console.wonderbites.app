@@ -3,6 +3,7 @@ build
 coverage
 .vscode
 .idea
+.fleet
 .DS_STORE
 .env
 .env.test
