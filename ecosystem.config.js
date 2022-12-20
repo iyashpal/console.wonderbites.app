@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
 
-      name: 'admin.wonderbites',
+      name: 'admin.wonderbites.app',
 
       script: './build/server.js',
 
@@ -24,11 +24,11 @@ module.exports = {
 
       ignore_watch: ['node_modules'],
 
-      cwd: '/home/ubuntu/sites/wonderbites.com/',
+      cwd: '/srv/admin.wonderbites.app/',
 
       post_update: ['yarn install', 'yarn build'],
 
-      env: { NODE_ENV: 'production', ENV_PATH: '/home/ubuntu/sites/wonderbites.com/.env', PORT: 8080 },
+      env: { NODE_ENV: 'production', ENV_PATH: '/srv/admin.wonderbites.app/.env', PORT: 8080 },
 
     },
   ],
