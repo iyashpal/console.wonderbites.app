@@ -16,7 +16,7 @@ import Env from '@ioc:Adonis/Core/Env'
 
 export default Env.rules({
   // Application
-  HOST: Env.schema.string({ format: 'host' }),
+  HOST: Env.schema.string({format: 'host'}),
   PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
@@ -26,19 +26,23 @@ export default Env.rules({
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
   // Postgres database
   DB_CONNECTION: Env.schema.string(),
-  PG_HOST: Env.schema.string({ format: 'host' }),
+  PG_HOST: Env.schema.string({format: 'host'}),
   PG_PORT: Env.schema.number(),
   PG_USER: Env.schema.string(),
   PG_PASSWORD: Env.schema.string.optional(),
   PG_DB_NAME: Env.schema.string(),
   // Redis
   REDIS_CONNECTION: Env.schema.enum(['local'] as const),
-  REDIS_HOST: Env.schema.string({ format: 'host' }),
+  REDIS_HOST: Env.schema.string({format: 'host'}),
   REDIS_PORT: Env.schema.number(),
   REDIS_PASSWORD: Env.schema.string.optional(),
   // SMTP Mailer
-  SMTP_HOST: Env.schema.string({ format: 'host' }),
+  SMTP_HOST: Env.schema.string({format: 'host'}),
   SMTP_PORT: Env.schema.number(),
   SMTP_USERNAME: Env.schema.string(),
   SMTP_PASSWORD: Env.schema.string.optional(),
+
+  // Google Cloud Drive
+  GCS_KEY_FILENAME: Env.schema.string(),
+  GCS_BUCKET: Env.schema.string(),
 })

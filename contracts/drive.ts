@@ -15,9 +15,9 @@ declare module '@ioc:Adonis/Core/Drive' {
     //   config: S3DriverConfig
     //   implementation: S3DriverContract
     // }
-    // gcs: {
-    //   config: GcsDriverConfig
-    //   implementation: GcsDriverContract
-    // }
+    gcs: {
+      config: GcsDriverConfig
+      implementation: GcsDriverContract
+    }
   }
 }

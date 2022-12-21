@@ -37,7 +37,8 @@
     "@adonisjs/session",
     "@adonisjs/lucid-slugify",
     "@adonisjs/attachment-lite",
-    "@adonisjs/route-model-binding/build/providers/RmbProvider"
+    "@adonisjs/route-model-binding/build/providers/RmbProvider",
+    "@adonisjs/drive-gcs"
   ],
   "metaFiles": [
     {
