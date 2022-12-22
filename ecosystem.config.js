@@ -30,8 +30,6 @@ module.exports = {
 
         NODE_ENV: 'production',
 
-        ENV_PATH: '/var/www/html/admin.wonderbites.app/.env',
-
       },
 
     },
