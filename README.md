@@ -1,18 +1,23 @@
 # admin.wonderbites.com
 
 ## Server Details
-**HOST** : `18.222.25.196`
+**HOST** : `35.202.36.48`
 **PORT** : `22`
-**USER** : `ubuntu`
+**USER** : `<your-given-user-for-ssh-key>`
 
 **Note** : For Login you must have the `.pem`/`ssh` key file.
 
+## PM2 Steps
+Below steps are only for the initial setup.
+1. Install PM2 with command `npm install -g pm2`.
+2. Start Process with command `ENV_PATH=/etc/myapp/.env pm2 start`
+
 
 ## Deploy Steps
-Below deployment steps is only for `AWS` EC2 instance `18.222.25.196`.
+Below deployment steps is only for `AWS` EC2 instance `35.202.36.48`.
 
 1. Login to server via any ssh client.
-2. Change directory (cd) to `/home/ubuntu/sites/wonderbites.com`.
+2. Change directory (cd) to `/var/www/html/admin.wonderbites.app`.
 3. Run git command to pull the latest changes/code (`git pull`).
 4. In case you find any npm depencies missing then install them via `yarn install`.
 5. Now generate build files using command `yarn build`.
