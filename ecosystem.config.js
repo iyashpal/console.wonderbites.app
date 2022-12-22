@@ -26,7 +26,7 @@ module.exports = {
 
       cwd: '/var/www/html/admin.wonderbites.app/',
 
-      post_update: ['yarn install', 'yarn build'],
+      post_update: ['yarn install', 'yarn build', 'cd ./build && yarn install --production'],
 
       env: { NODE_ENV: 'production', ENV_PATH: '/var/www/html/admin.wonderbites.app/.env', PORT: 8080 },
 
