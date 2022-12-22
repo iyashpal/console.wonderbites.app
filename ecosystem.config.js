@@ -24,11 +24,15 @@ module.exports = {
 
       ignore_watch: ['node_modules'],
 
-      cwd: '/var/www/html/admin.wonderbites.app/',
+      env: {
+        
+        PORT: 8080,
 
-      post_update: ['yarn install', 'yarn build', 'cd ./build && yarn install --production'],
+        NODE_ENV: 'production',
 
-      env: { NODE_ENV: 'production', ENV_PATH: '/var/www/html/admin.wonderbites.app/.env', PORT: 8080 },
+        ENV_PATH: '/var/www/html/admin.wonderbites.app/.env',
+
+      },
 
     },
   ],
