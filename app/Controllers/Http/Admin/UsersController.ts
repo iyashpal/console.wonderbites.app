@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import User from 'App/Models/User'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import CreateValidator from 'App/Validators/User/CreateValidator'
 import UpdateValidator from 'App/Validators/User/UpdateValidator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -36,10 +37,6 @@ export default class UsersController {
    */
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
-
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
 
     await User.create({}).then((user) => {
       session.flash('user_created', user.id)
@@ -79,14 +76,14 @@ export default class UsersController {
   public async update ({ request, response, params, session }: HttpContextContract) {
     const user = await User.findOrFail(params.id)
 
-    const data = await request.validate(UpdateValidator)
-
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
+    const payload = await request.validate(UpdateValidator)
 
     await user.merge({
-      ...data, imagePath: data.image_path ? data.image_path.fileName : user.imagePath,
+      // Request Validator Payload
+      ...payload,
+
+      // Conditional update of user avatar
+      avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : user.avatar,
     }).save().then(user => {
       session.flash('user_updated', true)
 

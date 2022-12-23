@@ -39,7 +39,7 @@ export default class UpdateValidator {
       rules.maxLength(255),
       // rules.unique({ table: 'users', column: "email" })
     ]),
-    image_path: schema.file.optional({
+    avatar: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
     }),
