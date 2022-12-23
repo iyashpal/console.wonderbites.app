@@ -1,6 +1,7 @@
 import User from 'App/Models/User'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import CreateValidator from 'App/Validators/User/CreateValidator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class RegistersController {
   /**
@@ -14,9 +15,15 @@ export default class RegistersController {
   }
 
   public async register ({ request, auth, response }: HttpContextContract) {
-    const validated = await request.validate(CreateValidator)
+    const payload = await request.validate(CreateValidator)
 
-    const user = await User.create(validated)
+    const user = await User.create({
+      // Request Validator Payload
+      ...payload,
+
+      // Conditional update of user avatar
+      avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null,
+    })
 
     await auth.login(user)
 

@@ -36,9 +36,15 @@ export default class UsersController {
    * @param param0 HttpContextContract
    */
   public async store ({ request, response, session }: HttpContextContract) {
-    const data = await request.validate(CreateValidator)
+    const payload = await request.validate(CreateValidator)
 
-    await User.create({}).then((user) => {
+    await User.create({
+      // Request Validator Payload
+      ...payload,
+
+      // Conditional update of user avatar
+      avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null,
+    }).then((user) => {
       session.flash('user_created', user.id)
 
       response.redirect().toRoute('users.show', { id: user.id })
