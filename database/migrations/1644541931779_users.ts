@@ -15,7 +15,7 @@ export default class UsersSchema extends BaseSchema {
 
       table.string('password', 180).notNullable()
 
-      table.text('image_path').nullable()
+      table.json('avatar').nullable()
 
       table.integer('address_id').unsigned().nullable()
 
@@ -30,9 +30,9 @@ export default class UsersSchema extends BaseSchema {
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('created_at', { useTz: true }).notNullable()
-      table.timestamp('updated_at', { useTz: true }).notNullable()
-      table.timestamp('deleted_at', { useTz: true }).defaultTo(null)
+      table.timestamp('created_at', {useTz: true}).notNullable()
+      table.timestamp('updated_at', {useTz: true}).notNullable()
+      table.timestamp('deleted_at', {useTz: true}).defaultTo(null)
     })
   }
 

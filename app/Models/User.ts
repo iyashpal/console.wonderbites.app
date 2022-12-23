@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback } from '.'
 import Notifiable from 'App/Features/Notification/Notifiable'
+import { BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import { Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback } from '.'
+import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends Notifiable {
   @column({ isPrimary: true })
@@ -21,8 +22,8 @@ export default class User extends Notifiable {
   @column()
   public mobile: string
 
-  @column()
-  public imagePath: string | null
+  @attachment({ folder: 'avatars', preComputeUrl: true })
+  public avatar: AttachmentContract | null
 
   @column({ serializeAs: null })
   public password: string
@@ -112,11 +113,11 @@ export default class User extends Notifiable {
    * User avatar attribute.
    */
   @computed()
-  public get avatar () {
+  public get avatar_url () {
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
-    let avatar = `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
+    return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
 
-    return this.imagePath === null ? avatar : `http://localhost:3333/uploads/${this.imagePath}`
+    // return this.avatar === null ? avatar : `http://localhost:3333/uploads/${this.avatar}`
   }
 }

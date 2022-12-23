@@ -48,7 +48,8 @@
       "@adonisjs/lucid-slugify",
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/route-model-binding/build/adonis-typings",
-      "@adonisjs/drive-gcs"
+      "@adonisjs/drive-gcs",
+      "@adonisjs/attachment-lite"
     ]
   }
 }
