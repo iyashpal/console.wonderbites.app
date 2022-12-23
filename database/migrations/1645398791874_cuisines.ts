@@ -11,7 +11,7 @@ export default class Cuisines extends BaseSchema {
 
       table.text('description').nullable()
 
-      table.text('image_path').nullable()
+      table.json('thumbnail').nullable()
 
       table.integer('status').defaultTo(1)
 

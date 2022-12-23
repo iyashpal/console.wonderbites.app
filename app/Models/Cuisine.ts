@@ -1,6 +1,8 @@
 import { Category } from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import Storage from 'App/Helpers/Storage'
 
 export default class Cuisine extends BaseModel {
   @column({ isPrimary: true })
@@ -12,8 +14,8 @@ export default class Cuisine extends BaseModel {
   @column()
   public description: string
 
-  @column()
-  public imagePath: string
+  @attachment({ folder: 'cuisines', preComputeUrl: true })
+  public thumbnail: AttachmentContract | null
 
   @column()
   public status: number
@@ -28,7 +30,11 @@ export default class Cuisine extends BaseModel {
   public updatedAt: DateTime
 
   @computed()
-  public get thumbnail () {
-    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/cuisine.png'
+  public get default_thumbnail () {
+    if (this.thumbnail) {
+      return this.thumbnail.url
+    }
+
+    return Storage.public('/images/placeholder/square.svg')
   }
 }
