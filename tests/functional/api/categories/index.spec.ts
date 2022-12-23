@@ -78,9 +78,7 @@ test.group('API [categories.index]', (group) => {
         {
           id: product.id,
           name: product.name,
-          media: media.map(
-            ({ id, title, caption, filePath }) => ({ id, title, caption, file_path: filePath })
-          ),
+          media: media.map(({ id, title, caption }) => ({ id, title, caption })),
         },
       ],
     }])

@@ -1,4 +1,5 @@
 import Media from 'App/Models/Media'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Media/CreateValidator'
 import UpdateValidator from 'App/Validators/Media/UpdateValidator'
@@ -35,11 +36,10 @@ export default class MediaController {
   public async store ({ request, response, session }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
-
-    const media = await Media.create({ ...data, filePath: data.image_path!.fileName })
+    const media = await Media.create({
+      ...data,
+      attachment: Attachment.fromFile(request.file('attachment')!),
+    })
       .then((media) => {
         session.flash('media_created', media.id)
         return media
@@ -80,14 +80,12 @@ export default class MediaController {
   public async update ({ request, response, params, session }: HttpContextContract) {
     const media = await Media.findOrFail(params.id)
 
-    const data = await request.validate(UpdateValidator)
-
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
+    const payload = await request.validate(UpdateValidator)
 
     await media.merge({
-      ...data, filePath: data.image_path ? data.image_path.fileName : media.filePath,
+      ...payload,
+
+      attachment: payload.attachment ? Attachment.fromFile(request.file('attachment')!) : media.attachment,
     }).save().then(() => session.flash('media_updated', true))
 
     response.redirect().toRoute('media.show', { id: media.id })

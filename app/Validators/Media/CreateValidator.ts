@@ -28,7 +28,7 @@ export default class CreateValidator {
     ref_type: schema.string({ trim: true }),
     title: schema.string({ trim: true }),
     caption: schema.string({ trim: true }),
-    image_path: schema.file({
+    attachment: schema.file({
       size: '1mb',
       extnames: ['jpg', 'jpeg', 'png', 'gif'],
     }),

@@ -1,6 +1,7 @@
 import { Product } from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class Media extends BaseModel {
   @column({ isPrimary: true })
@@ -15,8 +16,8 @@ export default class Media extends BaseModel {
   @column()
   public caption: string
 
-  @column()
-  public filePath: string
+  @attachment({ folder: 'uploads', preComputeUrl: true })
+  public attachment: AttachmentContract
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

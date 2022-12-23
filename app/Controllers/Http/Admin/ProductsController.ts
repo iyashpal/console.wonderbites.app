@@ -1,11 +1,11 @@
-import Application from '@ioc:Adonis/Core/Application'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { DateTime } from 'luxon'
+import Product from 'App/Models/Product'
 import Category from 'App/Models/Category'
 import Ingredient from 'App/Models/Ingredient'
-import Product from 'App/Models/Product'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Product/CreateValidator'
 import UpdateValidator from 'App/Validators/Product/UpdateValidator'
-import { DateTime } from 'luxon'
 
 export default class ProductsController {
   /**
@@ -115,13 +115,10 @@ export default class ProductsController {
 
   public async handleMedia ({ request, params: { id } }: HttpContextContract) {
     const product = await Product.findOrFail(id)
-    const images = request.files('files')
 
-    for (let image of images) {
-      await image.move(Application.tmpPath('uploads'))
-
+    for (let image of request.files('files')) {
       await product.related('media').create({
-        filePath: image.fileName,
+        attachment: Attachment.fromFile(image),
       })
     }
   }

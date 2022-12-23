@@ -134,7 +134,7 @@ test.group('API [orders.index]', (group) => {
         id,
         products: products.map(({ id, name, media }) => ({
           id, name,
-          media: media.map(({ id, title, caption, filePath }) => ({ id, title, caption, file_path: filePath })),
+          media: media.map(({ id, title, caption }) => ({ id, title, caption })),
         })),
       })),
     })
@@ -195,7 +195,7 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id, deliverTo }) => ({ id, deliver_to: JSON.stringify(deliverTo)})),
+      data: orders.map(({ id, deliverTo }) => ({ id, deliver_to: JSON.stringify(deliverTo) })),
     })
   }).tags(['@orders', '@orders.index'])
 
