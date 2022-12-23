@@ -17,7 +17,7 @@ export default class Products extends BaseSchema {
 
       table.string('calories').nullable()
 
-      table.text('image_path').nullable()
+      table.json('thumbnail').nullable()
 
       table.string('price').notNullable().defaultTo(0)
 

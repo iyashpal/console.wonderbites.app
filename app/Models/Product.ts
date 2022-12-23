@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
+import Storage from 'App/Helpers/Storage'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Category, ExtraField, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 import { BelongsTo, belongsTo, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { Cart, Category, ExtraField, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
 
 export default class Product extends BaseModel {
   /**
@@ -30,8 +32,8 @@ export default class Product extends BaseModel {
   @column()
   public price: string
 
-  @column()
-  public imagePath: string
+  @attachment({folder: 'products', preComputeUrl: true})
+  public thumbnail: AttachmentContract | null
 
   @column()
   public status: number
@@ -54,8 +56,12 @@ export default class Product extends BaseModel {
    * @returns {String}
    */
   @computed()
-  public get thumbnail () {
-    return this.imagePath ? `/uploads/${ this.imagePath }` : '/images/placeholders/product.png'
+  public get default_thumbnail () {
+    if (this.thumbnail?.url) {
+      return this.thumbnail.url
+    }
+
+    return Storage.public('/images/placeholder/square.svg')
   }
 
   @belongsTo(() => User)
