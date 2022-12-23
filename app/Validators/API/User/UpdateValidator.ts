@@ -30,7 +30,7 @@ export default class UpdateValidator {
     lastName: schema.string({ trim: true }, [
       rules.maxLength(255),
     ]),
-    imagePath: schema.file.optional({ size: '1mb' }),
+    avatar: schema.file.optional({ size: '1mb' }),
   })
 
   /**

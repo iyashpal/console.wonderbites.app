@@ -110,14 +110,16 @@ export default class User extends Notifiable {
   public feedbacks: HasMany<typeof Feedback>
 
   /**
-   * User avatar attribute.
+   * Default User avatar attribute.
    */
   @computed()
-  public get avatar_url () {
+  public get default_avatar () {
+    if (this.avatar?.url) {
+      return this.avatar.url
+    }
+
     let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
-
-    // return this.avatar === null ? avatar : `http://localhost:3333/uploads/${this.avatar}`
   }
 }

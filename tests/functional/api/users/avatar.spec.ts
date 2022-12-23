@@ -20,10 +20,10 @@ test.group('API [users.avatar]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.avatar'))
-      .guard('api').loginAs(user).json({ action: 'REMOVE' })
+      .guard('api').loginAs(user).json({})
 
     $response.assertStatus(200)
 
-    $response.assertBodyContains({ image_path: null })
+    $response.assertBodyContains({ avatar: null })
   })
 })

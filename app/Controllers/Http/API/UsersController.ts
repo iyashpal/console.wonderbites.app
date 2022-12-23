@@ -1,3 +1,5 @@
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AvatarValidator from 'App/Validators/API/User/AvatarValidator'
 import UpdateValidator from 'App/Validators/API/User/UpdateValidator'
@@ -11,7 +13,18 @@ export default class UsersController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ }: HttpContextContract) {
+  public async show ({auth, request, response }: HttpContextContract) {
+    try {
+      const user = auth.use('api').user!
+
+      if (request.input('with', []).includes('user.addresses')) {
+        await user.load('addresses')
+      }
+
+      response.status(200).json(user)
+    } catch (error) {
+      (new ExceptionResponse(response, error)).resolve()
+    }
   }
 
   /**
@@ -20,19 +33,22 @@ export default class UsersController {
    * @param param0 HttpContextContract
    */
   public async update ({ auth, request, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
     try {
+      const user = auth.use('api').user!
+
       const payload = await request.validate(UpdateValidator)
 
-      if (payload.imagePath) {
-        await payload.imagePath?.moveToDisk('avatars')
-      }
+      await user.merge({
+        // Request Validator Payload
+        ...payload,
 
-      await user.merge({ ...payload, imagePath: payload.imagePath ? `avatars/${payload.imagePath.fileName}` : user.imagePath })
-        .save().then(user => response.ok(user))
+        // Conditional update of user avatar
+        avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : user.avatar,
+      }).save()
+
+      response.status(200).ok(user)
     } catch (error) {
-      response.unprocessableEntity(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -44,15 +60,17 @@ export default class UsersController {
    *
    * @param param0 HttpContextContract
    */
-  public async auth ({ auth, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
+  public async auth ({ auth, request, response }: HttpContextContract) {
     try {
-      await user.load('addresses')
+      const user = auth.use('api').user!
+
+      if (request.input('with', []).includes('user.addresses')) {
+        await user.load('addresses')
+      }
 
       response.status(200).json(user)
     } catch (error) {
-      response.badRequest(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 
@@ -62,21 +80,18 @@ export default class UsersController {
    * @param param0 HttpContextContract
    */
   public async avatar ({ auth, request, response }: HttpContextContract) {
-    const user = auth.use('api').user!
-
     try {
+      const user = auth.use('api').user!
+
       const payload = await request.validate(AvatarValidator)
 
-      if (payload.avatar) {
-        await payload.avatar?.moveToDisk('avatars')
+      await user.merge({
+        avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null,
+      }).save()
 
-        await user.merge({ imagePath: `avatars/${payload.avatar.fileName}` })
-          .save().then(user => response.json(user))
-      } else {
-        await user.merge({ imagePath: null }).save().then(user => response.json(user))
-      }
+      response.status(200).json(user)
     } catch (error) {
-      response.unprocessableEntity(error)
+      (new ExceptionResponse(response, error)).resolve()
     }
   }
 }
