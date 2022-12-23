@@ -7,22 +7,22 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default Factory.define(Ingredient, async ({ faker }) => {
   // User profile attachment
-  const attachment = new Attachment({
+  const thumbnail = new Attachment({
     extname: 'png',
     mimeType: 'image/png',
     size: 10 * 1000,
     name: `${faker.random.alphaNumeric(10)}.png`,
   })
 
-  attachment.isPersisted = true
+  thumbnail.isPersisted = true
 
-  await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)
+  await Drive.put(thumbnail.name, (await file.generatePng('1mb')).contents)
 
   return {
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     price: faker.commerce.price(),
-    thumbnail: attachment,
+    thumbnail,
     status: 1,
   }
 })

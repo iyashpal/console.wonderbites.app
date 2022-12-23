@@ -1,7 +1,8 @@
 import { User } from '.'
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 import { AdvertisementOptions, AdvertisementStatus } from './Enums/Advertisement'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import { BaseModel, BelongsTo, belongsTo, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Advertisement extends BaseModel {
   @column({ isPrimary: true })
@@ -16,8 +17,8 @@ export default class Advertisement extends BaseModel {
   @column()
   public description: string
 
-  @column()
-  public imagePath: string
+  @attachment({ folder: 'advertisements', preComputeUrl: true })
+  public attachment: AttachmentContract
 
   @column()
   public options: AdvertisementOptions

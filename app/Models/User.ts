@@ -97,6 +97,9 @@ export default class User extends Notifiable {
   @hasOne(() => Wishlist)
   public wishlist: HasOne<typeof Wishlist>
 
+  /**
+   * Relation to user orders.
+   */
   @hasMany(() => Order)
   public orders: HasMany<typeof Order>
 
@@ -106,6 +109,9 @@ export default class User extends Notifiable {
   @hasMany(() => Wonderpoint)
   public wonderpoints: HasMany<typeof Wonderpoint>
 
+  /**
+   * Relation to user feedbacks.
+   */
   @hasMany(() => Feedback)
   public feedbacks: HasMany<typeof Feedback>
 
