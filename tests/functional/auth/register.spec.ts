@@ -28,7 +28,7 @@ test.group('Auth register', (group) => {
 
     response.assertStatus(422)
 
-    response.assertBodyContains({ errors: [{ field: 'first_name' }] })
+    response.assertBodyContains({ errors: [{ field: 'firstName' }] })
   })
 
   /**
@@ -48,7 +48,7 @@ test.group('Auth register', (group) => {
 
     response.assertStatus(422)
 
-    response.assertBodyContains({ errors: [{ field: 'last_name' }] })
+    response.assertBodyContains({ errors: [{ field: 'lastName' }] })
   })
 
   /**
@@ -201,8 +201,8 @@ test.group('Auth register', (group) => {
     const user = await UserFactory.make()
 
     const response = await client.post(route('api.register')).accept('json').json({
-      first_name: 'Yash',
-      last_name: 'Pal',
+      firstName: 'Yash',
+      lastName: 'Pal',
       mobile: '0123456789',
       email: 'yash@brandsonify.com',
       password: user.password,

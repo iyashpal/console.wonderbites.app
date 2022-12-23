@@ -13,7 +13,7 @@ export default class Ingredients extends BaseSchema {
 
       table.text('description').nullable()
 
-      table.string('image_path').nullable()
+      table.json('thumbnail').nullable()
 
       table.integer('price').unsigned().notNullable().defaultTo(0)
 

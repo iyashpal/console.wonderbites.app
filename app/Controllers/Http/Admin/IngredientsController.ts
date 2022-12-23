@@ -1,9 +1,11 @@
 import Category from 'App/Models/Category'
 import Ingredient from 'App/Models/Ingredient'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CreateValidator from 'App/Validators/Ingridient/CreateValidator'
-import UpdateValidator from 'App/Validators/Ingridient/UpdateValidator'
-export default class IngridientsController {
+import CreateValidator from 'App/Validators/Ingredient/CreateValidator'
+import UpdateValidator from 'App/Validators/Ingredient/UpdateValidator'
+
+export default class IngredientsController {
   /**
    * Display a listing of resources.
    *
@@ -11,11 +13,11 @@ export default class IngridientsController {
    * @returns ViewRendererContract
    */
   public async index ({ view, request }: HttpContextContract) {
-    let ingridients = await Ingredient.query().paginate(request.input('page', 1), 10)
+    let ingredients = await Ingredient.query().paginate(request.input('page', 1), 10)
 
-    ingridients.baseUrl(request.url())
+    ingredients.baseUrl(request.url())
 
-    return view.render('admin/ingredients/index', { ingridients })
+    return view.render('admin/ingredients/index', { ingredients })
   }
   /**
    * Show the form for creating a new resource.
@@ -33,15 +35,19 @@ export default class IngridientsController {
    * @param param0 HttpContextContract
    */
   public async store ({ request, response, session }: HttpContextContract) {
-    const data = await request.validate(CreateValidator)
+    const payload = await request.validate(CreateValidator)
 
-    const ingridient = await Ingredient.create(data)
-      .then((ingridient) => {
-        session.flash('ingridient_created', ingridient.id)
-        return ingridient
+    const ingredient = await Ingredient.create({
+      ...payload,
+
+      thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
+    })
+      .then((ingredient) => {
+        session.flash('ingredient_created', ingredient.id)
+        return ingredient
       })
 
-    response.redirect().toRoute('ingredients.show', { id: ingridient.id })
+    response.redirect().toRoute('ingredients.show', { id: ingredient.id })
   }
 
   /**
@@ -51,11 +57,11 @@ export default class IngridientsController {
    * @returns ViewRendererContract
    */
   public async show ({ view, params: { id } }: HttpContextContract) {
-    const ingridient = await Ingredient.findOrFail(id)
+    const ingredient = await Ingredient.findOrFail(id)
 
     const categories = await Category.query().where('type', 'Ingredient')
 
-    return view.render('admin/ingredients/show', { ingridient, categories })
+    return view.render('admin/ingredients/show', { ingredient, categories })
   }
 
   /**
@@ -65,9 +71,9 @@ export default class IngridientsController {
    * @returns ViewRendererContract
    */
   public async edit ({ view, params }: HttpContextContract) {
-    const ingridient = await Ingredient.findOrFail(params.id)
+    const ingredient = await Ingredient.findOrFail(params.id)
 
-    return view.render('admin/ingredients/edit', { ingridient })
+    return view.render('admin/ingredients/edit', { ingredient })
   }
 
   /**
@@ -76,19 +82,17 @@ export default class IngridientsController {
    * @param param0 HttpContextContract
    */
   public async update ({ request, response, params, session }: HttpContextContract) {
-    const ingridient = await Ingredient.findOrFail(params.id)
+    const ingredient = await Ingredient.findOrFail(params.id)
 
-    const data = await request.validate(UpdateValidator)
+    const payload = await request.validate(UpdateValidator)
 
-    if (data.image_path) {
-      await data.image_path.moveToDisk('./')
-    }
+    await ingredient.merge({
+      ...payload,
 
-    await ingridient.merge({
-      ...data, imagePath: data.image_path ? data.image_path.fileName : ingridient.imagePath,
-    }).save().then(() => session.flash('ingridient_updated', true))
+      thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : ingredient.thumbnail,
+    }).save().then(() => session.flash('ingredient_updated', true))
 
-    response.redirect().toRoute('ingredients.show', { id: ingridient.id })
+    response.redirect().toRoute('ingredients.show', { id: ingredient.id })
   }
 
   /**
@@ -97,10 +101,10 @@ export default class IngridientsController {
    * @param param0 HttpContextContract
    */
   public async destroy ({ params: { id }, response, session }: HttpContextContract) {
-    const ingridient = await Ingredient.findOrFail(id)
+    const ingredient = await Ingredient.findOrFail(id)
 
-    await ingridient.delete().then(() => {
-      session.flash('ingridient_deleted', true)
+    await ingredient.delete().then(() => {
+      session.flash('ingredient_deleted', true)
 
       response.redirect().toRoute('ingredients.index')
     })
