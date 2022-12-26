@@ -26,9 +26,11 @@ module.exports = {
 
       env: {
 
-        PORT: 8080,
+        PORT: process.env.ENV_PORT ?? 8080,
 
         NODE_ENV: 'production',
+
+        ENV_PATH: process.env.ENV_PATH ?? '/srv/admin.wonderbites.app/.env',
 
       },
 
