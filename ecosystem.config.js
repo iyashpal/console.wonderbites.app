@@ -24,6 +24,11 @@ module.exports = {
 
       ignore_watch: ['node_modules'],
 
+      post_update: [
+        'cd build',
+        'yarn install --production',
+      ],
+
       env: {
 
         PORT: process.env.ENV_PORT ?? 8080,
@@ -33,6 +38,10 @@ module.exports = {
         ENV_PATH: process.env.ENV_PATH ?? '/srv/admin.wonderbites.app/.env',
 
       },
+
+      error_file: './tmp/logs/error.log',
+
+      out_file: './tmp/logs/out.log',
 
     },
   ],
