@@ -39,10 +39,6 @@ module.exports = {
 
       },
 
-      // error_file: './tmp/error.log',
-
-      // out_file: './tmp/access.log',
-
     },
   ],
 }

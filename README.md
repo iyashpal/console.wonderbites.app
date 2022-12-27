@@ -1,7 +1,7 @@
 # admin.wonderbites.com
 
 ## Server Details
-**HOST** : `35.202.36.48`
+**HOST** : `34.121.19.181`
 **PORT** : `22`
 **USER** : `<your-given-user-for-ssh-key>`
 
@@ -14,7 +14,7 @@ Below steps are only for the initial setup.
 
 
 ## Deploy Steps
-Below deployment steps is only for `AWS` EC2 instance `35.202.36.48`.
+Below deployment steps is only for `AWS` EC2 instance `34.121.19.181`.
 
 1. Login to server via any ssh client.
 2. Change directory (cd) to `/var/www/html/admin.wonderbites.app`.
