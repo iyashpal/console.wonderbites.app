@@ -1,0 +1,228 @@
+---
+openapi: 3.0.0
+
+info:
+  title: Wonderbites App
+  description: ""
+  version: v1.0
+  license:
+    name: MIT
+    url: https://api.wonderbites.app
+
+security:
+  - BearerAuth:
+      - browse
+      - read
+      - edit
+      - add
+      - delete
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Wonderbites API for public website and mobile applications.
+    url: https://api.wonderbites.app
+  - url: https://api.wonderbites.app
+    description: SwaggerHub API Auto Mocking
+paths:
+  /api/users/auth:
+    get:
+      tags:
+        - Users
+      summary: Current User
+      description: Get the authenticated user data based on the authentication token.
+      operationId: authenticatedUser
+      responses:
+        200:
+          description: OK
+        403:
+          description: "Unauthorized"
+
+  /api/users/{id}:
+    
+    put:
+      tags:
+        - Users
+      summary: Update Profile
+      description: Get the authenticated user data based on the authentication token.
+      operationId: updateUserByID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+        403:
+          description: "Unauthorized"
+        
+      
+    get:
+      tags:
+        - Users
+      summary: User Details
+      description: Get the authenticated user data based on the authentication token.
+      operationId: showUserByID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: OK
+        403:
+          description: "Unauthorized"
+
+  /api/users/avatar:
+    put:
+      tags:
+        - Users
+      summary: Profile Photo
+      description: Get the authenticated user data based on the authentication token.
+      operationId: userAvatar
+      responses:
+        200:
+          description: OK
+        403:
+          description: "Unauthorized"
+
+  /api/categories:
+    get:
+      tags:
+        - Categories
+      summary: List
+      description: By passing in the appropriate options, you can search for available categories in the system.
+      operationId: searchCategory
+      parameters:
+        - name: type
+          in: query
+          description: The type of category (i.e. product, ingredient, cuisine etc.)
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: with
+          in: query
+          description: Pass an optional strings of category
+          required: false
+          schema:
+            type: array
+            items: {}
+      responses:
+        "200":
+          description: Search results matching criteria
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Categories:
+      required:
+        - type
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: Product | Ingredient | Cuisine etc.
+        parent:
+          type: integer
+          description: Reference to parent category.
+          example: 0
+    Users:
+      required:
+        - email
+        - first_name
+        - id
+        - last_name
+        - mobile
+        - password
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+        password:
+          type: string
+          example: password
+        image_path:
+          type: string
+          example: /storage/lkjoiqawelfjasdfaksdjfi.png
+        address_id:
+          type: number
+          example: 1
+        remember_me_token:
+          type: string
+        mobile:
+          type: string
+          example: 0123456798
+        status:
+          type: integer
+        language:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
+    Addresses:
+      required:
+        - city
+        - first_name
+        - last_name
+        - phone
+        - street
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          example: ACME Corporation
+        user_id:
+          type: string
+          format: url
+          example: https://www.acme-corp.com
+        first_name:
+          type: string
+          example: 408-867-5309
+        last_name:
+          type: string
+        street:
+          type: string
+        city:
+          type: string
+        phone:
+          type: string
+        location:
+          type: object
+          example:
+            lat: 2135467
+            lng: -56864564
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
