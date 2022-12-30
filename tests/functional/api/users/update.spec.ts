@@ -20,28 +20,28 @@ test.group('API [users.update]', (group) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      .guard('api').loginAs(user).json({ lastName: 'Pal' })
+      .guard('api').loginAs(user).json({ last_name: 'Pal' })
 
     $response.assertStatus(422)
-    $response.assertBodyContains({ messages: { firstName: ['First name is required.'] } })
+    $response.assertBodyContains({ errors: { first_name: 'First name is required.' } })
   })
 
   test('it cannot allow user to update their profile without last name.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      .guard('api').loginAs(user).json({ firstName: 'Yash' })
+      .guard('api').loginAs(user).json({ first_name: 'Yash' })
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { lastName: ['Last name is required.'] } })
+    $response.assertBodyContains({ errors: { last_name: 'Last name is required.' } })
   })
 
-  test('it can allow user to update their profile.', async ({ client, route, assert }) => {
+  test('it can allow user to update their profile.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.update', user))
-      .guard('api').loginAs(user).json({ firstName: 'Yash', lastName: 'Pal' })
+      .guard('api').loginAs(user).json({ first_name: 'Yash', last_name: 'Pal' })
 
     $response.assertStatus(200)
 

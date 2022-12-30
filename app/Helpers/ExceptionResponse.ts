@@ -1,5 +1,9 @@
 import { ResponseContract } from '@ioc:Adonis/Core/Response'
 
+type ErrorField = { [key: string]: string[] }
+
+type JsonErrorField = { errors: { field: string, message: string, rule: string }[] }
+
 export default class ExceptionResponse {
   /**
    * Exception name
@@ -55,7 +59,7 @@ export default class ExceptionResponse {
    * 
    * @var any[]
    */
-  public messages: { errors?: { rule: string, field: string, message: string }[] }
+  public messages: any
 
   /**
    * Request response instance.
@@ -72,8 +76,6 @@ export default class ExceptionResponse {
     this.status = error.status
     this.message = error.message
     this.messages = error.messages
-
-    this.resolveErrors()
   }
 
   /**
@@ -94,6 +96,14 @@ export default class ExceptionResponse {
    * @returns void
    */
   public resolve (response: ResponseContract, data?: any) {
+    // Resolve response messages
+    if (this.messages?.errors) {
+      this.resolveJsonAcceptedErrors(this.messages)
+    } else {
+      this.resolveErrors(this.messages)
+    }
+
+    // Set the response status
     response.status(this.status)
 
     if (data && typeof data === 'function') {
@@ -108,13 +118,20 @@ export default class ExceptionResponse {
    * 
    * @returns void
    */
-  protected resolveErrors (): void {
-    if (typeof this.messages?.errors === 'object') {
-      for (let error of this.messages.errors) {
-        // Determine if the error field is defined or not.
-        if (!this.errors.hasOwnProperty(error.field)) {
-          this.errors = { ...this.errors, ...{ [error.field]: error.message } }
-        }
+  protected resolveErrors (errors: ErrorField): void {
+    for (let field in errors) {
+      // Determine if the error field is defined or not.
+      if (!this.errors.hasOwnProperty(field)) {
+        this.errors = { ...this.errors, ...{ [field]: errors[field][0] } }
+      }
+    }
+  }
+
+  protected resolveJsonAcceptedErrors ({ errors }: JsonErrorField) {
+    for (let error of errors) {
+      // Determine if the error field is defined or not.
+      if (!this.errors.hasOwnProperty(error.field)) {
+        this.errors = { ...this.errors, ...{ [error.field]: error.message } }
       }
     }
   }

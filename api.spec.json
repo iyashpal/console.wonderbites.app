@@ -11,13 +11,7 @@
   },
   "security": [
     {
-      "BearerAuth": [
-        "browse",
-        "read",
-        "edit",
-        "add",
-        "delete"
-      ]
+      "BearerAuth": []
     }
   ],
   "servers": [
@@ -32,7 +26,9 @@
         "tags": [
           "Auth"
         ],
+        "security": [],
         "summary": "Login",
+        "description": "Login users via their email|mobile and password.",
         "operationId": "loginToApp",
         "requestBody": {
           "$ref": "#/components/requestBodies/Login"
@@ -134,7 +130,9 @@
         "tags": [
           "Auth"
         ],
+        "security": [],
         "summary": "Register",
+        "description": "Register users to the wonderbites cloud.",
         "operationId": "registerToApp",
         "requestBody": {
           "$ref": "#/components/requestBodies/Register"
@@ -162,46 +160,57 @@
                   "properties": {
                     "name": {
                       "type": "string",
-                      "example": "ValidationException"
+                      "example": "ValidationException",
+                      "description": "Name of the response"
                     },
                     "code": {
                       "type": "string",
-                      "example": "E_VALIDATION_FAILURE"
+                      "example": "E_VALIDATION_FAILURE",
+                      "description": "Alpha code of the response."
                     },
                     "status": {
                       "type": "integer",
-                      "example": 422
+                      "example": 422,
+                      "description": "Status code of response."
                     },
                     "message": {
                       "type": "string",
-                      "example": "E_VALIDATION_FAILURE: Validation Exception"
+                      "example": "E_VALIDATION_FAILURE: Validation Exception",
+                      "description": "Default response message."
                     },
                     "errors": {
                       "type": "object",
+                      "description": "Validation errors.",
                       "properties": {
                         "first_name": {
                           "type": "string",
-                          "example": "First name is required."
+                          "example": "First name is required.",
+                          "description": "First name field error."
                         },
                         "last_name": {
                           "type": "string",
-                          "example": "Last name is required."
+                          "example": "Last name is required.",
+                          "description": "Last name field error."
                         },
                         "mobile": {
                           "type": "string",
-                          "example": "Mobile no. is required."
+                          "example": "Mobile no. is required.",
+                          "description": "Mobile no. field error."
                         },
                         "email": {
                           "type": "string",
-                          "example": "Email address is required."
+                          "example": "Email address is required.",
+                          "description": "Email field error."
                         },
                         "password": {
                           "type": "string",
-                          "example": "Choose a password."
+                          "example": "Choose a password.",
+                          "description": "Password field error."
                         },
                         "password_confirmation": {
                           "type": "string",
-                          "example": "Password didn't match."
+                          "example": "Password didn't match.",
+                          "description": "Password match error."
                         }
                       }
                     }
@@ -218,7 +227,15 @@
         "tags": [
           "Auth"
         ],
+        "security": [
+          {
+            "BearerAuth": [
+              "token:revoke"
+            ]
+          }
+        ],
         "summary": "Logout",
+        "description": "Revoke logged in user's auth token.",
         "operationId": "logoutFromApp",
         "responses": {
           "200": {
@@ -248,9 +265,31 @@
         "tags": [
           "Users"
         ],
-        "summary": "Current User",
+        "security": [
+          {
+            "BearerAuth": [
+              "auth:view"
+            ]
+          }
+        ],
+        "summary": "Auth User",
         "description": "Get the authenticated user data based on the authentication token.",
         "operationId": "authenticatedUser",
+        "parameters": [
+          {
+            "name": "with",
+            "in": "query",
+            "required": false,
+            "description": "Additional data related to user.",
+            "schema": {
+              "type": "array",
+              "format": "int64",
+              "example": [
+                "user.addresses"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "When Request Success",
@@ -274,12 +313,45 @@
         "tags": [
           "Users"
         ],
-        "summary": "Profile Photo",
-        "description": "Get the authenticated user data based on the authentication token.",
+        "security": [
+          {
+            "BearerAuth": [
+              "avatar:update"
+            ]
+          }
+        ],
+        "summary": "Profile Avatar",
+        "description": "Update user's profile avatar.",
         "operationId": "userAvatar",
+        "requestBody": {
+          "content": {
+            "image/*": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "avatar"
+                ],
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -292,13 +364,22 @@
         "tags": [
           "Users"
         ],
+        "security": [
+          {
+            "BearerAuth": [
+              "auth:update"
+            ]
+          }
+        ],
         "summary": "Update Profile",
-        "description": "Get the authenticated user data based on the authentication token.",
+        "description": "Update user profile data.",
         "operationId": "updateUserByID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Unique ID of the user.",
+            "example": 1,
             "required": true,
             "schema": {
               "type": "integer",
@@ -306,6 +387,36 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "first_name",
+                  "last_name"
+                ],
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "example": "John",
+                    "description": "First name of the user."
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "example": "Doe",
+                    "description": "Last name of the image."
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Uploaded image for the user avatar"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -319,23 +430,53 @@
         "tags": [
           "Users"
         ],
-        "summary": "User Details",
+        "security": [
+          {
+            "BearerAuth": [
+              "auth:view"
+            ]
+          }
+        ],
+        "summary": "User Profile",
         "description": "Get the authenticated user data based on the authentication token.",
         "operationId": "showUserByID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Unique ID of the user.",
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int64",
+              "example": 1
+            }
+          },
+          {
+            "name": "with",
+            "in": "query",
+            "required": false,
+            "description": "Additional data related to user.",
+            "schema": {
+              "type": "array",
+              "format": "int64",
+              "example": [
+                "user.addresses"
+              ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -348,7 +489,14 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "List",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:list"
+            ]
+          }
+        ],
+        "summary": "Browse Addresses",
         "operationId": "getAddressesList",
         "responses": {
           "200": {
@@ -373,7 +521,14 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "Add",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:create"
+            ]
+          }
+        ],
+        "summary": "Create Address",
         "operationId": "storeAddressesList",
         "requestBody": {
           "$ref": "#/components/requestBodies/Address"
@@ -400,7 +555,14 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "Show",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:view"
+            ]
+          }
+        ],
+        "summary": "View Address",
         "operationId": "getAddressesById",
         "parameters": [
           {
@@ -434,7 +596,14 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "Update",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:edit", "address:update"
+            ]
+          }
+        ],
+        "summary": "Update Address",
         "operationId": "putAddressesById",
         "parameters": [
           {
@@ -463,7 +632,14 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "Patch",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:edit", "address:update"
+            ]
+          }
+        ],
+        "summary": "Update Address",
         "operationId": "patchAddressesById",
         "parameters": [
           {
@@ -489,7 +665,15 @@
         "tags": [
           "Addresses"
         ],
-        "summary": "Delete",
+        "security": [
+          {
+            "BearerAuth": [
+              "address:delete", "address:destroy"
+            ]
+          }
+        ],
+        "summary": "Delete Address",
+        "description": "Request to delete the user address.",
         "operationId": "deleteAddressesById",
         "parameters": [
           {
@@ -498,7 +682,8 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int64",
+              "description": "Unique ID of the address."
             }
           }
         ],
@@ -571,11 +756,13 @@
               "properties": {
                 "email": {
                   "type": "string",
-                  "example": "john.doe@example.com"
+                  "example": "john.doe@example.com",
+                  "description": "Registered email of the user."
                 },
                 "password": {
                   "type": "string",
-                  "example": "secret"
+                  "example": "secret",
+                  "description": "Password used while account registration."
                 }
               }
             }
@@ -583,6 +770,7 @@
         }
       },
       "Register": {
+        "description": "Form fields needed for the request.",
         "content": {
           "application/json": {
             "schema": {
@@ -598,27 +786,33 @@
               "properties": {
                 "first_name": {
                   "type": "string",
-                  "example": "John"
+                  "example": "John",
+                  "description": "First name of the user."
                 },
                 "last_name": {
                   "type": "string",
-                  "example": "Doe"
+                  "example": "Doe",
+                  "description": "Last name of the user."
                 },
                 "mobile": {
                   "type": "string",
-                  "example": "+xx xxxx-xxxx"
+                  "example": "+xx xxxx-xxxx",
+                  "description": "Mobile number of the user. User can also login with this number."
                 },
                 "email": {
                   "type": "string",
-                  "example": "john.doe@example.com"
+                  "example": "john.doe@example.com",
+                  "description": "Login email of the user."
                 },
                 "password": {
                   "type": "string",
-                  "example": "secret"
+                  "example": "secret",
+                  "description": "Login password."
                 },
                 "password_confirmation": {
                   "type": "string",
-                  "example": "secret"
+                  "example": "secret",
+                  "description": "Confirmation of the entered password."
                 }
               }
             }
@@ -641,38 +835,47 @@
               "properties": {
                 "first_name": {
                   "type": "string",
-                  "example": "John"
+                  "example": "John",
+                  "description": "First name of the user."
                 },
                 "last_name": {
                   "type": "string",
-                  "example": "Doe"
+                  "example": "Doe",
+                  "description": "Last name of the user."
                 },
                 "street": {
                   "type": "string",
-                  "example": "XYZ, ABC"
+                  "example": "XYZ, ABC",
+                  "description": "Street of the user address."
                 },
                 "city": {
                   "type": "string",
-                  "example": "US"
+                  "example": "US",
+                  "description": "City name of the user address"
                 },
                 "phone": {
                   "type": "string",
-                  "example": "+xx xxxx-xxxx"
+                  "example": "+xx xxxx-xxxx",
+                  "description": "Contact no. of the user."
                 },
                 "type": {
                   "type": "string",
-                  "example": "home"
+                  "example": "home",
+                  "description": "Address type."
                 },
                 "location": {
                   "type": "object",
+                  "description": "Location **LAT** & **LNG** coordinates.",
                   "properties": {
                     "lat": {
                       "type": "string",
-                      "example": 3257896
+                      "example": 3257896,
+                      "description": "Latitude of address."
                     },
                     "lng": {
                       "type": "string",
-                      "example": -85.3257896
+                      "example": -85.3257896,
+                      "description": "Longitude of address."
                     }
                   }
                 }
@@ -692,19 +895,23 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "example": "AuthorizationException"
+                  "example": "AuthorizationException",
+                  "description": "Name of the response."
                 },
                 "code": {
                   "type": "string",
-                  "example": "E_UNAUTHORIZED_ACCESS"
+                  "example": "E_UNAUTHORIZED_ACCESS",
+                  "description": "Alpha code of the response."
                 },
                 "status": {
                   "type": "number",
-                  "example": 401
+                  "example": 401,
+                  "description": "Status code of response."
                 },
                 "message": {
                   "type": "string",
-                  "example": "Unauthorized access"
+                  "example": "Unauthorized access",
+                  "description": "Default response message."
                 }
               }
             }
@@ -748,23 +955,28 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "1"
+            "example": "1",
+            "description": "Unique ID of the record."
           },
           "first_name": {
             "type": "string",
-            "example": "John"
+            "example": "John",
+            "description": "First name of the user."
           },
           "last_name": {
             "type": "string",
-            "example": "Doe"
+            "example": "Doe",
+            "description": "Last name of the user."
           },
           "email": {
             "type": "string",
-            "example": "john.doe@example.com"
+            "example": "john.doe@example.com",
+            "description": "Login email of the user."
           },
           "password": {
             "type": "string",
-            "example": "password"
+            "example": "password",
+            "description": "Hashed password of the user."
           },
           "avatar": {
             "type": "object",
@@ -773,39 +985,48 @@
               "extname": "png",
               "size": "127890",
               "mimeType": "image/png"
-            }
+            },
+            "description": "Cloud storage data of image."
           },
           "address_id": {
             "type": "number",
-            "example": 1
+            "example": 1,
+            "description": "Default delivery address unique ID."
           },
           "remember_me_token": {
             "type": "string",
-            "example": null
+            "example": null,
+            "description": "Remember me token."
           },
           "mobile": {
             "type": "string",
-            "example": "+xx xxxxx xxxxx"
+            "example": "+xx xxxxx xxxxx",
+            "description": "Mobile number of the user. User can also login with this number."
           },
           "status": {
             "type": "integer",
-            "example": 1
+            "example": 1,
+            "description": "User status (for internal use only.)"
           },
           "language": {
             "type": "string",
-            "example": "EN"
+            "example": "EN",
+            "description": "Default selected language of the user."
           },
           "created_at": {
             "type": "string",
-            "example": "2022-10-20 14:21:28.92+05:30"
+            "example": "2022-10-20 14:21:28.92+05:30",
+            "description": "Date when user registered to app/website."
           },
           "updated_at": {
             "type": "string",
-            "example": "2022-10-20 14:21:28.92+05:30"
+            "example": "2022-10-20 14:21:28.92+05:30",
+            "description": "Date when user last updated their data."
           },
           "deleted_at": {
             "type": "string",
-            "example": null
+            "example": null,
+            "description": "Date when user deleted their account."
           }
         }
       },
@@ -822,31 +1043,38 @@
         "properties": {
           "id": {
             "type": "integer",
-            "example": 1
+            "example": 1,
+            "description": "Unique ID of the record."
           },
           "user_id": {
             "type": "integer",
-            "example": 1
+            "example": 1,
+            "description": "ID of the user who owns the address."
           },
           "first_name": {
             "type": "string",
-            "example": "John"
+            "example": "John",
+            "description": "First name of the recipient."
           },
           "last_name": {
             "type": "string",
-            "example": "Doe"
+            "example": "Doe",
+            "description": "Last name of the recipient"
           },
           "street": {
             "type": "string",
-            "example": "845 Meadows Rd"
+            "example": "845 Meadows Rd",
+            "description": "Street name."
           },
           "city": {
             "type": "string",
-            "example": "Aspen"
+            "example": "Aspen",
+            "description": "City name"
           },
           "phone": {
             "type": "string",
-            "example": "(970) 925-4240"
+            "example": "(970) 925-4240",
+            "description": "Contact no. of recipient."
           },
           "location": {
             "type": "object",
@@ -857,15 +1085,18 @@
           },
           "created_at": {
             "type": "string",
-            "example": "2022-12-27 07:37:43.815+00"
+            "example": "2022-12-27 07:37:43.815+00",
+            "description": "Date when address added."
           },
           "updated_at": {
             "type": "string",
-            "example": "2022-12-29 11:21:28.195+00"
+            "example": "2022-12-29 11:21:28.195+00",
+            "description": "Date when address last updated."
           },
           "deleted_at": {
             "type": "string",
-            "example": null
+            "example": null,
+            "description": "Date when address deleted."
           }
         }
       }

@@ -24,10 +24,10 @@ export default class UpdateValidator {
    *    ```
    */
   public schema = schema.create({
-    firstName: schema.string({ trim: true }, [
+    first_name: schema.string({ trim: true }, [
       rules.maxLength(255),
     ]),
-    lastName: schema.string({ trim: true }, [
+    last_name: schema.string({ trim: true }, [
       rules.maxLength(255),
     ]),
     avatar: schema.file.optional({ size: '1mb' }),
@@ -45,7 +45,7 @@ export default class UpdateValidator {
    *
    */
   public messages: CustomMessages = {
-    'firstName.required': 'First name is required.',
-    'lastName.required': 'Last name is required.',
+    'first_name.required': 'First name is required.',
+    'last_name.required': 'Last name is required.',
   }
 }

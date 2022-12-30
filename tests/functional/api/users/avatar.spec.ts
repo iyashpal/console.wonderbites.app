@@ -1,6 +1,7 @@
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Application from '@ioc:Adonis/Core/Application'
 
 test.group('API [users.avatar]', (group) => {
   group.each.setup(async () => {
@@ -13,10 +14,10 @@ test.group('API [users.avatar]', (group) => {
 
     $response.assertStatus(401)
 
-    $response.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@users', '@users.avatar'])
 
-  test('it can not allow users to remove avatar', async ({ client, route }) => {
+  test('it can allow users to remove their avatar.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const $response = await client.put(route('api.users.avatar'))
@@ -25,5 +26,16 @@ test.group('API [users.avatar]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ avatar: null })
+  })
+
+  test('it can allow users to add/update avatar to their profile.', async ({ client, route }) => {
+    const user = await UserFactory.create()
+
+    const $response = await client.put(route('api.users.avatar'))
+      .guard('api').loginAs(user).file('avatar', Application.publicPath('/images/logo.svg'))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({ avatar: { extname: 'svg', mimeType: 'image/svg' } })
   })
 })
