@@ -21,7 +21,7 @@ export default class OrdersController {
 
       response.status(200).json(orders)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -39,7 +39,7 @@ export default class OrdersController {
 
       response.status(200).json(order)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -60,7 +60,7 @@ export default class OrdersController {
 
       response.ok(canceledOrder)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 }

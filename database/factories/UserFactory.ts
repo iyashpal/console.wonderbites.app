@@ -19,8 +19,8 @@ export default Factory.define(User, async ({ faker }) => {
   await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)
 
   return {
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
     mobile: faker.phone.number('+91 ##########'),
     email: faker.internet.email(),
     avatar: attachment,

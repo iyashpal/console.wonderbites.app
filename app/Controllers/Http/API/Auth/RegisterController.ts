@@ -1,4 +1,5 @@
 import User from 'App/Models/User'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserCreateValidator from 'App/Validators/User/CreateValidator'
@@ -11,16 +12,16 @@ export default class RegisterController {
    * @param {JSON}
    */
   public async register ({ request, response }: HttpContextContract) {
-    const data = await request.validate(UserCreateValidator)
     try {
-      const user = await User.create({
-        ...data,
-        avatar: data.avatar ? Attachment.fromFile(request.file('avatar')!) : null,
-      })
+      const payload = await request.validate(UserCreateValidator)
+
+      const avatar = payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null
+
+      const user = await User.create({ ...payload, avatar })
 
       response.status(200).json(user)
     } catch (error) {
-      response.badRequest(error.messages)
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 }

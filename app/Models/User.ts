@@ -11,10 +11,10 @@ export default class User extends Notifiable {
   public id: number
 
   @column()
-  public firstName: string
+  public first_name: string
 
   @column()
-  public lastName: string
+  public last_name: string
 
   @column()
   public email: string
@@ -29,10 +29,10 @@ export default class User extends Notifiable {
   public password: string
 
   @column()
-  public addressId: Number
+  public address_id: Number
 
   @column()
-  public rememberMeToken?: string
+  public remember_me_token?: string
 
   @column()
   public status: number
@@ -124,7 +124,7 @@ export default class User extends Notifiable {
       return this.avatar.url
     }
 
-    let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
+    let name = this.email ? this.email : [this.first_name, this.last_name].join(' ')
 
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
   }

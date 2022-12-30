@@ -5,8 +5,8 @@ export default class ProductSeederSeeder extends BaseSeeder {
   public async run () {
     // 
     const user = await User.firstOrCreate({ email: 'yash@brandsonify.com' }, {
-      firstName: 'Yash',
-      lastName: 'Pal',
+      first_name: 'Yash',
+      last_name: 'Pal',
       mobile: '01234567890',
       password: 'secret',
     })

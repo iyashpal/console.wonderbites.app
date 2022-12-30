@@ -23,7 +23,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -48,7 +48,7 @@ export default class UsersController {
 
       response.status(200).ok(user)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -70,7 +70,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -91,7 +91,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 }

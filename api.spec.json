@@ -129,7 +129,90 @@
         }
       }
     },
-    "/register": {},
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register",
+        "operationId": "registerToApp",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Register"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "422": {
+            "description": "Validation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "ValidationException"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "E_VALIDATION_FAILURE"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 422
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "E_VALIDATION_FAILURE: Validation Exception"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "first_name": {
+                          "type": "string",
+                          "example": "First name is required."
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "example": "Last name is required."
+                        },
+                        "mobile": {
+                          "type": "string",
+                          "example": "Mobile no. is required."
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "Email address is required."
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "Choose a password."
+                        },
+                        "password_confirmation": {
+                          "type": "string",
+                          "example": "Password didn't match."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/logout": {},
     "/users/auth": {
       "get": {
@@ -470,25 +553,68 @@
           }
         }
       },
+      "Register": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "first_name",
+                "last_name",
+                "mobile",
+                "email",
+                "password",
+                "password_confirmation"
+              ],
+              "properties": {
+                "first_name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "mobile": {
+                  "type": "string",
+                  "example": "+xx xxxx-xxxx"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "secret"
+                },
+                "password_confirmation": {
+                  "type": "string",
+                  "example": "secret"
+                }
+              }
+            }
+          }
+        }
+      },
       "Address": {
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "required": [
-                "firstName",
-                "lastName",
+                "first_name",
+                "last_name",
                 "street",
                 "city",
                 "phone",
                 "type"
               ],
               "properties": {
-                "firstName": {
+                "first_name": {
                   "type": "string",
                   "example": "John"
                 },
-                "lastName": {
+                "last_name": {
                   "type": "string",
                   "example": "Doe"
                 },
@@ -529,15 +655,27 @@
     },
     "responses": {
       "Unauthorized": {
-        "description": "Need authorization",
+        "description": "Authorization",
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "AuthorizationException"
+                },
+                "code": {
+                  "type": "string",
+                  "example": "E_UNAUTHORIZED_ACCESS"
+                },
+                "status": {
+                  "type": "number",
+                  "example": 401
+                },
                 "message": {
                   "type": "string",
-                  "example": "Unauthenticated"
+                  "example": "Unauthorized access"
                 }
               }
             }
@@ -581,8 +719,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid",
-            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+            "example": "1"
           },
           "first_name": {
             "type": "string",
@@ -600,35 +737,46 @@
             "type": "string",
             "example": "password"
           },
-          "image_path": {
-            "type": "string",
-            "example": "/storage/lkjoiqawelfjasdfaksdjfi.png"
+          "avatar": {
+            "type": "object",
+            "example": {
+              "name": "avatars/clc07y9mf00014wp969gabvh6.png",
+              "extname": "png",
+              "size": "127890",
+              "mimeType": "image/png"
+            }
           },
           "address_id": {
             "type": "number",
             "example": 1
           },
           "remember_me_token": {
-            "type": "string"
+            "type": "string",
+            "example": null
           },
           "mobile": {
             "type": "string",
-            "example": "0123456798"
+            "example": "+xx xxxxx xxxxx"
           },
           "status": {
-            "type": "integer"
+            "type": "integer",
+            "example": 1
           },
           "language": {
-            "type": "string"
+            "type": "string",
+            "example": "EN"
           },
           "created_at": {
-            "type": "string"
+            "type": "string",
+            "example": "2022-10-20 14:21:28.92+05:30"
           },
           "updated_at": {
-            "type": "string"
+            "type": "string",
+            "example": "2022-10-20 14:21:28.92+05:30"
           },
           "deleted_at": {
-            "type": "string"
+            "type": "string",
+            "example": null
           }
         }
       },

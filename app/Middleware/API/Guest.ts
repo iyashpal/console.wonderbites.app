@@ -8,6 +8,10 @@ export default class Guest {
       return
     }
 
-    response.unauthorized({ message: 'unauthorized access' })
+    response.unauthorized({
+      name: 'AuthorizationException',
+      code: 'E_UNAUTHORIZED_ACCESS',
+      message: 'Unauthorized access',
+    })
   }
 }

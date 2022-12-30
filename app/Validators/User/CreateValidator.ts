@@ -25,9 +25,9 @@ export default class CreateValidator {
    */
   public schema = schema.create({
 
-    firstName: schema.string({ trim: true }),
+    first_name: schema.string({ trim: true }),
 
-    lastName: schema.string({ trim: true }),
+    last_name: schema.string({ trim: true }),
 
     mobile: schema.string({ trim: true }, [
       // rules.mobile({ strict: true }),

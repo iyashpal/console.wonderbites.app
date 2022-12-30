@@ -21,7 +21,7 @@ export default class AddressesController {
 
       response.status(200).json(addresses)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -40,13 +40,13 @@ export default class AddressesController {
 
       // Check if the address is default for logged-in user.
       if (request.all()?.is_default === true) {
-        await user.merge({ addressId: address.id }).save()
+        await user.merge({ address_id: address.id }).save()
       }
 
       // Send response
       response.status(200).json(address)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -67,7 +67,7 @@ export default class AddressesController {
 
       response.status(200).json(address)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -90,12 +90,12 @@ export default class AddressesController {
 
       // Check if the address is default for logged-in user.
       if (request.all()?.is_default === true) {
-        await user.merge({ addressId: address.id }).save()
+        await user.merge({ address_id: address.id }).save()
       }
 
       response.status(200).json(address)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -116,7 +116,7 @@ export default class AddressesController {
 
       response.status(200).json({ deleted: true })
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 }

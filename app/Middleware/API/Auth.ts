@@ -8,6 +8,10 @@ export default class Auth {
       return
     }
 
-    response.unauthorized({ message: 'Unauthenticated' })
+    response.unauthorized({
+      name: 'AuthorizationException',
+      code: 'E_UNAUTHORIZED_ACCESS',
+      message: 'Unauthorized access',
+    })
   }
 }

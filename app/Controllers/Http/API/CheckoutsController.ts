@@ -42,7 +42,7 @@ export default class CheckoutsController {
       // Send order in response with all associated data.
       response.ok(data)
     } catch (error) {
-      (new ExceptionResponse(response, error)).resolve()
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
