@@ -40,6 +40,6 @@ test.group('Auth logout', (group) => {
     const response = await client.post(route('api.logout')).accept('json')
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   })
 })

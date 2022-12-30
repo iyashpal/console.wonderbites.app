@@ -30,9 +30,7 @@ export default class LoginController {
    */
   public async logout ({ auth, response }: HttpContextContract) {
     try {
-      await auth.use('api').revoke().then((data) => {
-        console.log(data)
-      })
+      await auth.use('api').revoke()
 
       response.status(200).json({ revoked: true })
     } catch (error) {
