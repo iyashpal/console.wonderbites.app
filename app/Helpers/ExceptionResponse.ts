@@ -44,11 +44,18 @@ export default class ExceptionResponse {
   public message: string
 
   /**
+   * Exception errors
+   * 
+   * @var object
+   */
+  public errors: { [key: string]: string } = {}
+
+  /**
    * Exception messages (specifically used for validation errors.)
    * 
    * @var any[]
    */
-  public messages?: any[]
+  public messages: { errors?: { rule: string, field: string, message: string }[] }
 
   /**
    * Request response instance.
@@ -57,8 +64,7 @@ export default class ExceptionResponse {
    */
   protected response: ResponseContract
 
-  constructor (response: ResponseContract, error: any) {
-    this.response = response
+  constructor (error: any) {
     this.name = error.name
     this.help = error.help
     this.code = error.code
@@ -66,6 +72,19 @@ export default class ExceptionResponse {
     this.status = error.status
     this.message = error.message
     this.messages = error.messages
+
+    this.resolveErrors()
+  }
+
+  /**
+   * Consume the exception response dependencies.
+   * 
+   * @param response Request response contract.
+   * @param error Cached error
+   * @returns ExceptionResponse
+   */
+  public static use (error: any = {}) {
+    return new ExceptionResponse(error)
   }
 
   /**
@@ -74,10 +93,29 @@ export default class ExceptionResponse {
    * @param resolveType Exception response type.
    * @returns void
    */
-  public resolve (data?: any, resolveType: string = 'json') {
-    switch (resolveType) {
-      case 'json':
-        return this.json(data)
+  public resolve (response: ResponseContract, data?: any) {
+    response.status(this.status)
+
+    if (data && typeof data === 'function') {
+      data(response, this.json(data))
+    } else {
+      response.json(this.json(data))
+    }
+  }
+
+  /**
+   * Resolve the exception validation errors.
+   * 
+   * @returns void
+   */
+  protected resolveErrors (): void {
+    if (typeof this.messages?.errors === 'object') {
+      for (let error of this.messages.errors) {
+        // Determine if the error field is defined or not.
+        if (!this.errors.hasOwnProperty(error.field)) {
+          this.errors = { ...this.errors, ...{ [error.field]: error.message } }
+        }
+      }
     }
   }
 
@@ -87,10 +125,14 @@ export default class ExceptionResponse {
    * @param data any
    */
   private json (data: any) {
-    this.response.status(this.status)
-      .json({
-        name: this.name, code: this.code, help: this.help, status: this.status,
-        message: this.message, messages: this.messages, ...data,
-      })
+    return {
+      ...(this.name ? { name: this.name } : {}),
+      ...(this.help ? { help: this.help } : {}),
+      ...(this.code ? { code: this.code } : {}),
+      ...(this.status ? { status: this.status } : {}),
+      ...(this.message ? { message: this.message } : {}),
+      ...(data ? data : {}),
+      errors: this.errors,
+    }
   }
 }

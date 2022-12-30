@@ -23,8 +23,8 @@ test.group('Auth login', (group) => {
 
     response.assertStatus(422)
 
-    response.assert?.containsSubset(response.body(), {
-      errors: [{ field: 'email' }, { field: 'password' }],
+    response.assertBodyContains({
+      errors: { email: 'Email address is required to login.', password: 'Enter password to login.' },
     })
   })
 
@@ -36,10 +36,11 @@ test.group('Auth login', (group) => {
    * ✔ Validation response should contain error field (password).
    */
   test('User cannot login without a password', async ({ client, route }) => {
-    const response = await client.post(route('api.login')).accept('json').fields({ email: 'info@example.com' })
+    const response = await client.post(route('api.login'))
+      .accept('json').fields({ email: 'info@example.com' })
 
     response.assertStatus(422)
-    response.assert?.containsSubset(response.body(), { errors: [{ field: 'password' }] })
+    response.assertBodyContains({ errors: { password: 'Enter password to login.' } })
   })
 
   /**
@@ -53,7 +54,7 @@ test.group('Auth login', (group) => {
     const response = await client.post(route('api.login')).accept('json').fields({ password: 'Welcome@123!' })
 
     response.assertStatus(422)
-    response.assert?.containsSubset(response.body(), { errors: [{ field: 'email' }] })
+    response.assertBodyContains({ errors: { email: 'Email address is required to login.' } })
   })
 
   /**
@@ -69,7 +70,7 @@ test.group('Auth login', (group) => {
       .fields({ email: 'info@example.com', password: 'Welcome@123!' })
 
     response.assertStatus(422)
-    response.assert?.containsSubset(response.body(), { errors: [{ message: 'Email does not exists.' }] })
+    response.assertBodyContains({ errors: { email: 'Email does not exists.' } })
   })
 
   /**
@@ -87,25 +88,17 @@ test.group('Auth login', (group) => {
       .fields({ email: user.email, password: 'wrong-password' })
 
     response.assertStatus(400)
-
-    response.assertBodyContains({
-      errors: [{
-        field: 'password', message: 'Password do not match.',
-      }],
-    })
-
-    // response.assert?.containsSubset(response.body(), { message: 'Credentials not found.' })
   })
 
   /**
-   * Case: User can login with valid credencials.
+   * Case: User can login with valid credentials.
    * 
    * ✔ Needs a user.
    * ✔ POST request to `route('api.login')` with user's email & password in the body.
    * ✔ Request status should be OK.
    * ✔ Request response should contain fields (type, token).
    */
-  test('User can login with valid credencials', async ({ client, route }) => {
+  test('User can login with valid credentials', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const response = await client.post(route('api.login')).accept('json')

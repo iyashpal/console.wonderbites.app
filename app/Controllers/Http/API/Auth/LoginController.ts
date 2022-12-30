@@ -1,5 +1,7 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
+
 export default class LoginController {
   /**
    * Authenticate users.
@@ -8,22 +10,14 @@ export default class LoginController {
    * @returns {JSON}
    */
   public async login ({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await this.validateRequest(request)
-
     try {
+      const { email, password } = await request.validate(LoginValidator)
+
       const token = await auth.use('api').attempt(email, password)
 
-      return response.status(200).json(token)
-    } catch {
-      return response.badRequest({
-        errors: [
-          {
-            rule: 'incorrect',
-            field: 'password',
-            message: 'Password do not match.',
-          },
-        ],
-      })
+      response.status(200).json(token)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
     }
   }
 
@@ -36,36 +30,13 @@ export default class LoginController {
    */
   public async logout ({ auth, response }: HttpContextContract) {
     try {
-      await auth.use('api').revoke()
+      await auth.use('api').revoke().then((data) => {
+        console.log(data)
+      })
 
       response.status(200).json({ revoked: true })
     } catch (error) {
-      response.badRequest(error.messages)
+      ExceptionResponse.use(error).resolve(response)
     }
-  }
-
-  /**
-   * Validate the login request.
-   * 
-   * @param request 
-   * @returns 
-   */
-  protected validateRequest (request) {
-    return request.validate({
-      schema: schema.create({
-        email: schema.string({ trim: true }, [
-          rules.email(),
-          rules.exists({ table: 'users', column: 'email' }),
-        ]),
-        password: schema.string({ trim: true }),
-      }),
-
-      messages: {
-        'email.required': 'Email address is required to login.',
-        'email.email': 'Enter a valid email address.',
-        'email.exists': 'Email does not exists.',
-        'password.required': 'Enter password to login.',
-      },
-    })
   }
 }

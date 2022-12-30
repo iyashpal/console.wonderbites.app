@@ -1,0 +1,697 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Wonderbites App",
+    "description": "",
+    "version": "v1.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://api.wonderbites.app"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": [
+        "browse",
+        "read",
+        "edit",
+        "add",
+        "delete"
+      ]
+    }
+  ],
+  "servers": [
+    {
+      "description": "Wonderbites API for public website and mobile applications.",
+      "url": "https://api.wonderbites.app/api"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login",
+        "operationId": "loginToApp",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Login"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "bearer"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "MQ.TpiVCZx6BGAyA2bgCVd8RNUBFjKKl-TTZH3lM2K_ELSMQ5vBxOb5FmQ3Ly9K"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "InvalidCredentialsException"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "E_INVALID_AUTH_PASSWORD"
+                    },
+                    "status": {
+                      "type": "number",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "E_INVALID_AUTH_PASSWORD: Password mis-match"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "ValidationException"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "E_VALIDATION_FAILURE"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 422
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "E_VALIDATION_FAILURE: Validation Exception"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "example": "Email address is required to login."
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "Enter password to login."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {},
+    "/logout": {},
+    "/users/auth": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Current User",
+        "description": "Get the authenticated user data based on the authentication token.",
+        "operationId": "authenticatedUser",
+        "responses": {
+          "200": {
+            "description": "When Request Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Profile Photo",
+        "description": "Get the authenticated user data based on the authentication token.",
+        "operationId": "userAvatar",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update Profile",
+        "description": "Get the authenticated user data based on the authentication token.",
+        "operationId": "updateUserByID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "User Details",
+        "description": "Get the authenticated user data based on the authentication token.",
+        "operationId": "showUserByID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/addresses": {
+      "get": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "List",
+        "operationId": "getAddressesList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Addresses"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Add",
+        "operationId": "storeAddressesList",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Address"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Addresses"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/addresses/{id}": {
+      "get": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Show",
+        "operationId": "getAddressesById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Addresses"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Update",
+        "operationId": "putAddressesById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Address"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Patch",
+        "operationId": "patchAddressesById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Addresses"
+        ],
+        "summary": "Delete",
+        "operationId": "deleteAddressesById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "List",
+        "description": "By passing in the appropriate options, you can search for available categories in the system.",
+        "operationId": "searchCategory",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type of category (i.e. product, ingredient, cuisine etc.)",
+            "style": "form",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "with",
+            "in": "query",
+            "description": "Pass an optional strings of category",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results matching criteria"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "requestBodies": {
+      "Login": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "secret"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Address": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "firstName",
+                "lastName",
+                "street",
+                "city",
+                "phone",
+                "type"
+              ],
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "street": {
+                  "type": "string",
+                  "example": "XYZ, ABC"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "US"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "+xx xxxx-xxxx"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "home"
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "lat": {
+                      "type": "string",
+                      "example": 3257896
+                    },
+                    "lng": {
+                      "type": "string",
+                      "example": -85.3257896
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Need authorization",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Unauthenticated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Categories": {
+        "required": [
+          "type",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "Product | Ingredient | Cuisine etc."
+          },
+          "parent": {
+            "type": "integer",
+            "description": "Reference to parent category.",
+            "example": 0
+          }
+        }
+      },
+      "Users": {
+        "required": [
+          "email",
+          "first_name",
+          "id",
+          "last_name",
+          "mobile",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          },
+          "image_path": {
+            "type": "string",
+            "example": "/storage/lkjoiqawelfjasdfaksdjfi.png"
+          },
+          "address_id": {
+            "type": "number",
+            "example": 1
+          },
+          "remember_me_token": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string",
+            "example": "0123456798"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "language": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "deleted_at": {
+            "type": "string"
+          }
+        }
+      },
+      "Addresses": {
+        "required": [
+          "city",
+          "first_name",
+          "last_name",
+          "phone",
+          "street",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "user_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "street": {
+            "type": "string",
+            "example": "845 Meadows Rd"
+          },
+          "city": {
+            "type": "string",
+            "example": "Aspen"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(970) 925-4240"
+          },
+          "location": {
+            "type": "object",
+            "example": {
+              "lat": 39.202683,
+              "lng": -106.831857
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "example": "2022-12-27 07:37:43.815+00"
+          },
+          "updated_at": {
+            "type": "string",
+            "example": "2022-12-29 11:21:28.195+00"
+          },
+          "deleted_at": {
+            "type": "string",
+            "example": null
+          }
+        }
+      }
+    }
+  }
+}
