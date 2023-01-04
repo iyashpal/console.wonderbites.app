@@ -20,7 +20,7 @@ test.group('API [reviews.index]', (group) => {
   test('it can list the reviews.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    const reviews = await ReviewFactory.with('user').merge({ reviewable_id: product.id }).createMany(1)
+    const reviews = await ReviewFactory.with('user').merge({ reviewableId: product.id }).createMany(1)
 
     const request = await client.get(route('api.reviews.index'))
 
@@ -36,7 +36,7 @@ test.group('API [reviews.index]', (group) => {
   test('it can list the reviews with author.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
 
-    const reviews = await ReviewFactory.with('user').merge({ reviewable_id: product.id }).createMany(10)
+    const reviews = await ReviewFactory.with('user').merge({ reviewableId: product.id }).createMany(10)
 
     await reviews.map(async review => await review.load('user'))
 
@@ -63,14 +63,14 @@ test.group('API [reviews.index]', (group) => {
     assert.equal(request.body().data.length, reviews.length)
 
     request.assertBodyContains({
-      data: reviews.map(({ id, product }) => ({ id: id, reviewable_id: product.id, product: { id: product.id } })),
+      data: reviews.map(({ id, product }) => ({ id: id, reviewableId: product.id, product: { id: product.id } })),
     })
   }).tags(['@reviews', '@reviews.index'])
 
   test('it can list reviews based on product identifier.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
     const reviews = [
-      ...await ReviewFactory.with('user').merge({ reviewable: 'Product', reviewable_id: product.id }).createMany(6),
+      ...await ReviewFactory.with('user').merge({ reviewable: 'Product', reviewableId: product.id }).createMany(6),
       ...await ReviewFactory.with('user').with('product').createMany(4),
     ]
 
@@ -81,7 +81,7 @@ test.group('API [reviews.index]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({
-      data: reviews.filter((review) => review.reviewable_id === product.id).map(({ id }) => ({ id })),
+      data: reviews.filter((review) => review.reviewableId === product.id).map(({ id }) => ({ id })),
     })
   }).tags(['@reviews', '@reviews.index'])
 })

@@ -7,7 +7,7 @@ export default class Feedback extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public experience: string
@@ -19,10 +19,10 @@ export default class Feedback extends BaseModel {
   public source: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

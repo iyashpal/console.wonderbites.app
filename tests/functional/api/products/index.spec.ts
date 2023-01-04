@@ -145,10 +145,10 @@ test.group('API [products.index]', (group) => {
   test('It can list the products with reviews.', async ({client, route}) => {
     const product = await ProductFactory.create()
 
-    const merge: { reviewable_id: number }[] = []
+    const merge: { reviewableId: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({reviewable_id: product.id})
+      merge.push({reviewableId: product.id})
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)
@@ -201,19 +201,19 @@ test.group('API [products.index]', (group) => {
     const ProductB = await ProductFactory.create()
 
     await ReviewFactory.merge([
-      {reviewable: 'Product', reviewable_id: ProductA.id, rating: 5, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductA.id, rating: 5, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductA.id, rating: 5, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductA.id, rating: 5, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductA.id, rating: 5, user_id: user.id},
+      {reviewable: 'Product', reviewableId: ProductA.id, rating: 5, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductA.id, rating: 5, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductA.id, rating: 5, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductA.id, rating: 5, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductA.id, rating: 5, userId: user.id},
     ]).createMany(5)
 
     await ReviewFactory.merge([
-      {reviewable: 'Product', reviewable_id: ProductB.id, rating: 3, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductB.id, rating: 3, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductB.id, rating: 3, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductB.id, rating: 3, user_id: user.id},
-      {reviewable: 'Product', reviewable_id: ProductB.id, rating: 3, user_id: user.id},
+      {reviewable: 'Product', reviewableId: ProductB.id, rating: 3, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductB.id, rating: 3, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductB.id, rating: 3, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductB.id, rating: 3, userId: user.id},
+      {reviewable: 'Product', reviewableId: ProductB.id, rating: 3, userId: user.id},
     ]).createMany(5)
 
     const qs = {filters: ['top-rated']}
@@ -230,7 +230,7 @@ test.group('API [products.index]', (group) => {
 
     const product = await ProductFactory.with('media', 3).create()
 
-    const wishlist = await WishlistFactory.merge({user_id: user.id}).create()
+    const wishlist = await WishlistFactory.merge({userId: user.id}).create()
 
     await wishlist.related('products').attach([product.id])
 
@@ -257,14 +257,14 @@ test.group('API [products.index]', (group) => {
   test('it can list the products with media, wishlist, reviews, and ingredients.', async ({client, route}) => {
     const user = await UserFactory.create()
 
-    const wishlist = await WishlistFactory.merge({user_id: user.id}).create()
+    const wishlist = await WishlistFactory.merge({userId: user.id}).create()
 
     const product = await ProductFactory.with('media', 3).with('ingredients', 4).create()
 
-    const merge: { reviewable_id: number }[] = []
+    const merge: { reviewableId: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({reviewable_id: product.id})
+      merge.push({reviewableId: product.id})
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)

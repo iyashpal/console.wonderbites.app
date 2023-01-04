@@ -16,11 +16,11 @@ test.group('Auth register', (group) => {
    * 
    * ✔ Need user information (having first_name field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
-   * ✔ Request status shoud be Unprocessable (422)
+   * ✔ Request status should be Unprocessable (422)
    * ✔ Request response body should contain errors field 'first_name'. 
    */
   test('User cannot create account without his first name', async ({ client, route }) => {
-    const user = await UserFactory.merge({ first_name: '' }).make()
+    const user = await UserFactory.merge({ firstName: '' }).make()
 
     const response = await client.post(route('api.register')).accept('json')
 
@@ -36,11 +36,11 @@ test.group('Auth register', (group) => {
    * 
    * ✔ Need user information (having last_name field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
-   * ✔ Request status shoud be Unprocessable (422)
+   * ✔ Request status should be Unprocessable (422)
    * ✔ Request response body should contain errors field 'last_name'. 
    */
   test('User cannot create account without his last name', async ({ client, route }) => {
-    const user = await UserFactory.merge({ last_name: '' }).make()
+    const user = await UserFactory.merge({ lastName: '' }).make()
 
     const response = await client.post(route('api.register')).accept('json')
 
@@ -56,7 +56,7 @@ test.group('Auth register', (group) => {
    * 
    * ✔ Need user information (having email field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
-   * ✔ Request status shoud be Unprocessable (422)
+   * ✔ Request status should be Unprocessable (422)
    * ✔ Request response body should contain errors field 'email'. 
    */
   test('User cannot create account without email address', async ({ client, route }) => {

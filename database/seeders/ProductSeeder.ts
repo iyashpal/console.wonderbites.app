@@ -5,15 +5,15 @@ export default class ProductSeederSeeder extends BaseSeeder {
   public async run () {
     // 
     const user = await User.firstOrCreate({ email: 'yash@brandsonify.com' }, {
-      first_name: 'Yash',
-      last_name: 'Pal',
+      firstName: 'Yash',
+      lastName: 'Pal',
       mobile: '01234567890',
       password: 'secret',
     })
 
     await Product.updateOrCreateMany('name', [
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Salmon Sallad',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -23,7 +23,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '001',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Chicken Soup Curry',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -33,7 +33,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '002',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Pizza Margharita',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -43,7 +43,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '003',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Shrimps Soup',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -53,7 +53,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '004',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Bacon Burger',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -63,7 +63,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '004',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Salad Bowl',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
@@ -73,7 +73,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         sku: '004',
       },
       {
-        user_id: user.id,
+        userId: user.id,
         name: 'Coca Cola',
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 

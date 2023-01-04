@@ -54,7 +54,7 @@ test.group('API [wishlists.update]', (group) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
 
-    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
     const qs = { with: ['wishlist.products'] }
@@ -82,7 +82,7 @@ test.group('API [wishlists.update]', (group) => {
   test('User can decrease the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const product = await ProductFactory.create()
-    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
 
     await wishlist.related('products').attach({ [product.id]: { qty: 4 } })
 

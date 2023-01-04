@@ -24,10 +24,10 @@ export default class Cuisine extends BaseModel {
   public categories: ManyToMany<typeof Category>
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @computed()
   public get default_thumbnail () {

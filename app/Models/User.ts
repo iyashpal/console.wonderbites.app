@@ -11,10 +11,10 @@ export default class User extends Notifiable {
   public id: number
 
   @column()
-  public first_name: string
+  public firstName: string
 
   @column()
-  public last_name: string
+  public lastName: string
 
   @column()
   public email: string
@@ -29,10 +29,10 @@ export default class User extends Notifiable {
   public password: string
 
   @column()
-  public address_id: Number
+  public addressId: Number
 
   @column()
-  public remember_me_token?: string
+  public rememberMeToken?: string
 
   @column()
   public status: number
@@ -41,13 +41,13 @@ export default class User extends Notifiable {
   public language: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @column.dateTime()
-  public deleted_at: DateTime
+  public deletedAt: DateTime
 
   /**
    * Hash user password before saving to database.
@@ -124,7 +124,7 @@ export default class User extends Notifiable {
       return this.avatar.url
     }
 
-    let name = this.email ? this.email : [this.first_name, this.last_name].join(' ')
+    let name = this.email ? this.email : [this.firstName, this.lastName].join(' ')
 
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
   }

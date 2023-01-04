@@ -9,7 +9,7 @@ export default class Advertisement extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public title: string
@@ -27,10 +27,10 @@ export default class Advertisement extends BaseModel {
   public status: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

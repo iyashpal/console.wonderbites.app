@@ -14,7 +14,7 @@ export default class Ingredient extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public name: string
@@ -44,13 +44,13 @@ export default class Ingredient extends BaseModel {
   public status: number
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @column.dateTime()
-  public deleted_at: DateTime
+  public deletedAt: DateTime
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

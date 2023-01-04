@@ -12,9 +12,9 @@ test.group('API [coupons.apply]', (group) => {
   test('coupon code can be applied to checkout/cart.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const cart = await CartFactory.merge({ user_id: user.id }).create()
+    const cart = await CartFactory.merge({ userId: user.id }).create()
 
-    const coupon = await CouponFactory.merge({ code: 'FRI24', expired_at: DateTime.now().plus({ minute: 1 }) }).create()
+    const coupon = await CouponFactory.merge({ code: 'FRI24', expiredAt: DateTime.now().plus({ minute: 1 }) }).create()
 
     const response = await client.post(route('api.coupons.apply')).loginAs(user)
       .json({ coupon: coupon.code, cart: cart.id })
@@ -24,8 +24,8 @@ test.group('API [coupons.apply]', (group) => {
       coupon: {
         id: coupon.id,
         code: coupon.code,
-        discount_type: coupon.discount_type,
-        discount_value: coupon.discount_value,
+        discount_type: coupon.discountType,
+        discount_value: coupon.discountValue,
       },
     })
   }).tags(['@coupons', '@coupons.apply'])
@@ -33,9 +33,9 @@ test.group('API [coupons.apply]', (group) => {
   test('expired coupon code can not be applied to checkout/cart.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const cart = await CartFactory.merge({ user_id: user.id }).create()
+    const cart = await CartFactory.merge({ userId: user.id }).create()
 
-    const coupon = await CouponFactory.merge({ code: 'FRI24', expired_at: DateTime.now().minus({ day: 1 }) }).create()
+    const coupon = await CouponFactory.merge({ code: 'FRI24', expiredAt: DateTime.now().minus({ day: 1 }) }).create()
 
     const response = await client.post(route('api.coupons.apply')).loginAs(user)
       .json({ coupon: coupon.code, cart: cart.id })
@@ -47,7 +47,7 @@ test.group('API [coupons.apply]', (group) => {
   test('unknown coupon can not apply to cart.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const cart = await CartFactory.merge({ user_id: user.id }).create()
+    const cart = await CartFactory.merge({ userId: user.id }).create()
 
     const response = await client.post(route('api.coupons.apply')).guard('api')
       .loginAs(user)

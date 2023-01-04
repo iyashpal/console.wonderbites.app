@@ -7,16 +7,16 @@ export default class Address extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
   @column()
-  public first_name: string
+  public firstName: string
 
   @column()
-  public last_name: string
+  public lastName: string
 
   @column()
   public street: string
@@ -37,10 +37,10 @@ export default class Address extends BaseModel {
   public type: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   /**
    * Serialize address fields for checkout.
@@ -50,8 +50,8 @@ export default class Address extends BaseModel {
   @computed()
   public get serializedForCheckout () {
     return {
-      first_name: this.first_name,
-      last_name: this.last_name,
+      first_name: this.firstName,
+      last_name: this.lastName,
       street: this.street,
       city: this.city,
       phone: this.phone,

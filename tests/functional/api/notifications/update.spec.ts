@@ -1,5 +1,5 @@
-import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
+import Database from '@ioc:Adonis/Lucid/Database'
 import { NotificationFactory, UserFactory } from 'Database/factories'
 
 test.group('API [notifications.update]', (group) => {
@@ -10,7 +10,7 @@ test.group('API [notifications.update]', (group) => {
 
   test('it can not allow access to un-authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const notification = await NotificationFactory.merge({ notifiable_id: user.id }).create()
+    const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
 
@@ -20,7 +20,7 @@ test.group('API [notifications.update]', (group) => {
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const notification = await NotificationFactory.merge({ notifiable_id: user.id }).create()
+    const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
       .guard('api').loginAs(user).json({ action: 'unread' })
@@ -30,7 +30,7 @@ test.group('API [notifications.update]', (group) => {
 
   test('it can mark the notification as read.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
-    const notification = await NotificationFactory.merge({ notifiable_id: user.id }).create()
+    const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
       .guard('api').loginAs(user).json({ action: 'read' })
@@ -44,7 +44,7 @@ test.group('API [notifications.update]', (group) => {
 
   test('it can mark the notification as unread.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
-    const notification = await NotificationFactory.merge({ notifiable_id: user.id }).create()
+    const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
 
     const $response = await client.put(route('api.notifications.update', notification))
       .guard('api').loginAs(user).json({ action: 'unread' })

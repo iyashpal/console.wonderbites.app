@@ -10,7 +10,7 @@ export default class ExtraField extends BaseModel {
   public relation: string
 
   @column()
-  public relation_id: number
+  public relationId: number
 
   @column()
   public field: string
@@ -22,10 +22,10 @@ export default class ExtraField extends BaseModel {
   public status: string
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @belongsTo(() => Product, {
     localKey: 'relationId'

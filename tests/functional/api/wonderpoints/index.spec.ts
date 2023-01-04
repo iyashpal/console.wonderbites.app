@@ -21,8 +21,8 @@ test.group('API [wonderpoints.index]', (group) => {
     const user = await UserFactory.create()
 
     const wonderpoints = await WonderpointFactory.merge([
-      { user_id: user.id, points: 50, action: 'earn' },
-      { user_id: user.id, points: 50, action: 'redeem' },
+      { userId: user.id, points: 50, action: 'earn' },
+      { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index')).guard('api')
@@ -47,8 +47,8 @@ test.group('API [wonderpoints.index]', (group) => {
     const user = await UserFactory.create()
 
     await WonderpointFactory.merge([
-      { user_id: user.id, points: 50, action: 'earn' },
-      { user_id: user.id, points: 50, action: 'redeem' },
+      { userId: user.id, points: 50, action: 'earn' },
+      { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'earned' } })).guard('api')
@@ -61,8 +61,8 @@ test.group('API [wonderpoints.index]', (group) => {
     const user = await UserFactory.create()
 
     await WonderpointFactory.merge([
-      { user_id: user.id, points: 50, action: 'earn' },
-      { user_id: user.id, points: 50, action: 'redeem' },
+      { userId: user.id, points: 50, action: 'earn' },
+      { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
     const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeemed' } })).guard('api')

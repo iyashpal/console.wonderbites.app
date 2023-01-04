@@ -21,8 +21,8 @@ test.group('API [coupons.update]', (group) => {
         title: 'Updated Title for tests.',
         description: 'Updated Description for tests.',
         code: 'UPDATED',
-        startedAt: coupon.started_at.toFormat('yyyy-MM-dd HH:mm:ss'),
-        expiredAt: coupon.expired_at.toFormat('yyyy-MM-dd HH:mm:ss'),
+        startedAt: coupon.startedAt.toFormat('yyyy-MM-dd HH:mm:ss'),
+        expiredAt: coupon.expiredAt.toFormat('yyyy-MM-dd HH:mm:ss'),
       })
 
     response.assertStatus(200)

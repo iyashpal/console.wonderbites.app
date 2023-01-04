@@ -105,14 +105,14 @@ export default class CouponsController {
       if (coupon && coupon.is_valid) {
         const cart = await Cart.query().where('id', payload.cart).first()
 
-        await cart?.merge({ coupon_id: coupon.id }).save()
+        await cart?.merge({ couponId: coupon.id }).save()
 
         response.status(200).json({
           coupon: {
             id: coupon.id,
             code: coupon.code,
-            discount_type: coupon.discount_type,
-            discount_value: coupon.discount_value,
+            discount_type: coupon.discountType,
+            discount_value: coupon.discountValue,
           },
         })
       }
@@ -131,7 +131,7 @@ export default class CouponsController {
 
       const cart = await Cart.query().where('id', payload.cart).first()
 
-      await cart?.merge({ coupon_id: null }).save()
+      await cart?.merge({ couponId: null }).save()
 
       response.status(200).json(cart)
     } catch (error) {

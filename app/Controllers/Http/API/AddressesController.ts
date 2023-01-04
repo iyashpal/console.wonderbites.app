@@ -40,7 +40,7 @@ export default class AddressesController {
 
       // Check if the address is default for logged-in user.
       if (request.all()?.is_default === true) {
-        await user.merge({ address_id: address.id }).save()
+        await user.merge({ addressId: address.id }).save()
       }
 
       // Send response
@@ -90,7 +90,7 @@ export default class AddressesController {
 
       // Check if the address is default for logged-in user.
       if (request.all()?.is_default === true) {
-        await user.merge({ address_id: address.id }).save()
+        await user.merge({ addressId: address.id }).save()
       }
 
       response.status(200).json(address)

@@ -7,7 +7,7 @@ export default class Wonderpoint extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public action: string
@@ -22,10 +22,10 @@ export default class Wonderpoint extends BaseModel {
   public extras: object
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   /**
    * Relation to user

@@ -22,10 +22,10 @@ export default class Category extends BaseModel {
   public status: number
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @computed()
   public get isForProduct () {

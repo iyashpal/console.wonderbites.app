@@ -40,7 +40,7 @@ export default class ProductsController {
   public async store ({ request, response, session, auth }: HttpContextContract) {
     const data = await request.validate(CreateValidator)
 
-    await Product.create({ ...data, user_id: auth.user?.id, published_at: data.status === 1 ? DateTime.now() : null })
+    await Product.create({ ...data, userId: auth.user?.id, publishedAt: data.status === 1 ? DateTime.now() : null })
       .then((product) => {
         session.flash('product_created', product.id)
 
@@ -90,7 +90,7 @@ export default class ProductsController {
 
     const data = await request.validate(UpdateValidator)
 
-    await product.merge({ ...data, published_at: data.status === 1 ? DateTime.now() : null }).save()
+    await product.merge({ ...data, publishedAt: data.status === 1 ? DateTime.now() : null }).save()
       .then(product => {
         session.flash('product_updated', true)
 

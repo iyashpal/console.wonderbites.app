@@ -87,10 +87,10 @@ export default class CartsController {
   protected async cart (request: RequestContract, user: User | undefined): Promise<Cart> {
     if (types.isNull(user) || types.isUndefined(user)) {
       const guestCart = await Cart.query().whereNull('user_id')
-        .where('ip_address', request.ip()).first()
+        .where('ipAddress', request.ip()).first()
 
       if (types.isNull(guestCart)) {
-        return await Cart.create({ ip_address: request.ip() })
+        return await Cart.create({ ipAddress: request.ip() })
       }
 
       return guestCart
@@ -99,7 +99,7 @@ export default class CartsController {
     await user.load('cart')
 
     if (types.isNull(user.cart)) {
-      return await user.related('cart').create({ ip_address: request.ip() })
+      return await user.related('cart').create({ ipAddress: request.ip() })
     }
 
     return user.cart

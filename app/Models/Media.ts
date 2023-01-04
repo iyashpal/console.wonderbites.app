@@ -9,7 +9,7 @@ export default class Media extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public title: string
@@ -21,10 +21,10 @@ export default class Media extends BaseModel {
   public attachment: AttachmentContract
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @manyToMany(() => Product)
   public products: ManyToMany<typeof Product>

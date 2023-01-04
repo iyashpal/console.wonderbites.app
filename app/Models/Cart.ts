@@ -7,22 +7,22 @@ export default class Cart extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number | null | undefined
+  public userId: number | null | undefined
 
   @column()
-  public ip_address: string
+  public ipAddress: string
 
   @column()
-  public coupon_id: number | null
+  public couponId: number | null
 
   @column()
   public status: number
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @manyToMany(() => Product, {
     pivotColumns: ['id', 'qty'],

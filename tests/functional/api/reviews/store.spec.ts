@@ -11,7 +11,7 @@ test.group('Api [reviews.store]', (group) => {
   test('it can not allow un-authenticated user to create a review', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.merge({ reviewable_id: product.id }).make()
+    const review = await ReviewFactory.merge({ reviewableId: product.id }).make()
 
     const request = await client.post(route('api.reviews.store')).json(review.toObject())
 
@@ -24,7 +24,7 @@ test.group('Api [reviews.store]', (group) => {
 
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.merge({ reviewable_id: product.id }).make()
+    const review = await ReviewFactory.merge({ reviewableId: product.id }).make()
 
     const request = await client.post(route('api.reviews.store'))
       .guard('api').loginAs(user).json(review.toObject())
@@ -57,7 +57,7 @@ test.group('Api [reviews.store]', (group) => {
 
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.merge({ reviewable_id: product.id, title: '' }).make()
+    const review = await ReviewFactory.merge({ reviewableId: product.id, title: '' }).make()
 
     const request = await client.post(route('api.reviews.store'))
       .guard('api').loginAs(user).json(review.toObject())
@@ -72,7 +72,7 @@ test.group('Api [reviews.store]', (group) => {
 
     const product = await ProductFactory.create()
 
-    const review = await ReviewFactory.merge({ reviewable_id: product.id, body: '' }).make()
+    const review = await ReviewFactory.merge({ reviewableId: product.id, body: '' }).make()
 
     const request = await client.post(route('api.reviews.store'))
       .guard('api').loginAs(user).json(review.toObject())

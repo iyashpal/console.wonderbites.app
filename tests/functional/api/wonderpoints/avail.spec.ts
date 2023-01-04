@@ -27,12 +27,12 @@ test.group('API [wonderpoints.avail]', (group) => {
   test('Avail wonderpoints after redemption of some wonderpoints.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const cart = await CartFactory.merge({ user_id: user.id }).create()
+    const cart = await CartFactory.merge({ userId: user.id }).create()
 
     const wonderpoints = await WonderpointFactory.merge([
-      { user_id: user.id, points: 50 },
-      { user_id: user.id, points: 50 },
-      { user_id: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
     ]).createMany(3)
 
     const totalPoints = wonderpoints.reduce((value, wonderpoint) => value + wonderpoint.points, 0)
@@ -44,7 +44,7 @@ test.group('API [wonderpoints.avail]', (group) => {
 
     const redeemedWonderpoint = await WonderpointFactory.merge({
       points: 50,
-      user_id: user.id,
+      userId: user.id,
       action: 'redeem',
       extras: { cart_id: cart.id },
     }).create()
@@ -59,9 +59,9 @@ test.group('API [wonderpoints.avail]', (group) => {
     const user = await UserFactory.create()
 
     await WonderpointFactory.merge([
-      { user_id: user.id, points: 50 },
-      { user_id: user.id, points: 50 },
-      { user_id: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
+      { userId: user.id, points: 50 },
     ]).createMany(3)
 
     const redeemResponse = await client.post(route('api.wonderpoints.store')).guard('api')

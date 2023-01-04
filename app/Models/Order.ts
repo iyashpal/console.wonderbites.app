@@ -8,19 +8,19 @@ export default class Order extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number | null
+  public userId: number | null
 
   @column()
-  public coupon_id: number | null
+  public couponId: number | null
 
   @column()
-  public ip_address: string
+  public ipAddress: string
 
   @column()
   public options: object
 
   @column()
-  public deliver_to: {
+  public deliverTo: {
     first_name: string,
     last_name?: string,
     street: string,
@@ -40,13 +40,13 @@ export default class Order extends BaseModel {
   public status: number
 
   @column.dateTime({ autoCreate: true })
-  public created_at: DateTime
+  public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updated_at: DateTime
+  public updatedAt: DateTime
 
   @column.dateTime()
-  public deleted_at: DateTime
+  public deletedAt: DateTime
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
