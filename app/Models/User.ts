@@ -41,13 +41,13 @@ export default class User extends Notifiable {
   public language: string
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @column.dateTime()
-  public deletedAt: DateTime
+  public deleted_at: DateTime
 
   /**
    * Hash user password before saving to database.
@@ -119,7 +119,7 @@ export default class User extends Notifiable {
    * Default User avatar attribute.
    */
   @computed()
-  public get default_avatar () {
+  public get avatar_url () {
     if (this.avatar?.url) {
       return this.avatar.url
     }

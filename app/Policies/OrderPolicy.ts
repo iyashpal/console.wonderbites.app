@@ -22,15 +22,15 @@ export default class OrderPolicy extends BasePolicy {
    */
   @action({ allowGuest: true })
   public async view (user: User, order: Order) {
-    if (!user && order.userId === null) {
+    if (!user && order.user_id === null) {
       return true
     }
 
-    if (!user && order.userId !== null) {
+    if (!user && order.user_id !== null) {
       return false
     }
 
-    return user.id === order.userId
+    return user.id === order.user_id
   }
 
   /**
@@ -53,15 +53,15 @@ export default class OrderPolicy extends BasePolicy {
    */
   @action({ allowGuest: true })
   public async update (user: User, order: Order) {
-    if (!user && order.userId === null) {
+    if (!user && order.user_id === null) {
       return true
     }
 
-    if (!user && order.userId !== null) {
+    if (!user && order.user_id !== null) {
       return false
     }
 
-    return user.id === order.userId
+    return user.id === order.user_id
   }
 
   /**

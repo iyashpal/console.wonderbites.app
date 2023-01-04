@@ -11,5 +11,5 @@ export default class PasswordReset extends BaseModel {
   public token: string
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 }

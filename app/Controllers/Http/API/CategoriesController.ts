@@ -44,9 +44,9 @@ export default class CategoriesController {
             ])
             // Load product from a keyword
             .match([
-              request.input('search', null),
-              query => query.whereLike('name', `%${request.input('search')}%`)
-                .orWhereLike('description', `%${request.input('search')}%`),
+              request.input('searchable', []).includes('products'),
+              query => query.whereLike('name', `%${request.input('search.products')}%`)
+                .orWhereLike('description', `%${request.input('search.products')}%`),
             ])
           ),
         ])
@@ -85,6 +85,10 @@ export default class CategoriesController {
           queryOnRequestInput,
         ],
       )
+        .match([
+          request.input('searchable', []).includes('categories'),
+          query => query.whereLike('name', `%${request.input('search')}%`),
+        ])
 
       response.status(200).json(category)
     } catch (error) {

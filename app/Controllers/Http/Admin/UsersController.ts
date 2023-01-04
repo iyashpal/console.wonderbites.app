@@ -113,7 +113,7 @@ export default class UsersController {
       return
     }
 
-    await user.merge({ deletedAt: DateTime.local() }).save().then(() => {
+    await user.merge({ deleted_at: DateTime.local() }).save().then(() => {
       session.flash('user_deleted', true)
 
       response.redirect().toRoute('users.index')

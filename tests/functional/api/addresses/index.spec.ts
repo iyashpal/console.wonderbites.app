@@ -34,7 +34,7 @@ test.group('API [addresses.index]', (group) => {
     const user = await UserFactory.create()
 
     const addresses = await AddressFactory.merge([
-      { userId: user.id }, { userId: user.id }, { userId: user.id },
+      { user_id: user.id }, { user_id: user.id }, { user_id: user.id },
     ]).createMany(3)
 
     const request = await client.get(route('api.addresses.index'))
@@ -42,6 +42,6 @@ test.group('API [addresses.index]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains(addresses.map(({ id, userId, type }) => ({ id, user_id: userId, type })))
+    request.assertBodyContains(addresses.map(({ id, user_id, type }) => ({ id, user_id: user_id, type })))
   }).tags(['@addresses', '@addresses.index'])
 })

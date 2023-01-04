@@ -20,10 +20,10 @@ export default class CheckoutsController {
       // Create order from cart details.
       let order = await Order.create({
         note: attrs.note,
-        userId: user?.id ?? null,
-        deliverTo: attrs.address,
-        couponId: cart.couponId,
-        ipAddress: cart.ipAddress,
+        user_id: user?.id ?? null,
+        deliver_to: attrs.address,
+        coupon_id: cart.coupon_id,
+        ip_address: cart.ip_address,
         options: attrs.options,
       })
 

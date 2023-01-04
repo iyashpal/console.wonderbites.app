@@ -24,7 +24,7 @@ export default class NotificationsController {
       const payload = await request.validate(UpdateValidator)
       const notification = await user.notifications().where('id', params.id).firstOrFail()
 
-      await notification.merge({ readAt: payload.action === 'read' ? DateTime.now() : null })
+      await notification.merge({ read_at: payload.action === 'read' ? DateTime.now() : null })
         .save().then(notification => response.json(notification))
     } catch (error) {
       response.status(error.status).json(error)

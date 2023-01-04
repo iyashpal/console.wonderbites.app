@@ -149,7 +149,7 @@ export default class ProductQuery extends Query {
   protected filterTodaysPick () {
     this.$query.match([
       this.input('filters', []).includes(ExtraFieldName.TODAYS_PICK),
-      query => query.whereHas('extraFields', builder => builder
+      query => query.whereHas('extra_fields', builder => builder
         .where('field', ExtraFieldName.TODAYS_PICK).where('data', 'true')),
     ])
 
@@ -164,7 +164,7 @@ export default class ProductQuery extends Query {
   protected filterPopular () {
     this.$query.match([
       this.input('filters', []).includes(ExtraFieldName.POPULAR),
-      query => query.whereHas('extraFields', builder => builder
+      query => query.whereHas('extra_fields', builder => builder
         .where('field', ExtraFieldName.POPULAR).where('data', 'true')),
     ])
 

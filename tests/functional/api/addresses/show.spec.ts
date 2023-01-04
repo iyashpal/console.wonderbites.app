@@ -13,7 +13,7 @@ test.group('API [addresses.show]', (group) => {
 
   test('it can see the address details of logged in user.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).create()
+    const address = await AddressFactory.merge({ user_id: user.id }).create()
 
     const request = await client.get(route('api.addresses.show', address))
       .guard('api').loginAs(user)

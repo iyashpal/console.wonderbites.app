@@ -29,7 +29,7 @@ test.group('API [notifications.index]', (group) => {
   test('it can access user notifications.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const notification = await NotificationFactory.merge({ notifiableId: user.id }).create()
+    const notification = await NotificationFactory.merge({ notifiable_id: user.id }).create()
 
     const $response = await client.get(route('api.notifications.index'))
       .guard('api').loginAs(user)

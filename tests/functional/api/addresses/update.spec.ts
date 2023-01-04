@@ -14,7 +14,7 @@ test.group('API [addresses.update]', (group) => {
   test('it can\'t update a non existing address.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.put(route('api.addresses.update', { id: 50 }))
       .guard('api').loginAs(user).json(addressData)
@@ -45,9 +45,9 @@ test.group('API [addresses.update]', (group) => {
   test('it can allow logged in users to update address.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const address = await AddressFactory.merge({ userId: user.id }).create()
+    const address = await AddressFactory.merge({ user_id: user.id }).create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({ user_id: user.id }).make()
 
     const $response = await client.put(route('api.addresses.update', address))
       .guard('api').loginAs(user).json(addressData)
@@ -55,8 +55,8 @@ test.group('API [addresses.update]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      first_name: addressData.firstName,
-      last_name: addressData.lastName,
+      first_name: addressData.first_name,
+      last_name: addressData.last_name,
       type: addressData.type,
       street: addressData.street,
       city: addressData.city,
@@ -67,9 +67,9 @@ test.group('API [addresses.update]', (group) => {
   test('updating existing address can be set as default.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const address = await AddressFactory.merge({ userId: user.id }).create()
+    const address = await AddressFactory.merge({ user_id: user.id }).create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.put(route('api.addresses.update', address))
       .guard('api').loginAs(user).json({ ...addressData, is_default: true })
@@ -77,8 +77,8 @@ test.group('API [addresses.update]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({
-      first_name: addressData.firstName,
-      last_name: addressData.lastName,
+      first_name: addressData.first_name,
+      last_name: addressData.last_name,
       type: addressData.type,
       street: addressData.street,
       city: addressData.city,

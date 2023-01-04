@@ -27,13 +27,13 @@ test.group('API [carts.update]', (group) => {
 
   test('Guest users can remove products from cart', async ({ client, route, assert }, qs) => {
     const user = await UserFactory.create()
-    const cart = await CartFactory.merge({ ipAddress: '127.0.0.1' }).create()
+    const cart = await CartFactory.merge({ ip_address: '127.0.0.1' }).create()
     const products = await ProductFactory.merge([
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
     ]).createMany(5)
 
     await products.map(async ({ id }) => cart.related('products').attach({ [id]: { qty: 1 } }))
@@ -87,14 +87,14 @@ test.group('API [carts.update]', (group) => {
   test('Authenticated User can remove products from cart', async ({ client, route, assert }, qs) => {
     const user = await UserFactory.create()
 
-    const cart = await CartFactory.merge({ userId: user.id }).create()
+    const cart = await CartFactory.merge({ user_id: user.id }).create()
 
     const products = await ProductFactory.merge([
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
     ]).createMany(5)
 
     products.map(({ id }) => cart.related('products').attach({ [id]: { qty: 1 } }))

@@ -31,7 +31,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -69,7 +69,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -101,7 +101,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -132,7 +132,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     await user.cart.related('products').attach([product.id])
 
@@ -165,7 +165,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
@@ -188,7 +188,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
@@ -211,7 +211,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     const [address] = user.addresses
 
@@ -242,7 +242,7 @@ test.group('API [checkout.process]', (group) => {
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({ couponId: coupon.id }).save()
+    await user.cart.merge({ coupon_id: coupon.id }).save()
 
     const [address] = user.addresses
 

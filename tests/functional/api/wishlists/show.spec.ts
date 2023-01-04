@@ -22,14 +22,14 @@ test.group('API [wishlists.show]', (group) => {
     const user = await UserFactory.create()
 
     const products = await ProductFactory.merge([
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
-      { userId: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
+      { user_id: user.id },
     ]).createMany(5)
 
-    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
 
     wishlist.related('products').attach(products.map(({ id }) => id))
     const qs = {with: ['wishlist.products']}

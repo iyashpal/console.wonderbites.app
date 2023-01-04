@@ -61,7 +61,7 @@ test.group('API [products.show]', (group) => {
 
     const product = await ProductFactory.with('media', 3).with('ingredients', 4).create()
 
-    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
 
     await wishlist.related('products').attach([product.id])
 
@@ -82,10 +82,10 @@ test.group('API [products.show]', (group) => {
   test('It can load the product reviews.', async ({ client, route }) => {
     const product = await ProductFactory.create()
 
-    const merge: { reviewableId: number }[] = []
+    const merge: { reviewable_id: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({ reviewableId: product.id })
+      merge.push({ reviewable_id: product.id })
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)
@@ -125,7 +125,7 @@ test.group('API [products.show]', (group) => {
 
     const product = await ProductFactory.with('media', 3).create()
 
-    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
 
     await wishlist.related('products').attach([product.id])
 
@@ -146,14 +146,14 @@ test.group('API [products.show]', (group) => {
   test('it can load the product media, wishlist, reviews, and ingredients.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const wishlist = await WishlistFactory.merge({ userId: user.id }).create()
+    const wishlist = await WishlistFactory.merge({ user_id: user.id }).create()
 
     const product = await ProductFactory.with('media', 3).with('ingredients', 4).create()
 
-    const merge: { reviewableId: number }[] = []
+    const merge: { reviewable_id: number }[] = []
 
     for (let i = 0; i < 10; i++) {
-      merge.push({ reviewableId: product.id })
+      merge.push({ reviewable_id: product.id })
     }
 
     const reviews = await ReviewFactory.merge(merge).with('user').createMany(10)

@@ -10,22 +10,22 @@ export default class Notification extends BaseModel {
   public type: string
 
   @column()
-  public notifiableType: string
+  public notifiable_type: string
 
   @column()
-  public notifiableId: number
+  public notifiable_id: number
 
   @column()
   public data: JSON
 
   @column.dateTime()
-  public readAt: DateTime | null
+  public read_at: DateTime | null
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @belongsTo(() => User, {
     localKey: 'notifiableId',
@@ -34,18 +34,18 @@ export default class Notification extends BaseModel {
   public notifiable: BelongsTo<typeof User>
 
   public async markAsRead (this: Notification) {
-    await this.merge({ readAt: DateTime.now() }).save()
+    await this.merge({ read_at: DateTime.now() }).save()
   }
 
   public async markAsUnread (this: Notification) {
-    await this.merge({ readAt: null }).save()
+    await this.merge({ read_at: null }).save()
   }
 
   public get read () {
-    return Boolean(this.readAt)
+    return Boolean(this.read_at)
   }
 
   public get unread () {
-    return !this.readAt
+    return !this.read_at
   }
 }

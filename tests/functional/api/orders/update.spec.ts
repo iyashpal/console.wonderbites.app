@@ -13,7 +13,7 @@ test.group('API [orders.update]', (group) => {
   test('it can not allow un-authenticated users to cancel the order.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const order = await OrderFactory.merge({ userId: user.id })
+    const order = await OrderFactory.merge({ user_id: user.id })
       .with('products', 5, query => query.with('ingredients', 4)).create()
 
     const $response = await client.put(route('api.orders.cancel', order))
@@ -26,7 +26,7 @@ test.group('API [orders.update]', (group) => {
     const user = await UserFactory.with('addresses', 1).create()
 
     const order = await OrderFactory.merge({
-      userId: user.id, createdAt: DateTime.now().minus({ day: 1 }),
+      user_id: user.id, created_at: DateTime.now().minus({ day: 1 }),
     })
       .with('products', 5, query => query.with('ingredients', 5)).create()
 

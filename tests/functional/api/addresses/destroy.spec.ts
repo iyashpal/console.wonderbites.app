@@ -23,7 +23,7 @@ test.group('API [addresses.destroy]', (group) => {
 
   test('it allows users to delete their addresses.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({userId: user.id}).create()
+    const address = await AddressFactory.merge({user_id: user.id}).create()
 
     const $response = await client.delete(route('api.addresses.destroy', address)).guard('api').loginAs(user)
 

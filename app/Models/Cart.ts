@@ -7,25 +7,22 @@ export default class Cart extends BaseModel {
   public id: number
 
   @column()
-  public userId: number | null | undefined
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  public user_id: number | null | undefined
 
   @column()
-  public ipAddress: string
+  public ip_address: string
 
   @column()
-  public couponId: number | null
+  public coupon_id: number | null
 
   @column()
   public status: number
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @manyToMany(() => Product, {
     pivotColumns: ['id', 'qty'],
@@ -38,6 +35,9 @@ export default class Cart extends BaseModel {
     pivotTimestamps: true,
     })
   public ingredients: ManyToMany<typeof Ingredient>
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @belongsTo(() => Coupon)
   public coupon: BelongsTo<typeof Coupon>

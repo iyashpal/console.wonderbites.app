@@ -16,42 +16,42 @@ export default class Coupon extends BaseModel {
   public code: string
 
   @column()
-  public discountType: string
+  public discount_type: string
 
   @column()
-  public discountValue: string
+  public discount_value: string
 
   @column.dateTime({ autoCreate: true })
-  public startedAt: DateTime
+  public started_at: DateTime
 
   @column.dateTime()
-  public expiredAt: DateTime
+  public expired_at: DateTime
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @hasMany(() => Cart)
   public carts: HasMany<typeof Cart>
 
   @computed()
   public get discount () {
-    if (this.discountType === 'price') {
-      return `${ this.discountValue }L`
+    if (this.discount_type === 'price') {
+      return `${ this.discount_value }L`
     }
 
-    return `${ this.discountValue }%`
+    return `${ this.discount_value }%`
   }
 
   @computed()
   public get is_expired () {
-    return parseInt(this.expiredAt.diff(DateTime.now(), 'days').toFormat('d')) < 0
+    return parseInt(this.expired_at.diff(DateTime.now(), 'days').toFormat('d')) < 0
   }
 
   @computed()
   public get is_valid () {
-    return parseInt(this.expiredAt.diff(DateTime.now(), 'days').toFormat('d')) >= 0
+    return parseInt(this.expired_at.diff(DateTime.now(), 'days').toFormat('d')) >= 0
   }
 }

@@ -24,7 +24,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('first name is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, firstName: null })
@@ -38,7 +38,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('first name length should be less than 255 characters.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, firstName: string.generateRandom(256) })
@@ -52,7 +52,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('last name is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, lastName: null })
@@ -66,7 +66,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('last name length should be less than 255 characters.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, lastName: string.generateRandom(256) })
@@ -80,7 +80,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('street is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, street: null })
@@ -94,7 +94,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('street length should be less than 255 characters.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, street: string.generateRandom(256) })
@@ -108,7 +108,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('city is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, city: null })
@@ -122,7 +122,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('city length should be less than 255 characters.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, city: string.generateRandom(256) })
@@ -136,7 +136,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('phone is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, phone: null })
@@ -150,7 +150,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('phone length should be less than 20 characters.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, phone: string.generateRandom(21) })
@@ -164,7 +164,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('phone is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, phone: null })
@@ -178,7 +178,7 @@ test.group('API [addresses.store]', (group) => {
 
   test('address type is required to create new address', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, type: null })
@@ -201,8 +201,8 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({
-      first_name: address.firstName,
-      last_name: address.lastName,
+      first_name: address.first_name,
+      last_name: address.last_name,
       type: address.type,
       street: address.street,
       city: address.city,
@@ -216,8 +216,8 @@ test.group('API [addresses.store]', (group) => {
 
     addressRequest.assertBodyContains([
       {
-        first_name: address.firstName,
-        last_name: address.lastName,
+        first_name: address.first_name,
+        last_name: address.last_name,
         type: address.type,
         street: address.street,
         city: address.city,
@@ -229,7 +229,7 @@ test.group('API [addresses.store]', (group) => {
   test('creating new address can be set as default.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
-    const address = await AddressFactory.merge({ userId: user.id }).make()
+    const address = await AddressFactory.merge({ user_id: user.id }).make()
 
     const request = await client.post(route('api.addresses.store'))
       .guard('api').loginAs(user).json({ ...address, is_default: true })
@@ -237,8 +237,8 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({
-      first_name: address.firstName,
-      last_name: address.lastName,
+      first_name: address.first_name,
+      last_name: address.last_name,
       type: address.type,
       street: address.street,
       city: address.city,

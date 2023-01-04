@@ -40,7 +40,7 @@ export default class DatabaseTokenRepository {
       .first()
 
     if (record) {
-      return !this.tokenExpired(record.createdAt)
+      return !this.tokenExpired(record.created_at)
     }
 
     return false
@@ -57,7 +57,7 @@ export default class DatabaseTokenRepository {
     const token = await PasswordReset.findBy('email', user.email)
 
     if (token) {
-      return this.tokenRecentlyCreated(token.createdAt)
+      return this.tokenRecentlyCreated(token.created_at)
     }
 
     return false
@@ -86,22 +86,22 @@ export default class DatabaseTokenRepository {
   /**
    * Determine if the token has expired.
    *
-   * @param createdAt
+   * @param created_at
    * 
    * @return bool
    */
-  protected tokenExpired (createdAt: DateTime) {
-    return DateTime.now() > createdAt
+  protected tokenExpired (created_at: DateTime) {
+    return DateTime.now() > created_at
   }
 
   /**
    * Determine if the token was recently created.
    *
-   * @param  createdAt
+   * @param  created_at
    * @return bool
    */
-  protected tokenRecentlyCreated (createdAt: DateTime): boolean {
-    return DateTime.now() < createdAt
+  protected tokenRecentlyCreated (created_at: DateTime): boolean {
+    return DateTime.now() < created_at
   }
 
   /**

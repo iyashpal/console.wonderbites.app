@@ -6,7 +6,7 @@ export default class Wishlist extends BaseModel {
   public id: number
 
   @column()
-  public userId: number
+  public user_id: number
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

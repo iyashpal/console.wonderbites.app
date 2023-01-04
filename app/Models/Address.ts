@@ -1,22 +1,22 @@
+import { User } from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column, computed } from '@ioc:Adonis/Lucid/Orm'
-import { User } from '.'
 
 export default class Address extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public userId: number
+  public user_id: number
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
   @column()
-  public firstName: string
+  public first_name: string
 
   @column()
-  public lastName: string
+  public last_name: string
 
   @column()
   public street: string
@@ -37,10 +37,10 @@ export default class Address extends BaseModel {
   public type: string
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   /**
    * Serialize address fields for checkout.
@@ -50,8 +50,8 @@ export default class Address extends BaseModel {
   @computed()
   public get serializedForCheckout () {
     return {
-      first_name: this.firstName,
-      last_name: this.lastName,
+      first_name: this.first_name,
+      last_name: this.last_name,
       street: this.street,
       city: this.city,
       phone: this.phone,

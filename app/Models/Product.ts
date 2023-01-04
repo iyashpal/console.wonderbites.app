@@ -18,7 +18,7 @@ export default class Product extends BaseModel {
   public name: string
 
   @column()
-  public userId: number
+  public user_id: number
 
   @column()
   public description: string
@@ -39,16 +39,16 @@ export default class Product extends BaseModel {
   public status: number
 
   @column.dateTime()
-  public publishedAt: DateTime | null
+  public published_at: DateTime | null
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @column.dateTime()
-  public deletedAt: DateTime
+  public deleted_at: DateTime
 
   /**
    * Get product default thumbnail based on imagePath column value.
@@ -56,7 +56,7 @@ export default class Product extends BaseModel {
    * @returns {String}
    */
   @computed()
-  public get default_thumbnail () {
+  public get thumbnail_url () {
     if (this.thumbnail?.url) {
       return this.thumbnail.url
     }
@@ -100,7 +100,7 @@ export default class Product extends BaseModel {
   public reviews: HasMany<typeof Review>
 
   @hasMany(() => ExtraField, {foreignKey: 'relationId', onQuery: query => query.where('relation', 'Product')})
-  public extraFields: HasMany<typeof ExtraField>
+  public extra_fields: HasMany<typeof ExtraField>
 
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>

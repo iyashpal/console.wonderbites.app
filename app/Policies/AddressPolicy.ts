@@ -21,7 +21,7 @@ export default class AddressPolicy extends BasePolicy {
    * @returns Boolean
    */
   public async view (user: User, address: Address) {
-    return user.id === address.userId
+    return user.id === address.user_id
   }
 
   /**
@@ -42,7 +42,7 @@ export default class AddressPolicy extends BasePolicy {
    * @returns Boolean
    */
   public async update (user: User, address: Address) {
-    return user.id === address.userId
+    return user.id === address.user_id
   }
 
   /**
@@ -53,6 +53,6 @@ export default class AddressPolicy extends BasePolicy {
    * @returns Boolean
    */
   public async delete (user: User, address: Address) {
-    return user.id === address.userId
+    return user.id === address.user_id
   }
 }

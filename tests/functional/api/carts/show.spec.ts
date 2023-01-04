@@ -25,7 +25,7 @@ test.group('API [carts.show]', (group) => {
 
   test('Only active carts are accessible.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
-    const cart = await CartFactory.merge({ userId: user.id, status: 0 }).create()
+    const cart = await CartFactory.merge({ user_id: user.id, status: 0 }).create()
 
     const response = await client.get(route('api.carts.show'))
       .guard('api').loginAs(user)

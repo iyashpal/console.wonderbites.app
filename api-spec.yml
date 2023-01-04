@@ -1,0 +1,1399 @@
+openapi: 3.0.0
+info:
+  title: Wonderbites App
+  description: ""
+  version: v1.0
+  license:
+    name: MIT
+    url: https://api.wonderbites.app
+security:
+  - BearerAuth: []
+servers:
+  - description: Wonderbites API for public website and mobile applications.
+    url: https://api.wonderbites.app/api
+
+tags:
+  - name: Auth
+    description: Application authentication endpoints.
+  - name: Auth > User
+    description: Application authentication endpoints.
+  - name: User
+    description: Application authentication endpoints.
+  - name: User > Profile
+    description: Application authentication endpoints.
+  - name: Cart
+  - name: Cart > Products
+  - name: Cart > Ingridients
+  - name: Cart > Wonderpoints
+  - name: Cuisine
+  - name: Wishlist
+  - name: Wishlist > Products
+  - name: Wishlist > Ingridients
+  - name: Product
+  - name: Coupon
+  - name: Auth > Content Pages
+  - name: Wishlists
+  - name: Category
+  - name: Profile
+  - name: Profile > Addresses
+  - name: Orders
+  - name: Reviews
+  - name: Advertisement
+  - name: Pages
+  - name: Media
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: Login
+      description: Login users via their email|mobile and password.
+      operationId: loginToApp
+      requestBody:
+        $ref: "#/components/requestBodies/Login"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: bearer
+                  token:
+                    type: string
+                    example: MQ.TpiVCZx6BGAyA2bgCVd8RNUBFjKKl-TTZH3lM2K_ELSMQ5vBxOb5FmQ3Ly9K
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: InvalidCredentialsException
+                  code:
+                    type: string
+                    example: E_INVALID_AUTH_PASSWORD
+                  status:
+                    type: number
+                    example: 400
+                  message:
+                    type: string
+                    example: "E_INVALID_AUTH_PASSWORD: Password mis-match"
+        "422":
+          description: Validation
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: Email address is required to login.
+                      password:
+                        type: string
+                        example: Enter password to login.
+  /register:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: Register
+      description: Register users to the wonderbites cloud.
+      operationId: registerToApp
+      requestBody:
+        $ref: "#/components/requestBodies/Register"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Validation
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                    description: Name of the response
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                    description: Alpha code of the response.
+                  status:
+                    type: integer
+                    example: 422
+                    description: Status code of response.
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                    description: Default response message.
+                  errors:
+                    type: object
+                    description: Validation errors.
+                    properties:
+                      first_name:
+                        type: string
+                        example: First name is required.
+                        description: First name field error.
+                      last_name:
+                        type: string
+                        example: Last name is required.
+                        description: Last name field error.
+                      mobile:
+                        type: string
+                        example: Mobile no. is required.
+                        description: Mobile no. field error.
+                      email:
+                        type: string
+                        example: Email address is required.
+                        description: Email field error.
+                      password:
+                        type: string
+                        example: Choose a password.
+                        description: Password field error.
+                      password_confirmation:
+                        type: string
+                        example: Password didn't match.
+                        description: Password match error.
+  /logout:
+    post:
+      tags:
+        - Auth
+      security:
+        - BearerAuth:
+            - token:revoke
+      summary: Logout
+      description: Revoke logged in user's auth token.
+      operationId: logoutFromApp
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  revoked:
+                    type: boolean
+                    example: true
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /users/auth:
+    get:
+      tags:
+        - User
+      security:
+        - BearerAuth:
+            - auth:view
+      summary: Current
+      description: Get the authenticated user data based on the authentication token.
+      operationId: authenticatedUser
+      parameters:
+        - name: with
+          in: query
+          required: false
+          allowEmptyValue: true
+          description: "All possible array items are listed below. "
+          schema:
+            type: array
+            items:
+              - type: object
+                default: null
+                description: "`user.addresses` can be used to get the user addresses."
+      responses:
+        "200":
+          description: When Request Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /users/avatar:
+    put:
+      tags:
+        - User
+      security:
+        - BearerAuth:
+            - avatar:update
+      summary: Avatar
+      description: Update user's profile avatar.
+      operationId: userAvatar
+      requestBody:
+        content:
+          image/*:
+            schema:
+              type: object
+              required:
+                - avatar
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /users/{id}:
+    put:
+      tags:
+        - User > Profile
+      security:
+        - BearerAuth:
+            - auth:update
+      summary: Update Profile
+      description: Update user profile data.
+      operationId: updateUserByID
+      parameters:
+        - name: id
+          in: path
+          description: Unique ID of the user.
+          example: 1
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                  description: First name of the user.
+                last_name:
+                  type: string
+                  example: Doe
+                  description: Last name of the image.
+                avatar:
+                  type: string
+                  format: binary
+                  description: Uploaded image for the user avatar
+      responses:
+        "200":
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    get:
+      tags:
+        - Users
+      security:
+        - BearerAuth:
+            - auth:view
+      summary: User Profile
+      description: Get the authenticated user data based on the authentication token.
+      operationId: showUserByID
+      parameters:
+        - name: id
+          in: path
+          description: Unique ID of the user.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: with
+          in: query
+          required: false
+          allowEmptyValue: true
+          description: "All possible array items are listed below. "
+          schema:
+            type: array
+            items:
+              - type: string
+                default: null
+                description: "`user.addresses` can be used to get the user addresses."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /addresses:
+    get:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:list
+      summary: Browse Addresses
+      operationId: getAddressesList
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Addresses"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:create
+      summary: Create Address
+      operationId: storeAddressesList
+      requestBody:
+        $ref: "#/components/requestBodies/Address"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Addresses"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /addresses/{id}:
+    get:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:view
+      summary: View Address
+      operationId: getAddressesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Addresses"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    put:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:edit
+            - address:update
+      summary: Update Address
+      operationId: putAddressesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        $ref: "#/components/requestBodies/Address"
+      responses:
+        "200":
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    patch:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:edit
+            - address:update
+      summary: Update Address
+      operationId: patchAddressesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - Addresses
+      security:
+        - BearerAuth:
+            - address:delete
+            - address:destroy
+      summary: Delete Address
+      description: Request to delete the user address.
+      operationId: deleteAddressesById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Unique ID of the address.
+      responses:
+        "200":
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /categories:
+    get:
+      tags:
+        - Categories
+      security: []
+      summary: List
+      description: By passing in the appropriate options, you can search for available categories in the system.
+      operationId: searchCategory
+      parameters:
+        - name: type
+          in: query
+          description: The possible categories types are (`all`,`product`, `ingredient`, `cuisine`)
+          style: form
+          required: false
+          explode: true
+          schema:
+            default: all
+            type: string
+            example: product
+        - name: search
+          in: query
+          description: Search categories by keywords.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: null
+        - name: searchable
+          in: query
+          description: Specify the searchable areas of the `search` query parameter.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: array
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`categories` can be used to search the categories only."
+              - type: string
+                default: null
+                description: "`products` can be used to search products within categories."
+        - name: with
+          in: query
+          description: All possible array items are listed below.
+          required: false
+          schema:
+            type: array
+            format: string
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`category.products` can be used to get the products under the categories."
+              - type: string
+                default: null
+                description: "`category.products.media` can be used to get the product's images under the categories."
+              - type: string
+                default: null
+                description: "`category.products.ingredients` can be used to get the product's ingredients under the categories."
+              - type: string
+                default: null
+                description: "`category.products.reviews` can be used to get the product's reviews under the categories."
+              - type: string
+                default: null
+                description: "`category.products.wishlist` can be used to get the product's status in user's wishlist. it needs the user to be signed in with their account."
+              - type: string
+                default: null
+                description: "`category.ingredients` can be used to get the ingredients (that are directly connected to the category) under the categories."
+              - type: string
+                default: null
+                description: "`category.cuisines` can be used to get the cuisines (that are directly connected to the category) under the categories."
+        - name: withAvg
+          in: query
+          description: Get the average calculation of some fields based on attributes passed.
+          style: form
+          schema:
+            type: array
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`category.products.reviews` string can be used to get the average of the product reviews."
+      responses:
+        "200":
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ""
+                items:
+                  $ref: "#/components/schemas/Categories"
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      security: []
+      summary: View
+      description: By passing in the appropriate options, you can search for available categories in the system.
+      operationId: showCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique ID of the category.
+          schema:
+            type: integer
+            default: null
+            example: 1
+        - name: search
+          in: query
+          description: The search keyword could be anything.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: null
+        - name: searchable
+          in: query
+          description: Specify the searchable areas for the `search` query parameter.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: array
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`categories` can be used to search the categories only."
+              - type: string
+                default: null
+                description: "`products` can be used to search products within categories."
+        - name: with
+          in: query
+          description: All possible array items are described below.
+          required: false
+          schema:
+            type: array
+            format: string
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`products` can be used to get the products under the category. "
+              - type: string
+                default: null
+                description: "`products.media` can be used to get the product's images under the category."
+              - type: string
+                default: null
+                description: "`products.ingredients` can be used to get the product's ingredients under the category."
+              - type: string
+                default: null
+                description: "`products.reviews` can be used to get the product's reviews under the category."
+              - type: string
+                default: null
+                description: "`products.wishlist` can be used to get the product's status in user's wishlist. it needs the user to be signed in with their account."
+              - type: string
+                default: null
+                description: "`ingredients` can be used to get the ingredients (that are directly connected to the category) under the category."
+              - type: string
+                default: null
+                description: "`cuisines` can be used to get the cuisines (that are directly connected to the category) under the category."
+        - name: withAvg
+          in: query
+          description: Get the average calculation of some fields based on attributes passed.
+          style: form
+          schema:
+            type: array
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`category.products.reviews` string can be used to get the average of the product reviews."
+      responses:
+        "200":
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ""
+                items:
+                  $ref: "#/components/schemas/Categories"
+  /products:
+    get:
+      tags:
+        - Products
+      security: []
+      summary: List Products
+      description: By passing in the appropriate options, you can search for available categories in the system.
+      operationId: searchProducts
+      parameters:
+        - name: search
+          in: query
+          description: Search products by keywords.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: null
+        - name: searchable
+          in: query
+          description: Specify the searchable areas of the `search` query parameter.
+          style: form
+          required: false
+          explode: true
+          schema:
+            type: object
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`categories` can be used to search the categories only."
+              - type: string
+                default: null
+                description: "`products` can be used to search products within categories."
+        - name: with
+          in: query
+          description: Pass an optional strings of category
+          required: false
+          schema:
+            type: array
+            format: string
+            default: []
+            items:
+              - type: string
+                default: null
+                description: "`category.products` can be used to get the products under the categories."
+              - type: string
+                default: null
+                description: "`category.products.media` can be used to get the product's images under the categories."
+              - type: string
+                default: null
+                description: "`category.products.ingredients` can be used to get the product's ingredients under the categories."
+              - type: string
+                default: null
+                description: "`category.products.reviews` can be used to get the product's reviews under the categories."
+              - type: string
+                default: null
+                description: "`category.products.wishlist` can be used to get the product's status in user's wishlist. it needs the user to be signed in with their account."
+              - type: string
+                default: null
+                description: "`category.ingredients` can be used to get the ingredients (that are directly connected to the category) under the categories."
+              - type: string
+                default: null
+                description: "`category.cuisines` can be used to get the cuisines (that are directly connected to the category) under the categories."
+        - name: withAvg
+          in: query
+          description: Get the average calculation of some fields based on attributes passed.
+          style: form
+          schema:
+            type: array
+            default: []
+            items:
+              type: string
+              default: null
+              description: "`category.products.reviews` string can be used to get the average of the product reviews."
+      responses:
+        "200":
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                description: ""
+                items:
+                  $ref: "#/components/schemas/Products"
+  /cart:
+    put:
+      tags:
+        - Cart > Ingridients
+      summary: Add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                action: SYNC
+                products:
+                  '1':
+                    qty: 1
+                ingredients:
+                  '1':
+                    product_id: 1
+                    qty: 5
+                  '2':
+                    product_id: 1
+                    qty: 2
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Wishlist > Ingridients
+      summary: Remove
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                action: DETACH
+                ingridients:
+                  - 5
+                  - 4
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Cart
+      summary: Show
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: with[]
+          in: query
+          schema:
+            type: string
+          example: cart.products
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /wonderpoints/avail:
+      get:
+        tags:
+          - Cart > Wonderpoints
+        summary: Avail
+        responses:
+          '200':
+            description: Successful response
+            content:
+              application/json: {}
+  /wishlists:
+    put:
+      tags:
+        - Wishlists
+      summary: Remove
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Wishlists
+      summary: create
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_id[0]:
+                  type: integer
+                  example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Wishlists
+      summary: Get
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /coupons/apply:
+    post:
+      tags:
+        - Coupon
+      summary: New Request
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                coupon:
+                  type: string
+                  example: FRIDAY
+                cart:
+                  type: integer
+                  example: '5'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /orders:
+    get:
+      tags:
+        - Orders
+      summary: List
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: with[]
+          in: query
+          schema:
+            type: string
+          example: order.products
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /reviews:
+    get:
+      tags:
+        - Reviews
+      summary: Store
+      parameters:
+        - name: with[]
+          in: query
+          schema:
+            type: string
+          example: review.user
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /advertisements:
+    get:
+      tags:
+        - Advertisement
+      summary: New Request
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /cuisines:
+    get:
+      tags:
+        - Cuisine
+      summary: List
+      parameters:
+        - name: with[]
+          in: query
+          schema:
+            type: string
+          example: cuisines.categories
+        - name: categories[]
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /wonderpoints:
+    get:
+      tags:
+        - Cart > Wonderpoints
+      summary: Index
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  requestBodies:
+    Login:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                example: john.doe@example.com
+                description: Registered email of the user.
+              password:
+                type: string
+                example: secret
+                description: Password used while account registration.
+    Register:
+      description: Form fields needed for the request.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - first_name
+              - last_name
+              - mobile
+              - email
+              - password
+              - password_confirmation
+            properties:
+              first_name:
+                type: string
+                example: John
+                description: First name of the user.
+              last_name:
+                type: string
+                example: Doe
+                description: Last name of the user.
+              mobile:
+                type: string
+                example: +xx xxxx-xxxx
+                description: Mobile number of the user. User can also login with this number.
+              email:
+                type: string
+                example: john.doe@example.com
+                description: Login email of the user.
+              password:
+                type: string
+                example: secret
+                description: Login password.
+              password_confirmation:
+                type: string
+                example: secret
+                description: Confirmation of the entered password.
+    Address:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - first_name
+              - last_name
+              - street
+              - city
+              - phone
+              - type
+            properties:
+              first_name:
+                type: string
+                example: John
+                description: First name of the user.
+              last_name:
+                type: string
+                example: Doe
+                description: Last name of the user.
+              street:
+                type: string
+                example: XYZ, ABC
+                description: Street of the user address.
+              city:
+                type: string
+                example: US
+                description: City name of the user address
+              phone:
+                type: string
+                example: +xx xxxx-xxxx
+                description: Contact no. of the user.
+              type:
+                type: string
+                example: home
+                description: Address type.
+              location:
+                type: object
+                description: Location **LAT** & **LNG** coordinates.
+                properties:
+                  lat:
+                    type: string
+                    example: 3257896
+                    description: Latitude of address.
+                  lng:
+                    type: string
+                    example: -85.3257896
+                    description: Longitude of address.
+  responses:
+    Unauthorized:
+      description: Authorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: AuthorizationException
+                description: Name of the response.
+              code:
+                type: string
+                example: E_UNAUTHORIZED_ACCESS
+                description: Alpha code of the response.
+              status:
+                type: number
+                example: 401
+                description: Status code of response.
+              message:
+                type: string
+                example: Unauthorized access
+                description: Default response message.
+    NotFound:
+      description: Record not found.
+      content:
+        application/json:
+          schema:
+            type: object
+            example: ""
+  schemas:
+    Categories:
+      required:
+        - type
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: Product
+          description: Product | Ingredient | Cuisine etc.
+        parent:
+          type: integer
+          description: Reference to parent category.
+          example: 0
+        name:
+          type: string
+          description: Name of the category.
+          example: Base
+        description:
+          type: string
+          description: Description of the category.
+          example: lorem impsum....
+        status:
+          type: number
+          description: Status of the category.
+          example: "1"
+        created_at:
+          type: string
+          description: Date when category added.
+          example: "2022-10-20 14:21:28.92+05:30"
+        updated_at:
+          type: string
+          description: Date when category last updated.
+          example: "2022-10-20 14:21:28.92+05:30"
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Products"
+    Users:
+      required:
+        - email
+        - first_name
+        - id
+        - last_name
+        - mobile
+        - password
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+          description: Unique ID of the record.
+        first_name:
+          type: string
+          example: John
+          description: First name of the user.
+        last_name:
+          type: string
+          example: Doe
+          description: Last name of the user.
+        email:
+          type: string
+          example: john.doe@example.com
+          description: Login email of the user.
+        password:
+          type: string
+          example: password
+          description: Hashed password of the user.
+        avatar:
+          type: object
+          example:
+            name: avatars/clc07y9mf00014wp969gabvh6.png
+            extname: png
+            size: "127890"
+            mimeType: image/png
+          description: Cloud storage data of image.
+        avatar_url:
+          type: string
+          description: Pre-computed url of user avatar.
+          example: https://storage.googleapis.com/next-wonderbites-app/avatars/clc07y9mf00014wp969gabvh6.png
+        address_id:
+          type: number
+          example: 1
+          description: Default delivery address unique ID.
+        remember_me_token:
+          type: string
+          example: null
+          description: Remember me token.
+        mobile:
+          type: string
+          example: +xx xxxxx xxxxx
+          description: Mobile number of the user. User can also login with this number.
+        status:
+          type: integer
+          example: 1
+          description: User status (for internal use only.)
+        language:
+          type: string
+          example: EN
+          description: Default selected language of the user.
+        created_at:
+          type: string
+          example: "2022-10-20 14:21:28.92+05:30"
+          description: Date when user registered to app/website.
+        updated_at:
+          type: string
+          example: "2022-10-20 14:21:28.92+05:30"
+          description: Date when user last updated their data.
+        deleted_at:
+          type: string
+          example: null
+          description: Date when user deleted their account.
+    Addresses:
+      required:
+        - city
+        - first_name
+        - last_name
+        - phone
+        - street
+        - type
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: Unique ID of the record.
+        user_id:
+          type: integer
+          example: 1
+          description: ID of the user who owns the address.
+        first_name:
+          type: string
+          example: John
+          description: First name of the recipient.
+        last_name:
+          type: string
+          example: Doe
+          description: Last name of the recipient
+        street:
+          type: string
+          example: 845 Meadows Rd
+          description: Street name.
+        city:
+          type: string
+          example: Aspen
+          description: City name
+        phone:
+          type: string
+          example: (970) 925-4240
+          description: Contact no. of recipient.
+        location:
+          type: object
+          example:
+            lat: 39.202683
+            lng: -106.831857
+        created_at:
+          type: string
+          example: "2022-12-27 07:37:43.815+00"
+          description: Date when address added.
+        updated_at:
+          type: string
+          example: "2022-12-29 11:21:28.195+00"
+          description: Date when address last updated.
+        deleted_at:
+          type: string
+          example: null
+          description: Date when address deleted.
+    Products:
+      required:
+        - city
+        - first_name
+        - last_name
+        - phone
+        - street
+        - type
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique ID of the product.
+          example: 1
+        name:
+          type: string
+          description: Name of the product.
+          example: Salmon Teriyaki
+        description:
+          type: string
+          description: Product description.
+          example: The beauty of this Salad Bowl is that it is completely customizable. The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. Swap the spinach/carrots/edamame for any of your favorite veggies
+        sku:
+          type: string
+          description: Product SKU
+          example: "482"
+        calories:
+          type: string
+          description: Calories of the product.
+          example: "500"
+        price:
+          type: string
+          description: Product sale price.
+          example: "1000"
+        thumbnail:
+          type: object
+          example:
+            name: products/clc07y9mf00014wp969gabvh6.png
+            extname: png
+            size: "127890"
+            mimeType: image/png
+          description: Cloud storage data of image.
+        thumbnail_url:
+          type: string
+          description: Pre-computed url of product thumbnail.
+          example: https://storage.googleapis.com/next-wonderbites-app/products/clc07y9mf00014wp969gabvh6.png
+        status:
+          type: integer
+          description: Product status.
+          example: "1"
+        published_at:
+          type: string
+          example: "2022-12-27 07:37:43.815+00"
+          description: Date when product published publicly.
+        created_at:
+          type: string
+          example: "2022-12-27 07:37:43.815+00"
+          description: Date when product added.
+        updated_at:
+          type: string
+          example: "2022-12-29 11:21:28.195+00"
+          description: Date when product last updated.
+        deleted_at:
+          type: string
+          example: null
+          description: Date when product deleted.
+        user:
+          $ref: "#/components/schemas/Users"
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/Media"
+    Media:
+      properties:
+        id:
+          type: string
+          description: Unique ID of the record.
+          example: "1"
+        user_id:
+          type: number
+          description: User ID of the user who created the media.
+          example: 1
+        title:
+          type: number
+          description: User ID of the user who created the media.
+          example: 1
+        caption:
+          type: number
+          description: User ID of the user who created the media.
+          example: 1
+        attachment:
+          type: object
+          example:
+            name: media/clc07y9mf00014wp969gabvh6.png
+            extname: png
+            size: "127890"
+            mimeType: image/png
+          description: Cloud storage data of attachment.
+        attachment_url:
+          type: string
+          description: Pre-computed url of media attachment.
+          example: https://storage.googleapis.com/next-wonderbites-app/media/clc07y9mf00014wp969gabvh6.png
+        created_at:
+          type: string
+          example: "2022-12-27 07:37:43.815+00"
+          description: Date when product added.
+        updated_at:
+          type: string
+          example: "2022-12-29 11:21:28.195+00"
+          description: Date when product last updated.

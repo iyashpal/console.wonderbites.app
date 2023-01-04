@@ -12,7 +12,7 @@ export default class WishlistsController {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
-      { userId: user.id }, // Search payload
+      { user_id: user.id }, // Search payload
       { ipAddress: request.ip() } // Save payload
     )
 
@@ -34,7 +34,7 @@ export default class WishlistsController {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
-      { userId: user.id }, // Search payload
+      { user_id: user.id }, // Search payload
       { ipAddress: request.ip() } // Save payload
     )
 
@@ -61,7 +61,7 @@ export default class WishlistsController {
 
     try {
       const wishlist = await user.related('wishlist').firstOrCreate(
-        { userId: user.id }, // Search payload
+        { user_id: user.id }, // Search payload
         { ipAddress: request.ip() } // Save payload
       )
 
