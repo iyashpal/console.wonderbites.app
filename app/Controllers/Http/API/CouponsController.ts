@@ -108,12 +108,10 @@ export default class CouponsController {
         await cart?.merge({ couponId: coupon.id }).save()
 
         response.status(200).json({
-          coupon: {
-            id: coupon.id,
-            code: coupon.code,
-            discount_type: coupon.discountType,
-            discount_value: coupon.discountValue,
-          },
+          id: coupon.id,
+          code: coupon.code,
+          discount_type: coupon.discountType,
+          discount_value: coupon.discountValue,
         })
       }
 

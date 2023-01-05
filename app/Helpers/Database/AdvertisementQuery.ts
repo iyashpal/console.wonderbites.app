@@ -46,7 +46,7 @@ export default class AdvertisementQuery extends Query {
    */
   protected filterStatus (): this {
     this.$query.match([
-      this.input('filters', []).includes(this.qs('status.active')),
+      this.input('filters', []).includes('active'),
       query => query.apply(scopes => scopes.withActive()),
     ])
 
