@@ -1,17 +1,11 @@
 import { defineConfig } from 'vite'
-import Adonis from '@adonisjs/vite-plugin-adonis'
+import vue from '@vitejs/plugin-vue'
+
+/** @type {import('vite').UserConfig} */
 export default defineConfig(({ command }) => ({
-  plugins: [
-    Adonis({
-      // Write files to this directory
-      outputPath: './public/assets',
 
-      // Prefix the following to the output URL
-      publicPath: '/assets',
+  root: './resources/app',
 
-      entryPoints: {
-        app: ['resources/js/app.ts'],
-      },
-    }),
-  ],
+  plugins: [vue()],
+
 }))

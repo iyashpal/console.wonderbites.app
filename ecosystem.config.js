@@ -1,8 +1,33 @@
 module.exports = {
   apps: [
     {
+      name: 'console.wonderbites.app',
 
-      name: 'admin.wonderbites.app',
+      script: './node_modules/@vitejs/plugin-vue/node_modules/.bin/vite',
+
+      args: 'preview',
+
+      autorestart: true,
+
+      max_restarts: 20,
+
+      restart_delay: 10000,
+
+      max_memory_restart: '200M',
+
+      instances: 1,
+
+      exec_mode: 'cluster',
+
+      kill_timeout: 3000,
+
+      watch: ['resources/app/dist'],
+
+      ignore_watch: ['node_modules'],
+    },
+    {
+
+      name: 'api.wonderbites.app',
 
       script: './build/server.js',
 
@@ -25,6 +50,7 @@ module.exports = {
       ignore_watch: ['node_modules'],
 
       post_update: [
+        'yarn app:build',
         'cd build',
         'yarn install --production',
       ],

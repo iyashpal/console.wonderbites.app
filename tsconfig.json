@@ -13,6 +13,7 @@
       "ES6",
       "DOM"
     ],
+    "module": "ESNext",
     "jsx": "preserve",
     "experimentalDecorators": true,
     "noUnusedParameters": false,
@@ -31,6 +32,9 @@
       ],
       "Database/*": [
         "./database/*"
+      ],
+      "AppUI/*": [
+        "./resources/app/*"
       ]
     },
     "types": [
@@ -45,11 +49,11 @@
       "@adonisjs/session",
       "@adonisjs/bouncer",
       "@adonisjs/limiter",
+      "@adonisjs/drive-gcs",
       "@adonisjs/lucid-slugify",
+      "@adonisjs/attachment-lite",
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/route-model-binding/build/adonis-typings",
-      "@adonisjs/drive-gcs",
-      "@adonisjs/attachment-lite"
     ]
   }
 }
