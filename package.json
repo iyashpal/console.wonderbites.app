@@ -9,9 +9,9 @@
     "start": "node server.js",
     "lint": "eslint . --ext=.ts",
     "test": "node ace test --watch",
-    "app:dev": "vite",
-    "app:build": "vue-tsc --declaration --emitDeclarationOnly && vite build",
-    "app:preview": "vite preview"
+    "vue:dev": "vite",
+    "vue:build": "vue-tsc --declaration --emitDeclarationOnly && vite build",
+    "vue:preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [

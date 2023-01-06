@@ -15,7 +15,7 @@ export default class WonderpointsController {
     // Query user wonderpoints.
     const wonderpoints = await user.related('wonderpoints').query()
       .match(
-        [request.input('type', 'all') === 'earned', query => query],
+        [request.input('type', 'all') === 'all', query => query],
         [request.input('type') === 'earned', query => query.where('action', 'earn')],
         [request.input('type') === 'redeemed', query => query.where('action', 'redeem')],
       )

@@ -16,7 +16,7 @@ test.group('Api [reviews.store]', (group) => {
     const request = await client.post(route('api.reviews.store')).json(review.toObject())
 
     request.assertStatus(401)
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@reviews', '@reviews.store'])
 
   test('it can allow logged in user to create a review.', async ({ client, route }) => {
@@ -49,7 +49,7 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertStatus(422)
 
-    request.assertBodyContains({ messages: { reviewable_id: ['Reviewable ID field is required.'] } })
+    request.assertBodyContains({ messages: { reviewableId: ['Reviewable ID field is required.'] } })
   }).tags(['@reviews', '@reviews.store'])
 
   test('it can validate the review title before submitting the review.', async ({ client, route }) => {

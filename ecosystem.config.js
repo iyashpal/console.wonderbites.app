@@ -5,7 +5,7 @@ module.exports = {
 
       script: './node_modules/@vitejs/plugin-vue/node_modules/.bin/vite',
 
-      args: 'preview',
+      args: 'vue:preview',
 
       autorestart: true,
 

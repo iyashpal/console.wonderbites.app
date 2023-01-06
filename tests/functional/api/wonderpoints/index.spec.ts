@@ -14,7 +14,7 @@ test.group('API [wonderpoints.index]', (group) => {
   test('Guest users cannot access the wonderpoints list.', async ({ client, route }) => {
     const response = await client.get(route('api.wonderpoints.index'))
 
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@wonderpoints', '@wonderpoints.index'])
 
   test('Authenticated users can access their wonderpoints earnings.', async ({ client, route }) => {
@@ -51,7 +51,7 @@ test.group('API [wonderpoints.index]', (group) => {
       { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
-    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'earned' } })).guard('api')
+    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { type: 'earned' } })).guard('api')
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)
@@ -65,7 +65,7 @@ test.group('API [wonderpoints.index]', (group) => {
       { userId: user.id, points: 50, action: 'redeem' },
     ]).createMany(2)
 
-    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { filter: 'redeemed' } })).guard('api')
+    const response = await client.get(route('api.wonderpoints.index', {}, { qs: { type: 'redeemed' } })).guard('api')
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)

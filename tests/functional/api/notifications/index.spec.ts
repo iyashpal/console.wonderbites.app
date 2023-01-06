@@ -12,7 +12,7 @@ test.group('API [notifications.index]', (group) => {
     const $response = await client.get(route('api.notifications.index'))
 
     $response.assertStatus(401)
-    $response.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@notifications', '@notifications.index', '@notifications.index'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {

@@ -232,6 +232,7 @@ test.group('API [categories.index]', (group) => {
 
     const queryString = {
       type: 'product',
+      searchable: ['products'],
       search: 'search keyword',
       with: [
         'category.products',

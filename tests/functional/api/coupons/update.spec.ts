@@ -40,7 +40,7 @@ test.group('API [coupons.update]', (group) => {
       .json({ title: 'Updated Title for tests.', description: 'Updated Description for tests.', code: 'UPDATED' })
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@coupons', '@coupons.update'])
 
   test('only existing coupons can be updated.', async ({ client, route }) => {

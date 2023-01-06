@@ -26,6 +26,6 @@ test.group('API [coupons.store]', (group) => {
     const response = await client.post(route('api.coupons.store')).json(coupon)
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@coupons', '@coupons.store'])
 })

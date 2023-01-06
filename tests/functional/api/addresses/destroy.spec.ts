@@ -18,7 +18,7 @@ test.group('API [addresses.destroy]', (group) => {
 
     $response.assertStatus(401)
 
-    $response.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@addresses', '@addresses.destroy'])
 
   test('it allows users to delete their addresses.', async ({ client, route }) => {

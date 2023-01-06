@@ -21,12 +21,10 @@ test.group('API [coupons.apply]', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains({
-      coupon: {
-        id: coupon.id,
-        code: coupon.code,
-        discount_type: coupon.discountType,
-        discount_value: coupon.discountValue,
-      },
+      id: coupon.id,
+      code: coupon.code,
+      discount_type: coupon.discountType,
+      discount_value: coupon.discountValue,
     })
   }).tags(['@coupons', '@coupons.apply'])
 

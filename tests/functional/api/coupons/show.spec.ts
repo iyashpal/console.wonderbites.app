@@ -41,6 +41,6 @@ test.group('API [coupons.show]', (group) => {
     const response = await client.get(route('api.coupons.show', { id: coupon.id }))
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@coupons', '@coupons.show'])
 })

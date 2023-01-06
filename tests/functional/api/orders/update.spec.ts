@@ -19,7 +19,7 @@ test.group('API [orders.update]', (group) => {
     const $response = await client.put(route('api.orders.cancel', order))
 
     $response.assertStatus(401)
-    $response.assertBodyContains({ message: 'Unauthenticated' })
+    $response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@orders', '@orders.update', '@orders.cancel'])
 
   test('it can allow user to cancel the order.', async ({ client, route }) => {

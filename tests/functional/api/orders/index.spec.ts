@@ -1,8 +1,8 @@
 import { Order } from 'App/Models'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { IngredientFactory, OrderFactory, ReviewFactory, UserFactory } from 'Database/factories'
 import { OrderStatus } from 'App/Models/Enums/Order'
+import { IngredientFactory, OrderFactory, ReviewFactory, UserFactory } from 'Database/factories'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -14,7 +14,7 @@ test.group('API [orders.index]', (group) => {
     const request = await client.get(route('api.orders.index'))
 
     request.assertStatus(401)
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@orders', '@orders.index'])
 
   test('it can allow the access to authenticated users.', async ({ client, route }) => {
@@ -37,8 +37,8 @@ test.group('API [orders.index]', (group) => {
     request.assertStatus(200)
     request.assertBodyContains({
       data: orders.map(({ id, userId, deliverTo, ipAddress, options, note, status }) => ({
-        id, userId: userId, deliverTo: JSON.stringify(deliverTo),
-        ipAddress: ipAddress, options: JSON.stringify(options), note, status,
+        id, user_id: userId, deliver_to: JSON.stringify(deliverTo),
+        ip_address: ipAddress, options: JSON.stringify(options), note, status,
       })),
     })
   }).tags(['@orders', '@orders.index'])
@@ -65,8 +65,8 @@ test.group('API [orders.index]', (group) => {
 
     request.assertBodyContains({
       data: orders.map(({ id, userId, ipAddress, deliverTo, options, note, status }) => ({
-        id, userId: userId, deliverTo: deliverTo,
-        ipAddress: ipAddress, options: options, note, status,
+        id, user_id: userId, deliver_to: deliverTo,
+        ip_address: ipAddress, options: options, note, status,
       })),
     })
   }).tags(['@orders', '@orders.index'])
@@ -171,8 +171,8 @@ test.group('API [orders.index]', (group) => {
 
     request.assertBodyContains({
       data: orders.map(({ id, userId, deliverTo, ipAddress, options, note, status, ingredients }) => ({
-        id, userId: userId, deliverTo: JSON.stringify(deliverTo),
-        ipAddress: ipAddress, options: JSON.stringify(options), note, status,
+        id, user_id: userId, deliver_to: JSON.stringify(deliverTo),
+        ip_address: ipAddress, options: JSON.stringify(options), note, status,
         ingredients: ingredients.map(({ id, name, description, price, status }) => ({
           id, name, description, price, status,
         })),
@@ -195,7 +195,7 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id, deliverTo }) => ({ id, deliverTo: JSON.stringify(deliverTo) })),
+      data: orders.map(({ id, deliverTo }) => ({ id, deliver_to: JSON.stringify(deliverTo) })),
     })
   }).tags(['@orders', '@orders.index'])
 
@@ -237,7 +237,7 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({ id }) => ({ id, userId: user.id, user: { id: user.id } })),
+      data: orders.map(({ id }) => ({ id, user_id: user.id, user: { id: user.id } })),
     })
   }).tags(['@orders', '@orders.index'])
 
@@ -313,9 +313,9 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({
       data: [{
         id: order.id,
-        userId: user.id,
+        user_id: user.id,
         user: { id: user.id },
-        deliverTo: JSON.stringify(order.deliverTo),
+        deliver_to: JSON.stringify(order.deliverTo),
         options: JSON.stringify(order.options),
         coupon_id: order.coupon.id,
         coupon: { id: order.coupon.id },

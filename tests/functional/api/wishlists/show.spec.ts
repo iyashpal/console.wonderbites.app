@@ -15,7 +15,7 @@ test.group('API [wishlists.show]', (group) => {
     const response = await client.get(route('api.wishlists.show'))
 
     response.assertStatus(401)
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@wishlists', '@wishlists.show'])
 
   test('User can access the wishlist after login', async ({ client, route, assert }) => {

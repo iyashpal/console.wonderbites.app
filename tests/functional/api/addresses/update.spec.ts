@@ -29,7 +29,7 @@ test.group('API [addresses.update]', (group) => {
 
     request.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@addresses', '@addresses.update'])
 
   test('it can not allow a user to update other\'s address', async ({ client, route }) => {

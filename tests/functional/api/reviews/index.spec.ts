@@ -63,7 +63,7 @@ test.group('API [reviews.index]', (group) => {
     assert.equal(request.body().data.length, reviews.length)
 
     request.assertBodyContains({
-      data: reviews.map(({ id, product }) => ({ id: id, reviewableId: product.id, product: { id: product.id } })),
+      data: reviews.map(({ id, product }) => ({ id: id, reviewable_id: product.id, product: { id: product.id } })),
     })
   }).tags(['@reviews', '@reviews.index'])
 

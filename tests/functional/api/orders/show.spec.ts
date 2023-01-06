@@ -20,7 +20,7 @@ test.group('API [orders.show]', (group) => {
 
     request.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@orders', '@orders.show'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
@@ -179,7 +179,7 @@ test.group('API [orders.show]', (group) => {
 
     request.assertBodyContains({
       id: order.id,
-      userId: user.id,
+      user_id: user.id,
       user: { id: user.id },
       deliver_to: JSON.stringify(order.deliverTo),
       coupon_id: order.couponId,

@@ -13,7 +13,7 @@ test.group('API [wonderpoints.avail]', (group) => {
 
   test('Guest users can not avail the wonderpoints.', async ({ client, route }) => {
     const response = await client.get(route('api.wonderpoints.avail'))
-    response.assertBodyContains({ message: 'Unauthenticated' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@wonderpoints', '@wonderpoints.avail'])
 
   test('Authenticated users can avail the wonderpoints.', async ({ client, route }) => {

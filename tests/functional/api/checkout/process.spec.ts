@@ -89,7 +89,7 @@ test.group('API [checkout.process]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { cart: ['required validation failed'] } })
+    $response.assertBodyContains({ errors: { cart: 'required validation failed' } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without invalid cart.', async ({ client, route }) => {
@@ -122,7 +122,7 @@ test.group('API [checkout.process]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { cart: ['exists validation failure'] } })
+    $response.assertBodyContains({ errors: { cart: 'exists validation failure' } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without address.', async ({ client, route }) => {
@@ -153,7 +153,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({
-      messages: { address: ['required validation failed'] },
+      errors: { address: 'required validation failed' },
     })
   }).tags(['@checkout', '@checkouts.process'])
 
@@ -176,7 +176,7 @@ test.group('API [checkout.process]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { address: ['object validation failed'] } })
+    $response.assertBodyContains({ errors: { address: 'object validation failed' } })
   }).tags(['@checkout', '@checkouts.process'])
 
   test('user cannot process checkout without payment method.', async ({ client, route }) => {
@@ -200,7 +200,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({
-      messages: { 'options.payment.mode': ['required validation failed'] },
+      errors: { 'options.payment.mode': 'required validation failed' },
     })
   }).tags(['@checkout', '@checkouts.process'])
 

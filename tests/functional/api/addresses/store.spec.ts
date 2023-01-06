@@ -19,7 +19,7 @@ test.group('API [addresses.store]', (group) => {
 
     request.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@addresses', '@addresses.store'])
 
   test('first name is required to create new address', async ({ client, route }) => {
@@ -32,7 +32,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { firstName: ['First name is required'] },
+      errors: { firstName: 'First name is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -46,7 +46,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { firstName: ['Maximum 255 characters allowed only'] },
+      errors: { firstName: 'Maximum 255 characters allowed only' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -60,7 +60,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { lastName: ['Last name is required'] },
+      errors: { lastName: 'Last name is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -74,7 +74,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { lastName: ['Maximum 255 characters allowed only'] },
+      errors: { lastName: 'Maximum 255 characters allowed only' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -88,7 +88,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { street: ['Street is required'] },
+      errors: { street: 'Street is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -102,7 +102,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { street: ['Maximum 255 characters allowed only'] },
+      errors: { street: 'Maximum 255 characters allowed only' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -116,7 +116,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { city: ['City is required'] },
+      errors: { city: 'City is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -130,7 +130,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { city: ['Maximum 255 characters allowed only'] },
+      errors: { city: 'Maximum 255 characters allowed only' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -144,7 +144,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { phone: ['Phone is required'] },
+      errors: { phone: 'Phone is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -158,7 +158,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { phone: ['Maximum 20 characters allowed only'] },
+      errors: { phone: 'Maximum 20 characters allowed only' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -172,7 +172,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { phone: ['Phone is required'] },
+      errors: { phone: 'Phone is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 
@@ -186,7 +186,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({
-      messages: { type: ['Address type is required'] },
+      errors: { type: 'Address type is required' },
     })
   }).tags(['@addresses', '@addresses.store'])
 

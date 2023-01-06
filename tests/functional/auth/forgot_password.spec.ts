@@ -8,7 +8,7 @@ test.group('Auth forgot password', () => {
     const response = await client.post(route('api.password.email'))
       .guard('api').loginAs(user).json({ email: user.email }).accept('json')
 
-    response.assertBodyContains({ message: 'unauthorized access' })
+    response.assertBodyContains({ message: 'Unauthorized access' })
   })
 
   test('Cannot request password reset link without an email address.', async ({ client, route }) => {

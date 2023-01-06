@@ -16,7 +16,7 @@ test.group('API [addresses.index]', (group) => {
 
     request.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthenticated' })
+    request.assertBodyContains({ message: 'Unauthorized access' })
   }).tags(['@addresses', '@addresses.index'])
 
   test('address list is accessible to logged in users.', async ({ client, route }) => {
@@ -42,6 +42,6 @@ test.group('API [addresses.index]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains(addresses.map(({ id, userId, type }) => ({ id, userId: userId, type })))
+    request.assertBodyContains(addresses.map(({ id, userId, type }) => ({ id, user_id: userId, type })))
   }).tags(['@addresses', '@addresses.index'])
 })
