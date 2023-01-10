@@ -13,8 +13,7 @@
     "App": "app",
     "Config": "config",
     "Database": "database",
-    "Contracts": "contracts",
-    "VueApp": "resources/app"
+    "Contracts": "contracts"
   },
   "preloads": [
     "./start/routes",

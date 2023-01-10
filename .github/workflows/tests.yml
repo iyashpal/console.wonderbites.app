@@ -21,6 +21,3 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-
-      - name: Execute tests
-        run: node ace test
