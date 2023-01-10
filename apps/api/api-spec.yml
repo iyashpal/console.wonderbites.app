@@ -6,9 +6,6 @@ info:
 security:
   - BearerAuth: []
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/iyashpal/WonderbitesApp/v1.0
   - description: Wonderbites API for public website and mobile applications.
     url: https://api.wonderbites.app/api
 
@@ -230,7 +227,7 @@ paths:
           required: false
           allowEmptyValue: true
           description: "All possible array items are listed below."
-          example: 
+          example:
             - user.addresses
           schema:
             type: array
@@ -347,7 +344,7 @@ paths:
           required: false
           allowEmptyValue: true
           description: "All possible array items are listed below. "
-          example: 
+          example:
             - user.addresses
           schema:
             type: array
@@ -447,6 +444,11 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Addresses"
+
         "401":
           $ref: "#/components/responses/Unauthorized"
     patch:
@@ -465,9 +467,15 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        $ref: "#/components/requestBodies/Address"
       responses:
         "200":
-          $ref: "#/components/requestBodies/Address"
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Addresses"
         "401":
           $ref: "#/components/responses/Unauthorized"
     delete:
@@ -672,7 +680,7 @@ paths:
             default: []
             items:
               type: string
-        
+
         - name: with[]
           in: query
           description: Pass an optional attributes of product
@@ -694,13 +702,13 @@ paths:
           description: Get the average calculation of some fields based on attributes passed.
           style: form
           example:
-              - category.products.reviews
+            - category.products.reviews
           schema:
             type: array
             default: []
             items:
               type: string
-              
+
         - name: inCategories[]
           in: query
           description: Search products within selected categories.
@@ -724,7 +732,7 @@ paths:
             default: []
             items:
               type: string
-              
+
         - name: withCount[]
           in: query
           description: Attach the relation's counts.
@@ -762,7 +770,7 @@ paths:
             type: number
             default: null
             example: 1
-        
+
         - name: with[]
           in: query
           description: Pass an optional attributes of product
@@ -784,13 +792,13 @@ paths:
           description: Get the average calculation of some fields based on attributes passed.
           style: form
           example:
-              - category.products.reviews
+            - category.products.reviews
           schema:
             type: array
             default: []
             items:
               type: string
-              
+
         - name: inCategories[]
           in: query
           description: Search products within selected categories.
@@ -836,7 +844,7 @@ paths:
                   $ref: "#/components/schemas/Products"
         404:
           $ref: '#/components/responses/NotFound'
-  
+
   /cart:
     put:
       tags:
@@ -875,12 +883,12 @@ paths:
           application/json:
             schema:
               type: object
-              properties: 
+              properties:
                 action:
                   type: string
                   default: null
                   description: Specify the cart action for the request.
-                  example: 
+                  example:
                     - ADD
                     - REMOVE
                 products:
@@ -921,14 +929,14 @@ paths:
           description: Successful response
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: "#/components/schemas/Cart"
   /wonderpoints:
     get:
       tags:
         - User > Wonderpoints
       summary: Detail
-      parameters: 
+      parameters:
         - name: type
           in: query
           example:
@@ -952,7 +960,7 @@ paths:
           schema:
             type: string
             default: 10
-          
+
       responses:
         "200":
           description: OK
@@ -1011,7 +1019,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Wishlists'
+                $ref: '#/components/schemas/Wishlists'
     put:
       tags:
         - User > Wishlist
@@ -1021,12 +1029,12 @@ paths:
           application/json:
             schema:
               type: object
-              properties: 
+              properties:
                 action:
                   type: string
                   default: null
                   description: Specify the cart action for the request.
-                  example: 
+                  example:
                     - ADD
                     - REMOVE
                 products:
@@ -1062,7 +1070,7 @@ paths:
           content:
             application/json:
               schema:
-                    $ref: '#/components/schemas/Wishlists'
+                $ref: '#/components/schemas/Wishlists'
   /feedbacks:
     get:
       tags:
@@ -1102,7 +1110,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Feedbacks'
+                $ref: '#/components/schemas/Feedbacks'
   /feedbacks/{id}:
     get:
       tags:
@@ -1255,8 +1263,8 @@ paths:
             application/json:
               schema:
                 type: object
-                
-                    
+
+
   /coupons/remove:
     post:
       tags:
@@ -1275,7 +1283,7 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: 
+            application/json:
               schema:
                 $ref: '#/components/schemas/Cart'
         422:
@@ -1464,7 +1472,7 @@ paths:
       tags:
         - Advertisements
       summary: List
-      parameters: 
+      parameters:
         - name: location
           in: query
           required: true
@@ -1504,7 +1512,7 @@ paths:
       tags:
         - Advertisements
       summary: Show
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -1544,7 +1552,7 @@ paths:
             items:
               type: string
           example:
-           - cuisines.categories
+            - cuisines.categories
         - name: limit
           in: query
           example:
@@ -1560,7 +1568,7 @@ paths:
           schema:
             default: 1
             type: number
-            
+
       responses:
         "200":
           description: OK
@@ -1583,7 +1591,7 @@ paths:
           schema:
             type: number
             default: null
-            
+
         - name: with[]
           in: query
           schema:
@@ -1592,8 +1600,8 @@ paths:
             items:
               type: string
           example:
-           - cuisines.categories
-            
+            - cuisines.categories
+
       responses:
         "200":
           description: OK
@@ -1601,7 +1609,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cuisines'
-  
+
   /checkouts:
     post:
       tags:
@@ -1768,18 +1776,10 @@ components:
                     type: string
                     example: -85.3257896
                     description: Longitude of address.
-              created_at:
-                type: string
-                example: "2022-12-27 07:37:43.815+00"
-                description: Date when address added.
-              updated_at:
-                type: string
-                example: "2022-12-29 11:21:28.195+00"
-                description: Date when address last updated.
-              deleted_at:
-                type: string
-                example: null
-                description: Date when address deleted.
+              is_default:
+                type: boolean
+                example: true
+                description: Set this address as default
     Checkout:
       content:
         application/json:
@@ -1835,7 +1835,7 @@ components:
                         example: COD
               note:
                 type: string
-                example: 
+                example:
     CreateReview:
       content:
         application/json:
@@ -2265,7 +2265,7 @@ components:
             size: "127890"
             mimeType: image/png
           description: Cloud storage data of attachment.
-          
+
         attachment_url:
           type: string
           description: Pre-computed url of media attachment.
@@ -2297,32 +2297,32 @@ components:
           type: string
           default: 1
           description: Unique ID of the record.
-          
+
         user_id:
           type: number
           default: 1
           description: User id belongs to wonderpoint.
-          
+
         action:
           type: string
           example: "earned"
           description: Wonderpoints nature earned OR redeemed.
-          
+
         event:
           type: string
           example: "Daily login"
           description: Event name.
-          
+
         points:
           type: integer
           example: 24
           description: Earned/Redeemed points.
-          
+
         extras:
           type: object
           description: extra options of wonderpoints.
           example: {}
-        
+
         created_at:
           type: string
           description: Date when wonderpoints created.
@@ -2335,22 +2335,22 @@ components:
           type: string
           default: 1
           description: Unique ID of the record.
-          
+
         user_id:
           type: number
           default: 1
           description: User id belongs to wonderpoint.
-          
+
         coupon_id:
           type: number
           example: 1
           description: Redeemed coupon ID.
-          
+
         ip_address:
           type: string
           example: "127.0.0.1"
           description: User IP address.
-          
+
         deliver_to:
           type: object
           example:
@@ -2364,22 +2364,22 @@ components:
               lat: 56.5647
               lng: -75.655
           description: customer delivery address.
-          
+
         options:
           type: object
           description: extra options for the record.
           example: {}
-          
+
         note:
           type: object
           description: record notes...
           example: This is extra note.
-          
+
         status:
           type: number
           description: record's status.
           example: 1
-        
+
         created_at:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
@@ -2392,49 +2392,49 @@ components:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
           description: Date when record last deleted.
-          
+
     Reviews:
       properties:
         id:
           type: string
           default: 1
           description: Unique ID of the record.
-          
+
         user_id:
           type: number
           default: 1
           description: User id belongs to wonderpoint.
-          
+
         reviewable:
           type: string
           example: Product
           description: Reviewable model name.
-          
+
         reviewable_id:
           type: number
           example: 1
           description: Related model id.
-          
+
         rating:
           type: number
           example: 5
           description: customer delivery address.
-          
+
         title:
           type: string
           description: extra options for the record.
           example: Review title
-          
+
         body:
           type: object
           description: record notes...
           example: Review body.
-          
+
         status:
           type: number
           description: record's status.
           example: 1
-        
+
         created_at:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
@@ -2445,7 +2445,7 @@ components:
           description: Date when record last updated.
         deleted_at:
           type: string
-          example: 
+          example:
           description: Date when record last deleted.
     Feedbacks:
       properties:
@@ -2453,27 +2453,27 @@ components:
           type: string
           default: 1
           description: Unique ID of the record.
-          
+
         user_id:
           type: number
           default: 1
           description: User id belongs to the record.
-          
+
         experience:
           type: string
           example: 10
           description: User experience
-          
+
         body:
           type: object
           description: record body...
           example: Feedback body.
-          
+
         source:
           type: string
           description: record's source.
           example: Feedback source
-        
+
         created_at:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
@@ -2482,24 +2482,24 @@ components:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
           description: Date when record last updated.
-          
+
     Wishlists:
       properties:
         id:
           type: string
           default: 1
           description: Unique ID of the record.
-          
+
         user_id:
           type: number
           default: 1
           description: User id belongs to the record.
-          
+
         ip_address:
           type: string
           example: 127.0.0.1
           description: User device IP
-        
+
         created_at:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
@@ -2508,4 +2508,3 @@ components:
           type: string
           example: "2022-10-20 14:21:28.92+05:30"
           description: Date when record last updated.
-          
