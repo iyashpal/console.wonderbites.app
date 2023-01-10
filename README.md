@@ -1,6 +1,6 @@
-# Turborepo starter
+# Management Console for wonderbites.app
 
-This is an official Yarn v1 starter turborepo.
+This is an official turborepo for Management Console of Wonderbites Platform.
 
 ## What's inside?
 
@@ -8,9 +8,9 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. I
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `app`: a [Next.js](https://nextjs.org/) app
+- `api`: another [Next.js](https://nextjs.org/) app
+- `ui`: a stub React component library shared by both `app` and `api` applications
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
@@ -60,6 +60,9 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 ```
 npx turbo link
 ```
+
+### Deployment Instructions
+Deployment instructions and steps are documented in `README.md` file for each app under `apps` directory has its separate README.md file which   
 
 ## Useful Links
 
