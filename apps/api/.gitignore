@@ -1,0 +1,13 @@
+node_modules
+build
+coverage
+.vscode
+.idea
+.fleet
+.DS_STORE
+.env
+tmp
+public/assets/*
+package-lock.json
+.logs
+google-cloud-key.json

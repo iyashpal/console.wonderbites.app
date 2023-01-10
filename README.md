@@ -1,31 +1,73 @@
-# admin.wonderbites.com
+# Turborepo starter
 
-## Server Details
-**HOST** : `34.121.19.181`
-**PORT** : `22`
-**USER** : `<your-given-user-for-ssh-key>`
+This is an official Yarn v1 starter turborepo.
 
-**Note** : For Login you must have the `.pem`/`ssh` key file.
+## What's inside?
 
-## PM2 Steps
-Below steps are only for the initial setup.
-1. Install PM2 with command `npm install -g pm2`.
-2. Start Process with command `ENV_PATH=/etc/myapp/.env pm2 start`
+This turborepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
 
+### Apps and Packages
 
-## Deploy Steps
-Below deployment steps is only for `AWS` EC2 instance `34.121.19.181`.
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
-1. Login to server via any ssh client.
-2. Change directory (cd) to `/var/www/html/admin.wonderbites.app`.
-3. Run git command to pull the latest changes/code (`git pull`).
-4. In case you find any npm depencies missing then install them via `yarn install`.
-5. Now generate build files using command `yarn build`.
-6. You are all done!
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
+### Utilities
 
-## Setup on local machine
-1. Clone the repo.
-2. Install the dependencies by running `yarn` OR `yarn install` OR `npm install`.
-3. Duplicate `.env.example` file and name it `.env`. Update the environment variable in `.env` according to your development setup.
-4. If you are interested to run the tests make sure to create `.env.test` file from `.env` OR `.env.example`.
+This turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd my-turborepo
+yarn run build
+```
+
+### Develop
+
+To develop all apps and packages, run the following command:
+
+```
+cd my-turborepo
+yarn run dev
+```
+
+### Remote Caching
+
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+
+```
+cd my-turborepo
+npx turbo login
+```
+
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
+
+```
+npx turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Pipelines](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
