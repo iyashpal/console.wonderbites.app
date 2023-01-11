@@ -1,0 +1,81 @@
+@layout('layouts/index')
+
+@set('title', blog.name)
+
+@section('actions')
+<a class="tw:btn tw:btn-secondary" href="{{ route('blogs.index') }}">
+    <icon name="arrow-left" class="w-6 h-6 mr-1"></icon> Back
+</a>
+@end
+@section('content')
+@!alerts.success({show: flashMessages.get('blog_created'), icon: 'check-circle', message: "Blog successfully saved!", className: "mb-4"})
+@!alerts.success({show: flashMessages.get('blog_updated'), icon: 'check-circle', message: "Blog successfully updated!", className: "mb-4"})
+<div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+    <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Blog Details</h3>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Name</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ blog.name }}</dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Description</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ blog.description }}</dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Image</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    <img src="{{ `/uploads/${blog.image_path}` }}" alt="{{ blog.name }}" class="w-10 h-10 rounded-full">
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Status</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @if(blog.status === 1)
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                    @else
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Disabled</span>
+                    @endif
+                </dd>
+            </div>
+
+        </dl>
+    </div>
+    <div class="px-4 py-4 sm:px-6">
+        <div class="flex justify-end items-center">
+            <a class="tw:btn tw:btn-primary mr-2" href="{{ route('blogs.edit', {id: blog.id}) }}">
+                <icon name="edit" class="w-5 h-5 mr-1"></icon>Edit
+            </a>
+            <form action="{{ route('blogs.destroy', {id: blog.id}, {qs: {_method: 'delete'}}) }}" method="post">
+                {{ csrfField() }}
+                <button class="tw:btn tw:btn-danger">
+                    <icon name="delete" class="w-5 h-5 mr-1"></icon>Delete
+                </button>
+            </form>
+
+        </div>
+    </div>
+   <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="pb-3">
+                <h2 class="font-semibold text-xl">Categories</h2>
+                <p class="text-xs text-gray-400">Click categories to add/remove</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                @each(category in categories)
+                <v-toggle-product-categories csrf="{{ csrfToken }}" route="{{ route('blogs.category', blog) }}" :category="{{ JSON.stringify(category) }}" :categories="{{ JSON.stringify(blog.categories) }}"></v-toggle-product-categories>
+                @endeach
+            </div>
+
+            @if(categories.length === 0)
+            <v-alert name="warning">
+                Categories not found. <a class="font-semibold underline hover:italic" href="{{ route('categories.create') }}">Click here</a> to create categories.
+            </v-alert>
+            @endif
+        </div>
+    </div>
+
+</div>
+@endsection

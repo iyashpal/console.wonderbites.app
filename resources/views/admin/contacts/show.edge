@@ -1,0 +1,42 @@
+@layout('layouts/index')
+
+@set('title', contact.name)
+@set('breadcrumb', [{label: 'Categories', link: route('contacts.index')}])
+@section('actions')
+<a class="tw:btn tw:btn-secondary" href="{{ route('contacts.index') }}">
+    <icon name="arrow-left" class="w-6 h-6 mr-1"></icon> Back
+</a>
+@end
+@section('content')
+
+<div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+    <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Contact Details</h3>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Name</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ contact.name }}</dd>
+            </div>
+
+
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">Status</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @if(contact.status === 1)
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                    @else
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Disabled</span>
+                    @endif
+                </dd>
+            </div>
+             <div class="sm:col-span-2">
+                <dt class="text-sm font-medium text-gray-500">Comment</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ contact.comment }}</dd>
+            </div>
+        </dl>
+    </div>
+
+</div>
+@endsection

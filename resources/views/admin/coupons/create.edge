@@ -1,0 +1,64 @@
+@layout('layouts/index')
+
+@set('title', 'Create New')
+
+@set('breadcrumb', [{label: 'Coupons', link: route('coupons.index')}])
+
+@section('content')
+<form action="{{ route('coupons.store') }}" method="POST" enctype="multipart/form-data">
+
+    {{ csrfField() }}
+
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-6">
+                    @!form.label({for:'title', label: "Title", required: true})
+                    @!form.input({id: "title", value: flashMessages.get('title', ''), name: "title", type: "text", className: "mt-1 block w-full", autofocus: true})
+                    @!form.inputError({error: 'errors.title'})
+                </div>
+
+                <div class="col-span-6">
+                    @!form.label({for:'description', label: "Description"})
+                    @!form.textarea({name:'description', id:'description', value: flashMessages.get('description', ''), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.description'})
+                </div>
+
+                <div class="col-span-6">
+                    @!form.label({for:'code', label: "Coupon Code", required: true})
+                    @!form.input({type:'text', id:'code', name:'code', value: flashMessages.get('code', ''), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.code'})
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'discountType', label: "Discount Type", required: true})
+                    @!form.select({id: "discountType", name: "discountType", value: flashMessages.get('discountType', ''), options: [{label: 'Price', value: 'price'}, {label: 'Percentage', value: 'percentage'}], className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.discountType'})
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'discountValue', label: "Discount Value", required: true})
+                    @!form.input({type: 'text', id: "discountValue", name: "discountValue", value: flashMessages.get('discountValue', ''), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.discountValue'})
+                </div>
+
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'startedAt', label: "Promotion Starts At"})
+                    @!form.input({type: 'datetime-local', id: "startedAt", name: "startedAt", value: flashMessages.get('startedAt', ''), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.startedAt'})
+                </div>
+                <div class="col-span-6 sm:col-span-3">
+                    @!form.label({for:'expiredAt', label: "Promotion Expired At"})
+                    @!form.input({type: 'datetime-local', id: "expiredAt", name: "expiredAt", value: flashMessages.get('expiredAt', ''), className: "mt-1 block w-full"})
+                    @!form.inputError({error: 'errors.expiredAt'})
+                </div>
+
+            </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-4 sm:px-6">
+            <div class="flex justify-end">
+                <button type="submit" class="ml-3 tw:btn tw:btn-secondary">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+@endsection
