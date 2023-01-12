@@ -1,13 +1,13 @@
-import { DateTime } from 'luxon'
+import {DateTime} from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Notifiable from 'App/Features/Notification/Notifiable'
-import { BelongsTo, HasMany, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback } from '.'
-import { beforeSave, belongsTo, column, computed, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
+import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
+import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'
+import {Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback, Role} from './index'
 
 export default class User extends Notifiable {
-  @column({ isPrimary: true })
+  @column({isPrimary: true})
   public id: number
 
   @column()
@@ -16,16 +16,19 @@ export default class User extends Notifiable {
   @column()
   public lastName: string
 
+  @column.date()
+  public dateOfBirth: DateTime | undefined
+
   @column()
   public email: string
 
   @column()
   public mobile: string
 
-  @attachment({ folder: 'avatars', preComputeUrl: true })
+  @attachment({folder: 'avatars', preComputeUrl: true})
   public avatar: AttachmentContract | null
 
-  @column({ serializeAs: null })
+  @column({serializeAs: null})
   public password: string
 
   @column()
@@ -40,10 +43,10 @@ export default class User extends Notifiable {
   @column()
   public language: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({autoCreate: true})
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -55,7 +58,7 @@ export default class User extends Notifiable {
    * @param user
    */
   @beforeSave()
-  public static async hashPassword (user: User) {
+  public static async hashPassword(user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
@@ -82,7 +85,7 @@ export default class User extends Notifiable {
   /**
    * Relation to active cart of the user.
    */
-  @hasOne(() => Cart, { onQuery: query => query.where('status', 1) })
+  @hasOne(() => Cart, {onQuery: query => query.where('status', 1)})
   public cart: HasOne<typeof Cart>
 
   /**
@@ -104,7 +107,7 @@ export default class User extends Notifiable {
   public orders: HasMany<typeof Order>
 
   /**
-   * Relation to user wonderpoints.
+   * Relation to user wonder points.
    */
   @hasMany(() => Wonderpoint)
   public wonderpoints: HasMany<typeof Wonderpoint>
@@ -116,10 +119,16 @@ export default class User extends Notifiable {
   public feedbacks: HasMany<typeof Feedback>
 
   /**
+   * Relation to user role.
+   */
+  @belongsTo(() => Role)
+  public role: BelongsTo<typeof Role>
+
+  /**
    * Default User avatar attribute.
    */
   @computed()
-  public get avatar_url () {
+  public get avatar_url() {
     if (this.avatar?.url) {
       return this.avatar.url
     }

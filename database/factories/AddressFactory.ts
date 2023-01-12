@@ -4,6 +4,7 @@ import { UserFactory } from '.'
 
 export default Factory.define(Address, ({ faker }) => {
   return {
+    title: faker.name.jobTitle(),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     street: faker.address.street(),

@@ -1,11 +1,12 @@
-import { User } from 'App/Models'
+import {User} from 'App/Models'
+import {DateTime} from "luxon"
 import Drive from '@ioc:Adonis/Core/Drive'
-import { file } from '@ioc:Adonis/Core/Helpers'
+import {file} from '@ioc:Adonis/Core/Helpers'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { AddressFactory, CartFactory, OrderFactory, WishlistFactory } from '.'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
+import {AddressFactory, CartFactory, OrderFactory, WishlistFactory} from './index'
 
-export default Factory.define(User, async ({ faker }) => {
+export default Factory.define(User, async ({faker}) => {
   // User profile attachment
   const attachment = new Attachment({
     extname: 'png',
@@ -19,8 +20,11 @@ export default Factory.define(User, async ({ faker }) => {
   await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)
 
   return {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    dateOfBirth: DateTime.fromJSDate(
+      faker.date.birthdate({min: 20, max: 40})
+    ),
     mobile: faker.phone.number('+91 ##########'),
     email: faker.internet.email(),
     avatar: attachment,
