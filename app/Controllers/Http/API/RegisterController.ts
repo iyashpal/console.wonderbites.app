@@ -1,17 +1,17 @@
-import User from 'App/Models/User'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import UserCreateValidator from 'App/Validators/User/CreateValidator'
+import {User} from "App/Models";
+import {Attachment} from "@ioc:Adonis/Addons/AttachmentLite";
+import ExceptionResponse from "App/Helpers/ExceptionResponse";
+import {HttpContextContract} from "@ioc:Adonis/Core/HttpContext";
+import UserCreateValidator from "App/Validators/User/CreateValidator";
 
 export default class RegisterController {
   /**
    * Register users.
-   * 
-   * @param param0 {HttpContextContract} 
+   *
+   * @param param0 {HttpContextContract}
    * @param {JSON}
    */
-  public async register ({ request, response }: HttpContextContract) {
+  public async handle ({ request, response }: HttpContextContract) {
     try {
       const payload = await request.validate(UserCreateValidator)
 

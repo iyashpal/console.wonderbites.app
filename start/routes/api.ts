@@ -2,9 +2,23 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   /**
+   * Routes that allowed only for guest users.
+   */
+  Route.group(() => {
+    Route.post('/login', 'LoginController').as('login')
+
+    Route.post('/register', 'RegisterController').as('register')
+
+    Route.post('/forgot-password', 'PasswordResetLinkController').as('password.email')
+  }).middleware('api.guest')
+
+
+  /**
    * Routes that allowed only for a logged-in user.
    */
   Route.group(() => {
+    Route.post('/logout', 'LogoutController').as('logout')
+
     // Get the authenticated user.
     Route.get('users/auth', 'UsersController.auth').as('users.auth')
 

@@ -25,22 +25,3 @@ Route.group(() => {
   }).middleware('auth')
 })
 
-/**
- * Auth api routes 
- */
-Route.group(() => {
-  /**
-   * Routes that allowed only for guest users.
-   */
-  Route.group(() => {
-    Route.post('/login', 'API/Auth/LoginController.login').as('login')
-
-    Route.post('/register', 'API/Auth/RegisterController.register').as('register')
-
-    Route.post('/forgot-password', 'Auth/PasswordResetLinkController.store').as('password.email')
-  }).middleware('api.guest')
-
-  Route.group(() => {
-    Route.post('/logout', 'API/Auth/LoginController.logout').as('logout')
-  }).middleware('api.auth')
-}).prefix('/api').as('api')
