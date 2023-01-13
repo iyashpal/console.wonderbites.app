@@ -48,6 +48,17 @@ import './routes/web'
 */
 import './routes/api'
 
+
+/*
+|-------------------------------------------------------------------------
+| Core API Routes
+|-------------------------------------------------------------------------
+| This file is dedicated for defining the core API routes. which we will use for
+| management console operations.
+|
+*/
+import './routes/core'
+
 /*
 |-------------------------------------------------------------------------
 | SPA Routes

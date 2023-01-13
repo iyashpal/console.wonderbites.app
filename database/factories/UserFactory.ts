@@ -5,6 +5,7 @@ import {file} from '@ioc:Adonis/Core/Helpers'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import {AddressFactory, CartFactory, OrderFactory, WishlistFactory} from './index'
+import RoleFactory from "Database/factories/RoleFactory";
 
 export default Factory.define(User, async ({faker}) => {
   // User profile attachment
@@ -20,6 +21,7 @@ export default Factory.define(User, async ({faker}) => {
   await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)
 
   return {
+    roleId: null,
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     dateOfBirth: DateTime.fromJSDate(
@@ -31,6 +33,7 @@ export default Factory.define(User, async ({faker}) => {
     password: 'Welcome@123!',
   }
 })
+  .relation('role', () => RoleFactory)
   .relation('cart', () => CartFactory)
   .relation('orders', () => OrderFactory)
   .relation('wishlist', () => WishlistFactory)

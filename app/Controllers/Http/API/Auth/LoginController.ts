@@ -5,7 +5,7 @@ import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
 export default class LoginController {
   /**
    * Authenticate users.
-   * 
+   *
    * @param param0 {HttpContextContract} Request Data
    * @returns {JSON}
    */
@@ -22,10 +22,10 @@ export default class LoginController {
   }
 
   /**
-   * Revoke API token of logged in user.
-   * 
+   * Revoke API token of logged-in user.
+   *
    * @param param0 HttpContextContract
-   * 
+   *
    * @return {JSON}
    */
   public async logout ({ auth, response }: HttpContextContract) {
