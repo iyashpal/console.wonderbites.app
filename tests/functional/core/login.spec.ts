@@ -49,4 +49,13 @@ test.group('Core [core.login]', (group) => {
     response.assertStatus(200)
     assert.properties(response.body(), ['type', 'token'])
   }).tags(['@core', '@core.login'])
+
+  test('It do not allow access to auth users', async ({client, route}) => {
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.post(route('core.login')).guard('api').loginAs(user).json({email: user.email, password: 'Welcome@123!'})
+    response.dumpBody()
+    response.assertStatus(401)
+    response.assertBodyContains({message: 'Unauthorized access'})
+  }).tags(['@core', '@core.login'])
 })

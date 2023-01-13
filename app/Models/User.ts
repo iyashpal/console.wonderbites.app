@@ -143,6 +143,6 @@ export default class User extends Notifiable {
 
 
   public isRoleAssigned(): boolean {
-    return this.roleId !== null
+    return !!this.roleId
   }
 }
