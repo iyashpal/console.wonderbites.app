@@ -46,7 +46,8 @@ Server.middleware.register([
 Server.middleware.registerNamed({
   'auth': () => import('App/Middleware/Auth'),
   'guest': () => import('App/Middleware/Guest'),
-  'api.auth': () => import('App/Middleware/API/Auth'),
-  'api.guest': () => import('App/Middleware/API/Guest'),
+  'api.auth': () => import('App/Middleware/AuthApi'),
+  'api.guest': () => import('App/Middleware/GuestApi'),
+  'api.core.auth': () => import('App/Middleware/CoreAuthApi'),
   'throttle': () => import('@adonisjs/limiter/build/throttle'),
 })

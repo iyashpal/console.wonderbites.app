@@ -1,7 +1,7 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
-export default class Guest {
-  public async handle ({ auth, response }: HttpContextContract, next: () => Promise<void>) {
+export default class GuestApi {
+  public async handle({auth, response}: HttpContextContract, next: () => Promise<void>) {
     if (auth.use('api').isGuest) {
       await next()
 
@@ -14,4 +14,5 @@ export default class Guest {
       message: 'Unauthorized access',
     })
   }
+
 }
