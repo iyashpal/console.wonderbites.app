@@ -1,6 +1,6 @@
 import {test} from '@japa/runner'
-import Database from "@ioc:Adonis/Lucid/Database";
-import {UserFactory} from "Database/factories";
+import {UserFactory} from 'Database/factories'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 test.group('Core [core.logout]', (group) => {
   group.each.setup(async () => {
@@ -29,10 +29,8 @@ test.group('Core [core.logout]', (group) => {
   test('it allows access to a core user', async ({ client, route}) => {
     const user = await UserFactory.with('role').create()
 
-    console.log(user.roleId)
-
     const response = await client.post(route('core.logout')).guard('api').loginAs(user)
-    response.dumpBody()
+
     response.assertStatus(200)
     response.assertBodyContains({revoked: true})
   }).tags(['@core', '@core.logout'])

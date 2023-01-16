@@ -1,6 +1,6 @@
 import {test} from '@japa/runner'
-import Database from "@ioc:Adonis/Lucid/Database";
-import {UserFactory} from "Database/factories";
+import Database from '@ioc:Adonis/Lucid/Database'
+import {UserFactory} from 'Database/factories'
 
 test.group('Core [core.login]', (group) => {
   group.each.setup(async () => {
@@ -24,26 +24,24 @@ test.group('Core [core.login]', (group) => {
     assert.properties(response.body().errors, ['password'])
   }).tags(['@core', '@core.login'])
 
-
   test('It can not allow non core user to login.', async ({client, route}) => {
     const user = await UserFactory.create()
 
     const response = await client.post(route('core.login')).json({
       email: user.email,
-      password: 'Welcome@123!'
+      password: 'Welcome@123!',
     })
 
     response.assertStatus(401)
     response.assertBodyContains({message: 'Unauthorized access'})
   }).tags(['@core', '@core.login'])
 
-
   test('It can allow core user to login.', async ({client, route, assert}) => {
     const user = await UserFactory.with('role').create()
 
     const response = await client.post(route('core.login')).json({
       email: user.email,
-      password: 'Welcome@123!'
+      password: 'Welcome@123!',
     })
 
     response.assertStatus(200)
@@ -53,8 +51,10 @@ test.group('Core [core.login]', (group) => {
   test('It do not allow access to auth users', async ({client, route}) => {
     const user = await UserFactory.with('role').create()
 
-    const response = await client.post(route('core.login')).guard('api').loginAs(user).json({email: user.email, password: 'Welcome@123!'})
-    response.dumpBody()
+    const response = await client.post(route('core.login'))
+      .guard('api').loginAs(user)
+      .json({email: user.email, password: 'Welcome@123!'})
+
     response.assertStatus(401)
     response.assertBodyContains({message: 'Unauthorized access'})
   }).tags(['@core', '@core.login'])
