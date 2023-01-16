@@ -94,8 +94,10 @@ export const csrf: ShieldConfig['csrf'] = {
   |
   */
   exceptRoutes: ({ request }) => {
+    const segments = ['/api', '/core']
+
     // Check if the route is api
-    if (request.url().includes('/api')) {
+    if (segments.some(segment => request.url().includes(segment))) {
       return true
     }
 

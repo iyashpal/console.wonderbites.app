@@ -1,8 +1,7 @@
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class CoreAuthApi {
-  public async handle({response, auth}: HttpContextContract, next: () => Promise<void>) {
-
+  public async handle ({response, auth}: HttpContextContract, next: () => Promise<void>) {
     const guard = auth.use('api')
 
     if (guard.isLoggedIn && guard.user?.isRoleAssigned()) {
@@ -17,5 +16,4 @@ export default class CoreAuthApi {
       message: 'Unauthorized access',
     })
   }
-
 }

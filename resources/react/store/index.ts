@@ -1,7 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit'
+import * as features from './features'
 
 const Store = configureStore({
-  reducer: {}
+  reducer: {
+    auth: features.authSlice,
+    user: features.userSlice,
+  }
 })
 
 export default Store

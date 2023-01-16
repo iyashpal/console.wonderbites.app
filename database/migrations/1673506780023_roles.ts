@@ -3,7 +3,7 @@ import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 export default class extends BaseSchema {
   protected tableName = 'roles'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
       table.string('slug')
@@ -18,11 +18,11 @@ export default class extends BaseSchema {
     })
 
     this.schema.table('users', (table) => {
-      table.bigInteger('role_id').after('id').nullable().references('roles.id').onDelete("RESTRICT")
+      table.bigInteger('role_id').after('id').nullable().references('roles.id').onDelete('RESTRICT')
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.table('users', (table) => {
       table.dropColumn('role_id')
     })
