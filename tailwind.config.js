@@ -15,6 +15,10 @@ module.exports = {
           primary: '#E1251B',
         },
       },
+
+      maxHeight: {
+        content: 'calc(100vh - 86px)',
+      },
     },
   },
   plugins: [

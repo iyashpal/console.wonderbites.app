@@ -1,13 +1,8 @@
 import {Fragment} from "react";
+import {Link} from "react-router-dom";
 import {Menu, Popover, Transition} from "@headlessui/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import {Bars3CenterLeftIcon, BellIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
-import {Link} from "react-router-dom";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 
 const user = {
   name: 'Chelsea Hagon',
@@ -20,17 +15,17 @@ const userNavigation = [
   {name: 'Sign out', href: '/app/dashboard'},
 ]
 
-export default function Header() {
+export default function Header({onToggleSidebar}: { onToggleSidebar: () => void }) {
   return <>
     {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
-    <Popover as="header" className={({open}) => classNames(open ? 'fixed inset-0 z-40 overflow-y-auto' : '', 'bg-white shadow-sm lg:static lg:overflow-y-visible')}>
+    <Popover as="header" className={({open}) => [open && 'fixed inset-0 z-40 overflow-y-auto', 'bg-white shadow-md lg:static lg:overflow-y-visible'].join(' ')}>
       {({open}) => (
         <>
           <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="relative flex justify-between lg:gap-8 xl:grid xl:grid-cols-12">
               <div className="flex xl:col-span-2">
                 <div className="flex flex-shrink-0 items-center gap-2">
-                  <button className="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-primary">
+                  <button onClick={onToggleSidebar} className="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-primary">
                     <span className="sr-only">Open menu</span>
                     <Bars3CenterLeftIcon className="block h-6 w-6" aria-hidden="true"/>
                   </button>
@@ -89,7 +84,7 @@ export default function Header() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({active}) => (
-                            <Link to={item.href} className={classNames(active ? 'bg-gray-100' : '', 'block py-2 px-4 text-sm text-gray-700')}>
+                            <Link to={item.href} className={[active && 'bg-gray-100', 'block py-2 px-4 text-sm text-gray-700'].join(' ')}>
                               {item.name}
                             </Link>
                           )}
