@@ -21,5 +21,5 @@ Route.group(() => {
   /**
    * Routes for all users.
    */
-  Route.get('auth', 'UserController').as('user')
+  Route.get('auth', 'UserController').as('auth')
 }).prefix('/core').as('core').namespace('App/Controllers/Http/Core')

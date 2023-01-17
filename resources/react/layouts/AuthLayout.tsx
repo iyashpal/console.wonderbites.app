@@ -1,6 +1,8 @@
-import {Outlet, useNavigate} from "react-router-dom";
-import {useAuth} from "~/hooks";
-import {useEffect} from "react";
+import {useAuth} from '~/hooks'
+import {useEffect} from 'react'
+import {Outlet, useNavigate} from 'react-router-dom'
+import Header from './AuthLayout/Header'
+
 
 export default function AuthLayout(props) {
   const auth = useAuth()
@@ -13,7 +15,7 @@ export default function AuthLayout(props) {
   }, [])
   return <>
     <div>
-      <div>This is demo</div>
+      <Header />
       <div>
         <Outlet/>
         {props.children}
@@ -21,3 +23,5 @@ export default function AuthLayout(props) {
     </div>
   </>
 }
+
+
