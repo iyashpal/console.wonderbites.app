@@ -8,7 +8,7 @@ import {ExclamationTriangleIcon} from '@heroicons/react/24/outline'
 import {UserCircleIcon, LockClosedIcon} from '@heroicons/react/24/solid'
 
 
-export default function index() {
+export default function Login() {
   const dashboardURI = '/app/dashboard'
   const auth = useAuth()
   const usableFetch = useFetch()

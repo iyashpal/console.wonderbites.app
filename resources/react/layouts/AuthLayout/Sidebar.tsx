@@ -1,18 +1,42 @@
-import {Fragment} from "react";
-import {Dialog, Transition} from "@headlessui/react";
-import {ChatBubbleBottomCenterTextIcon, BookOpenIcon, HomeIcon, QueueListIcon, UsersIcon, XMarkIcon, RectangleGroupIcon, RectangleStackIcon} from "@heroicons/react/24/outline";
+import {Fragment} from 'react';
+import {Link, useMatches} from 'react-router-dom';
+import {Dialog, Transition} from '@headlessui/react';
+import {Vegan, BoxIso, PageStar, NumberedListLeft} from 'iconoir-react'
+import {WonderPointsIcon, FeedbackIcon, DashboardIcon} from '~/components/icons'
+import {
+  BookOpenIcon, HomeIcon, UsersIcon, XMarkIcon, RectangleStackIcon, CogIcon, ChevronRightIcon,
+  PhotoIcon, UserGroupIcon, ChatBubbleOvalLeftEllipsisIcon, TicketIcon, FolderIcon, DocumentTextIcon,
+  CalendarDaysIcon, ClockIcon, ArrowTopRightOnSquareIcon
+} from '@heroicons/react/24/outline'
 
 const navigation = [
-  {name: 'View Site', href: '#', icon: HomeIcon, current: false},
-  {name: 'Dashboard', href: '#', icon: RectangleGroupIcon, current: true},
-  {name: 'Users', href: '#', icon: UsersIcon, current: false},
-  {name: 'Reviews', href: '#', icon: ChatBubbleBottomCenterTextIcon, current: false},
-  {name: 'Cuisines', href: '#', icon: BookOpenIcon, current: false},
-  {name: 'Subscriptions', href: '#', icon: RectangleStackIcon, current: false},
-  {name: 'Orders', href: '#', icon: QueueListIcon, current: false},
+  {name: 'Dashboard', href: '/app/dashboard', icon: DashboardIcon},
+  {name: 'Users', href: '/app/users', icon: UsersIcon},
+  {name: 'Categories', href: '/app/categories', icon: FolderIcon},
+  {name: 'Reviews', href: '/app/reviews', icon: PageStar},
+  {name: 'Ingredients', href: '/app/ingredients', icon: Vegan},
+  {name: 'Cuisines', href: '/app/cuisines', icon: BookOpenIcon},
+  {name: 'Subscriptions', href: '/app/subscriptions', icon: RectangleStackIcon},
+  {name: 'Orders', href: '/app/orders', icon: NumberedListLeft},
+  {name: 'Chat', href: '/app/chats', icon: ChatBubbleOvalLeftEllipsisIcon},
+  {name: 'Products', href: '/app/products', icon: BoxIso},
+  {name: 'Clients', href: '/app/clients', icon: UserGroupIcon},
+  {name: 'Banners', href: '/app/banners', icon: PhotoIcon},
+  {name: 'Pages', href: '/app/pages', icon: DocumentTextIcon},
+  {name: 'Feedback', href: '/app/feedbacks', icon: FeedbackIcon},
+  {name: 'Wonderpoints', href: '/app/wonderpoints', icon: WonderPointsIcon},
+  {name: 'Coupons', href: '/app/coupons', icon: TicketIcon},
+  {name: 'Reservations', href: '/app/reservations', icon: CalendarDaysIcon},
+  {name: 'Waitlist', href: '/app/waitlist', icon: ClockIcon},
+  {name: 'Settings', href: '/app/settings', icon: CogIcon},
 ]
 
 export default function Sidebar({show, onToggleSidebar}: { show: boolean, onToggleSidebar: () => void }) {
+  let matches = useMatches()
+
+  function isMatchWithCurrent(uri) {
+    return matches.some(({pathname}) => pathname === uri)
+  }
 
   return <>
     <Transition.Root show={show} as={Fragment}>
@@ -60,12 +84,22 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
                 Management Console
               </div>
               <div className="mt-5 h-0 flex-1 overflow-y-auto">
-                <nav className="space-y-1 px-2">
+                <nav className="space-y-1">
+                  <a target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'}>
+                    <span className={'inline-flex items-center gap-x-2'}>
+                      <HomeIcon className={'h-4 w-4'}/>
+                      Visit Site
+                    </span>
+                    <ArrowTopRightOnSquareIcon className={'w-4 h-4'}/>
+                  </a>
                   {navigation.map((item) => (
-                    <a key={item.name} href={item.href} className={[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md'].join(' ')}>
-                      <item.icon className={[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6'].join(' ')} aria-hidden="true"/>
-                      {item.name}
-                    </a>
+                    <Link key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-2 py-2 text-base font-medium gap-x-2'].join(' ')}>
+                      <span className={'inline-flex items-center gap-x-2'}>
+                        <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
+                        {item.name}
+                      </span>
+                      <ChevronRightIcon className={'w-4 h-4'}/>
+                    </Link>
                   ))}
                 </nav>
               </div>
@@ -79,16 +113,26 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
     </Transition.Root>
 
     {/* Static sidebar for desktop */}
-    <div className="hidden md:flex md:flex-col md:w-64 shadow-md border-2 border-slate-100">
+    <div className="hidden md:flex md:flex-col md:w-64 shadow-md border-2 border-slate-100 z-10">
       {/* Sidebar component, swap this element with another sidebar if you like */}
       <div className="flex min-h-0 flex-1 flex-col bg-white">
         <div className="flex flex-1 flex-col max-h-content overflow-y-auto">
           <nav className="flex-1 space-y-1 py-4">
+            <a target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'}>
+              <span className={'inline-flex items-center gap-x-2'}>
+                <HomeIcon className={'h-4 w-4'}/>
+                Visit Site
+              </span>
+              <ArrowTopRightOnSquareIcon className={'w-4 h-4'}/>
+            </a>
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className={[item.current ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium gap-x-2'].join(' ')}>
-                <item.icon className={[item.current ? 'text-white' : ' group-hover:text-white', 'text-slate-600 mr-3 flex-shrink-0 h-6 w-6'].join('')} aria-hidden="true"/>
-                {item.name}
-              </a>
+              <Link key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'].join(' ')}>
+                <span className={'inline-flex gap-x-2 items-center'}>
+                  <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
+                  {item.name}
+                </span>
+                <ChevronRightIcon className={'w-4 h-4'}/>
+              </Link>
             ))}
           </nav>
         </div>

@@ -19,7 +19,7 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
   return <>
     {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
     <Popover as="header" className={({open}) => [open && 'fixed inset-0 z-40 overflow-y-auto', 'bg-white shadow-md lg:static lg:overflow-y-visible'].join(' ')}>
-      {({open}) => (
+      {() => (
         <>
           <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="relative flex justify-between lg:gap-8 xl:grid xl:grid-cols-12">
@@ -32,7 +32,7 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
 
                   <Link to="/app/dashboard" className={'uppercase font-bold'}>
                     <span className={'hidden sm:block'}>Management Console</span>
-                    <span className={'sm:hidden'}>MC</span>
+                    <span className={'sm:hidden'}>WMC</span>
                   </Link>
 
                 </div>

@@ -3,8 +3,8 @@ import * as features from './features'
 
 const Store = configureStore({
   reducer: {
-    auth: features.authSlice,
-    user: features.userSlice,
+    authSlice: features.authSlice,
+    userSlice: features.userSlice,
   }
 })
 

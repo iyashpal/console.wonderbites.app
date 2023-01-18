@@ -17,7 +17,7 @@ module.exports = {
       },
 
       maxHeight: {
-        content: 'calc(100vh - 86px)',
+        content: 'calc(100vh - 90px)',
       },
     },
   },

@@ -1,13 +1,21 @@
-import {useState} from 'react';
-import {useFetch} from "./index";
-import {useSelector, useDispatch} from '@/store/hooks';
+import {useFetch} from "./index"
+import {useEffect, useState} from 'react'
+import {useSelector, useDispatch} from '@/store/hooks'
+import {setUser} from '~/store/features/auth/authSlice'
 import {setAuthToken} from '~/store/features/auth/authSlice'
 
 export default function useAuth() {
-  const auth = useSelector(state => state.auth)
   const dispatch = useDispatch()
 
+  const auth = useSelector(state => state.authSlice)
+
   const [token, setToken] = useState<string>(auth.token)
+
+  useEffect(() => {
+    console.log('This is testing.')
+  }, [])
+
+
 
   function useToken(authToken: string) {
     setToken(authToken)
@@ -17,23 +25,26 @@ export default function useAuth() {
     return this
   }
 
+  function syncUser(user) {
+    dispatch(setUser(user))
+  }
+
   /**
    * Determine if the user is logged in or not.
    */
   function isLoggedIn(): boolean {
-    if (token) return true
-
-    return false
+    return !!token;
   }
 
 
-  function authorize() {
+  function check() {
     useFetch().get('auth')
   }
 
   return {
+    check,
+    syncUser,
+    useToken,
     isLoggedIn,
-    authorize,
-    useToken
   }
 }
