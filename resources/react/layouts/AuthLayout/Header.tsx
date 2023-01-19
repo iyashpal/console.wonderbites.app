@@ -21,11 +21,11 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
     <Popover as="header" className={({open}) => [open && 'fixed inset-0 z-40 overflow-y-auto', 'bg-white shadow-md lg:static lg:overflow-y-visible'].join(' ')}>
       {() => (
         <>
-          <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="mx-auto px-3 sm:px-6 py-4">
             <div className="relative flex justify-between lg:gap-8 xl:grid xl:grid-cols-12">
               <div className="flex xl:col-span-2">
                 <div className="flex flex-shrink-0 items-center gap-2">
-                  <button onClick={onToggleSidebar} className="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-primary">
+                  <button onClick={onToggleSidebar} className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-primary">
                     <span className="sr-only">Open menu</span>
                     <Bars3CenterLeftIcon className="block h-6 w-6" aria-hidden="true"/>
                   </button>

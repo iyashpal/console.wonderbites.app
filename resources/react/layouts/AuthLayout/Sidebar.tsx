@@ -85,16 +85,16 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
               </div>
               <div className="mt-5 h-0 flex-1 overflow-y-auto">
                 <nav className="space-y-1">
-                  <a target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'}>
+                  <a onClick={onToggleSidebar} target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between px-4 py-2 text-base font-medium gap-x-2'}>
                     <span className={'inline-flex items-center gap-x-2'}>
-                      <HomeIcon className={'h-4 w-4'}/>
+                      <HomeIcon className={'flex-shrink-0 h-4 w-4'} aria-hidden="true"/>
                       Visit Site
                     </span>
-                    <ArrowTopRightOnSquareIcon className={'w-4 h-4'}/>
+                    <ArrowTopRightOnSquareIcon className={'w-4 h-4'} aria-hidden="true"/>
                   </a>
                   {navigation.map((item) => (
-                    <Link key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-2 py-2 text-base font-medium gap-x-2'].join(' ')}>
-                      <span className={'inline-flex items-center gap-x-2'}>
+                    <Link onClick={onToggleSidebar} key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-4 py-2 text-base font-medium gap-x-2'].join(' ')}>
+                      <span className={'inline-flex items-center gap-x-2'} aria-hidden="true">
                         <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
                         {item.name}
                       </span>
@@ -118,7 +118,7 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
       <div className="flex min-h-0 flex-1 flex-col bg-white">
         <div className="flex flex-1 flex-col max-h-content overflow-y-auto">
           <nav className="flex-1 space-y-1 py-4">
-            <a target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'}>
+            <a onClick={onToggleSidebar} target={'_blank'} href={'https://next.wonderbites.app'} className={'text-slate-900 hover:text-red-primary group flex items-center justify-between pl-3 sm:pl-6 pr-2 sm:pr-4 py-2 text-sm font-medium gap-x-2'}>
               <span className={'inline-flex items-center gap-x-2'}>
                 <HomeIcon className={'h-4 w-4'}/>
                 Visit Site
@@ -126,7 +126,7 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
               <ArrowTopRightOnSquareIcon className={'w-4 h-4'}/>
             </a>
             {navigation.map((item) => (
-              <Link key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-2 py-2 text-sm font-medium gap-x-2'].join(' ')}>
+              <Link onClick={onToggleSidebar} key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between pl-4 sm:pl-6 pr-2 sm:pr-4 py-2 text-sm font-medium gap-x-2'].join(' ')}>
                 <span className={'inline-flex gap-x-2 items-center'}>
                   <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
                   {item.name}
