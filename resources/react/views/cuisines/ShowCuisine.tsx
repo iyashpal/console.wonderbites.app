@@ -1,5 +1,16 @@
+import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+
 export default function ShowCuisine() {
   return <>
-    <div>Show cuisine page.</div>
+    <div className="py-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <Breadcrumb pages={[{name: 'Cuisines', href:'/app/cuisines'}, {name: '1'}]}/>
+      </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <div className="py-4">
+          <div className="h-96 rounded-lg border-4 border-dashed border-gray-200"/>
+        </div>
+      </div>
+    </div>
   </>
 }
