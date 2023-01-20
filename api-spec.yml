@@ -1319,6 +1319,19 @@ paths:
           schema:
             type: string
           example: order.products
+        - name: status
+          in: query
+          schema:
+            type: string
+          example:
+            - past
+            - upcoming
+            - placed
+            - confirmed
+            - preparing
+            - in-transit
+            - delivered
+            - canceled
       responses:
         "200":
           description: Successful response
