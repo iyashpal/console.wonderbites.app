@@ -1,11 +1,15 @@
 export enum OrderStatus {
 
-  UPCOMING = 0,
+  PLACED = 0,
 
-  PREPARING = 1,
+  CONFIRMED = 1,
 
-  DELIVERED = 2,
+  PREPARING = 2,
 
-  CANCELED = 3,
+  IN_TRANSIT = 3,
+
+  DELIVERED = 4,
+
+  CANCELED = 5,
 
 }

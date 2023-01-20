@@ -1,8 +1,8 @@
 import Query from './Query'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
-import { Order } from 'App/Models'
-import { OrderStatus } from 'App/Models/Enums/Order'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
+import {Order} from 'App/Models'
+import {OrderStatus} from 'App/Models/Enums/Order'
 
 export default class OrderQuery extends Query {
   public $query: ModelQueryBuilderContract<typeof Order, Order>
@@ -25,7 +25,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Get the query instance.
-   * 
+   *
    * @returns ModelQueryBuilderContract<typeof Order, Order>
    */
   public query (): ModelQueryBuilderContract<typeof Order, Order> {
@@ -34,7 +34,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Preload the order products.
-   * 
+   *
    * @returns OrderQuery
    */
   protected preloadProducts (): this {
@@ -69,7 +69,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Preload the order product ingredients.
-   * 
+   *
    * @returns OrderQuery
    */
   protected preloadIngredients (): this {
@@ -82,7 +82,6 @@ export default class OrderQuery extends Query {
           this.input('with', []).includes(this.qs('ingredients.categories')),
           ingredient => ingredient.preload('categories'),
         ])
-
       ),
 
     ])
@@ -92,7 +91,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Preload the order user.
-   * 
+   *
    * @returns OrderQuery
    */
   protected preloadUser (): this {
@@ -106,7 +105,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Preload the used order coupon.
-   * 
+   *
    * @returns OrderQuery
    */
   protected preloadCoupon (): this {
@@ -119,7 +118,7 @@ export default class OrderQuery extends Query {
 
   /**
    * Preload the order review.
-   * 
+   *
    * @returns OrderQuery
    */
   protected preloadReview (): this {
@@ -133,13 +132,24 @@ export default class OrderQuery extends Query {
 
   /**
    * Filter orders based on status.
-   * 
+   *
    * @returns OrderQuery
    */
   protected filterStatus (): this {
     this.$query.match(
-      [this.input('status') === 'upcoming', query => query.where('status', OrderStatus.UPCOMING)],
+      // Filter all past orders.
+      [this.input('status') === 'past', query => query.whereIn('status', [
+        OrderStatus.DELIVERED, OrderStatus.CANCELED,
+      ])],
+
+      // Filter all upcoming orders.
+      [this.input('status') === 'upcoming', query => query.whereIn('status', [
+        OrderStatus.PLACED, OrderStatus.CONFIRMED, OrderStatus.IN_TRANSIT, OrderStatus.PREPARING,
+      ])],
+      [this.input('status') === 'placed', query => query.where('status', OrderStatus.PLACED)],
+      [this.input('status') === 'confirmed', query => query.where('status', OrderStatus.CONFIRMED)],
       [this.input('status') === 'preparing', query => query.where('status', OrderStatus.PREPARING)],
+      [this.input('status') === 'in-transit', query => query.where('status', OrderStatus.IN_TRANSIT)],
       [this.input('status') === 'delivered', query => query.where('status', OrderStatus.DELIVERED)],
       [this.input('status') === 'canceled', query => query.where('status', OrderStatus.CANCELED)],
     )
