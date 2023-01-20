@@ -25,7 +25,7 @@ export default function Breadcrumb({pages}: { pages: { name: string, href?: stri
             <div className="flex items-center">
               <ForwardSlashIcon className="h-5 w-5 flex-shrink-0 text-slate-900"/>
               {page.href ? <>
-                <Link to={page.href} className={[isMatchWithCurrent(page.href) ? 'text-slate-900 hover:text-slate-400' : 'text-slate-400 hover:text-slate-900', 'ml-1 text-sm font-medium'].join(' ')} aria-current={isMatchWithCurrent(page.href) ? 'page' : undefined}>
+                <Link to={page.href} className={[isMatchWithCurrent(page.href) ? 'text-red-primary hover:text-red-400' : 'text-slate-400 hover:text-slate-900', 'ml-1 text-sm font-medium'].join(' ')} aria-current={isMatchWithCurrent(page.href) ? 'page' : undefined}>
                   {page.name}
                 </Link>
               </> : <>

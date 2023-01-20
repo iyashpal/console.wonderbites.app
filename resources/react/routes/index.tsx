@@ -152,6 +152,10 @@ export const AppRoutes = [
           {
             path: ':id',
             element: <Views.Products.Show/>
+          },
+          {
+            path: 'create',
+            element: <Views.Products.Create />
           }
         ]
       },
@@ -282,6 +286,11 @@ export const AppRoutes = [
         ]
       },
     ]
+  },
+
+  {
+    path: '*',
+    element: <Views.Errors.NotFound />
   }
 ]
 

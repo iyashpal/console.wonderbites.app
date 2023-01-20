@@ -13,6 +13,7 @@ import Dashboard from '~/views/Dashboard'
  */
 import ShowProduct from '~/views/products/ShowProduct'
 import ListProducts from '~/views/products/ListProducts'
+import CreateProduct from '~/views/products/CreateProduct'
 
 /**
  * Categories Views
@@ -101,6 +102,12 @@ import ListWaitList from '~/views/waitlist/ListWaitList';
  */
 import ListWonderPoints from '~/views/wonderpoints/ListWonderPoints';
 
+/**
+ * Error Views
+ */
+import NotFound from '~/views/errors/NotFound';
+
+
 const Views = {
 
   Auth: {
@@ -154,6 +161,7 @@ const Views = {
   Products: {
     List: ListProducts,
     Show: ShowProduct,
+    Create: CreateProduct,
   },
 
   Reservations: {
@@ -182,6 +190,10 @@ const Views = {
 
   WonderPoints: {
     List: ListWonderPoints
+  },
+
+  Errors: {
+    NotFound: NotFound
   }
 }
 
