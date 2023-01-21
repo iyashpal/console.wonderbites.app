@@ -21,25 +21,6 @@ import Route from '@ioc:Adonis/Core/Route'
 
 /*
 |-------------------------------------------------------------------------
-| Auth Routes
-|-------------------------------------------------------------------------
-| This file is dedicated for defining User Authentication routes. which we will use for
-| frontend and mobile Application development as well as for admin panel SPA.
-|
-*/
-import './routes/auth'
-
-/*
-|-------------------------------------------------------------------------
-| Web Routes
-|-------------------------------------------------------------------------
-| Below routes are used for Web Application and for authenticated users.
-|
-*/
-import './routes/web'
-
-/*
-|-------------------------------------------------------------------------
 | API Routes
 |-------------------------------------------------------------------------
 | This file is dedicated for defining API routes. which we will use for
@@ -47,7 +28,6 @@ import './routes/web'
 |
 */
 import './routes/api'
-
 
 /*
 |-------------------------------------------------------------------------

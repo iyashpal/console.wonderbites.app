@@ -28,10 +28,6 @@ const people = [
   {id: '', name: 'SUPER BOWL', price: '500 L', description: 'Corn fed beef topped with cheddar ...', image: '', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member'},
 ]
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function ListProducts() {
 
   const checkbox = useRef<HTMLInputElement>(null)
@@ -146,7 +142,7 @@ export default function ListProducts() {
                       )}
                       />
                     </td>
-                    <td className={classNames('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selectedPeople.includes(person) ? 'text-red-600' : 'text-gray-900')}>
+                    <td {...className('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selectedPeople.includes(person) ? 'text-red-600' : 'text-gray-900')}>
                       {index + 1}
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.name}</td>
