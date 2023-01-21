@@ -10,8 +10,9 @@ Route.group(() => {
     Route.post('/register', 'RegisterController').as('register')
 
     Route.post('/forgot-password', 'PasswordResetLinkController').as('password.email')
-  }).middleware('api.guest')
 
+    Route.get('/reset-password/:token', 'Auth/NewPasswordController.create').as('password.reset')
+  }).middleware('api.guest')
 
   /**
    * Routes that allowed only for a logged-in user.
