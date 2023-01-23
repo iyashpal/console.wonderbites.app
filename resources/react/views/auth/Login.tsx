@@ -59,7 +59,7 @@ export default function Login() {
                   <UserCircleIcon className="w-4 h-4 text-white"/>
               </span>
           </span>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`flex-auto focus:outline-none py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`}/>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`}/>
           </div>
           <InputError show={errors?.email}>{errors.email}</InputError>
         </div>
@@ -71,7 +71,7 @@ export default function Login() {
                 <LockClosedIcon className="w-4 h-4 text-white"/>
             </span>
         </span>
-            <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`flex-auto focus:outline-none py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`}/>
+            <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`}/>
           </div>
           <InputError show={errors?.password}>{errors.password}</InputError>
         </div>
