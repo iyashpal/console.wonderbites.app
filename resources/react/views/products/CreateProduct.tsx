@@ -1,6 +1,15 @@
+import {useState} from 'react';
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import {ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
+import {Link} from "react-router-dom";
 
 export default function CreateProduct() {
+  const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
+
+  function toggleUploadProgress() {
+    setIsShowFiles(e => !e)
+  }
+
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -77,6 +86,39 @@ export default function CreateProduct() {
                       <p className="text-xs text-gray-500">PNG, JPG, GIF up to 20MB</p>
                     </div>
                   </div>
+
+                  <div className={'py-4 space-y-3'}>
+                    <div className={'flex items-center justify-center text-sm'}>
+                      <button onClick={toggleUploadProgress} className={'inline-flex items-center space-x-3'}>
+                        All Files {isShowFiles ? <ChevronDownIcon className={'w-5 h-5'}/> : <ChevronRightIcon className={'w-5 h-5'}/>}
+                      </button>
+                    </div>
+
+                    {isShowFiles && <>
+                      <div className={'border rounded-lg shadow p-4 space-y-3'}>
+                        <div className={'flex items-center font-semibold'}>
+                          Uploading - <span className={'font-normal'}>img24687.jpg</span>
+                        </div>
+                        <div className={'flex items-center justify-between'}>
+                          <div className={'flex items-center text-sm'}>50% - 12 seconds remaining</div>
+                          <div className={'flex items-center'}>
+                            <button className={'text-gray-300 hover:text-gray-500'}>
+                              <PauseCircleIcon className={'h-6 w-6'}/>
+                            </button>
+                            <button className={'text-gray-300 hover:text-gray-500'}>
+                              <XCircleIcon className={'h-6 w-6'}/>
+                            </button>
+                          </div>
+                        </div>
+                        <div className={'flex items-center'}>
+                          <div className="w-full rounded-full bg-gray-200 h-2 relative">
+                            <div className="h-full w-6/12 bg-red-primary rounded-full relative overflow-hidden"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </>}
+
+                  </div>
                 </div>
 
               </div>
@@ -86,7 +128,7 @@ export default function CreateProduct() {
 
               <div className="flex justify-end">
 
-                <button type="button" className="rounded-md border border-gray-300 bg-white py-2 px-8 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Cancel</button>
+                <Link to="/app/products" className="rounded-md border border-gray-300 bg-white py-2 px-8 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Cancel</Link>
 
                 <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Save</button>
 

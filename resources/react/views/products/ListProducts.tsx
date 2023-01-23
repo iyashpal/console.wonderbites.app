@@ -1,12 +1,13 @@
+import {className} from '~/helpers'
+import {Link} from 'react-router-dom'
 import {Menu, Transition} from '@headlessui/react'
 import {useLayoutEffect, useRef, useState} from 'react'
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {
   EllipsisVerticalIcon, PlusIcon, CloudArrowUpIcon, CloudArrowDownIcon, MagnifyingGlassIcon, Bars3BottomLeftIcon, CalendarDaysIcon, ChevronDownIcon,
   ChevronRightIcon, ChevronLeftIcon
 } from "@heroicons/react/24/outline"
-import {className} from "~/helpers";
-import {Link} from "react-router-dom";
+
 
 const people = [
   {id: '', name: 'PIZZA CARBONARA', price: '500 L', description: 'Corn fed beef topped with cheddar ...', image: '', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member'},
@@ -102,7 +103,7 @@ export default function ListProducts() {
 
         </div>
         <div className="">
-          <div className="inline-block min-w-full py-2 align-middle">
+          <div className="inline-block min-w-full align-middle">
 
             <div className="overflow-x-auto overflow-y-hidden">
 
@@ -167,7 +168,7 @@ export default function ListProducts() {
                           leaveFrom="transform scale-100 opacity-100"
                           leaveTo="transform scale-95 opacity-0"
                         >
-                          <Menu.Items className="fixed right-0 mt-2 w-28 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
+                          <Menu.Items className="fixed right-0 mt-2 w-20 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
                             <Menu.Item>
                               {({active}) => (
                                 <button className={`${active ? 'bg-red-primary text-white' : 'text-gray-900'} group flex w-full items-center px-2 py-2 text-sm`}>
