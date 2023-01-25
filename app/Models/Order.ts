@@ -57,13 +57,13 @@ export default class Order extends BaseModel {
   @manyToMany(() => Product, {
     pivotColumns: ['id', 'qty', 'price'],
     pivotTimestamps: true,
-    })
+  })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient, {
     pivotColumns: ['id', 'qty', 'price', 'product_id'],
-    pivotTimestamps: true
-    })
+    pivotTimestamps: true,
+  })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @hasOne(() => Review, { foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Order')})
