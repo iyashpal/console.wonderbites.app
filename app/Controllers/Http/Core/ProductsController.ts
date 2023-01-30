@@ -7,7 +7,7 @@ export default class ProductsController {
 
     const products = await Product.query()
       .whereNull('deleted_at')
-      .paginate(page ?? 1, limit ?? 2)
+      .paginate(page ?? 1, limit ?? 1)
 
     response.json(products)
   }
