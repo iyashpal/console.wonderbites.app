@@ -18,15 +18,15 @@ export default function ListProducts() {
   const fetcher = useFetch()
   const location = useLocation()
   const [searchParams] = useSearchParams()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [products, setProducts] = useState<Product[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [meta, setMeta] = useState<PaginationMeta>({} as PaginationMeta)
 
-  const checkbox = useRef<HTMLInputElement>(null)
   const [checked, setChecked] = useState(false)
-  const [indeterminate, setIndeterminate] = useState(false)
+  const checkbox = useRef<HTMLInputElement>(null)
   const [selected, setSelected] = useState<Product[]>([])
+  const [indeterminate, setIndeterminate] = useState(false)
 
   useEffect(() => {
     fetchProducts()
@@ -152,7 +152,7 @@ export default function ListProducts() {
                   <tbody className="divide-y divide-gray-200 bg-white">
                   {isLoading ? <>
                     {[1,2,3,4,5,6,7,8,9,0].map(item => (
-                      <tr key={item} className={'animate-pulse'}>
+                      <tr key={`${item}-skeleton`} className={'animate-pulse'}>
                         <td className={'px-3 py-3 '}>
                           <div className={'w-5 h-5 rounded-md bg-gray-200 mx-auto'}></div>
                         </td>
@@ -179,7 +179,7 @@ export default function ListProducts() {
 
                   </> : <>
                     {products.map((person, index) => (
-                      <tr key={person.name} className={selected.includes(person) ? 'bg-gray-50' : undefined}>
+                      <tr key={person.id} className={selected.includes(person) ? 'bg-gray-50' : undefined}>
                         <td className="relative w-12 px-6 sm:w-16 sm:px-8">
                           {selected.includes(person) && (<div className="absolute inset-y-0 left-0 w-0.5 bg-red-600"/>)}
                           <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" value={person.id} checked={selected.includes(person)} onChange={(e) => setSelected(
@@ -192,7 +192,9 @@ export default function ListProducts() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.name}</td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.price}</td>
-                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 truncate max-w-xs">{person.description}</td>
+                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 truncate max-w-xs">
+                          {person.description}
+                        </td>
                         <td className="whitespace-nowrap text-center">
                           <div className={'rounded-full overflow-hidden group w-9 h-9 mx-auto relative cursor-pointer z-0'}>
                             <img className={'w-9 h-9 rounded-full'} src="/images/placeholder/square.svg" alt="Product Name"/>

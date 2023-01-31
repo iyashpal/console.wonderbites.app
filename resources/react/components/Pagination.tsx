@@ -1,27 +1,152 @@
-import { Fragment } from "react";
-import { usePagination } from '@/hooks';
 import { PaginationMeta } from '~/types';
+import { Product } from '@/types/models';
 import { Link, useLocation } from "react-router-dom";
+import { Fragment, useEffect, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
-type ComponentProps = {
-  className?: string,
+type Slider = { first: number[], active: number[], last: number[] }
 
-  meta: PaginationMeta,
+type ComponentProps = { className?: string, meta: PaginationMeta, url?: string, data?: Product[] }
 
-  url?: string,
-}
-
-export default function Pagination({ className, meta, url }: ComponentProps) {
+export default function Pagination({ className, meta, url, data }: ComponentProps) {
 
   const location = useLocation()
 
-  const paginator = usePagination({ meta })
+  const [pages, setPages] = useState<number[]>([] as number[])
+  const [slider, setSlider] = useState<Slider>({ first: [], active: [], last: [] })
+
+  useEffect(() => {
+
+
+    setSlider({ first: [], active: [], last: [] })
+    
+    resolvePages().map(page => {
+
+
+      if (page <= (meta.first_page + 1)) {
+
+        resolveFirstSlider(page)
+
+      }
+
+      if (page >= (meta.last_page - 1) && meta.last_page > 5) {
+
+        resolveLastSlider(page)
+
+      }
+
+      if (page >= (meta.current_page - 1) && page <= (meta.current_page + (meta.current_page < 5 ? 2 : 1))) {
+
+        resolveActiveSlider(page)
+
+      }
+
+    })
+
+  }, [meta, location])
+
+  function firstItem() {
+    return (meta.per_page * meta.current_page) - (meta.per_page - 1)
+  }
+
+  function lastItem() {
+    return meta.per_page * meta.current_page
+  }
+
+  function resolvePages(): number[] {
+    for (let i = 1; i <= meta.last_page; i++) {
+      setPages(stack => ((!stack.includes(i) ? stack.push(i) : null), stack))
+    }
+
+    return pages
+  }
+
+
+  function resolveFirstSlider(page: number) {
+
+    setSlider(slide => {
+
+      if (!slide.first.includes(page)) {
+        slide.first.push(page)
+      }
+
+      return slide
+    })
+
+    slider.first.sort()
+
+  }
+
+  function resolveActiveSlider(page: number) {
+    setSlider(slide => {
+
+      if ((!slide.first.includes(page) && !slide.active.includes(page) && !slide.last.includes(page))) {
+        slide.active.push(page)
+      }
+
+      return slide
+    })
+
+    slider.active.sort()
+  }
+
+
+  function resolveLastSlider(page: number) {
+    setSlider(slide => {
+
+      if (!slide.last.includes(page)) {
+
+        slide.last.push(page)
+
+      }
+
+      return slide
+    })
+
+    slider.last.sort()
+  }
+
+
+  function isFirstSeparatorEnabled() {
+    return (slider.active[0] - slider.first[1]) > 1
+  }
+
+  function isLastSeparatorEnabled() {
+    return (slider.last[0] - slider.active[slider.active.length - 1]) > 1
+  }
+
+  function items() {
+    let links = [...slider.first];
+
+    if (isFirstSeparatorEnabled()) {
+      links.push(0)
+    }
+
+    links.push(...slider.active)
+
+    if (isFirstSeparatorEnabled() === false && isLastSeparatorEnabled() === false && slider.active.length === 0 && slider.last.length > 0) {
+      links.push(0)
+    }
+
+    if (isLastSeparatorEnabled()) {
+      links.push(0)
+    }
+
+    links.push(...slider.last)
+
+    return links
+  }
+
+  function total() {
+    return meta.total
+  }
 
 
   return <>
     <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 shadow border flex items-center justify-between'}`}>
-      <div>Showing {paginator.page.firstItem()} to {paginator.page.lastItem()} of {paginator.total()} results first Seperator : {paginator.isFirstSeparatorEnabled() ? 'true' : 'false'} & Last separtor {paginator.isLastSeparatorEnabled() ? 'true' : 'false'}</div>
+
+      <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
+
       <div className={'flex items-center justify-end gap-x-3'}>
 
         {meta.current_page === meta.first_page ? <>
@@ -36,13 +161,17 @@ export default function Pagination({ className, meta, url }: ComponentProps) {
 
         <span className="isolate inline-flex rounded-full shadow-sm overflow-hidden bg-gray-100">
 
-          {paginator.items().map((page, index) => (
+          {items().map((page, index) => (
             <Fragment key={index}>
-
-              <button type="button" className="rounded-full relative inline-flex items-center hover:bg-red-primary hover:text-white px-4 py-2 text-sm font-medium text-gray-700 focus:z-10 focus:border-red-500 focus:outline-none">
-                {page ? page : '...'}
-              </button>
-
+              {page === 0 ? (
+                <button type="button" className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 focus:outline-none">
+                  ...
+                </button>
+              ) : (
+                <Link to={{ pathname: url ?? location.pathname, search: `page=${page}` }} className={`rounded-full relative inline-flex w-9 h-9 items-center justify-center text-sm font-medium text-gray-700 focus:z-10 focus:border-red-500 focus:outline-none ${meta.current_page === page ? 'bg-red-500 text-white' : 'hover:bg-red-200 hover:text-red-primary '}`}>
+                  {page}
+                </Link>
+              )}
             </Fragment>
           ))}
         </span>

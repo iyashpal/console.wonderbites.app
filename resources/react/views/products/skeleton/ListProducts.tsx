@@ -73,7 +73,7 @@ export default function ListProducts() {
                     <div className=" bg-gray-200 rounded-full w-8 h-8 mx-auto"></div>
                   </td>
                   <td className={'px-3 py-3.5'}>
-                    <div className="w-full bg-gray-200 rounded-md w-3 h-5 mx-auto"></div>
+                    <div className="bg-gray-200 rounded-md w-3 h-5 mx-auto"></div>
                   </td>
                 </tr>
               ))}
