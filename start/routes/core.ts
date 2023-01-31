@@ -17,7 +17,7 @@ Route.group(() => {
   Route.group(() => {
     Route.post('logout', 'LogoutController').as('logout')
 
-    Route.resource('products', 'ProductsController')
+    Route.resource('products', 'ProductsController').apiOnly()
   }).middleware('api.core.auth')
 
   /**
