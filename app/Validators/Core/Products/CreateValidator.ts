@@ -45,7 +45,7 @@ export default class CreateValidator {
       rules.required()
     ]),
 
-    publishedAt: schema.date.optional()
+    publishedAt: schema.date.nullableAndOptional()
   })
 
   /**

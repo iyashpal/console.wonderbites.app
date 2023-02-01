@@ -1,6 +1,7 @@
 import { test } from '@japa/runner'
 import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { DateTime } from 'luxon'
 
 test.group('Core [products.create]', (group) => {
   group.each.setup(async () => {
@@ -91,7 +92,7 @@ test.group('Core [products.create]', (group) => {
     response.assertBodyContains({ errors: { categoryId: 'required validation failed' } })
   }).tags(['@core', '@core.products.create'])
 
-  test('it can create new product.', async ({ client, route }) => {
+  test('it can create new product.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('role').create()
 
     const response = await client.post(route('core.products.store'))
@@ -99,6 +100,30 @@ test.group('Core [products.create]', (group) => {
 
     response.assertStatus(200)
 
-    response.assertBodyContains({ name: 'Demo' })
+    assert.properties(response.body(), ['id', 'name', 'description', 'price', 'sku'])
+  }).tags(['@core', '@core.products.create'])
+
+  test('it can draft new product.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.post(route('core.products.store'))
+      .guard('api').loginAs(user).json({ name: 'Demo', sku: 'P5684', price: 500, description: 'this is demo description...', categoryId: 1 })
+
+    response.assertStatus(200)
+
+    assert.notProperty(response.body(), 'publishedAt')
+    
+    assert.properties(response.body(), ['id', 'name', 'description', 'price', 'sku'])
+  }).tags(['@core', '@core.products.create'])
+
+  test('it can publish new product.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.post(route('core.products.store'))
+      .guard('api').loginAs(user).json({ name: 'Demo', sku: 'P5684', price: 500, description: 'this is demo description...', categoryId: 1, publishedAt: DateTime.now() })
+
+    response.assertStatus(200)
+
+    assert.properties(response.body(), ['id', 'name', 'description', 'price', 'sku', 'publishedAt'])
   }).tags(['@core', '@core.products.create'])
 })

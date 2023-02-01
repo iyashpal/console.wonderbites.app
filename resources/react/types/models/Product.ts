@@ -5,5 +5,7 @@ export default interface Product {
 
   description: string,
 
-  price: number
+  price: number,
+
+  sku: string,
 }

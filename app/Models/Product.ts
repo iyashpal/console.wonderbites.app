@@ -30,7 +30,7 @@ export default class Product extends BaseModel {
   public calories: string
 
   @column()
-  public price: string
+  public price: number
 
   @attachment({folder: 'products', preComputeUrl: true})
   public thumbnail: AttachmentContract | null

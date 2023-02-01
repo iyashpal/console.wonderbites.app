@@ -18,7 +18,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '452',
         sku: '001',
       },
@@ -28,7 +28,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '453',
         sku: '002',
       },
@@ -38,7 +38,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '454',
         sku: '003',
       },
@@ -48,7 +48,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '455',
         sku: '004',
       },
@@ -58,7 +58,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '455',
         sku: '004',
       },
@@ -68,7 +68,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '455',
         sku: '004',
       },
@@ -78,7 +78,7 @@ export default class ProductSeederSeeder extends BaseSeeder {
         description: `The beauty of this Salad Bowl is that it is completely customizable. 
         The baked salmon with homemade teriyaki sauce is the star of the show but you can choose how to showcase it. 
         Swap the spinach/carrots/edamame for any of your favorite veggies`,
-        price: '500',
+        price: 500,
         calories: '455',
         sku: '004',
       },

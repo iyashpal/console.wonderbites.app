@@ -188,7 +188,7 @@ export default function ListProducts() {
                           />
                         </td>
                         <td {...className('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(person) ? 'text-red-600' : 'text-gray-900')}>
-                          {person.id}
+                          {person.sku}
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.name}</td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.price}</td>

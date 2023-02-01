@@ -57,7 +57,7 @@ test.group('Core [products.index]', (group) => {
 
     const user = await UserFactory.with('role').create()
 
-    const response = await client.get(route('core.products.index', [], {qs: {page: 2}}))
+    const response = await client.get(route('core.products.index', [], {qs: {page: 2, limit: 20}}))
       .guard('api').loginAs(user)
 
     response.assertStatus(200)
