@@ -74,7 +74,11 @@ export const AppRoutes = [
           {
             path: '',
             element: <Views.Ingredients.List />
-          }
+          },
+          {
+            path: 'create',
+            element: <Views.Ingredients.Create />
+          },
         ]
       },
 
