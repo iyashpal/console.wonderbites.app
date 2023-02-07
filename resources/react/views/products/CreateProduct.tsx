@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useFetch } from '@/hooks';
-import { Link, Form, useNavigate } from "react-router-dom";
+import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import { Link, Form, useNavigate } from "react-router-dom";
 import { ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 type CreateProductForm = {
@@ -24,8 +25,8 @@ export default function CreateProduct() {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
-
   const [form, setForm] = useState<CreateProductForm>({} as CreateProductForm)
+  const [errors, setErrors] = useState<{ name?: string, sku?: string, categoryId?: string, price?: string, description?: string }>({})
 
   function toggleUploadProgress() {
     setIsShowFiles(e => !e)
@@ -37,6 +38,8 @@ export default function CreateProduct() {
     fetcher.post('products', form).then(() => {
       alert('Success')
       navigateTo('/app/products')
+    }).catch(({data}) => {
+      setErrors(data?.errors)
     })
   }
 
@@ -54,11 +57,12 @@ export default function CreateProduct() {
           <Form method='post' onSubmit={handleSubmit} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
               <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3">
+                <div className="col-span-6 sm:col-span-3 relative">
                   <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" onChange={(e) => setForm(f => (f.name = e.target.value, f))} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <InputError show={errors?.name}>{errors.name}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -66,6 +70,7 @@ export default function CreateProduct() {
                     ID <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" onChange={(e) => setForm(f => (f.sku = e.target.value, f))} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <InputError show={errors?.sku}>{errors.sku}</InputError>
                 </div>
 
 
@@ -79,6 +84,7 @@ export default function CreateProduct() {
                     <option value={2}>Category 2</option>
                     <option value={3}>Category 3</option>
                   </select>
+                  <InputError show={errors?.categoryId}>{errors.categoryId}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -86,6 +92,7 @@ export default function CreateProduct() {
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" onChange={(e) => setForm(f => (f.price = Number(e.target.value), f))} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <InputError show={errors?.price}>{errors.price}</InputError>
                 </div>
 
                 <div className="col-span-6">
@@ -93,6 +100,7 @@ export default function CreateProduct() {
                     Description <sup className='text-red-primary'>*</sup>
                   </label>
                   <textarea name="description" onChange={(e) => setForm(f => (f.description = e.target.value, f))} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+                  <InputError show={errors?.description}>{errors.description}</InputError>
                 </div>
 
                 <div className="col-span-6">
