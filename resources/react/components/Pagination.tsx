@@ -8,7 +8,7 @@ type Slider = { first: number[], active: number[], last: number[] }
 
 type ComponentProps = { className?: string, meta: PaginationMeta, url?: string, data?: Product[] }
 
-export default function Pagination({ className, meta, url, data }: ComponentProps) {
+export default function Pagination({ className, meta, url }: ComponentProps) {
 
   const location = useLocation()
 
@@ -19,7 +19,7 @@ export default function Pagination({ className, meta, url, data }: ComponentProp
 
 
     setSlider({ first: [], active: [], last: [] })
-    
+
     resolvePages().map(page => {
 
 
@@ -55,7 +55,10 @@ export default function Pagination({ className, meta, url, data }: ComponentProp
 
   function resolvePages(): number[] {
     for (let i = 1; i <= meta.last_page; i++) {
-      setPages(stack => ((!stack.includes(i) ? stack.push(i) : null), stack))
+      setPages(stack => {
+        !stack.includes(i) ? stack.push(i) : null
+        return stack;
+      })
     }
 
     return pages
@@ -124,7 +127,7 @@ export default function Pagination({ className, meta, url, data }: ComponentProp
 
     links.push(...slider.active)
 
-    if (isFirstSeparatorEnabled() === false && isLastSeparatorEnabled() === false && slider.active.length === 0 && slider.last.length > 0) {
+    if (!isFirstSeparatorEnabled() && !isLastSeparatorEnabled() && slider.active.length === 0 && slider.last.length > 0) {
       links.push(0)
     }
 
@@ -168,7 +171,7 @@ export default function Pagination({ className, meta, url, data }: ComponentProp
                   ...
                 </button>
               ) : (
-                <Link to={{ pathname: url ?? location.pathname, search: `page=${page}` }} className={`rounded-full relative inline-flex w-9 h-9 items-center justify-center text-sm font-medium text-gray-700 focus:z-10 focus:border-red-500 focus:outline-none ${meta.current_page === page ? 'bg-red-500 text-white' : 'hover:bg-red-200 hover:text-red-primary '}`}>
+                <Link to={{ pathname: url ?? location.pathname, search: `page=${page}` }} className={`rounded-full relative inline-flex w-9 h-9 items-center justify-center text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none ${meta.current_page === page ? 'bg-red-500 text-white' : 'hover:bg-red-200 hover:text-red-primary text-gray-700'}`}>
                   {page}
                 </Link>
               )}
