@@ -7,11 +7,17 @@ import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import {PaginationMeta, ProductsPaginationResponse} from '~/types'
 import {Link, useLocation, useSearchParams} from 'react-router-dom'
-import {
-  EllipsisVerticalIcon, PlusIcon, CloudArrowUpIcon, CloudArrowDownIcon, MagnifyingGlassIcon, Bars3BottomLeftIcon, CalendarDaysIcon, ChevronDownIcon
-} from "@heroicons/react/24/outline"
+import {EllipsisVerticalIcon} from "@heroicons/react/24/outline"
 import {Product} from '@/types/models'
+import IndexFilters from "@/components/IndexFilters";
+import {BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon} from "@heroicons/react/24/outline";
 
+const sortByFilters = [
+  {label: 'ID', value: 'id', icon: <HashtagIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
+  {label: 'Date', value: 'date', icon: <CalendarDaysIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
+  {label: 'Name', value: 'name', icon: <BookmarkIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
+  {label: 'Price', value: 'price', icon: <CurrencyDollarIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
+]
 
 export default function ListProducts() {
 
@@ -41,6 +47,11 @@ export default function ListProducts() {
     }
   }, [selected])
 
+  /**
+   * Toggle all checkboxes.
+   *
+   * @return void
+   */
   function toggleAll() {
     setSelected(checked || indeterminate ? [] : products)
     setChecked(!checked && !indeterminate)
@@ -75,49 +86,7 @@ export default function ListProducts() {
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
-          <div className={'p-4 shadow border flex flex-col-reverse md:flex-row items-center justify-between'}>
-            <div className={'flex items-center gap-x-2 flex-col md:flex-row'}>
-              <div className={'border border-gray-300 p-2 rounded-md flex items-center gap-x-3 text-sm'}>
-                <div className={'inline-flex items-center gap-x-1'}>
-                  <Bars3BottomLeftIcon className={'w-4 h-4'}/>
-                  <span>Sort by date</span>
-                  <ChevronDownIcon className={'w-4 h-4 text-red-primary'}/>
-                </div>
-                <div className={'inline-flex items-center gap-x-1'}>
-                  <CalendarDaysIcon className={'w-4 h-4'}/>
-                  <span>Any Date</span>
-                  <ChevronDownIcon className={'w-4 h-4 text-red-primary'}/>
-                </div>
-              </div>
-              <div>
-                <div className="relative flex items-center">
-                  <input type="text" name="search" id="search" placeholder={'Search'} className="block w-full rounded-md border-gray-300 pl-12 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"/>
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-1.5">
-                    <kbd className="inline-flex items-center rounded px-2 font-sans text-sm font-medium text-gray-400">
-                      <MagnifyingGlassIcon className={'w-5 h-5'}/>
-                    </kbd>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={'flex items-center gap-x-2'}>
-
-              <Link to="/app/products/create" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                <PlusIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
-                Add Product
-              </Link>
-              <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                <CloudArrowUpIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
-                Import
-              </button>
-              <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                <CloudArrowDownIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
-                Export
-              </button>
-            </div>
-
-          </div>
+          <IndexFilters create={{url: '/app/products/create', label: 'Add Product'}} sortBy={sortByFilters}/>
           <div className="">
             <div className="inline-block min-w-full align-middle">
 
@@ -150,36 +119,9 @@ export default function ListProducts() {
                   </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                  {isLoading ? <>
-                    {[1,2,3,4,5,6,7,8,9,0].map(item => (
-                      <tr key={`${item}-skeleton`} className={'animate-pulse'}>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-5 h-5 rounded-md bg-gray-200 mx-auto'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-8 h-8 rounded-full bg-gray-200 mx-auto'}></div>
-                        </td>
-                        <td className={'px-3 py-3 '}>
-                          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-                        </td>
-                      </tr>
-                    ))}
-
-                  </> : <>
+                  {isLoading ? <><TableRowsSkeleton/></> : <>
                     {products.map((person, index) => (
-                      <tr key={person.id} className={selected.includes(person) ? 'bg-gray-50' : undefined}>
+                      <tr key={index} className={selected.includes(person) ? 'bg-gray-50' : undefined}>
                         <td className="relative w-12 px-6 sm:w-16 sm:px-8">
                           {selected.includes(person) && (<div className="absolute inset-y-0 left-0 w-0.5 bg-red-600"/>)}
                           <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" value={person.id} checked={selected.includes(person)} onChange={(e) => setSelected(
@@ -190,7 +132,11 @@ export default function ListProducts() {
                         <td {...className('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(person) ? 'text-red-600' : 'text-gray-900')}>
                           {person.sku}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.name}</td>
+                        <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                          <Link to={`/app/products/${person.id}`}>
+                            {person.name}
+                          </Link>
+                        </td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{person.price}</td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500 truncate max-w-xs">
                           {person.description}
@@ -255,5 +201,36 @@ export default function ListProducts() {
         </div>
       </div>
     ) : (<Skeleton.List.Page/>)}
+  </>
+}
+
+
+function TableRowsSkeleton() {
+  return <>
+    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(item => (
+      <tr key={`${item}-skeleton`} className={'animate-pulse'}>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-5 h-5 rounded-md bg-gray-200 mx-auto'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-8 h-8 rounded-full bg-gray-200 mx-auto'}></div>
+        </td>
+        <td className={'px-3 py-3 '}>
+          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
+        </td>
+      </tr>
+    ))}
   </>
 }
