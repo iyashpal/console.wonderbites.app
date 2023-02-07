@@ -5841,10 +5841,10 @@ ical-generator@^3.4.1:
   dependencies:
     uuid-random "^1.3.2"
 
-iconoir-react@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/iconoir-react/-/iconoir-react-6.0.0.tgz#81ec280d16e1936f3a7eb9c21779a3d36e944891"
-  integrity sha512-riNG9dy82c+AnCskNfwqjevdnUHHZdvlepUW4bv6objKfkdKFSOelCo+zXmw2Qz2jfgXbhfKkN0txBZMZM78zg==
+iconoir-react@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/iconoir-react/-/iconoir-react-6.2.1.tgz#d4b224679d9cc89f269b6c976a22d5eaf93cdc41"
+  integrity sha512-KcVRNsgNSm8OoZDJPWH6xCa7qnZXweG6SswykINyGXl5ro/2TM7Taf1G8zr6usNnbxnYixOoPLz8G/5amxexvA==
 
 iconv-lite@0.4.24:
   version "0.4.24"
