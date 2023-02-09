@@ -23,6 +23,10 @@ export default Factory.define(Ingredient, async ({ faker }) => {
     description: faker.commerce.productDescription(),
     price: faker.commerce.price(),
     thumbnail,
+    unit: 'gr',
+    quantity: 5,
+    minQuantity: 1,
+    maxQuantity: 5,
     status: 1,
   }
 })

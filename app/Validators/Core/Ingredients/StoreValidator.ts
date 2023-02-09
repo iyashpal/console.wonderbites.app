@@ -1,8 +1,9 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import {schema, rules, CustomMessages} from '@ioc:Adonis/Core/Validator'
 
-export default class CreateValidator {
-  constructor (protected ctx: HttpContextContract) { }
+export default class StoreValidator {
+  constructor (protected ctx: HttpContextContract) {
+  }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -24,28 +25,37 @@ export default class CreateValidator {
    *    ```
    */
   public schema = schema.create({
-
-    name: schema.string({}, [
+    name: schema.string({trim: true}, [
+      rules.required(),
+      rules.maxLength(100),
+    ]),
+    description: schema.string({trim: true}, [
+      rules.nullable(),
+      rules.maxLength(255),
+    ]),
+    price: schema.string({trim: true}, [
+      rules.required(),
+      rules.maxLength(10),
+    ]),
+    unit: schema.string({trim: true}, [
+      rules.required(),
+      rules.maxLength(10),
+    ]),
+    quantity: schema.number([
       rules.required(),
     ]),
-
-    categoryId: schema.number([
+    minQuantity: schema.number([
       rules.required(),
     ]),
-
-    price: schema.number([
+    maxQuantity: schema.number([
       rules.required(),
     ]),
-
-    description: schema.string({}, [
+    thumbnail: schema.file({
+      size: '1mb',
+      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
+    }, [
       rules.required(),
     ]),
-
-    sku: schema.string({}, [
-      rules.required(),
-    ]),
-
-    publishedAt: schema.date.nullableAndOptional(),
   })
 
   /**
