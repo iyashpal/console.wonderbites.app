@@ -5,15 +5,16 @@ import CreateValidator from 'App/Validators/Core/Products/CreateValidator'
 import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
 
 export default class ProductsController {
-  public async index({ response, request }: HttpContextContract) {
+  public async index ({ response, request }: HttpContextContract) {
     const { page, limit } = <{ page: number, limit: number }>request.all()
 
-    const products = await Product.query().whereNull('deleted_at').orderBy('id', 'desc').paginate(page ?? 1, limit ?? 10)
+    const products = await Product.query().whereNull('deleted_at').orderBy('id', 'desc')
+      .paginate(page ?? 1, limit ?? 10)
 
     response.status(200).json(products)
   }
 
-  public async store({ auth, request, response }: HttpContextContract) {
+  public async store ({ auth, request, response }: HttpContextContract) {
     try {
       const userId = auth.use('api').user?.id
 
@@ -27,7 +28,7 @@ export default class ProductsController {
     }
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show ({ params, response }: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)
 
@@ -37,7 +38,7 @@ export default class ProductsController {
     }
   }
 
-  public async update({ response, request, params }: HttpContextContract) {
+  public async update ({ response, request, params }: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)
 
@@ -51,7 +52,7 @@ export default class ProductsController {
     }
   }
 
-  public async destroy({ response, params }: HttpContextContract) {
+  public async destroy ({ response, params }: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)
 

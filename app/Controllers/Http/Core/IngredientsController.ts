@@ -1,6 +1,6 @@
+import {Ingredient} from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {Ingredient} from 'App/Models'
 
 export default class IngredientsController {
   public async index ({request, response}: HttpContextContract) {
@@ -18,12 +18,28 @@ export default class IngredientsController {
   public async store ({}: HttpContextContract) {
   }
 
-  public async show ({}: HttpContextContract) {
+  public async show ({response, params}: HttpContextContract) {
+    try {
+      const ingredient = await Ingredient.query().where('id', params.id).firstOrFail()
+
+      response.json(ingredient)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async update ({}: HttpContextContract) {
   }
 
-  public async destroy ({}: HttpContextContract) {
+  public async destroy ({params, response}: HttpContextContract) {
+    try {
+      const ingredient = await Ingredient.findByOrFail('id', params.id)
+
+      await ingredient.delete()
+
+      response.ok({success: true})
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 }
