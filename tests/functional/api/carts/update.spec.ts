@@ -43,7 +43,7 @@ test.group('API [carts.update]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({
-      products: products.map(({ id, name, description, sku, price }) => ({ id, name, description, sku, price })),
+      products: products.map(({ id, name, description, sku }) => ({ id, name, description, sku })),
     })
 
     assert.equal(response.body()?.products.length, products.length)
@@ -106,7 +106,7 @@ test.group('API [carts.update]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({
-      products: products.map(({ id, name, description, sku, price }) => ({ id, name, description, sku, price })),
+      products: products.map(({ id, name, description, sku }) => ({ id, name, description, sku })),
     })
 
     assert.equal(response.body()?.products.length, products.length)

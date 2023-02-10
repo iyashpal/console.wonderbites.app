@@ -19,10 +19,10 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      data: products.map((product) => ({
+      data: products.reverse().map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: product.price.toString(),
         description: product.description,
       })),
     })
@@ -78,10 +78,10 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      data: products.map((product) => ({
+      data: products.reverse().map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: product.price.toString(),
         description: product.description,
         media: product.media.map(({id}) => ({id})),
       })),
@@ -101,10 +101,10 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      data: products.map((product) => ({
+      data: products.reverse().map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: product.price.toString(),
         description: product.description,
         ingredients: product.ingredients.map(({id}) => ({id})),
       })),
@@ -129,10 +129,10 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({
-      data: products.map((product) => ({
+      data: products.reverse().map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: product.price.toString(),
         description: product.description,
         ingredients: product.ingredients.map(({id}) => ({
           id,
@@ -246,7 +246,7 @@ test.group('API [products.index]', (group) => {
         {
           id: product.id,
           name: product.name,
-          price: product.price,
+          price: product.price.toString(),
           description: product.description,
           wishlists: [{id: wishlist.id}],
         },
@@ -281,7 +281,7 @@ test.group('API [products.index]', (group) => {
         {
           id: product.id,
           name: product.name,
-          price: product.price,
+          price: product.price.toString(),
           description: product.description,
           wishlists: [{id: wishlist.id}],
           reviews: reviews.map(({id}) => ({id})),

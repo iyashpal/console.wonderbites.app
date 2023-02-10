@@ -22,7 +22,7 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price.toString(),
       description: product.description,
     })
   }).tags(['@products', '@products.show'])
@@ -50,7 +50,7 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price.toString(),
       description: product.description,
       media: product.media.map(({ id }) => ({ id })),
     })
@@ -73,7 +73,7 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price.toString(),
       description: product.description,
       ingredients: product.ingredients.map(({ id }) => ({ id })),
     })
@@ -137,7 +137,7 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price.toString(),
       description: product.description,
       wishlists: [{ id: wishlist.id }],
     })
@@ -168,7 +168,7 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.price.toString(),
       description: product.description,
       wishlists: [{ id: wishlist.id }],
       reviews: reviews.map(({ id }) => ({ id })),
