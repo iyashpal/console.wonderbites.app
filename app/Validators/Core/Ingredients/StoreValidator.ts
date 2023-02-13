@@ -56,6 +56,8 @@ export default class StoreValidator {
     }, [
       rules.required(),
     ]),
+
+    publishedAt: schema.date.optional(),
   })
 
   /**

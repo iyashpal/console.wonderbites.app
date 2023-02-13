@@ -77,7 +77,7 @@ function SortBy({filters}: { filters: { label: string, value: string, icon: JSX.
             {filters.map((filter, key) => (
               <Menu.Item key={key}>
                 {({active}) => (
-                  <button onClick={() => setSelected(filter)} className={`${active ? 'bg-red-primary text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                  <button onClick={() => setSelected(filter)} className={`${active ? 'bg-red-primary text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm gap-x-2`}>
                     {filter.icon} {filter.label}
                   </button>
                 )}

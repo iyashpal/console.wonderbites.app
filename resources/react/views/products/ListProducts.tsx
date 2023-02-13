@@ -13,10 +13,10 @@ import IndexFilters from "@/components/IndexFilters";
 import {BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon} from "@heroicons/react/24/outline";
 
 const sortByFilters = [
-  {label: 'ID', value: 'id', icon: <HashtagIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
-  {label: 'Date', value: 'date', icon: <CalendarDaysIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
-  {label: 'Name', value: 'name', icon: <BookmarkIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
-  {label: 'Price', value: 'price', icon: <CurrencyDollarIcon className="mr-2 h-5 w-5" aria-hidden="true"/>},
+  {label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true"/>},
+  {label: 'Date', value: 'date', icon: <CalendarDaysIcon className="h-5 w-5" aria-hidden="true"/>},
+  {label: 'Name', value: 'name', icon: <BookmarkIcon className="h-5 w-5" aria-hidden="true"/>},
+  {label: 'Price', value: 'price', icon: <CurrencyDollarIcon className="h-5 w-5" aria-hidden="true"/>},
 ]
 
 export default function ListProducts() {

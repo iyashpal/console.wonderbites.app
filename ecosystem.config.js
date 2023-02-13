@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
 
-      name: 'api.wonderbites.app',
+      name: 'console.wonderbites.app',
 
       script: './build/server.js',
 
@@ -36,7 +36,7 @@ module.exports = {
 
         NODE_ENV: 'production',
 
-        ENV_PATH: process.env.ENV_PATH ?? '/srv/admin.wonderbites.app/.env',
+        ENV_PATH: process.env.ENV_PATH ?? '/srv/console.wonderbites.app/.env',
 
       },
 
