@@ -24,12 +24,6 @@ module.exports = {
 
       ignore_watch: ['node_modules'],
 
-      post_update: [
-        'yarn app:build',
-        'cd build',
-        'yarn install --production',
-      ],
-
       env: {
 
         PORT: process.env.ENV_PORT ?? 8080,
