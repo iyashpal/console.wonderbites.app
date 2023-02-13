@@ -33,11 +33,6 @@ module.exports = {
         ENV_PATH: process.env.ENV_PATH ?? '/srv/console.wonderbites.app/.env',
 
       },
-
-      error_file: './tmp/logs/error.log',
-
-      out_file: './tmp/logs/out.log',
-
     },
   ],
 }
