@@ -79,6 +79,10 @@ export const AppRoutes = [
             path: 'create',
             element: <Views.Ingredients.Create />
           },
+          {
+            path: ':id/update',
+            element: <Views.Ingredients.Update />
+          },
         ]
       },
 

@@ -57,6 +57,7 @@ import ListFeedbacks from '~/views/feedbacks/ListFeedbacks';
  */
 import ListIngredients from '~/views/ingredients/ListIngredients';
 import CreateIngredient from '~/views/ingredients/CreateIngredient';
+import UpdateIngredient from '~/views/ingredients/UpdateIngredient';
 
 /**
  * Orders Views
@@ -149,6 +150,7 @@ const Views = {
 
   Ingredients: {
     Create: CreateIngredient,
+    Update: UpdateIngredient,
     List: ListIngredients
   },
 

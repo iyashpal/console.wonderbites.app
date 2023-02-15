@@ -1,6 +1,6 @@
 
-import {HttpContextContract} from "@ioc:Adonis/Core/HttpContext";
-import ExceptionResponse from "App/Helpers/ExceptionResponse";
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 
 export default class LogoutController {
   /**
@@ -10,7 +10,7 @@ export default class LogoutController {
    *
    * @return {JSON}
    */
-  public async handle({auth, response}: HttpContextContract) {
+  public async handle ({auth, response}: HttpContextContract) {
     try {
       await auth.use('api').revoke()
 

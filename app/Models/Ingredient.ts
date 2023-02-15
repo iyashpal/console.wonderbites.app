@@ -34,10 +34,10 @@ export default class Ingredient extends BaseModel {
   @column()
   public quantity: number
 
-  @column()
+  @column({ serializeAs: 'minQuantity' })
   public minQuantity: number
 
-  @column()
+  @column({ serializeAs: 'maxQuantity' })
   public maxQuantity: number
 
   @column()
@@ -70,8 +70,8 @@ export default class Ingredient extends BaseModel {
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
 
-  @computed()
-  public image () {
+  @computed({serializeAs: 'thumbnailUrl'})
+  public get image () {
     if (this.thumbnail?.url) {
       return this.thumbnail.url
     }

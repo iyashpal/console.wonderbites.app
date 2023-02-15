@@ -29,8 +29,10 @@ export default class StoreValidator {
       rules.required(),
       rules.maxLength(100),
     ]),
-    description: schema.string({trim: true}, [
-      rules.nullable(),
+    categoryId: schema.number([
+      rules.required(),
+    ]),
+    description: schema.string.optional({trim: true}, [
       rules.maxLength(255),
     ]),
     price: schema.string({trim: true}, [
@@ -52,7 +54,6 @@ export default class StoreValidator {
     ]),
     thumbnail: schema.file({
       size: '1mb',
-      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
     }, [
       rules.required(),
     ]),

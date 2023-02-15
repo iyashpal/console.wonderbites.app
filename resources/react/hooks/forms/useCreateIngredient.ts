@@ -16,24 +16,40 @@ type CreateIngredientForm = {
   publishedAt: string,
 }
 type IngredientFormErrors = {
-  name?: string,
-  sku?: string,
-  categoryId?: string,
-  price?: string,
-  description?: string,
-  publishedAt?: string,
+  categoryId: string,
+  name: string,
+  description: string,
+  price: string,
+  unit: string,
+  quantity: string,
+  minQuantity: string,
+  maxQuantity: string,
+  thumbnail: string,
+  sku: string,
+  publishedAt: string,
 }
 export default function useCreateIngredient() {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
+  const [thumbnail, setThumbnail] = useState<string | Blob>('')
   const [errors, setErrors] = useState<IngredientFormErrors>({} as IngredientFormErrors)
   const [createForm, setCreateForm] = useState<CreateIngredientForm>({} as CreateIngredientForm)
 
+
   function handleSubmit(e) {
     e.preventDefault()
-    fetcher.post('products', createForm).then(() => {
+    let createFormData = new FormData()
+
+    for (let key in createForm) {
+      if (key === 'thumbnail') {
+        createFormData.append('thumbnail', thumbnail, createForm[key])
+      } else {
+        createFormData.append(key, createForm[key])
+      }
+    }
+    fetcher.post('ingredients', createFormData).then(() => {
       alert('Success')
-      navigateTo('/app/products')
+      navigateTo('/app/ingredients')
     }).catch(({data}) => {
       setErrors(data?.errors)
     })
@@ -73,6 +89,7 @@ export default function useCreateIngredient() {
 
 
   function onChangeThumbnail(e) {
+    setThumbnail(e.target.files[0])
     setCreateForm(payload => ({...payload, thumbnail: e.target.value}))
   }
 

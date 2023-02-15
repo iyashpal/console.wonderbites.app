@@ -1,25 +1,41 @@
 import {DateTime} from "luxon";
-import {Form, Link } from "react-router-dom";
+import {Form, Link, useParams} from "react-router-dom";
 import {useCreateIngredient} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
+import {useEffect, useState} from "react";
+import {useFetch} from "@/hooks";
+import {Ingredient} from "@/types/models";
 
-export default function CreateIngredient() {
-
+export default function UpdateIngredient() {
+  const {id} = useParams()
+  const fetcher = useFetch()
   const form = useCreateIngredient()
+  const [ingredient, setIngredient] = useState<Ingredient>({} as Ingredient)
+
+  useEffect(() => {
+    fetchIngredient()
+  }, [id])
+
+
+  function fetchIngredient() {
+    fetcher.get(`/ingredients/${id}`).then(({data}) => {
+      setIngredient(data)
+    })
+  }
 
 
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{name: 'Ingredients', href: '/app/ingredients'}, {name: 'Add Ingredient'}]}/>
+        <Breadcrumb pages={[{name: 'Ingredients', href: '/app/ingredients'}, {name: 'Modify Ingredient'}]}/>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
         <div className="shadow border">
 
           <div className="p-4 sm:p-6 border-b">
-            <h1 className={'font-semibold'}>Add Ingredient</h1>
+            <h1 className={'font-semibold'}>Modify Ingredient</h1>
           </div>
 
           <Form method='post' onSubmit={form.onSubmit} encType='multipart/form-data'>
@@ -29,7 +45,7 @@ export default function CreateIngredient() {
                   <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="text" onChange={form.input.onChange.name} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="text" defaultValue={ingredient.name} onChange={form.input.onChange.name} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.name}>{form.errors.name}</InputError>
                 </div>
 
@@ -59,7 +75,7 @@ export default function CreateIngredient() {
                   <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number" defaultValue={ingredient.price} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
@@ -67,7 +83,7 @@ export default function CreateIngredient() {
                   <label htmlFor="unit" className="block text-sm font-bold text-gray-700">
                     Unit of Measure <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="unit" onChange={form.input.onChange.unit} name="unit" autoComplete="unit" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="unit" defaultValue={ingredient.unit} onChange={form.input.onChange.unit} name="unit" autoComplete="unit" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={''}>Select a measure</option>
                     <option value={'gram'}>Gram</option>
                   </select>
@@ -78,7 +94,7 @@ export default function CreateIngredient() {
                   <label htmlFor="quantity" className="block text-sm font-bold text-gray-700">
                     Quantity <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" onChange={form.input.onChange.quantity} name="quantity" id="quantity" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number" defaultValue={ingredient.quantity} onChange={form.input.onChange.quantity} name="quantity" id="quantity" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
@@ -86,7 +102,7 @@ export default function CreateIngredient() {
                   <label htmlFor="min-quantity" className="block text-sm font-bold text-gray-700">
                     Min Quantity <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" defaultValue={form.input.value('quantity')} onChange={form.input.onChange.minQuantity} name="min-quantity" id="min-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number"  defaultValue={ingredient.minQuantity} onChange={form.input.onChange.minQuantity} name="min-quantity" id="min-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
@@ -94,7 +110,7 @@ export default function CreateIngredient() {
                   <label htmlFor="max-quantity" className="block text-sm font-bold text-gray-700">
                     Max Quantity <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" onChange={form.input.onChange.maxQuantity} name="max-quantity" id="max-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number" defaultValue={ingredient.maxQuantity} onChange={form.input.onChange.maxQuantity} name="max-quantity" id="max-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
@@ -110,7 +126,7 @@ export default function CreateIngredient() {
                   <label htmlFor="status" className="block text-sm font-bold text-gray-700">
                     Status <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="status" onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="status" defaultValue={ingredient.status} onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={DateTime.now().toString()}>Public</option>
                     <option value={''}>Private</option>
                   </select>

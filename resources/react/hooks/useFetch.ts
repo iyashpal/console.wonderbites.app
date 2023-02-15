@@ -9,7 +9,7 @@ export default function useFetch(config = {}) {
     baseURL: '/core',
     headers: {
       'Authorization': `Bearer ${auth.token}`,
-      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/json'
     }
   })
 }
