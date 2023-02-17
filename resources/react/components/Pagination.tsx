@@ -1,24 +1,24 @@
-import { PaginationMeta } from '~/types';
-import { Product } from '@/types/models';
-import { Link, useLocation } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import {PaginationMeta} from '~/types';
+import {Product} from '@/types/models';
+import {Link, useLocation} from "react-router-dom";
+import {Fragment, useEffect, useState} from "react";
+import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/24/outline';
 
 type Slider = { first: number[], active: number[], last: number[] }
 
 type ComponentProps = { className?: string, meta: PaginationMeta, url?: string, data?: Product[] }
 
-export default function Pagination({ className, meta, url }: ComponentProps) {
+export default function Pagination({className, meta, url}: ComponentProps) {
 
   const location = useLocation()
 
   const [pages, setPages] = useState<number[]>([] as number[])
-  const [slider, setSlider] = useState<Slider>({ first: [], active: [], last: [] })
+  const [slider, setSlider] = useState<Slider>({first: [], active: [], last: []})
 
   useEffect(() => {
 
 
-    setSlider({ first: [], active: [], last: [] })
+    setSlider({first: [], active: [], last: []})
 
     resolvePages().map(page => {
 
@@ -146,23 +146,24 @@ export default function Pagination({ className, meta, url }: ComponentProps) {
 
 
   return <>
-    <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 shadow border flex items-center justify-between'}`}>
+    {meta.first_page !== meta.last_page &&
+      <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 shadow border flex items-center justify-between'}`}>
 
-      <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
+        <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
 
-      <div className={'flex items-center justify-end gap-x-3'}>
+        <div className={'flex items-center justify-end gap-x-3'}>
 
-        {meta.current_page === meta.first_page ? <>
-          <button className={'rounded-full relative inline-flex items-center bg-gray-100 p-2 text-sm font-medium text-gray-400 focus:z-10 focus:border-red-500 focus:outline-none cursor-not-allowed'}>
-            <ChevronLeftIcon className={'w-5 h-5'} />
-          </button>
-        </> : <>
-          <Link to={{ pathname: url ?? location.pathname, search: meta.previous_page_url?.replace('/?', '') }} className={'rounded-full relative inline-flex items-center bg-gray-100 text-red-primary hover:bg-red-primary hover:text-white p-2 text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none'}>
-            <ChevronLeftIcon className={'w-5 h-5'} />
-          </Link>
-        </>}
+          {meta.current_page === meta.first_page ? <>
+            <button className={'rounded-full relative inline-flex items-center bg-gray-100 p-2 text-sm font-medium text-gray-400 focus:z-10 focus:border-red-500 focus:outline-none cursor-not-allowed'}>
+              <ChevronLeftIcon className={'w-5 h-5'}/>
+            </button>
+          </> : <>
+            <Link to={{pathname: url ?? location.pathname, search: meta.previous_page_url?.replace('/?', '')}} className={'rounded-full relative inline-flex items-center bg-gray-100 text-red-primary hover:bg-red-primary hover:text-white p-2 text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none'}>
+              <ChevronLeftIcon className={'w-5 h-5'}/>
+            </Link>
+          </>}
 
-        <span className="isolate inline-flex rounded-full shadow-sm overflow-hidden bg-gray-100">
+          <span className="isolate inline-flex rounded-full shadow-sm overflow-hidden bg-gray-100">
 
           {items().map((page, index) => (
             <Fragment key={index}>
@@ -171,7 +172,7 @@ export default function Pagination({ className, meta, url }: ComponentProps) {
                   ...
                 </button>
               ) : (
-                <Link to={{ pathname: url ?? location.pathname, search: `page=${page}` }} className={`rounded-full relative inline-flex w-9 h-9 items-center justify-center text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none ${meta.current_page === page ? 'bg-red-500 text-white' : 'hover:bg-red-200 hover:text-red-primary text-gray-700'}`}>
+                <Link to={{pathname: url ?? location.pathname, search: `page=${page}`}} className={`rounded-full relative inline-flex w-9 h-9 items-center justify-center text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none ${meta.current_page === page ? 'bg-red-500 text-white' : 'hover:bg-red-200 hover:text-red-primary text-gray-700'}`}>
                   {page}
                 </Link>
               )}
@@ -179,17 +180,18 @@ export default function Pagination({ className, meta, url }: ComponentProps) {
           ))}
         </span>
 
-        {meta.current_page === meta.last_page ? <>
-          <button className={'rounded-full relative inline-flex items-center bg-gray-100 p-2 text-sm font-medium text-gray-400 focus:z-10 focus:border-red-500 focus:outline-none cursor-not-allowed'}>
-            <ChevronRightIcon className={'w-5 h-5'} />
-          </button>
-        </> : <>
-          <Link to={{ pathname: url ?? location.pathname, search: meta.next_page_url?.replace('/?', '') }} className={'rounded-full relative inline-flex items-center bg-gray-100 text-red-primary hover:bg-red-primary hover:text-white p-2 text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none'}>
-            <ChevronRightIcon className={'w-5 h-5'} />
-          </Link>
-        </>}
+          {meta.current_page === meta.last_page ? <>
+            <button className={'rounded-full relative inline-flex items-center bg-gray-100 p-2 text-sm font-medium text-gray-400 focus:z-10 focus:border-red-500 focus:outline-none cursor-not-allowed'}>
+              <ChevronRightIcon className={'w-5 h-5'}/>
+            </button>
+          </> : <>
+            <Link to={{pathname: url ?? location.pathname, search: meta.next_page_url?.replace('/?', '')}} className={'rounded-full relative inline-flex items-center bg-gray-100 text-red-primary hover:bg-red-primary hover:text-white p-2 text-sm font-medium focus:z-10 focus:border-red-500 focus:outline-none'}>
+              <ChevronRightIcon className={'w-5 h-5'}/>
+            </Link>
+          </>}
 
+        </div>
       </div>
-    </div>
+    }
   </>
 }

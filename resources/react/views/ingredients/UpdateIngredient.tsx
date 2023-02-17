@@ -1,21 +1,26 @@
 import {DateTime} from "luxon";
 import {Form, Link, useParams} from "react-router-dom";
-import {useCreateIngredient} from "@/hooks/forms";
+import {useUpdateIngredient} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
 import {useEffect, useState} from "react";
 import {useFetch} from "@/hooks";
 import {Ingredient} from "@/types/models";
+import * as Loaders from "@/components/loaders";
 
 export default function UpdateIngredient() {
   const {id} = useParams()
   const fetcher = useFetch()
-  const form = useCreateIngredient()
+  const form = useUpdateIngredient()
   const [ingredient, setIngredient] = useState<Ingredient>({} as Ingredient)
 
   useEffect(() => {
     fetchIngredient()
   }, [id])
+
+  useEffect(() => {
+    form.syncData(ingredient)
+  }, [ingredient])
 
 
   function fetchIngredient() {
@@ -102,7 +107,7 @@ export default function UpdateIngredient() {
                   <label htmlFor="min-quantity" className="block text-sm font-bold text-gray-700">
                     Min Quantity <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number"  defaultValue={ingredient.minQuantity} onChange={form.input.onChange.minQuantity} name="min-quantity" id="min-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number" defaultValue={ingredient.minQuantity} onChange={form.input.onChange.minQuantity} name="min-quantity" id="min-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
@@ -140,7 +145,9 @@ export default function UpdateIngredient() {
 
                   <Link to="/app/ingredients" className="rounded-md border border-gray-300 bg-white py-2 px-8 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Cancel</Link>
 
-                  <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Save</button>
+                  <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'}/> : 'Save'}
+                  </button>
 
                 </div>
 

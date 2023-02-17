@@ -28,8 +28,10 @@ export default class UpdateValidator {
       rules.required(),
       rules.maxLength(100),
     ]),
-    description: schema.string({trim: true}, [
-      rules.nullable(),
+    categoryId: schema.number([
+      rules.required(),
+    ]),
+    description: schema.string.optional({trim: true}, [
       rules.maxLength(255),
     ]),
     price: schema.string({trim: true}, [
@@ -49,12 +51,10 @@ export default class UpdateValidator {
     maxQuantity: schema.number([
       rules.required(),
     ]),
-    thumbnail: schema.file({
+    thumbnail: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
-    }, [
-      rules.required(),
-    ]),
+    }),
   })
 
   /**

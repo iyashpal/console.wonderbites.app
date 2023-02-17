@@ -1,5 +1,6 @@
 import {DateTime} from "luxon";
-import {Form, Link } from "react-router-dom";
+import * as Loaders from '~/components/loaders'
+import {Form, Link} from "react-router-dom";
 import {useCreateIngredient} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
@@ -124,7 +125,9 @@ export default function CreateIngredient() {
 
                   <Link to="/app/ingredients" className="rounded-md border border-gray-300 bg-white py-2 px-8 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Cancel</Link>
 
-                  <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Save</button>
+                  <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'}/> : 'Save'}
+                  </button>
 
                 </div>
 

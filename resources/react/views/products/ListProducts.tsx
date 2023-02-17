@@ -11,6 +11,8 @@ import {EllipsisVerticalIcon} from "@heroicons/react/24/outline"
 import {Product} from '@/types/models'
 import IndexFilters from "@/components/IndexFilters";
 import {BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon} from "@heroicons/react/24/outline";
+import * as Index from "@/components/Index";
+import * as Alert from "@/components/alerts";
 
 const sortByFilters = [
   {label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true"/>},
@@ -188,6 +190,18 @@ export default function ListProducts() {
                         </td>
                       </tr>
                     ))}
+                    {products.length === 0 && <>
+                      <Index.Tr>
+                        <Index.Td colSpan={11}>
+                          <Alert.Warning>
+                            No products available.{' '}
+                            <Link to={'/app/products/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                              Click here to add more products.
+                            </Link>
+                          </Alert.Warning>
+                        </Index.Td>
+                      </Index.Tr>
+                    </>}
                   </>}
 
                   </tbody>

@@ -3,6 +3,7 @@ import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Ingredients/StoreValidator'
+import UpdateValidator from "App/Validators/Core/Ingredients/UpdateValidator";
 
 export default class IngredientsController {
   public async index ({request, response}: HttpContextContract) {
@@ -49,7 +50,7 @@ export default class IngredientsController {
     try {
       const {
         name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail,
-      } = await request.validate(StoreValidator)
+      } = await request.validate(UpdateValidator)
 
       const ingredient = await Ingredient.findByOrFail('id', params.id)
 

@@ -1,8 +1,10 @@
 import {useState} from "react";
 import {useFetch} from "@/hooks";
 import {useNavigate} from "react-router-dom";
+import {Ingredient} from "@/types/models";
 
-type CreateIngredientForm = {
+type UpdateIngredientForm = {
+  id: number,
   categoryId: number,
   name: string,
   description: string,
@@ -11,7 +13,7 @@ type CreateIngredientForm = {
   quantity: number,
   minQuantity: number,
   maxQuantity: number,
-  thumbnail: any,
+  thumbnail?: any,
   sku: string,
   publishedAt: string,
 }
@@ -28,14 +30,21 @@ type IngredientFormErrors = {
   sku: string,
   publishedAt: string,
 }
-export default function useCreateIngredient() {
+export default function useUpdateIngredient() {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
   const [errors, setErrors] = useState<IngredientFormErrors>({} as IngredientFormErrors)
-  const [createForm, setCreateForm] = useState<CreateIngredientForm>({} as CreateIngredientForm)
+  const [createForm, setCreateForm] = useState<UpdateIngredientForm>({} as UpdateIngredientForm)
 
+  function syncData(ingredient: Ingredient) {
+    for (let key in ingredient) {
+      if (['id', 'name', 'price', 'unit', 'quantity', 'minQuantity', 'maxQuantity', 'status', 'sku'].includes(key)) {
+        setCreateForm(form => (form[key] = ingredient[key], form))
+      }
+    }
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -44,12 +53,12 @@ export default function useCreateIngredient() {
 
     for (let key in createForm) {
       if (key === 'thumbnail') {
-        createFormData.append('thumbnail', thumbnail, createForm[key])
+          createFormData.append('thumbnail', thumbnail ?? null, createForm[key] ?? null)
       } else {
         createFormData.append(key, createForm[key])
       }
     }
-    fetcher.post('ingredients', createFormData).then(() => {
+    fetcher.put(`/ingredients/${createForm.id}`, createFormData).then(() => {
       alert('Success')
       setIsProcessing(false)
       navigateTo('/app/ingredients')
@@ -123,6 +132,8 @@ export default function useCreateIngredient() {
         publishedAt: onChangePublishedAt
       },
     },
+
+    syncData,
 
     onSubmit: handleSubmit
   }

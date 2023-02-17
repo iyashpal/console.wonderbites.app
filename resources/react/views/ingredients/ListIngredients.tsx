@@ -1,13 +1,15 @@
 import {useEffect, useState} from "react";
 import {Ingredient} from "@/types/models";
 import * as Index from '~/components/Index'
+import * as Alert from '~/components/alerts'
 import Skeleton from './skeleton'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {PaginationMeta, IngredientsPaginationResponse} from "@/types";
 import Pagination from '~/components/Pagination'
-import {BookmarkIcon, HashtagIcon} from "@heroicons/react/24/outline";
+import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
 import {useFetch} from "@/hooks";
+import {className} from "@/helpers";
 
 export default function ListIngredients() {
   const fetcher = useFetch()
@@ -77,7 +79,7 @@ export default function ListIngredients() {
                 <Index.Th>
                   Category
                 </Index.Th>
-                <Index.Th>
+                <Index.Th className={'text-center'}>
                   Image
                 </Index.Th>
                 <Index.Th>
@@ -117,12 +119,26 @@ export default function ListIngredients() {
                     Category
                   </Index.Td>
                   <Index.Td>
-                    <img className={'w-9 h-9 rounded-full object-cover'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
+                    <img className={'w-9 h-9 rounded-full object-cover mx-auto'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
                   </Index.Td>
-                  <Index.Td>
-                    A
+                  <Index.Td className={'text-center'}>
+                    <button>
+                      <EllipsisVerticalIcon {...className('h-5 w-5')} />
+                    </button>
                   </Index.Td>
                 </Index.Tr>)}
+                {ingredients.length === 0 && <>
+                  <Index.Tr>
+                    <Index.Td colSpan={11}>
+                      <Alert.Warning>
+                        No ingredients available.{' '}
+                        <Link to={'/app/ingredients/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                          Click here to add more ingredients.
+                        </Link>
+                      </Alert.Warning>
+                    </Index.Td>
+                  </Index.Tr>
+                </>}
               </>}
             </Index.TBody>
           </Index.Table>

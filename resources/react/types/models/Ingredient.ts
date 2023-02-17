@@ -3,6 +3,10 @@ export default interface Ingredient {
 
   name: string,
 
+  description: string,
+
+  sku: string,
+
   unit: string,
 
   quantity: number,
@@ -14,6 +18,8 @@ export default interface Ingredient {
   price: number,
 
   thumbnailUrl: string,
+
+  publishedAt: string,
 
   status: string,
 }
