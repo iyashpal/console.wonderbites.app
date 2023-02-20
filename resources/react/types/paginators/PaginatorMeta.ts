@@ -1,4 +1,4 @@
-export default interface PaginationMeta {
+export default interface PaginatorMeta {
   current_page: number,
 
   first_page: number,

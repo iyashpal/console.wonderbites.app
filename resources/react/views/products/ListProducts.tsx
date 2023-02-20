@@ -5,7 +5,7 @@ import Pagination from '~/components/Pagination'
 import {Menu, Transition} from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import {PaginationMeta, ProductsPaginationResponse} from '~/types'
+import {PaginatorMeta} from '~/types/paginators'
 import {Link, useLocation, useSearchParams} from 'react-router-dom'
 import {EllipsisVerticalIcon} from "@heroicons/react/24/outline"
 import {Product} from '@/types/models'
@@ -13,6 +13,7 @@ import IndexFilters from "@/components/IndexFilters";
 import {BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon} from "@heroicons/react/24/outline";
 import * as Index from "@/components/Index";
 import * as Alert from "@/components/alerts";
+import ProductsPaginator from "@/types/paginators/ProductsPaginator";
 
 const sortByFilters = [
   {label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true"/>},
@@ -29,7 +30,7 @@ export default function ListProducts() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [meta, setMeta] = useState<PaginationMeta>({} as PaginationMeta)
+  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
 
   const [checked, setChecked] = useState(false)
   const checkbox = useRef<HTMLInputElement>(null)
@@ -68,7 +69,7 @@ export default function ListProducts() {
   function fetchProducts(): void {
     setIsLoading(true)
     fetcher.get('/products', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: ProductsPaginationResponse }) => {
+      .then(({data: response}: { data: ProductsPaginator }) => {
         setIsLoading(false)
         setIsLoaded(true)
         setProducts(response.data)

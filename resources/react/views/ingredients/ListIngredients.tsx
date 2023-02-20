@@ -5,11 +5,12 @@ import * as Alert from '~/components/alerts'
 import Skeleton from './skeleton'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
-import {PaginationMeta, IngredientsPaginationResponse} from "@/types";
+import {PaginatorMeta} from "@/types/paginators";
 import Pagination from '~/components/Pagination'
 import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
 import {useFetch} from "@/hooks";
 import {className} from "@/helpers";
+import IngredientsPaginator from "@/types/paginators/IngredientsPaginator";
 
 export default function ListIngredients() {
   const fetcher = useFetch()
@@ -18,7 +19,7 @@ export default function ListIngredients() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [meta, setMeta] = useState<PaginationMeta>({} as PaginationMeta)
+  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
   const [selected] = useState<number[]>([])
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function ListIngredients() {
   function fetchIngredients(): void {
     setIsLoading(true)
     fetcher.get('/ingredients', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: IngredientsPaginationResponse }) => {
+      .then(({data: response}: { data: IngredientsPaginator }) => {
         setIsLoading(false)
         setIsLoaded(true)
         setIngredients(response.data)
