@@ -1,13 +1,14 @@
 import {Cuisine} from 'App/Models'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
+import UpdateValidator from 'App/Validators/Core/Cuisines/UpdateValidator'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
     try {
-      const {page = 1, limit = 10} = <{page: number, limit: number}>request.all()
+      const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
 
       const cuisines = await Cuisine.query().whereNull('deleted_at').paginate(page, limit)
 
@@ -34,9 +35,9 @@ export default class CuisinesController {
     }
   }
 
-  public async show ({response}: HttpContextContract) {
+  public async show ({response, params}: HttpContextContract) {
     try {
-      const cuisine = await Cuisine.query().whereNull('deleted_at').firstOrFail()
+      const cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
 
       response.ok(cuisine.toObject())
     } catch (errors) {
@@ -44,7 +45,25 @@ export default class CuisinesController {
     }
   }
 
-  public async update ({}: HttpContextContract) {}
+  public async update ({request, response, params}: HttpContextContract) {
+    try {
+      const {name, description, thumbnail, status} = await request.validate(UpdateValidator)
 
-  public async destroy ({}: HttpContextContract) {}
+      const cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+
+      await cuisine.merge({
+        name: name ?? cuisine.name,
+        description: description ?? cuisine.description,
+        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : cuisine.thumbnail,
+        status: status ?? cuisine.status,
+      }).save()
+
+      response.ok(cuisine.toObject())
+    } catch (errors) {
+      ExceptionResponse.use(errors).resolve(response)
+    }
+  }
+
+  public async destroy ({}: HttpContextContract) {
+  }
 }
