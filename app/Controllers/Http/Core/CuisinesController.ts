@@ -34,7 +34,15 @@ export default class CuisinesController {
     }
   }
 
-  public async show ({}: HttpContextContract) {}
+  public async show ({response}: HttpContextContract) {
+    try {
+      const cuisine = await Cuisine.query().whereNull('deleted_at').firstOrFail()
+
+      response.ok(cuisine.toObject())
+    } catch (errors) {
+      ExceptionResponse.use(errors).resolve(response)
+    }
+  }
 
   public async update ({}: HttpContextContract) {}
 
