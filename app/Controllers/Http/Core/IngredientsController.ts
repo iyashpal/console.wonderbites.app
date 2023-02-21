@@ -3,14 +3,14 @@ import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Ingredients/StoreValidator'
-import UpdateValidator from "App/Validators/Core/Ingredients/UpdateValidator";
+import UpdateValidator from 'App/Validators/Core/Ingredients/UpdateValidator'
 
 export default class IngredientsController {
   public async index ({request, response}: HttpContextContract) {
     try {
-      const ingredients = await Ingredient.query()
-        .whereNull('deleted_at')
-        .paginate(request.input('page', 1), request.input('limit', 10))
+      const {page = 1, limit = 10} = <{page: number, limit: number}>request.all()
+
+      const ingredients = await Ingredient.query().whereNull('deleted_at').paginate(page, limit)
 
       response.status(200).json(ingredients)
     } catch (error) {
@@ -21,6 +21,7 @@ export default class IngredientsController {
   public async store ({auth, request, response}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
+
       const {
         name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail,
       } = await request.validate(StoreValidator)

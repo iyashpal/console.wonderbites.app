@@ -5,9 +5,9 @@ import {Category} from 'App/Models'
 export default class CategoriesController {
   public async index ({request, response}: HttpContextContract) {
     try {
-      const {page, limit} = <{page: number, limit: number}>request.all()
-      const categories = await Category.query()
-        .paginate(page ?? 1, limit ?? 10)
+      const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
+
+      const categories = await Category.query().paginate(page, limit)
 
       response.json(categories)
     } catch (error) {

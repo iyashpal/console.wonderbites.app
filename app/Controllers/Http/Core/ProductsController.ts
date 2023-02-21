@@ -6,10 +6,10 @@ import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
 
 export default class ProductsController {
   public async index ({ response, request }: HttpContextContract) {
-    const { page, limit } = <{ page: number, limit: number }>request.all()
+    const { page = 1, limit = 10 } = <{ page: number, limit: number }>request.all()
 
-    const products = await Product.query().whereNull('deleted_at').orderBy('id', 'desc')
-      .paginate(page ?? 1, limit ?? 10)
+    const products = await Product.query().whereNull('deleted_at')
+      .orderBy('id', 'desc').paginate(page, limit)
 
     response.status(200).json(products)
   }

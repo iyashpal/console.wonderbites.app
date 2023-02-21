@@ -1,4 +1,4 @@
-import { CategoryFactory } from '.'
+import {CategoryFactory, UserFactory} from '.'
 import { Cuisine } from 'App/Models'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { file } from '@ioc:Adonis/Core/Helpers'
@@ -24,6 +24,7 @@ export default Factory.define(Cuisine, async ({ faker }) => {
     status: 1,
   }
 })
+  .relation('user', () => UserFactory)
   .relation('categories', () => CategoryFactory)
   .state('inactive', (cuisine) => cuisine.status = 0)
   .build()

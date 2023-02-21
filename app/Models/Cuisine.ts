@@ -1,12 +1,15 @@
-import { Category } from '.'
+import {Category, User} from '.'
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import Storage from 'App/Helpers/Storage'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import {BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cuisine extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public userId: number
 
   @column()
   public name: string
@@ -29,6 +32,9 @@ export default class Cuisine extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  @column.dateTime()
+  public deletedAt: DateTime
+
   @computed()
   public get default_thumbnail () {
     if (this.thumbnail) {
@@ -37,4 +43,7 @@ export default class Cuisine extends BaseModel {
 
     return Storage.public('/images/placeholder/square.svg')
   }
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }
