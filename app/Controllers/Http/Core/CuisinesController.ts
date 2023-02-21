@@ -1,6 +1,8 @@
 import {Cuisine} from 'App/Models'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
@@ -15,7 +17,22 @@ export default class CuisinesController {
     }
   }
 
-  public async store ({}: HttpContextContract) {}
+  public async store ({auth, request, response}: HttpContextContract) {
+    try {
+      const user = auth.use('api').user!
+
+      const {name, description, thumbnail, status} = await request.validate(StoreValidator)
+
+      const cuisine = await Cuisine.create({
+        userId: user.id, name, description, status,
+        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
+      })
+
+      response.ok(cuisine.toObject())
+    } catch (errors) {
+      ExceptionResponse.use(errors).resolve(response)
+    }
+  }
 
   public async show ({}: HttpContextContract) {}
 

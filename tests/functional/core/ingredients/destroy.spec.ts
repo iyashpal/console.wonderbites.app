@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
-import {IngredientFactory, UserFactory} from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import {IngredientFactory, UserFactory} from 'Database/factories'
 
 test.group('Core [ingredients.destroy]', (group) => {
   group.each.setup(async () => {
