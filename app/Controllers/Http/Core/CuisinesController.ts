@@ -4,6 +4,8 @@ import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Cuisines/UpdateValidator'
+import {DateTime} from 'luxon'
+import { types } from '@ioc:Adonis/Core/Helpers'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
@@ -64,6 +66,23 @@ export default class CuisinesController {
     }
   }
 
-  public async destroy ({}: HttpContextContract) {
+  public async destroy ({request, response, params}: HttpContextContract) {
+    try {
+      const {force = false} = <{ force: boolean }>request.all()
+
+      const cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+
+      if (force) {
+        await cuisine.delete()
+
+        response.ok({deleted: true})
+      } else {
+        await cuisine.merge({deletedAt: DateTime.now()}).save()
+
+        response.ok({deleted: !types.isNull(cuisine.deletedAt)})
+      }
+    } catch (errors) {
+      ExceptionResponse.use(errors).resolve(response)
+    }
   }
 }

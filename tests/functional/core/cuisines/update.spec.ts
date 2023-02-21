@@ -4,7 +4,7 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Application from '@ioc:Adonis/Core/Application'
 import {CuisineFactory, UserFactory} from 'Database/factories'
 
-test.group('Core cuisines update', (group) => {
+test.group('Core [cuisines.update]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
