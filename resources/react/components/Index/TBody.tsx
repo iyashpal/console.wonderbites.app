@@ -1,3 +1,3 @@
 export default function TBody(props) {
-  return <tbody>{props.children}</tbody>
+  return <tbody className="divide-y divide-gray-200 bg-white">{props.children}</tbody>
 }

@@ -44,6 +44,11 @@ export const AppRoutes = [
           },
 
           {
+            path: 'create',
+            element: <Views.Categories.Create/>
+          },
+
+          {
             path: ':id',
             element: <Views.Categories.Show/>
           }

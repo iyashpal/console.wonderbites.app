@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {Category} from "~/types/models";
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
-import Skeleton from './skeleton'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import Pagination from '~/components/Pagination'
@@ -10,6 +9,7 @@ import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/
 import {useFetch} from "@/hooks";
 import {className} from "@/helpers";
 import {CategoriesPaginator, PaginatorMeta} from "@/types/paginators";
+import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
 
 export default function ListCategories() {
   const fetcher = useFetch()
@@ -71,7 +71,9 @@ export default function ListCategories() {
             </Index.THead>
 
             <Index.TBody>
-              {isLoading ? <><TableRowsSkeleton/></> : <>
+              {isLoading ? <>
+                <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
+              </> : <>
                 {categories.map(category => <Index.Tr key={category.id}>
                   <Index.TdCheck isChecked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
                   <Index.Td>
@@ -109,49 +111,6 @@ export default function ListCategories() {
           <Pagination meta={meta}/>
         </div>
       </div>
-      : <Skeleton.List.Page/>}
-  </>
-}
-
-
-function TableRowsSkeleton() {
-  return <>
-    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(item => (
-      <tr key={`${item}-skeleton`} className={'animate-pulse'}>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-5 h-5 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-8 h-8 rounded-full bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-      </tr>
-    ))}
+      : <ListPageSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type', align: 'center'}]} limit={10}/>}
   </>
 }
