@@ -33,7 +33,10 @@ export default function useCreateCuisine() {
     for (let key in createForm) {
       if (key === 'thumbnail') {
         createFormData.append('thumbnail', thumbnail, createForm[key])
-      } else {
+        continue
+      }
+
+      if (createForm[key]) {
         createFormData.append(key, createForm[key])
       }
     }

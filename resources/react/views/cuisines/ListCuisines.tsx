@@ -87,7 +87,7 @@ export default function ListCuisines() {
                     {cuisine.id}
                   </Index.Td>
                   <Index.Td className={'text-left'}>
-                    <Link to={`/app/cuisines/${cuisine.id}/update`} className={'hover:text-red-primary inline-flex items-center'}>
+                    <Link to={`/app/cuisines/${cuisine.id}/edit`} className={'hover:text-red-primary inline-flex items-center'}>
                       <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.name}
                     </Link>
                   </Index.Td>

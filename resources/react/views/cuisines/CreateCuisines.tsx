@@ -31,18 +31,18 @@ export default function CreateCuisines() {
                 </div>
 
                 <div className="col-span-6 relative">
-                  <label htmlFor="name" className="block text-sm font-bold text-gray-700">
+                  <label htmlFor="description" className="block text-sm font-bold text-gray-700">
                     Description
                   </label>
-                  <textarea onChange={form.input.onChange.description} name="name" id="name" rows={5} className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <textarea onChange={form.input.onChange.description} name="description" id="description" rows={5} className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError show={form.errors?.description}>{form.errors.description}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3 relative">
-                  <label htmlFor="name" className="block text-sm font-bold text-gray-700">
+                  <label htmlFor="image" className="block text-sm font-bold text-gray-700">
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="file" onChange={form.input.onChange.thumbnail} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-1.5 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="file" onChange={form.input.onChange.thumbnail} accept={'image/*'} name="image" id="image" className="mt-1"/>
                   <InputError show={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
                 </div>
 
