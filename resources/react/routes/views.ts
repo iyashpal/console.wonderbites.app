@@ -27,6 +27,7 @@ import ListCategories from '~/views/categories/ListCategories'
  */
 import ShowCuisine from '~/views/cuisines/ShowCuisine'
 import ListCuisines from '~/views/cuisines/ListCuisines'
+import CreateCuisines from '~/views/cuisines/CreateCuisines'
 
 /**
  * Banners Views
@@ -142,6 +143,7 @@ const Views = {
   Cuisines: {
     List: ListCuisines,
     Show: ShowCuisine,
+    Create: CreateCuisines,
   },
 
   Dashboard: Dashboard,

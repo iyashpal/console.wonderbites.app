@@ -103,6 +103,10 @@ export const AppRoutes = [
             element: <Views.Cuisines.List/>
           },
           {
+            path: 'create',
+            element: <Views.Cuisines.Create/>
+          },
+          {
             path: ':id',
             element: <Views.Cuisines.Show/>
           }
