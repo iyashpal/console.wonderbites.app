@@ -1,3 +1,5 @@
+import {User} from "@/types/models";
+
 export default interface Cuisine {
   id: number,
 
@@ -16,4 +18,6 @@ export default interface Cuisine {
   updated_at: string,
 
   deleted_at: string,
+
+  user?: User
 }

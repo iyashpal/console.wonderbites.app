@@ -1,18 +1,18 @@
+import {DateTime} from 'luxon'
 import {Cuisine} from 'App/Models'
+import { types } from '@ioc:Adonis/Core/Helpers'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Cuisines/UpdateValidator'
-import {DateTime} from 'luxon'
-import { types } from '@ioc:Adonis/Core/Helpers'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
     try {
       const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
 
-      const cuisines = await Cuisine.query().whereNull('deleted_at').paginate(page, limit)
+      const cuisines = await Cuisine.query().preload('user').whereNull('deleted_at').paginate(page, limit)
 
       response.json(cuisines)
     } catch (errors) {

@@ -5,12 +5,12 @@ import {useEffect, useState} from "react";
 import {Cuisine} from "@/types/models";
 import { CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
 import * as Index from "@/components/Index";
-import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
-import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
+import {DateTime} from "luxon";
 import {className} from "@/helpers";
 import * as Alert from "@/components/alerts";
 import Pagination from "@/components/Pagination";
-import {DateTime} from "luxon";
+import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
+import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon, LinkIcon} from "@heroicons/react/24/outline";
 
 export default function ListCuisines() {
   const fetcher = useFetch()
@@ -87,8 +87,8 @@ export default function ListCuisines() {
                     {cuisine.id}
                   </Index.Td>
                   <Index.Td className={'text-left'}>
-                    <Link to={`/app/cuisines/${cuisine.id}/update`}>
-                      {cuisine.name}
+                    <Link to={`/app/cuisines/${cuisine.id}/update`} className={'hover:text-red-primary inline-flex items-center'}>
+                      <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.name}
                     </Link>
                   </Index.Td>
                   <Index.Td>
@@ -98,7 +98,9 @@ export default function ListCuisines() {
                     {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATE_MED)}
                   </Index.Td>
                   <Index.Td>
-                    {cuisine.user_id}
+                    <Link to={`/app/users/${cuisine.user?.id}`} className={'hover:text-red-primary inline-flex items-center'}>
+                      <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.user?.fullname}
+                    </Link>
                   </Index.Td>
                   <Index.Td className={'text-center'}>
                     <button>

@@ -61,7 +61,7 @@ export default class User extends Notifiable {
    * @param user
    */
   @beforeSave()
-  public static async hashPassword(user: User) {
+  public static async hashPassword (user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
@@ -127,11 +127,16 @@ export default class User extends Notifiable {
   @belongsTo(() => Role)
   public role: BelongsTo<typeof Role>
 
+  @computed()
+  public get fullname () {
+    return [this.firstName, this.lastName].join(' ')
+  }
+
   /**
    * Default User avatar attribute.
    */
   @computed()
-  public get avatar_url() {
+  public get avatar_url () {
     if (this.avatar?.url) {
       return this.avatar.url
     }
@@ -141,8 +146,7 @@ export default class User extends Notifiable {
     return `https://unavatar.io/${name}?fallback=https://ui-avatars.com/api?name=${name}&color=7F9CF4&background=EBF4FF&format=svg`
   }
 
-
-  public isRoleAssigned(): boolean {
+  public isRoleAssigned (): boolean {
     return !!this.roleId
   }
 }
