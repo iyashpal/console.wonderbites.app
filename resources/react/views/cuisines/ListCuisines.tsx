@@ -94,8 +94,8 @@ export default function ListCuisines() {
                   <Index.Td>
                     {cuisine.status === 1 ? <><span className={'text-red-600'}>Active</span></> : 'Inactive'}
                   </Index.Td>
-                  <Index.Td>
-                    {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATE_MED)}
+                  <Index.Td className={'uppercase'}>
+                    {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATETIME_SHORT)}
                   </Index.Td>
                   <Index.Td>
                     <Link to={`/app/users/${cuisine.user?.id}`} className={'hover:text-red-primary inline-flex items-center'}>
