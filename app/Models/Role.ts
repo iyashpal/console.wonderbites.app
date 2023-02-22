@@ -1,6 +1,6 @@
 import {DateTime} from 'luxon'
-import {User} from "App/Models/index";
-import {slugify} from "@ioc:Adonis/Addons/LucidSlugify";
+import {User} from 'App/Models/index'
+import {slugify} from '@ioc:Adonis/Addons/LucidSlugify'
 import {BaseModel, column, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Role extends BaseModel {
@@ -25,6 +25,9 @@ export default class Role extends BaseModel {
 
   @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
+
+  @column.dateTime()
+  public deletedAt: DateTime
 
   @hasMany(() => User)
   public users: HasMany<typeof User>

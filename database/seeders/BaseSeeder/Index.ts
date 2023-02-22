@@ -15,6 +15,7 @@ export default class extends BaseSeeder {
   }
 
   public async run () {
+    await this.runSeeder(await import('../RoleSeeder'))
     await this.runSeeder(await import('../UserSeeder'))
     await this.runSeeder(await import('../ProductSeeder'))
     await this.runSeeder(await import('../MediaSeeder'))
