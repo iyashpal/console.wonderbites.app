@@ -109,6 +109,10 @@ export const AppRoutes = [
           {
             path: ':id',
             element: <Views.Cuisines.Show/>
+          },
+          {
+            path: ':id/edit',
+            element: <Views.Cuisines.Edit/>
           }
         ]
       },

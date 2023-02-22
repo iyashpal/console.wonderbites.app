@@ -27,6 +27,7 @@ import ListCategories from '~/views/categories/ListCategories'
  */
 import ShowCuisine from '~/views/cuisines/ShowCuisine'
 import ListCuisines from '~/views/cuisines/ListCuisines'
+import EditCuisines from '~/views/cuisines/EditCuisines'
 import CreateCuisines from '~/views/cuisines/CreateCuisines'
 
 /**
@@ -143,6 +144,7 @@ const Views = {
   Cuisines: {
     List: ListCuisines,
     Show: ShowCuisine,
+    Edit: EditCuisines,
     Create: CreateCuisines,
   },
 

@@ -53,8 +53,11 @@ export default function useUpdateIngredient() {
 
     for (let key in createForm) {
       if (key === 'thumbnail') {
-          createFormData.append('thumbnail', thumbnail ?? null, createForm[key] ?? null)
-      } else {
+        createFormData.append('thumbnail', thumbnail, createForm[key])
+        continue
+      }
+
+      if (createForm[key]) {
         createFormData.append(key, createForm[key])
       }
     }
