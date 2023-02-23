@@ -3,14 +3,14 @@ import {useFetch} from "@/hooks";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Cuisine} from "@/types/models";
-import { CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
+import {CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
 import * as Index from "@/components/Index";
 import {DateTime} from "luxon";
-import {className} from "@/helpers";
 import * as Alert from "@/components/alerts";
 import Pagination from "@/components/Pagination";
-import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
-import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon, LinkIcon} from "@heroicons/react/24/outline";
+import {TableRowsSkeleton} from "@/components/skeletons";
+import {BookmarkIcon, HashtagIcon, LinkIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
 
 export default function ListCuisines() {
   const fetcher = useFetch()
@@ -71,7 +71,7 @@ export default function ListCuisines() {
                 <Index.Th>
                   Added By
                 </Index.Th>
-                <Index.Th>
+                <Index.Th className={'w-24'}>
                   Action
                 </Index.Th>
               </Index.Tr>
@@ -87,7 +87,7 @@ export default function ListCuisines() {
                     {cuisine.id}
                   </Index.Td>
                   <Index.Td className={'text-left'}>
-                    <Link to={`/app/cuisines/${cuisine.id}/edit`} className={'hover:text-red-primary inline-flex items-center'}>
+                    <Link to={`/app/cuisines/${cuisine.id}`} className={'hover:text-red-primary inline-flex items-center'}>
                       <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.name}
                     </Link>
                   </Index.Td>
@@ -103,9 +103,18 @@ export default function ListCuisines() {
                     </Link>
                   </Index.Td>
                   <Index.Td className={'text-center'}>
-                    <button>
-                      <EllipsisVerticalIcon {...className('h-5 w-5')} />
-                    </button>
+                    <div className="flex item-center justify-center gap-x-1">
+                      <Link to={`/app/cuisines/${cuisine.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                        <PencilSquareIcon className={'w-5 h-5'}/>
+                      </Link>
+
+                      <Link to={`/app/cuisines/${cuisine.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                        <EyeIcon className={'w-5 h-5'}/>
+                      </Link>
+                      <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                        <TrashIcon className={'w-5 h-5'}/>
+                      </button>
+                    </div>
                   </Index.Td>
                 </Index.Tr>)}
                 {cuisines.length === 0 && <>
@@ -126,12 +135,6 @@ export default function ListCuisines() {
           <Pagination meta={meta}/>
         </div>
       </div>
-      : <ListPageSkeleton columns={[
-        {label: 'ID'},
-        {label: 'Cuisine Name'},
-        {label: 'Status', align: 'center'},
-        {label: 'Created On', align: 'center'},
-        {label: 'Added By'}
-      ]} limit={10}/>}
+      : <ListCuisineSkeleton/>}
   </>
 }

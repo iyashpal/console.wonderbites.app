@@ -1,18 +1,131 @@
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {useFetch} from "@/hooks";
+import {useUpdateCuisine} from "@/hooks/forms";
+import {useEffect, useState} from "react";
+import {Cuisine} from "@/types/models";
+import {DateTime} from "luxon";
+import {ShowCuisineSkeleton} from "@/views/cuisines/skeleton";
+import TrashModal from "@/components/TrashModal";
 
 export default function ShowCuisine() {
+  const {id} = useParams()
+  const fetcher = useFetch()
+  const form = useUpdateCuisine()
+  const navigateTo = useNavigate()
+  const [cuisine, setCuisine] = useState<Cuisine>({} as Cuisine)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [isTrashing, setIsTrashing] = useState<boolean>(false)
+
+  useEffect(() => {
+    fetchCuisine()
+  }, [id])
+
+  useEffect(() => {
+    form.syncData(cuisine)
+  }, [cuisine])
+
+
+  function fetchCuisine() {
+    fetcher.get(`/cuisines/${id}`, {params: {with: ['cuisines.user']}}).then(({data}) => {
+      setCuisine(data)
+      setIsLoaded(true)
+    })
+  }
+
+  function onDeleteCuisine() {
+    navigateTo('/app/cuisines')
+  }
+
+  function onCloseTrash() {
+    setIsTrashing(false)
+  }
+
   return <>
-    <div className="py-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{name: 'Cuisines', href:'/app/cuisines'}, {name: '1'}]}/>
-      </div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <div className="py-4">
-          <div className="h-96 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
-            <span className="text-sm text-gray-500">Coming soon...</span>
+    {isLoaded ?
+      <div className="py-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <Breadcrumb pages={[{name: 'Cuisines', href: '/app/cuisines'}, {name: 'Cuisine Detail'}]}/>
+        </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <div className="py-4">
+            <div className="shadow px-4 pt-4 sm:px-6 sm:pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="font-bold text-xl">{cuisine.name}</span>
+                </div>
+                <div className="text-sm">
+                  <p>Created on: {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATE_MED)}</p>
+                  <p>By: {cuisine.user?.fullname || 'Unknown'}</p>
+                </div>
+              </div>
+              <div>
+                <p className={'font-medium text-sm mb-3'}>Cuisine Details</p>
+                <div className={'-mx-4 sm:-mx-6 overflow-x-auto'}>
+                  <table className={'table-auto w-full'}>
+                    <thead>
+                    <tr>
+                      <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Name</th>
+                      <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>ID</th>
+                      <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Image</th>
+                      <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Description</th>
+                      <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Status</th>
+                      <th className={'text-center px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
+                      <span className={'text-red-primary font-bold'}>
+                        {cuisine.name}
+                      </span>
+                      </td>
+                      <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
+                        {cuisine.id}
+                      </td>
+                      <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
+                        <div className={''}>
+                          <img className={'w-10 h-10 rounded-full object-cover shadow border-2 border-gray-300'} src={cuisine.default_thumbnail} alt="Product Image"/>
+                        </div>
+                      </td>
+                      <td className={'text-left px-4 sm:px-6 py-2'}>
+                        {cuisine.description}
+                      </td>
+
+                      <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
+                      <span className={'font-bold'}>
+                        {cuisine.status === 1 ? <><span className={'text-red-primary'}>Active</span></> : 'Inactive'}
+                      </span>
+                      </td>
+                      <td className={'text-center px-4 sm:px-6 py-2 whitespace-nowrap'}>
+                        <div className="flex item-center justify-center gap-x-1">
+                          <Link to={`/app/cuisines/${cuisine.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                            <PencilSquareIcon className={'w-5 h-5'}/>
+                          </Link>
+                          <button onClick={() => setIsTrashing(true)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                            <TrashIcon className={'w-5 h-5'}/>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <TrashModal
+              show={isTrashing}
+              url={`/cuisines/${cuisine.id}`}
+              title={'Delete'}
+              description={<>Are you sure you want to delete "<b>{cuisine.name}</b>"?</>}
+              onClose={onCloseTrash}
+              onDelete={onDeleteCuisine}
+            />
           </div>
         </div>
       </div>
-    </div>
+      : <ShowCuisineSkeleton/>}
+
   </>
 }

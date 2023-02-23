@@ -11,6 +11,8 @@ export default interface Cuisine {
 
   thumbnail: object,
 
+  default_thumbnail: string,
+
   status: number,
 
   created_at: string,

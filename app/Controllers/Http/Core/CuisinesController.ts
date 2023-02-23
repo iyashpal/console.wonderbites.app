@@ -1,6 +1,6 @@
 import {DateTime} from 'luxon'
 import {Cuisine} from 'App/Models'
-import { types } from '@ioc:Adonis/Core/Helpers'
+import {types} from '@ioc:Adonis/Core/Helpers'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
@@ -31,17 +31,22 @@ export default class CuisinesController {
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
-      response.ok(cuisine.toObject())
+      response.ok(cuisine)
     } catch (errors) {
       ExceptionResponse.use(errors).resolve(response)
     }
   }
 
-  public async show ({response, params}: HttpContextContract) {
+  public async show ({response, params, request}: HttpContextContract) {
     try {
-      const cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+      const cuisine = await Cuisine.query()
+        .match([
+          request.input('with', []).includes('cuisines.user'),
+          query => query.preload('user'),
+        ])
+        .where('id', params.id).whereNull('deleted_at').firstOrFail()
 
-      response.ok(cuisine.toObject())
+      response.ok(cuisine)
     } catch (errors) {
       ExceptionResponse.use(errors).resolve(response)
     }
@@ -60,7 +65,7 @@ export default class CuisinesController {
         status: status ?? cuisine.status,
       }).save()
 
-      response.ok(cuisine.toObject())
+      response.ok(cuisine)
     } catch (errors) {
       ExceptionResponse.use(errors).resolve(response)
     }

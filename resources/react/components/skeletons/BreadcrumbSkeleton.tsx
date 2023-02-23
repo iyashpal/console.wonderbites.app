@@ -20,7 +20,7 @@ export default function BreadcrumbSkeleton({pages}: { pages?: number[] }) {
           <li key={index}>
             <div className="flex items-center">
               <ForwardSlashIcon className="h-5 w-5 flex-shrink-0 text-slate-900"/>
-              <span className="inline-block ml-1 w-14 py-2 bg-gray-200 rounded-md"></span>
+              <span className="inline-block ml-1 w-14 py-2 bg-gray-200 rounded-md animate-pulse"></span>
             </div>
           </li>
         ))}
