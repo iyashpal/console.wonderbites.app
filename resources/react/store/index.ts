@@ -5,6 +5,7 @@ const Store = configureStore({
   reducer: {
     authSlice: features.authSlice,
     userSlice: features.userSlice,
+    flashSlice: features.flashSlice,
   }
 })
 

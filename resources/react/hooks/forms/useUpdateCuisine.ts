@@ -1,4 +1,4 @@
-import {useFetch} from "@/hooks";
+import {useFetch, useFlash} from "@/hooks";
 import {Cuisine} from "@/types/models";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
@@ -17,6 +17,7 @@ type CuisineFormErrors = {
   status: string,
 }
 export default function useUpdateCuisine() {
+  const flash = useFlash()
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
@@ -43,6 +44,7 @@ export default function useUpdateCuisine() {
     }
     fetcher.put(`cuisines/${createForm.id}`, createFormData).then(() => {
       setIsProcessing(false)
+      flash.set('cuisine_updated', true)
       navigateTo(`/app/cuisines/${createForm.id}`)
     }).catch(({data}) => {
       setIsProcessing(false)

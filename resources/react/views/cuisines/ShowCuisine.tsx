@@ -1,16 +1,18 @@
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {useFetch} from "@/hooks";
+import {useFetch, useFlash} from "@/hooks";
 import {useUpdateCuisine} from "@/hooks/forms";
 import {useEffect, useState} from "react";
 import {Cuisine} from "@/types/models";
 import {DateTime} from "luxon";
+import * as Alert from '@/components/alerts'
 import {ShowCuisineSkeleton} from "@/views/cuisines/skeleton";
 import TrashModal from "@/components/TrashModal";
 
 export default function ShowCuisine() {
   const {id} = useParams()
+  const flash = useFlash()
   const fetcher = useFetch()
   const form = useUpdateCuisine()
   const navigateTo = useNavigate()
@@ -35,6 +37,7 @@ export default function ShowCuisine() {
   }
 
   function onDeleteCuisine() {
+    flash.set('cuisine_deleted', true)
     navigateTo('/app/cuisines')
   }
 
@@ -49,6 +52,13 @@ export default function ShowCuisine() {
           <Breadcrumb pages={[{name: 'Cuisines', href: '/app/cuisines'}, {name: 'Cuisine Detail'}]}/>
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          {flash.get('cuisine_created') && <>
+            <Alert.Success className={'mt-4'}>Cuisine created successfully.</Alert.Success>
+          </>}
+
+          {flash.get('cuisine_updated') && <>
+            <Alert.Success className={'mt-4'}>Cuisine updated successfully.</Alert.Success>
+          </>}
           <div className="py-4">
             <div className="shadow px-4 pt-4 sm:px-6 sm:pt-6">
               <div className="flex items-start justify-between">

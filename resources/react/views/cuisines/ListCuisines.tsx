@@ -1,19 +1,21 @@
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import {useFetch} from "@/hooks";
-import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {Cuisine} from "@/types/models";
-import {CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
-import * as Index from "@/components/Index";
 import {DateTime} from "luxon";
+import {Cuisine} from "@/types/models";
+import {useEffect, useState} from "react";
+import {useFetch, useFlash} from "@/hooks";
+import * as Index from "@/components/Index";
 import * as Alert from "@/components/alerts";
-import Pagination from "@/components/Pagination";
-import {TableRowsSkeleton} from "@/components/skeletons";
-import {BookmarkIcon, HashtagIcon, LinkIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
-import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
 import TrashModal from "@/components/TrashModal";
+import Pagination from "@/components/Pagination";
+import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import {TableRowsSkeleton} from "@/components/skeletons";
+import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
+import {CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
+import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {BookmarkIcon, HashtagIcon, LinkIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 export default function ListCuisines() {
+
+  const flash = useFlash()
   const fetcher = useFetch()
   const location = useLocation()
   const navigateTo = useNavigate()
@@ -47,6 +49,7 @@ export default function ListCuisines() {
 
   function onDeleteCuisine() {
     setIsTrashing(false)
+    flash.set('cuisine_deleted', true)
     navigateTo('/app/cuisines')
   }
 
@@ -62,6 +65,11 @@ export default function ListCuisines() {
           <Breadcrumb pages={[{name: 'Cuisines'}]}/>
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5">
+
+          {flash.get('cuisine_deleted') && <>
+            <Alert.Success className={'mb-6'}>Cuisine deleted successfully</Alert.Success>
+          </>}
+
           <Index.Filters sortBy={[
             {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
             {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
