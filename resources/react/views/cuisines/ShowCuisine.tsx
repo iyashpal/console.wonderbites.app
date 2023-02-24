@@ -117,7 +117,7 @@ export default function ShowCuisine() {
             <TrashModal
               show={isTrashing}
               url={`/cuisines/${cuisine.id}`}
-              title={'Delete'}
+              title={'Delete Cuisine'}
               description={<>Are you sure you want to delete "<b>{cuisine.name}</b>"?</>}
               onClose={onCloseTrash}
               onDelete={onDeleteCuisine}

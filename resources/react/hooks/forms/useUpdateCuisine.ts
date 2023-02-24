@@ -42,7 +42,6 @@ export default function useUpdateCuisine() {
       }
     }
     fetcher.put(`cuisines/${createForm.id}`, createFormData).then(() => {
-      alert('Success')
       setIsProcessing(false)
       navigateTo(`/app/cuisines/${createForm.id}`)
     }).catch(({data}) => {

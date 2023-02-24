@@ -41,7 +41,6 @@ export default function useCreateCuisine() {
       }
     }
     fetcher.post('cuisines', createFormData).then(() => {
-      alert('Success')
       setIsProcessing(false)
       navigateTo('/app/cuisines')
     }).catch(({data}) => {

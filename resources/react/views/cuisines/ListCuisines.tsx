@@ -1,6 +1,6 @@
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {useFetch} from "@/hooks";
-import {Link, useLocation, useSearchParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Cuisine} from "@/types/models";
 import {CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
@@ -11,10 +11,14 @@ import Pagination from "@/components/Pagination";
 import {TableRowsSkeleton} from "@/components/skeletons";
 import {BookmarkIcon, HashtagIcon, LinkIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
+import TrashModal from "@/components/TrashModal";
 
 export default function ListCuisines() {
   const fetcher = useFetch()
   const location = useLocation()
+  const navigateTo = useNavigate()
+  const [cuisine, setCuisine] = useState<Cuisine>({} as Cuisine)
+  const [isTrashing, setIsTrashing] = useState<boolean>(false)
   const [searchParams] = useSearchParams()
   const [cuisines, setCuisines] = useState<Cuisine[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
@@ -38,6 +42,17 @@ export default function ListCuisines() {
       .catch(() => {
         setIsLoading(false)
       })
+  }
+
+
+  function onDeleteCuisine() {
+    setIsTrashing(false)
+    navigateTo('/app/cuisines')
+  }
+
+  function onCloseTrash() {
+    setIsTrashing(false)
+    setCuisine({} as Cuisine)
   }
 
   return <>
@@ -88,7 +103,7 @@ export default function ListCuisines() {
                   </Index.Td>
                   <Index.Td className={'text-left'}>
                     <Link to={`/app/cuisines/${cuisine.id}`} className={'hover:text-red-primary inline-flex items-center'}>
-                      <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.name}
+                      {cuisine.name}
                     </Link>
                   </Index.Td>
                   <Index.Td>
@@ -111,7 +126,10 @@ export default function ListCuisines() {
                       <Link to={`/app/cuisines/${cuisine.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                         <EyeIcon className={'w-5 h-5'}/>
                       </Link>
-                      <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                      <button onClick={() => {
+                        setCuisine(cuisine);
+                        setIsTrashing(true);
+                      }} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
                         <TrashIcon className={'w-5 h-5'}/>
                       </button>
                     </div>
@@ -134,6 +152,14 @@ export default function ListCuisines() {
           </Index.Table>
           <Pagination meta={meta}/>
         </div>
+        <TrashModal
+          show={isTrashing}
+          url={`/cuisines/${cuisine.id}`}
+          title={'Delete'}
+          description={<>Are you sure you want to delete "<b>{cuisine.name}</b>"?</>}
+          onClose={onCloseTrash}
+          onDelete={onDeleteCuisine}
+        />
       </div>
       : <ListCuisineSkeleton/>}
   </>
