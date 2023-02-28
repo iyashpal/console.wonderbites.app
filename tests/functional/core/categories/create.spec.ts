@@ -33,7 +33,7 @@ test.group('Core [categories.create]', (group) => {
     response.assertStatus(200)
   }).tags(['@core', '@core.categories.create'])
 
-  test('it sees the list of root categories in response.', async ({client, route}) => {
+  test('it sees the create category page data.', async ({client, route}) => {
     const user = await UserFactory.with('role').create()
     const categories = await CategoryFactory.createMany(6)
     const response = await client.get(route('core.categories.create')).guard('api').loginAs(user)
