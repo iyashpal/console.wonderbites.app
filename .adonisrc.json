@@ -21,7 +21,8 @@
     "./start/routes",
     "./start/kernel",
     "./start/bouncer",
-    "./start/limiter"
+    "./start/limiter",
+    "./start/validator"
   ],
   "providers": [
     "./providers/AppProvider",
