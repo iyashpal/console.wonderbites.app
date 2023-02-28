@@ -12,7 +12,7 @@ export default function useAuth() {
   const [token, setToken] = useState<string>(auth.token)
 
   useEffect(() => {
-    console.log('This is testing.')
+
   }, [])
 
 
