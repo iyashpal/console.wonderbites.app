@@ -1,6 +1,7 @@
 import Views from '@/routes/views'
 import {AuthLayout} from '~/layouts'
 import {createBrowserRouter, Outlet} from 'react-router-dom'
+import Axios from 'redaxios'
 
 export const AppRoutes = [
   {
@@ -26,7 +27,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Users.List />
+            element: <Views.Users.List/>
           }
         ]
       },
@@ -45,7 +46,8 @@ export const AppRoutes = [
 
           {
             path: 'create',
-            element: <Views.Categories.Create/>
+            element: <Views.Categories.Create/>,
+            loader: async () => Axios.get('categories/create').then(({data}) => data),
           },
 
           {
@@ -64,7 +66,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Reviews.List />
+            element: <Views.Reviews.List/>
           }
         ]
       },
@@ -78,15 +80,15 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Ingredients.List />
+            element: <Views.Ingredients.List/>
           },
           {
             path: 'create',
-            element: <Views.Ingredients.Create />
+            element: <Views.Ingredients.Create/>
           },
           {
             path: ':id/update',
-            element: <Views.Ingredients.Update />
+            element: <Views.Ingredients.Update/>
           },
         ]
       },
@@ -126,7 +128,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Subscriptions.List />
+            element: <Views.Subscriptions.List/>
           }
         ]
       },
@@ -140,7 +142,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Orders.List />
+            element: <Views.Orders.List/>
           }
         ]
       },
@@ -154,7 +156,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Chat.List />
+            element: <Views.Chat.List/>
           }
         ]
       },
@@ -176,7 +178,7 @@ export const AppRoutes = [
           },
           {
             path: 'create',
-            element: <Views.Products.Create />
+            element: <Views.Products.Create/>
           }
         ]
       },
@@ -190,7 +192,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Clients.List />
+            element: <Views.Clients.List/>
           }
         ]
       },
@@ -204,7 +206,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Banners.List />
+            element: <Views.Banners.List/>
           }
         ]
       },
@@ -218,7 +220,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Pages.List />
+            element: <Views.Pages.List/>
           }
         ]
       },
@@ -232,7 +234,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Feedbacks.List />
+            element: <Views.Feedbacks.List/>
           }
         ]
       },
@@ -246,7 +248,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.WonderPoints.List />
+            element: <Views.WonderPoints.List/>
           }
         ]
       },
@@ -260,7 +262,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Coupons.List />
+            element: <Views.Coupons.List/>
           }
         ]
       },
@@ -274,7 +276,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Reservations.List />
+            element: <Views.Reservations.List/>
           }
         ]
       },
@@ -288,7 +290,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.WaitList.List />
+            element: <Views.WaitList.List/>
           }
         ]
       },
@@ -302,7 +304,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Settings.List />
+            element: <Views.Settings.List/>
           }
         ]
       },
@@ -311,7 +313,7 @@ export const AppRoutes = [
 
   {
     path: '*',
-    element: <Views.Errors.NotFound />
+    element: <Views.Errors.NotFound/>
   }
 ]
 

@@ -1,12 +1,15 @@
-import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
-import {Form, Link} from "react-router-dom";
-import InputError from "@/components/Form/InputError";
-import {DateTime} from "luxon";
-import * as Loaders from "@/components/loaders";
-import {useCreateIngredient} from "@/hooks/forms";
+import {Category} from "@/types/models";
+import * as Loaders from '@/components/loaders';
+import {useCategoryForm} from '@/hooks/forms';
+import InputError from '@/components/Form/InputError';
+import Breadcrumb from '@/layouts/AuthLayout/Breadcrumb';
+import {Form, Link, useLoaderData} from 'react-router-dom';
 
 export default function CreateCategory() {
-  const form = useCreateIngredient()
+  const {categories} = useLoaderData() as { categories: Category[] }
+
+  console.log(categories)
+  const form = useCategoryForm({name: '', description: '', parent: null, type: 'all', status: 1})
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -20,7 +23,7 @@ export default function CreateCategory() {
             <h1 className={'font-semibold'}>Add Category</h1>
           </div>
 
-          <Form method='post' onSubmit={form.onSubmit} encType='multipart/form-data'>
+          <Form method='post' onSubmit={form.onSubmit.create} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
               <div className="grid grid-cols-6 gap-6">
                 <div className="col-span-6 sm:col-span-3 relative">
@@ -32,14 +35,38 @@ export default function CreateCategory() {
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="parent" className="block text-sm font-bold text-gray-700">
+                    Parent
+                  </label>
+                  <select onChange={form.input.onChange.parent} disabled={categories.length === 0} id="parent" name="parent" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm disabled:bg-gray-50">
+                    <option value={''}>Select Category</option>
+                    {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
+                  </select>
+                  <InputError show={form.errors?.parent}>{form.errors.parent}</InputError>
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="type" className="block text-sm font-bold text-gray-700">
+                    Type
+                  </label>
+                  <select onChange={form.input.onChange.type} id="type" name="type" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={'All'}>All</option>
+                    <option value={'Cuisine'}>Cuisine</option>
+                    <option value={'Ingredient'}>Ingredient</option>
+                    <option value={'Product'}>Product</option>
+                  </select>
+                  <InputError show={form.errors?.type}>{form.errors.type}</InputError>
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="status" className="block text-sm font-bold text-gray-700">
                     Status <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="status" onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={DateTime.now().toString()}>Public</option>
-                    <option value={''}>Private</option>
+                  <select id="status" onChange={form.input.onChange.status} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={1}>Public</option>
+                    <option value={0}>Private</option>
                   </select>
-                  <InputError show={form.errors?.publishedAt}>{form.errors.publishedAt}</InputError>
+                  <InputError show={form.errors?.status}>{form.errors.status}</InputError>
                 </div>
               </div>
 

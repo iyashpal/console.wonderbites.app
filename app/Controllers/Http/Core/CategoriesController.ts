@@ -1,6 +1,7 @@
+import {Category} from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {Category} from 'App/Models'
+import StoreValidator from 'App/Validators/Core/Categories/StoreValidator'
 
 export default class CategoriesController {
   public async index ({request, response}: HttpContextContract) {
@@ -15,15 +16,28 @@ export default class CategoriesController {
     }
   }
 
+  public async create ({request, response}: HttpContextContract) {
+    const categories = await Category.query().withScopes(scopes => scopes.root())
+    response.json({categories})
+  }
+
   public async store ({request, response}: HttpContextContract) {
-    //
+    try {
+      const payload = await request.validate(StoreValidator)
+
+      const category = await Category.create(payload)
+
+      response.json(category)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async show ({request, response}: HttpContextContract) {
     //
   }
 
-  public async update ({request, response}: HttpContextContract) {
+  public async update ({request, response, params}: HttpContextContract) {
     //
   }
 
