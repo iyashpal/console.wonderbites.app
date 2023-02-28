@@ -28,6 +28,9 @@ export default class Category extends BaseModel {
   @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
 
+  @column.dateTime()
+  public deletedAt: DateTime
+
   @computed()
   public get isForProduct () {
     return this.type === 'Product'

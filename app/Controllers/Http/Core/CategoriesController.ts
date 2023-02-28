@@ -1,4 +1,6 @@
+import {DateTime} from 'luxon'
 import {Category} from 'App/Models'
+import {types} from '@ioc:Adonis/Core/Helpers'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Categories/StoreValidator'
@@ -9,7 +11,7 @@ export default class CategoriesController {
     try {
       const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
 
-      const categories = await Category.query().paginate(page, limit)
+      const categories = await Category.query().whereNull('deleted_at').paginate(page, limit)
 
       response.json(categories)
     } catch (error) {
@@ -34,13 +36,13 @@ export default class CategoriesController {
     }
   }
 
-  public async show ({request, response}: HttpContextContract) {
+  public async show ({}: HttpContextContract) {
     //
   }
 
-  public async edit ({request, response, params}: HttpContextContract) {
+  public async edit ({ response, params}: HttpContextContract) {
     try {
-      const category = await Category.query().where('id', params.id).firstOrFail()
+      const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
       const categories = await Category.query().withScopes(scopes => scopes.root())
       response.json({category, categories})
     } catch (error) {
@@ -50,7 +52,7 @@ export default class CategoriesController {
 
   public async update ({request, response, params}: HttpContextContract) {
     try {
-      const category = await Category.query().where('id', params.id).firstOrFail()
+      const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
 
       const payload = await request.validate(UpdateValidator)
 
@@ -68,7 +70,23 @@ export default class CategoriesController {
     }
   }
 
-  public async destroy ({request, response}: HttpContextContract) {
-    //
+  public async destroy ({request, response, params}: HttpContextContract) {
+    try {
+      const {force = false} = <{ force: boolean }>request.all()
+
+      const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+
+      if (force) {
+        await category.delete()
+
+        response.ok({deleted: true})
+      } else {
+        await category.merge({deletedAt: DateTime.now()}).save()
+
+        response.ok({deleted: !types.isNull(category.deletedAt)})
+      }
+    } catch (errors) {
+      ExceptionResponse.use(errors).resolve(response)
+    }
   }
 }
