@@ -9,7 +9,7 @@ export default class Categories extends BaseSchema {
 
       table.string('type').notNullable()
 
-      table.bigInteger('parent').nullable().defaultTo(0)
+      table.bigInteger('parent').nullable()
 
       table.string('name').notNullable()
 

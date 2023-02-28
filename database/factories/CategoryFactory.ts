@@ -7,7 +7,7 @@ export default Factory.define(Category, ({ faker }) => {
     name: faker.word.adjective(),
     description: faker.lorem.lines(2),
     type: 'Product',
-    parent: 0,
+    parent: null,
     status: 1,
   }
 })
