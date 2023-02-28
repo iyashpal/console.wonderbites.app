@@ -1,15 +1,14 @@
-import {useEffect, useState} from "react";
+import {useFetch} from "@/hooks";
 import {Category} from "~/types/models";
+import {useEffect, useState} from "react";
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
+import Pagination from '~/components/Pagination'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
-import Pagination from '~/components/Pagination'
-import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
-import {useFetch} from "@/hooks";
-import {className} from "@/helpers";
 import {CategoriesPaginator, PaginatorMeta} from "@/types/paginators";
 import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
+import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 export default function ListCategories() {
   const fetcher = useFetch()
@@ -64,7 +63,7 @@ export default function ListCategories() {
                 <Index.Th>
                   Type
                 </Index.Th>
-                <Index.Th>
+                <Index.Th className={'w-24'}>
                   Action
                 </Index.Th>
               </Index.Tr>
@@ -80,7 +79,7 @@ export default function ListCategories() {
                     {category.id}
                   </Index.Td>
                   <Index.Td className={'text-left'}>
-                    <Link to={`/app/categories/${category.id}/update`}>
+                    <Link to={`/app/categories/${category.id}`}>
                       {category.name}
                     </Link>
                   </Index.Td>
@@ -88,9 +87,18 @@ export default function ListCategories() {
                     {category.type}
                   </Index.Td>
                   <Index.Td className={'text-center'}>
-                    <button>
-                      <EllipsisVerticalIcon {...className('h-5 w-5')} />
-                    </button>
+                    <div className="flex item-center justify-center gap-x-1">
+                      <Link to={`/app/categories/${category.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                        <PencilSquareIcon className={'w-5 h-5'}/>
+                      </Link>
+
+                      <Link to={`/app/cuisines/${category.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                        <EyeIcon className={'w-5 h-5'}/>
+                      </Link>
+                      <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                        <TrashIcon className={'w-5 h-5'}/>
+                      </button>
+                    </div>
                   </Index.Td>
                 </Index.Tr>)}
                 {categories.length === 0 && <>

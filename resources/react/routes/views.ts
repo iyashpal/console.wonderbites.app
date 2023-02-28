@@ -19,6 +19,7 @@ import CreateProduct from '~/views/products/CreateProduct'
  * Categories Views
  */
 import ShowCategory from '~/views/categories/ShowCategory'
+import EditCategory from '~/views/categories/EditCategory'
 import CreateCategory from '~/views/categories/CreateCategory'
 import ListCategories from '~/views/categories/ListCategories'
 
@@ -125,8 +126,9 @@ const Views = {
 
   Categories: {
     List: ListCategories,
-    Show: ShowCategory,
     Create: CreateCategory,
+    Show: ShowCategory,
+    Edit: EditCategory,
   },
 
   Chat: {

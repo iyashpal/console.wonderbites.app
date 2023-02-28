@@ -1,11 +1,10 @@
 import {useFetch} from "@/hooks";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
-
-export default function useCategoryForm(fields: CategoryCreateForm | CategoryUpdateForm) {
+export default function useCategoryForm(fields: CategoryFormFields) {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
-  const [form, setForm] = useState(fields)
+  const [form, setForm] = useState<CategoryFormFields>(fields)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   /**
@@ -29,7 +28,8 @@ export default function useCategoryForm(fields: CategoryCreateForm | CategoryUpd
    * @param event
    */
   function onChangeParent(event: ChangeEvent<HTMLSelectElement>) {
-    setForm(payload => ({...payload, parent: Number(event.target.value) ?? null}))
+    let parent = Number(event.target.value)
+    setForm(payload => ({...payload, parent: parent > 0 ? parent : null}))
   }
 
   /**
@@ -48,13 +48,26 @@ export default function useCategoryForm(fields: CategoryCreateForm | CategoryUpd
     setForm(payload => ({...payload, status: Number(event.target.value)}))
   }
 
+  function touchCategoryParent() {
+    setForm(payload => ({...payload, parent: Number(payload.parent) > 0 ? Number(payload.parent) : null}))
+  }
+
   function onUpdate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    touchCategoryParent()
     setIsProcessing(true)
+    fetcher.put(`categories/${form?.id}`, form).then(({data}) => {
+      setIsProcessing(false)
+      navigateTo(`/app/categories/${data.id}`)
+    }).catch(({data}) => {
+      setIsProcessing(false)
+      setErrors(data?.errors)
+    })
   }
 
   function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    touchCategoryParent()
     setIsProcessing(true)
     fetcher.post('categories', form).then(({data}) => {
       setIsProcessing(false)
@@ -87,22 +100,16 @@ export default function useCategoryForm(fields: CategoryCreateForm | CategoryUpd
   }
 }
 
-interface CategoryCreateForm {
+type CategoryFormFields = {
+  id?: number,
   name: string,
   type: string,
   parent: number | null,
   description: string,
-  status: number
+  status: number,
+  created_at?: string,
+  updated_at?: string,
 }
-
-interface CategoryUpdateForm extends CategoryCreateForm {
-  id: number,
-
-  created_at: string,
-
-  updated_at: string,
-}
-
 type FormErrors = {
   name: string,
   description: string,

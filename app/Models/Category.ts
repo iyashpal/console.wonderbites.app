@@ -11,7 +11,7 @@ export default class Category extends BaseModel {
   public type: string
 
   @column()
-  public parent: number
+  public parent: number | null
 
   @column()
   public name: string
@@ -60,7 +60,7 @@ export default class Category extends BaseModel {
   @manyToMany(() => Ingredient, {pivotTable: 'category_ingredient'})
   public ingredients: ManyToMany<typeof Ingredient>
 
-  public static root = scope((query) => query.where('parent', 0))
+  public static root = scope((query) => query.whereNull('parent'))
 
   /**
    * Query scope for different types of categories.
