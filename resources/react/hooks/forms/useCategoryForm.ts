@@ -1,7 +1,8 @@
-import {useFetch} from "@/hooks";
+import {useFetch, useFlash} from "@/hooks";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
 export default function useCategoryForm(fields: CategoryFormFields) {
+  const flash = useFlash()
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [form, setForm] = useState<CategoryFormFields>(fields)
@@ -58,9 +59,11 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     setIsProcessing(true)
     fetcher.put(`categories/${form?.id}`, form).then(({data}) => {
       setIsProcessing(false)
+      flash.set('category_updated', true)
       navigateTo(`/app/categories/${data.id}`)
     }).catch(({data}) => {
       setIsProcessing(false)
+      flash.set('category_updated', false)
       setErrors(data?.errors)
     })
   }
@@ -71,9 +74,11 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     setIsProcessing(true)
     fetcher.post('categories', form).then(({data}) => {
       setIsProcessing(false)
+      flash.set('category_created', true)
       navigateTo(`/app/categories/${data.id}`)
     }).catch(({data}) => {
       setIsProcessing(false)
+      flash.set('category_created', false)
       setErrors(data?.errors)
     })
   }

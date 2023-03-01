@@ -41,7 +41,8 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Categories.List/>
+            element: <Views.Categories.List/>,
+            loader: async () => Axios.get('/categories').then(({data}) => data)
           },
 
           {
@@ -52,7 +53,8 @@ export const AppRoutes = [
 
           {
             path: ':id',
-            element: <Views.Categories.Show/>
+            element: <Views.Categories.Show/>,
+            loader: async ({params}) => Axios.get(`categories/${params.id}`).then(({data}) => data),
           },
           {
             path: ':id/edit',
