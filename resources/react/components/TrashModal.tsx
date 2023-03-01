@@ -13,8 +13,10 @@ export default function TrashModal({show = false, onClose, onDelete, title, desc
 
   function onSubmit() {
     setIsProcessing(true)
-    fetcher.delete(url).then(onDelete).catch((error) => {
-      console.log(error)
+    fetcher.delete(url).then(() => {
+      onDelete()
+      setIsProcessing(false)
+    }).catch(() => {
       setIsProcessing(false)
     })
   }
