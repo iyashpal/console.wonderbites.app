@@ -63,7 +63,7 @@ export default class Category extends BaseModel {
   @manyToMany(() => Ingredient, {pivotTable: 'category_ingredient'})
   public ingredients: ManyToMany<typeof Ingredient>
 
-  public static root = scope((query) => query.whereNull('parent'))
+  public static root = scope((query) => query.whereNull('parent').whereNull('deleted_at'))
 
   /**
    * Query scope for different types of categories.
