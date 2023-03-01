@@ -1,24 +1,29 @@
-import {useFetch} from "@/hooks";
-import {Category} from "~/types/models";
-import {useEffect, useState} from "react";
+import {Category} from '~/types/models'
+import {useEffect, useState} from 'react'
+import {useFetch, useFlash} from '@/hooks'
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
 import Pagination from '~/components/Pagination'
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import {Link, useLocation, useSearchParams} from "react-router-dom";
-import {CategoriesPaginator, PaginatorMeta} from "@/types/paginators";
-import {ListPageSkeleton, TableRowsSkeleton} from "@/components/skeletons";
-import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import TrashModal from '@/components/TrashModal'
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {CategoriesPaginator, PaginatorMeta} from '@/types/paginators'
+import {ListPageSkeleton, TableRowsSkeleton} from '@/components/skeletons'
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
+import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ListCategories() {
+  const flash = useFlash()
   const fetcher = useFetch()
   const location = useLocation()
+  const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-  const [categories, setCategories] = useState<Category[]>([])
+  const [selected] = useState<number[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [category, setCategory] = useState<Category>({} as Category)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
-  const [selected] = useState<number[]>([])
+  const [isTrashing, setIsTrashing] = useState<boolean>(false)
+  const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
     fetchCategories()
@@ -38,13 +43,33 @@ export default function ListCategories() {
       })
   }
 
+  function toggleTrash(category) {
+    setCategory(category);
+    setIsTrashing(!isTrashing);
+  }
+
+  function onDeleteCategory() {
+    setIsTrashing(false)
+    flash.set('category_deleted', true)
+    navigateTo('/app/categories')
+  }
+
+  function onCloseTrash() {
+    setIsTrashing(false)
+    setCategory({} as Category)
+  }
+
   return <>
-    {isLoaded ?
+    {isLoaded ? <>
       <div className="py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
           <Breadcrumb pages={[{name: 'Categories'}]}/>
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5">
+          {flash.get('category_deleted') && <>
+            <Alert.Success className={'mb-6'}>Category deleted successfully</Alert.Success>
+          </>}
+
           <Index.Filters sortBy={[
             {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
             {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
@@ -61,7 +86,10 @@ export default function ListCategories() {
                   Category Name
                 </Index.Th>
                 <Index.Th>
-                  Type
+                  Parent
+                </Index.Th>
+                <Index.Th>
+                  Status
                 </Index.Th>
                 <Index.Th className={'w-24'}>
                   Action
@@ -84,7 +112,10 @@ export default function ListCategories() {
                     </Link>
                   </Index.Td>
                   <Index.Td>
-                    {category.type}
+                    {category.parent ?? '-'}
+                  </Index.Td>
+                  <Index.Td className={'font-semibold'}>
+                    {category.status ? <><span className={'text-red-primary'}>Active</span></> : 'In-active'}
                   </Index.Td>
                   <Index.Td className={'text-center'}>
                     <div className="flex item-center justify-center gap-x-1">
@@ -92,10 +123,10 @@ export default function ListCategories() {
                         <PencilSquareIcon className={'w-5 h-5'}/>
                       </Link>
 
-                      <Link to={`/app/cuisines/${category.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                      <Link to={`/app/categories/${category.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                         <EyeIcon className={'w-5 h-5'}/>
                       </Link>
-                      <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                      <button onClick={() => toggleTrash(category)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
                         <TrashIcon className={'w-5 h-5'}/>
                       </button>
                     </div>
@@ -119,6 +150,14 @@ export default function ListCategories() {
           <Pagination meta={meta}/>
         </div>
       </div>
-      : <ListPageSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type', align: 'center'}]} limit={10}/>}
+      <TrashModal
+        show={isTrashing}
+        onClose={onCloseTrash}
+        onDelete={onDeleteCategory}
+        title={'Delete Category'}
+        url={`/categories/${category.id}`}
+        description={<>Are you sure you want to delete "<b>{category.name}</b>" category?</>}
+      />
+    </> : <ListPageSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type', align: 'center'}]} limit={10}/>}
   </>
 }
