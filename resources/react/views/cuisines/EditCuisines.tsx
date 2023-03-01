@@ -12,8 +12,8 @@ export default function EditCuisines() {
   const {id} = useParams()
   const fetcher = useFetch()
   const form = useUpdateCuisine()
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [cuisine, setCuisine] = useState<Cuisine>({} as Cuisine)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     fetchCuisine()
