@@ -1,14 +1,15 @@
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useFetch, useFlash} from "@/hooks";
-import {useUpdateCuisine} from "@/hooks/forms";
-import {useEffect, useState} from "react";
-import {Cuisine} from "@/types/models";
-import {DateTime} from "luxon";
+import {DateTime} from 'luxon'
+import {useEffect, useState} from 'react'
+import {useFetch, useFlash} from '@/hooks'
 import * as Alert from '@/components/alerts'
-import {ShowCuisineSkeleton} from "@/views/cuisines/skeleton";
-import TrashModal from "@/components/TrashModal";
+import {useUpdateCuisine} from '@/hooks/forms'
+import {Category, Cuisine} from '@/types/models'
+import TrashModal from '@/components/TrashModal'
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {Link, useNavigate, useParams} from 'react-router-dom'
+import {ShowCuisineSkeleton} from '@/views/cuisines/skeleton'
+import {PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
+import CuisineCategories from '@/views/cuisines/Partials/CuisineCategories'
 
 export default function ShowCuisine() {
   const {id} = useParams()
@@ -30,7 +31,7 @@ export default function ShowCuisine() {
 
 
   function fetchCuisine() {
-    fetcher.get(`/cuisines/${id}`, {params: {with: ['cuisines.user']}}).then(({data}) => {
+    fetcher.get(`/cuisines/${id}`, {params: {with: ['cuisines.user', 'cuisines.categories']}}).then(({data}) => {
       setCuisine(data)
       setIsLoaded(true)
     })
@@ -46,7 +47,7 @@ export default function ShowCuisine() {
   }
 
   return <>
-    {isLoaded ?
+    {isLoaded ? <>
       <div className="py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
           <Breadcrumb pages={[{name: 'Cuisines', href: '/app/cuisines'}, {name: 'Cuisine Detail'}]}/>
@@ -124,18 +125,23 @@ export default function ShowCuisine() {
                 </div>
               </div>
             </div>
-            <TrashModal
-              show={isTrashing}
-              url={`/cuisines/${cuisine.id}`}
-              title={'Delete Cuisine'}
-              description={<>Are you sure you want to delete "<b>{cuisine.name}</b>"?</>}
-              onClose={onCloseTrash}
-              onDelete={onDeleteCuisine}
-            />
           </div>
         </div>
       </div>
-      : <ShowCuisineSkeleton/>}
+
+      <div className="pb-6">
+        <CuisineCategories categories={cuisine.categories ?? [] as Category[]}/>
+      </div>
+
+      <TrashModal
+        show={isTrashing}
+        onClose={onCloseTrash}
+        onDelete={onDeleteCuisine}
+        title={'Delete Cuisine'}
+        url={`/cuisines/${cuisine.id}`}
+        description={<>Are you sure you want to delete "<b>{cuisine.name}</b>" cuisine?</>}
+      />
+    </> : <ShowCuisineSkeleton/>}
 
   </>
 }

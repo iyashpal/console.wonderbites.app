@@ -1,4 +1,4 @@
-import {User} from "@/types/models";
+import {Category, User} from "@/types/models";
 
 export default interface Cuisine {
   id: number,
@@ -22,4 +22,6 @@ export default interface Cuisine {
   deleted_at: string,
 
   user?: User
+
+  categories?: Category[]
 }
