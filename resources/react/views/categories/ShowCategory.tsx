@@ -1,12 +1,12 @@
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import * as Alert from "@/components/alerts";
-import {DateTime} from "luxon";
-import {Link, useLoaderData, useNavigate} from "react-router-dom";
-import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
-import TrashModal from "@/components/TrashModal";
-import {useFlash} from "@/hooks";
-import {useState} from "react";
-import {Category} from "@/types/models";
+import {DateTime} from 'luxon'
+import {useState} from 'react'
+import {useFlash} from '@/hooks'
+import {Category} from '@/types/models'
+import * as Alert from '@/components/alerts'
+import TrashModal from '@/components/TrashModal'
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {Link, useLoaderData, useNavigate} from 'react-router-dom'
+import {PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ShowCategory() {
   const flash = useFlash()
@@ -25,7 +25,7 @@ export default function ShowCategory() {
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{name: 'Categories', href: '/app/Categories'}, {name: 'Category Detail'}]}/>
+        <Breadcrumb pages={[{name: 'Categories', href: '/app/categories'}, {name: 'Category Detail'}]}/>
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         {flash.get('category_created') && <>
