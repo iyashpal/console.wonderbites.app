@@ -36,14 +36,19 @@ export default class CategoriesController {
     }
   }
 
-  public async show ({}: HttpContextContract) {
-    //
+  public async show ({response, params}: HttpContextContract) {
+    try {
+      const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+      response.json({category})
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async edit ({ response, params}: HttpContextContract) {
     try {
       const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
-      const categories = await Category.query().withScopes(scopes => scopes.root())
+      const categories = await Category.query().where('id', '<>', params.id).withScopes(scopes => scopes.root())
       response.json({category, categories})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)

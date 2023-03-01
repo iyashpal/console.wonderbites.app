@@ -37,7 +37,17 @@ test.group('Core categories show', (group) => {
     const response = await client.get(route('core.categories.show', category)).guard('api').loginAs(user)
 
     response.assertStatus(200)
+  }).tags(['@core', '@core.categories.show'])
 
-    response.dumpBody()
+  test('it sees the show category view data.', async ({client, route}) => {
+    const category = await CategoryFactory.create()
+    const user = await UserFactory.with('role').create()
+    const response = await client.get(route('core.categories.show', category)).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+
+    response.assertBodyContains({
+      category: {id: category.id},
+    })
   }).tags(['@core', '@core.categories.show'])
 })
