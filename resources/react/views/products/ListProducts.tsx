@@ -1,6 +1,6 @@
 import {useFetch} from '~/hooks'
 import Skeleton from './skeleton'
-import {className} from '~/helpers'
+import {classNames} from '~/helpers'
 import Pagination from '~/components/Pagination'
 import {Menu, Transition} from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
@@ -132,7 +132,7 @@ export default function ListProducts() {
                           )}
                           />
                         </td>
-                        <td {...className('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(person) ? 'text-red-600' : 'text-gray-900')}>
+                        <td {...classNames('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(person) ? 'text-red-600' : 'text-gray-900')}>
                           {person.sku}
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
@@ -153,7 +153,7 @@ export default function ListProducts() {
                         <td className="whitespace-nowrap py-3 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <Menu>
                             <Menu.Button>
-                              <EllipsisVerticalIcon {...className('h-5 w-5')} />
+                              <EllipsisVerticalIcon {...classNames('h-5 w-5')} />
                             </Menu.Button>
                             <Transition
                               enter="transition duration-100 ease-out"

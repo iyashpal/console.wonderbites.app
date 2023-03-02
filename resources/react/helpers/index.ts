@@ -5,7 +5,6 @@ export function classNames(...classes) {
   return { className: classes.filter(Boolean).join(' ') }
 }
 
-export const className = classNames
 
 export function flash(key, defaultValue = null) {
   if (defaultValue === null) {

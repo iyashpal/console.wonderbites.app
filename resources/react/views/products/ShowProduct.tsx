@@ -1,8 +1,8 @@
-import {className} from '@/helpers'
+import {classNames} from '@/helpers'
+import {Fragment, useState} from "react";
 import {Listbox, Transition} from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {CheckIcon, ChevronUpDownIcon, EllipsisVerticalIcon} from '@heroicons/react/24/solid'
-import {Fragment, useState} from "react";
 
 export default function ShowProduct() {
   return <>
@@ -137,39 +137,39 @@ function ProductIngredients() {
 
                 {ingredients.map((ingredient, index) => (
                   <tr key={index}>
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8')}>
                       {ingredient.name}
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell')}>
                       {ingredient.id}
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden lg:table-cell')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden lg:table-cell')}>
                       {ingredient.qty}
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
                       {ingredient.price}
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
                       {ingredient.category}
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
                       <input type="checkbox" name="" id=""/>
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
                       <input type="checkbox" name="" id=""/>
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'whitespace-nowrap px-3 py-4 text-sm text-gray-500')}>
                       <img className={'w-10 h-10 rounded-full'} src={ingredient.image} alt={ingredient.name}/>
                     </td>
 
-                    <td {...className(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6 lg:pr-8')}>
+                    <td {...classNames(index !== ingredients.length - 1 ? 'border-b border-gray-200' : '', 'relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6 lg:pr-8')}>
                       <a href="#" className="text-indigo-600 hover:text-indigo-900">
                         Edit
                       </a>

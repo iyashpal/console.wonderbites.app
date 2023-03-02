@@ -9,7 +9,7 @@ import {PaginatorMeta} from "@/types/paginators";
 import Pagination from '~/components/Pagination'
 import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
 import {useFetch} from "@/hooks";
-import {className} from "@/helpers";
+import {classNames} from "@/helpers";
 import IngredientsPaginator from "@/types/paginators/IngredientsPaginator";
 
 export default function ListIngredients() {
@@ -124,7 +124,7 @@ export default function ListIngredients() {
                   </Index.Td>
                   <Index.Td className={'text-center'}>
                     <button>
-                      <EllipsisVerticalIcon {...className('h-5 w-5')} />
+                      <EllipsisVerticalIcon {...classNames('h-5 w-5')} />
                     </button>
                   </Index.Td>
                 </Index.Tr>)}
