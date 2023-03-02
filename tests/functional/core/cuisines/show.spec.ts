@@ -57,7 +57,7 @@ test.group('Core [cuisines.show]', (group) => {
 
     response.assertStatus(200)
 
-    response.assertBodyContains({ id: cuisine.id })
+    response.assertBodyContains({ cuisine: { id: cuisine.id } })
   }).tags(['@core', '@core.cuisines.show'])
 
   test('it can preload the cuisine creator.', async ({ client, route }) => {
@@ -69,6 +69,6 @@ test.group('Core [cuisines.show]', (group) => {
 
     response.assertStatus(200)
 
-    response.assertBodyContains({ id: cuisine.id, user: {id : user.id} })
+    response.assertBodyContains({ cuisine: { id: cuisine.id, user: {id : user.id} } })
   }).tags(['@core', '@core.cuisines.show'])
 })

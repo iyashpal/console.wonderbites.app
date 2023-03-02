@@ -1,21 +1,30 @@
+import { Axios } from '@/helpers'
 import Views from '@/routes/views'
-import {AuthLayout} from '~/layouts'
-import {createBrowserRouter, Outlet} from 'react-router-dom'
-import Axios from 'redaxios'
+import { AuthLayout } from '~/layouts'
+import { createBrowserRouter, Outlet, redirect } from 'react-router-dom'
 
 export const AppRoutes = [
   {
     path: '/',
-    element: <Views.Auth.Login/>
+    element: <Views.Auth.Login />
   },
 
   {
     path: '/app',
-    element: <AuthLayout/>,
+    element: <AuthLayout />,
+    shouldRevalidate: () => true,
+    loader: async () => {
+
+      const { data } = await Axios().get('auth')
+      
+      return data?.id === undefined ? redirect('/') : data
+
+    },
+
     children: [
       {
         path: 'dashboard',
-        element: <Views.Dashboard/>
+        element: <Views.Dashboard />
       },
 
       /**
@@ -23,11 +32,11 @@ export const AppRoutes = [
        */
       {
         path: 'users',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Users.List/>
+            element: <Views.Users.List />
           }
         ]
       },
@@ -37,29 +46,29 @@ export const AppRoutes = [
        */
       {
         path: 'categories',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Categories.List/>,
-            loader: async () => Axios.get('/categories').then(({data}) => data)
+            element: <Views.Categories.List />,
+            loader: async () => Axios().get('/categories').then(({ data }) => data),
           },
 
           {
             path: 'create',
-            element: <Views.Categories.Create/>,
-            loader: async () => Axios.get('categories/create').then(({data}) => data),
+            element: <Views.Categories.Create />,
+            loader: async () => Axios().get('categories/create').then(({ data }) => data),
           },
 
           {
             path: ':id',
-            element: <Views.Categories.Show/>,
-            loader: async ({params}) => Axios.get(`categories/${params.id}`).then(({data}) => data),
+            element: <Views.Categories.Show />,
+            loader: async ({ params }) => Axios().get(`categories/${params.id}`).then(({ data }) => data),
           },
           {
             path: ':id/edit',
-            element: <Views.Categories.Edit/>,
-            loader: async ({params}) => Axios.get(`categories/${params.id}/edit`).then(({data}) => data)
+            element: <Views.Categories.Edit />,
+            loader: async ({ params }) => Axios().get(`categories/${params.id}/edit`).then(({ data }) => data)
           }
         ]
       },
@@ -69,11 +78,11 @@ export const AppRoutes = [
        */
       {
         path: 'reviews',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Reviews.List/>
+            element: <Views.Reviews.List />
           }
         ]
       },
@@ -83,19 +92,19 @@ export const AppRoutes = [
        */
       {
         path: 'ingredients',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Ingredients.List/>
+            element: <Views.Ingredients.List />
           },
           {
             path: 'create',
-            element: <Views.Ingredients.Create/>
+            element: <Views.Ingredients.Create />
           },
           {
             path: ':id/update',
-            element: <Views.Ingredients.Update/>
+            element: <Views.Ingredients.Update />
           },
         ]
       },
@@ -105,23 +114,24 @@ export const AppRoutes = [
        */
       {
         path: 'cuisines',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Cuisines.List/>
+            element: <Views.Cuisines.List />
           },
           {
             path: 'create',
-            element: <Views.Cuisines.Create/>
+            element: <Views.Cuisines.Create />
           },
           {
             path: ':id',
-            element: <Views.Cuisines.Show/>
+            element: <Views.Cuisines.Show />,
+            loader: async ({ params }) => Axios().get(`/cuisines/${params.id}`).then(({data}) => data) 
           },
           {
             path: ':id/edit',
-            element: <Views.Cuisines.Edit/>
+            element: <Views.Cuisines.Edit />
           }
         ]
       },
@@ -131,11 +141,11 @@ export const AppRoutes = [
        */
       {
         path: 'subscriptions',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Subscriptions.List/>
+            element: <Views.Subscriptions.List />
           }
         ]
       },
@@ -145,11 +155,11 @@ export const AppRoutes = [
        */
       {
         path: 'orders',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Orders.List/>
+            element: <Views.Orders.List />
           }
         ]
       },
@@ -159,11 +169,11 @@ export const AppRoutes = [
        */
       {
         path: 'chats',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Chat.List/>
+            element: <Views.Chat.List />
           }
         ]
       },
@@ -173,19 +183,19 @@ export const AppRoutes = [
        */
       {
         path: 'products',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Products.List/>
+            element: <Views.Products.List />
           },
           {
             path: ':id',
-            element: <Views.Products.Show/>
+            element: <Views.Products.Show />
           },
           {
             path: 'create',
-            element: <Views.Products.Create/>
+            element: <Views.Products.Create />
           }
         ]
       },
@@ -195,11 +205,11 @@ export const AppRoutes = [
        */
       {
         path: 'clients',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Clients.List/>
+            element: <Views.Clients.List />
           }
         ]
       },
@@ -209,11 +219,11 @@ export const AppRoutes = [
        */
       {
         path: 'banners',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Banners.List/>
+            element: <Views.Banners.List />
           }
         ]
       },
@@ -223,11 +233,11 @@ export const AppRoutes = [
        */
       {
         path: 'pages',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Pages.List/>
+            element: <Views.Pages.List />
           }
         ]
       },
@@ -237,11 +247,11 @@ export const AppRoutes = [
        */
       {
         path: 'feedbacks',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Feedbacks.List/>
+            element: <Views.Feedbacks.List />
           }
         ]
       },
@@ -251,11 +261,11 @@ export const AppRoutes = [
        */
       {
         path: 'wonderpoints',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.WonderPoints.List/>
+            element: <Views.WonderPoints.List />
           }
         ]
       },
@@ -265,11 +275,11 @@ export const AppRoutes = [
        */
       {
         path: 'coupons',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Coupons.List/>
+            element: <Views.Coupons.List />
           }
         ]
       },
@@ -279,11 +289,11 @@ export const AppRoutes = [
        */
       {
         path: 'reservations',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Reservations.List/>
+            element: <Views.Reservations.List />
           }
         ]
       },
@@ -293,11 +303,11 @@ export const AppRoutes = [
        */
       {
         path: 'waitlist',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.WaitList.List/>
+            element: <Views.WaitList.List />
           }
         ]
       },
@@ -307,11 +317,11 @@ export const AppRoutes = [
        */
       {
         path: 'settings',
-        element: <Outlet/>,
+        element: <Outlet />,
         children: [
           {
             path: '',
-            element: <Views.Settings.List/>
+            element: <Views.Settings.List />
           }
         ]
       },
@@ -320,7 +330,7 @@ export const AppRoutes = [
 
   {
     path: '*',
-    element: <Views.Errors.NotFound/>
+    element: <Views.Errors.NotFound />
   }
 ]
 

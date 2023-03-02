@@ -1,9 +1,9 @@
 import Modal from '@/components/Modal'
-import {Category} from '@/types/models'
-import {TrashIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import {Category, Cuisine} from '@/types/models'
 import {useLayoutEffect, useRef, useState} from 'react'
+import {TrashIcon, XMarkIcon} from '@heroicons/react/24/outline'
 
-export default function CuisineCategories({categories}: { categories: Category[] }) {
+export default function CuisineCategories({categories, cuisine}: {cuisine: Cuisine, categories: Category[] }) {
   const [checked, setChecked] = useState(false)
   const checkbox = useRef<HTMLInputElement>(null)
   const [selected, setSelected] = useState<Category[]>([])
@@ -77,7 +77,7 @@ export default function CuisineCategories({categories}: { categories: Category[]
                   </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                  {categories.map((category, index) => (
+                  {cuisine.categories?.map((category, index) => (
                     <tr key={index} className={selected.includes(category) ? 'bg-gray-50' : undefined}>
                       <td className="relative px-7 sm:w-12 sm:px-6">
                         {selected.includes(category) && (<div className="absolute inset-y-0 left-0 w-0.5 bg-red-600"/>)}
