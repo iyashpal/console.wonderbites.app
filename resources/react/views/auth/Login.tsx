@@ -1,17 +1,17 @@
-import {GuestLayout} from '~/layouts'
-import {useFetch, useAuth} from '~/hooks'
-import {useNavigate} from 'react-router-dom'
-import React, {useEffect, useState} from 'react'
+import { useAuth } from '~/hooks'
+import { Axios } from '@/helpers'
+import { GuestLayout } from '~/layouts'
+import { useNavigate } from 'react-router-dom'
 import AuthCard from '@/components/auth/AuthCard'
+import React, { useEffect, useState } from 'react'
 import InputError from '@/components/Form/InputError'
-import {ExclamationTriangleIcon} from '@heroicons/react/24/outline'
-import {UserCircleIcon, LockClosedIcon} from '@heroicons/react/24/solid'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon, LockClosedIcon } from '@heroicons/react/24/solid'
 
 
 export default function Login() {
   const dashboardURI = '/app/dashboard'
   const auth = useAuth()
-  const usableFetch = useFetch()
   const navigateTo = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -31,12 +31,12 @@ export default function Login() {
 
     setIsLoading(true)
 
-    usableFetch.post('login', {email, password}).then(({data}) => {
+    Axios().post('login', { email, password }).then(({ data }) => {
       setErrors({})
       setIsLoading(false)
       auth.useToken(data.token)
       navigateTo(dashboardURI)
-    }).catch(({data}) => {
+    }).catch(({ data }) => {
       setErrorCode(data.code)
       setIsLoading(false)
       setErrors(data?.errors)
@@ -48,30 +48,30 @@ export default function Login() {
       <AuthCard>
         {errorCode === 'E_INVALID_AUTH_PASSWORD' && <>
           <div className="flex items-center text-red-600 bg-red-100 px-5 py-3 w-full rounded-md gap-x-2">
-            <ExclamationTriangleIcon className={'h-5 w-5'}/> <span>You entered a wrong password.</span>
+            <ExclamationTriangleIcon className={'h-5 w-5'} /> <span>You entered a wrong password.</span>
           </div>
         </>}
 
         <div className={'w-full relative'}>
           <div className="flex items-center w-full border border-gray-50 shadow-lg rounded overflow-hidden divide-x divide-gray-300 focus-within:divide-red-primary">
-          <span className="px-3 flex-none flex items-center">
+            <span className="px-3 flex-none flex items-center">
               <span className="p-1 rounded-full bg-red-primary inline-block">
-                  <UserCircleIcon className="w-4 h-4 text-white"/>
+                <UserCircleIcon className="w-4 h-4 text-white" />
               </span>
-          </span>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`}/>
+            </span>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
           <InputError show={errors?.email}>{errors.email}</InputError>
         </div>
 
         <div className="w-full">
           <div className="flex items-center w-full border border-gray-50 shadow-lg rounded overflow-hidden divide-x divide-gray-300 focus-within:divide-red-primary">
-        <span className="px-3 flex-none  flex items-center">
-            <span className="p-1 bg-red-primary inline-block rounded-full">
-                <LockClosedIcon className="w-4 h-4 text-white"/>
+            <span className="px-3 flex-none  flex items-center">
+              <span className="p-1 bg-red-primary inline-block rounded-full">
+                <LockClosedIcon className="w-4 h-4 text-white" />
+              </span>
             </span>
-        </span>
-            <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`}/>
+            <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
           <InputError show={errors?.password}>{errors.password}</InputError>
         </div>
