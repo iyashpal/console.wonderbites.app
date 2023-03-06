@@ -92,8 +92,26 @@ export default class CuisinesController {
     }
   }
 
-  public async categories({ response }: HttpContextContract) {
+  public async categories({ request, response, params }: HttpContextContract) {
     try {
+
+      let cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+
+      const { action, categories } = request.all() as { action: string, categories: number[] }
+
+      switch (action) {
+        case 'attach':
+          await cuisine.related('categories').attach(categories)
+          break;
+        
+        case 'detach':
+          await cuisine.related('categories').detach(categories)
+          break;
+      }
+
+      await cuisine.load('categories')
+
+      return response.json({cuisine})
 
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)

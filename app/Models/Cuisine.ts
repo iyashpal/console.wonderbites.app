@@ -33,7 +33,7 @@ export default class Cuisine extends BaseModel {
   public updatedAt: DateTime
 
   @column.dateTime()
-  public deletedAt: DateTime
+  public deletedAt: DateTime | null
 
   @computed()
   public get default_thumbnail () {
