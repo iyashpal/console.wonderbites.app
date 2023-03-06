@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useFetch } from '@/hooks';
 import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import { Link, Form, useNavigate } from "react-router-dom";
+import { Link, Form, useNavigate, useLoaderData } from "react-router-dom";
 import { ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { Category } from '@/types/models';
 
 type CreateProductForm = {
 
@@ -25,6 +26,7 @@ export default function CreateProduct() {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
+  const {categories} = useLoaderData() as { categories: Category[] }
   const [form, setForm] = useState<CreateProductForm>({} as CreateProductForm)
   const [errors, setErrors] = useState<{ name?: string, sku?: string, categoryId?: string, price?: string, description?: string }>({})
 
@@ -80,9 +82,7 @@ export default function CreateProduct() {
                   </label>
                   <select id="categoryId" onChange={(e) => setForm(f => (f.categoryId = Number(e.target.value), f))} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option >Select Category</option>
-                    <option value={1}>Category 1</option>
-                    <option value={2}>Category 2</option>
-                    <option value={3}>Category 3</option>
+                    {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
                   <InputError show={errors?.categoryId}>{errors.categoryId}</InputError>
                 </div>

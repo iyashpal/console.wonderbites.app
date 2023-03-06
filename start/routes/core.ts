@@ -20,7 +20,7 @@ Route.group(() => {
     Route.resource('cuisines', 'CuisinesController')
     Route.get('cuisines/:id/categories', 'CuisinesController.categories').as('cuisines.categories')
 
-    Route.resource('products', 'ProductsController').apiOnly()
+    Route.resource('products', 'ProductsController')
 
     Route.resource('categories', 'CategoriesController')
 

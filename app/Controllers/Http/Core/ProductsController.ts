@@ -1,4 +1,4 @@
-import { Product } from 'App/Models'
+import { Category, Product } from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/Core/Products/CreateValidator'
@@ -12,6 +12,16 @@ export default class ProductsController {
       .orderBy('id', 'desc').paginate(page, limit)
 
     response.status(200).json(products)
+  }
+
+  public async create({ response }: HttpContextContract) {
+    try {
+      const categories = await Category.query().where('type', 'All').orWhere('type', 'Product').whereNull('deleted_at').orderBy('name', 'asc')
+      
+      response.ok({categories})
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async store ({ auth, request, response }: HttpContextContract) {

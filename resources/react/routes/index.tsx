@@ -195,7 +195,8 @@ export const AppRoutes = [
           },
           {
             path: 'create',
-            element: <Views.Products.Create />
+            element: <Views.Products.Create />,
+            loader: async () => Axios().get(`/products/create`).then(({data}) => data)
           }
         ]
       },

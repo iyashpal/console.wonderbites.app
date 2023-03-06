@@ -9,7 +9,7 @@ export default function CreateCategory() {
   const {categories} = useLoaderData() as { categories: Category[] }
 
   console.log(categories)
-  const form = useCategoryForm({name: '', description: '', parent: null, type: 'all', status: 1})
+  const form = useCategoryForm({name: '', description: '', parent: null, type: 'All', status: 1})
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
