@@ -1,18 +1,19 @@
-import { useFetch } from '~/hooks'
 import Skeleton from './skeleton'
 import { classNames } from '~/helpers'
-import Pagination from '~/components/Pagination'
-import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { PaginatorMeta } from '~/types/paginators'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import { EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
 import { Product } from '@/types/models'
-import IndexFilters from "@/components/IndexFilters";
-import { BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { useFetch, useFlash } from '~/hooks'
 import * as Index from "@/components/Index";
 import * as Alert from "@/components/alerts";
+import Pagination from '~/components/Pagination'
+import TrashModal from '@/components/TrashModal'
+import { PaginatorMeta } from '~/types/paginators'
+import IndexFilters from "@/components/IndexFilters";
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ProductsPaginator from "@/types/paginators/ProductsPaginator";
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline"
+import { BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 
 const sortByFilters = [
   { label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true" /> },
@@ -22,9 +23,10 @@ const sortByFilters = [
 ]
 
 export default function ListProducts() {
-
+  const flash = useFlash()
   const fetcher = useFetch()
   const location = useLocation()
+  const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
@@ -35,6 +37,9 @@ export default function ListProducts() {
   const checkbox = useRef<HTMLInputElement>(null)
   const [selected, setSelected] = useState<Product[]>([])
   const [indeterminate, setIndeterminate] = useState(false)
+
+  const [product, setProduct] = useState<Product>({} as Product)
+  const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   useEffect(() => {
     fetchProducts()
@@ -79,6 +84,17 @@ export default function ListProducts() {
       })
   }
 
+  function onDeleteProduct() {
+    setIsTrashing(false)
+    flash.set('product_deleted', true)
+    navigateTo('/app/products')
+  }
+
+  function onCloseTrash() {
+    setIsTrashing(false)
+    setProduct({} as Product)
+  }
+
 
   return <>
     {isLoaded ? (
@@ -88,6 +104,10 @@ export default function ListProducts() {
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
+          {flash.get('product_deleted') && <>
+            <Alert.Success className={'mb-6'}>Product deleted successfully</Alert.Success>
+          </>}
+
           <IndexFilters create={{ url: '/app/products/create', label: 'Add Product' }} sortBy={sortByFilters} />
           <div className="">
             <div className="inline-block min-w-full align-middle">
@@ -101,7 +121,7 @@ export default function ListProducts() {
                         <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" ref={checkbox} checked={checked} onChange={toggleAll} />
                       </th>
                       <th scope="col" className="w-14 py-3.5 pr-3 text-center text-sm font-semibold text-gray-900 uppercase">
-                        ID
+                        SKU
                       </th>
                       <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 uppercase">
                         Product Name
@@ -146,7 +166,9 @@ export default function ListProducts() {
                           <td className="whitespace-nowrap text-center">
                             <div className={'rounded-full overflow-hidden group w-9 h-9 mx-auto relative cursor-pointer z-0'}>
                               <img className={'w-9 h-9 rounded-full'} src={product.thumbnail_url} alt="Product Name" />
-                              <span className="hidden group-hover:flex items-center justify-center font-semibold text-xs absolute inset-0 text-white bg-gray-900/30">+4</span>
+                              {((product.meta.media_count ?? 0) > 0) && <>
+                                <span className="hidden group-hover:flex items-center justify-center font-semibold text-xs absolute inset-0 text-white bg-gray-900/30">+{product.meta.media_count}</span>
+                              </>}
                             </div>
                           </td>
                           <td className="whitespace-nowrap py-3 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -158,7 +180,10 @@ export default function ListProducts() {
                               <Link to={`/app/products/${product.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                                 <EyeIcon className={'w-5 h-5'} />
                               </Link>
-                              <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                              <button onClick={() => {
+                                setProduct(product);
+                                setIsTrashing(true);
+                              }} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
                                 <TrashIcon className={'w-5 h-5'} />
                               </button>
                             </div>
@@ -188,6 +213,14 @@ export default function ListProducts() {
 
           <Pagination meta={meta} />
         </div>
+        <TrashModal
+          show={isTrashing}
+          url={`/products/${product.id}`}
+          title={'Delete Product'}
+          description={<>Are you sure you want to delete "<b>{product.name}</b>"?</>}
+          onClose={onCloseTrash}
+          onDelete={onDeleteProduct}
+        />
       </div>
     ) : (<Skeleton.List.Page />)}
   </>

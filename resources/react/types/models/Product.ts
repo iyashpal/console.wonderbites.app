@@ -15,5 +15,9 @@ export default interface Product {
 
   status: number,
 
-  categories?: Category[]
+  categories?: Category[],
+
+  meta: {
+    media_count?: number
+  }
 }

@@ -10,6 +10,7 @@ export default class ProductsController {
     const { page = 1, limit = 10 } = <{ page: number, limit: number }>request.all()
 
     const products = await Product.query().whereNull('deleted_at')
+      .withCount('media')
       .orderBy('id', 'desc').paginate(page, limit)
 
     response.status(200).json(products)
