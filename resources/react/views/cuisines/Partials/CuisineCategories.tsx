@@ -1,15 +1,23 @@
+import { Axios } from '@/helpers'
+import { useFlash } from '@/hooks'
+import * as Alert from '@/components/alerts'
+import { useNavigate } from 'react-router-dom'
+import TrashModal from '@/components/TrashModal'
 import { Category, Cuisine } from '@/types/models'
 import { Combobox, Transition } from '@headlessui/react'
-import { FolderOpenIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useLayoutEffect, useRef, useState, Fragment } from 'react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { ArrowPathIcon, FolderOpenIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function CuisineCategories({ categories, cuisine }: { cuisine: Cuisine, categories: Category[] }) {
+  const flash = useFlash()
+  const navigateTo = useNavigate()
   const [checked, setChecked] = useState(false)
   const checkbox = useRef<HTMLInputElement>(null)
   const [selected, setSelected] = useState<Category[]>([])
   const [indeterminate, setIndeterminate] = useState(false)
-  const [toggleCategoryModal, setToggleCategoryModal] = useState(false)
+  const [trashCategory, setTrashCategory] = useState({} as Category)
+  const [toggleAddCategoryForm, setToggleAddCategoryForm] = useState(false)
 
   useLayoutEffect(() => {
     const isIndeterminate = selected.length > 0 && selected.length < (cuisine.categories ?? []).length
@@ -35,11 +43,21 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
   }
 
   function onCloseModal() {
-    setToggleCategoryModal(false)
+    setToggleAddCategoryForm(false)
   }
 
   function onSuccessModal() {
 
+  }
+
+  function onCloseTrash() {
+    setTrashCategory({} as Category)
+  }
+
+  function onDeleteCategory() {
+    flash.set('cuisine_category_deleted', true)
+    setTrashCategory({} as Category)
+    navigateTo(`/app/cuisines/${cuisine.id}`)
   }
 
   return <>
@@ -67,7 +85,9 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
                   <thead>
                     <tr className={'bg-gray-50 border-y'}>
                       <th scope="col" className="relative px-7 sm:w-12 sm:px-6">
-                        <input type="checkbox" ref={checkbox} checked={checked} onChange={toggleAll} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" />
+                        {(cuisine.categories ?? []).length > 0 && <>
+                          <input type="checkbox" ref={checkbox} checked={checked} onChange={toggleAll} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500" />
+                        </>}
                       </th>
                       <th scope="col" className="min-w-[12rem] py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">
                         List Of Categories
@@ -89,13 +109,23 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
                         </td>
                         <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
                           <div className="flex items-center justify-center">
-                            <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                            <button onClick={() => setTrashCategory(category)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
                               <TrashIcon className={'w-5 h-5'} />
                             </button>
                           </div>
                         </td>
                       </tr>
                     ))}
+
+                    {(cuisine.categories ?? []).length === 0 && <>
+                      <tr>
+                        <td colSpan={3} className="px-7 py-4 sm:px-6">
+                          <Alert.Warning>
+                            Categories Not available.
+                          </Alert.Warning>
+                        </td>
+                      </tr>
+                    </>}
                   </tbody>
                 </table>
               </div>
@@ -103,13 +133,26 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
           </div>
         </div>
 
-        <AddNewCategory cuisine={cuisine} categories={categories.filter((category) => !cuisine.categories?.map(({ id }) => id).includes(category.id))} show={toggleCategoryModal} onClose={onCloseModal} onSuccess={onSuccessModal} />
+        <AddNewCategory cuisine={cuisine} categories={categories.filter((category) => !cuisine.categories?.map(({ id }) => id).includes(category.id))} show={toggleAddCategoryForm} onClose={onCloseModal} onSuccess={onSuccessModal} />
 
-        <div className="sm:flex sm:items-center p-4 sm:p-6 border-t">
-          <button type="button" onClick={() => setToggleCategoryModal(true)} className="inline-flex gap-x-1 items-center justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-            Add New
-          </button>
-        </div>
+        {toggleAddCategoryForm === false && <>
+          <div className="sm:flex sm:items-center p-4 sm:p-6 border-t">
+            <button type="button" onClick={() => setToggleAddCategoryForm(true)} className="inline-flex gap-x-1 items-center justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+              Add New
+            </button>
+          </div>
+        </>}
+
+
+        <TrashModal
+          show={trashCategory.id !== undefined}
+          url={`/cuisines/${cuisine.id}/categories`}
+          request={{ type: 'post', data: { action: 'detach', categories: [trashCategory.id] } }}
+          title={'Delete Category'}
+          description={<>Are you sure you want to delete "<b>{trashCategory.name}</b>"?</>}
+          onClose={onCloseTrash}
+          onDelete={onDeleteCategory}
+        />
       </div>
     </div>
 
@@ -120,6 +163,8 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
 type AddNewCategoryProps = { show: boolean, onSuccess: () => void, onClose: () => void, cuisine: Cuisine, categories: Category[] }
 
 function AddNewCategory({ show, onClose = () => { }, onSuccess = () => { }, cuisine, categories }: AddNewCategoryProps) {
+  const flash = useFlash()
+  const navigateTo = useNavigate()
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Category>({} as Category)
   const filtered = query === '' ? categories : categories.filter(category => category.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')))
@@ -127,6 +172,16 @@ function AddNewCategory({ show, onClose = () => { }, onSuccess = () => { }, cuis
   function onClickClose() {
     onClose()
     setSelected({} as Category)
+  }
+
+  function addCategory() {
+    Axios().post(`/cuisines/${cuisine.id}/categories`, { action: 'attach', categories: [selected.id] })
+      .then(() => {
+        flash.set('cuisine_category_attached', true)
+        navigateTo(`/app/cuisines/${cuisine.id}`)
+        onSuccess()
+        onClickClose()
+      })
   }
 
   return <>
@@ -159,7 +214,7 @@ function AddNewCategory({ show, onClose = () => { }, onSuccess = () => { }, cuis
                               <span className={`block truncate ${selected ? `font-medium ${(!active) && 'text-red-primary'}` : 'font-normal'}`}> {category.name} </span>
 
                               <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : ((!!selected) && 'text-red-primary')}`}>
-                                {(!!selected) ? <CheckIcon className="h-5 w-5" aria-hidden="true"/> : <FolderOpenIcon className="h-5 w-5" aria-hidden="true" />}
+                                {(!!selected) ? <CheckIcon className="h-5 w-5" aria-hidden="true" /> : <FolderOpenIcon className="h-5 w-5" aria-hidden="true" />}
                               </span>
                             </>
                           )}
@@ -176,12 +231,13 @@ function AddNewCategory({ show, onClose = () => { }, onSuccess = () => { }, cuis
         <div className="text-sm font-medium">
           <div className="flex items-center justify-center gap-x-2">
             {selected?.id !== undefined && (
-              <button className={'bg-green-100 border border-green-400 text-green-500 rounded-lg p-1 hover:border-green-700 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+              <button onClick={addCategory} className={'bg-green-100 border border-green-400 text-green-500 rounded-lg p-1 hover:border-green-700 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                 <CheckIcon className={'w-5 h-5'} />
               </button>
             )}
 
             <button onClick={onClickClose} className={'bg-red-100 border border-red-400 text-red-500 rounded-lg p-1 hover:border-red-700 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+              <ArrowPathIcon className={'w-5 h-5 hidden'} />
               <XMarkIcon className={'w-5 h-5'} />
             </button>
           </div>

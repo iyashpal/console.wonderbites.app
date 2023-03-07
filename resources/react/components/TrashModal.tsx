@@ -1,24 +1,46 @@
-import {useFetch} from "@/hooks";
-import {Fragment, useState} from "react";
+import { Axios } from "@/helpers";
+import { AxiosResponse } from "axios";
+import { Fragment, useState } from "react";
 import * as Loaders from '@/components/loaders';
-import {Dialog, Transition} from "@headlessui/react";
-import {TrashIcon, ExclamationTriangleIcon} from "@heroicons/react/24/outline";
+import { Dialog, Transition } from "@headlessui/react";
+import { TrashIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
-type TrashProps = { show: boolean, title: string, description: string | JSX.Element | JSX.Element[], type?: string, url: string, onClose: () => void, onDelete: () => void }
-export default function TrashModal({show = false, onClose, onDelete, title, description, url}: TrashProps) {
-
-  const fetcher = useFetch()
+type TrashProps = {
+  url: string,
+  show: boolean,
+  title: string,
+  type?: string,
+  request?: {
+    type?: string,
+    data?: object,
+  },
+  onClose: () => void,
+  onDelete: () => void,
+  description: string | JSX.Element | JSX.Element[],
+  handleSubmit?: () => Promise<AxiosResponse<any, any>>,
+}
+export default function TrashModal({ show = false, request, onClose, onDelete, title, description, url }: TrashProps) {
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   function onSubmit() {
+
     setIsProcessing(true)
-    fetcher.delete(url).then(() => {
+
+    handle().then(() => {
       onDelete()
       setIsProcessing(false)
     }).catch(() => {
       setIsProcessing(false)
     })
+  }
+
+  function handle() {
+    if (request) {
+     return Axios()[request.type ?? 'delete'](url, request.data) 
+    }
+
+    return Axios().delete(url)
   }
 
   return <>
@@ -33,7 +55,7 @@ export default function TrashModal({show = false, onClose, onDelete, title, desc
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -50,7 +72,7 @@ export default function TrashModal({show = false, onClose, onDelete, title, desc
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true"/>
+                    <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -66,9 +88,9 @@ export default function TrashModal({show = false, onClose, onDelete, title, desc
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button type="button" className="inline-flex w-full items-center justify-center gap-x-1 rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" onClick={onSubmit}>
                     {isProcessing ? <>
-                      <Loaders.Circle className={'animate-spin h-4 w-4'}/> Deleting
+                      <Loaders.Circle className={'animate-spin h-4 w-4'} /> Deleting
                     </> : <>
-                      <TrashIcon className={'w-4 h-4'}/> Delete
+                      <TrashIcon className={'w-4 h-4'} /> Delete
                     </>}
                   </button>
                   <button type="button" className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" onClick={onClose}>

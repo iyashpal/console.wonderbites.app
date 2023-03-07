@@ -44,6 +44,13 @@ export default function ShowCuisine() {
           {flash.get('cuisine_updated') && <>
             <Alert.Success className={'mt-4'}>Cuisine updated successfully.</Alert.Success>
           </>}
+          
+          {flash.get('cuisine_category_attached') && <>
+            <Alert.Success className={'mt-4'}>Cuisine category added successfully.</Alert.Success>
+          </>}
+          {flash.get('cuisine_category_deleted') && <>
+            <Alert.Success className={'mt-4'}>Cuisine category deleted successfully.</Alert.Success>
+          </>}
           <div className="py-4">
             <div className="shadow px-4 pt-4 sm:px-6 sm:pt-6">
               <div className="flex items-start justify-between">
