@@ -1,3 +1,5 @@
+import Category from "./Category";
+
 export default interface Product {
   id: number,
 
@@ -8,4 +10,10 @@ export default interface Product {
   price: number,
 
   sku: string,
+
+  thumbnail_url: string,
+
+  status: number,
+
+  categories?: Category[]
 }

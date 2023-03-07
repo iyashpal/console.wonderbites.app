@@ -57,6 +57,16 @@ export default class ProductsController {
     }
   }
 
+  public async edit({ response, params }: HttpContextContract) {
+    try {
+      const product = await Product.query().whereNull('deleted_at').where('id', params.id).preload('categories').firstOrFail()
+      const categories = await Category.query().where('type', 'All').orWhere('type', 'Product').whereNull('deleted_at').orderBy('name', 'asc')
+      response.ok({ product, categories, category: product.categories[0] })
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
+  }
+
   public async update({ response, request, params }: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)

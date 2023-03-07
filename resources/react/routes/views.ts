@@ -12,6 +12,7 @@ import Dashboard from '~/views/Dashboard'
  * Products Views
  */
 import ShowProduct from '~/views/products/ShowProduct'
+import EditProduct from '~/views/products/EditProduct'
 import ListProducts from '~/views/products/ListProducts'
 import CreateProduct from '~/views/products/CreateProduct'
 
@@ -173,6 +174,7 @@ const Views = {
   Products: {
     List: ListProducts,
     Show: ShowProduct,
+    Edit: EditProduct,
     Create: CreateProduct,
   },
 

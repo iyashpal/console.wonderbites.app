@@ -16,7 +16,7 @@ export const AppRoutes = [
     loader: async () => {
 
       const { data } = await Axios().get('auth')
-      
+
       return data?.id === undefined ? redirect('/') : data
 
     },
@@ -127,7 +127,7 @@ export const AppRoutes = [
           {
             path: ':id',
             element: <Views.Cuisines.Show />,
-            loader: async ({ params }) => Axios().get(`/cuisines/${params.id}`).then(({data}) => data) 
+            loader: async ({ params }) => Axios().get(`/cuisines/${params.id}`).then(({ data }) => data)
           },
           {
             path: ':id/edit',
@@ -194,9 +194,14 @@ export const AppRoutes = [
             element: <Views.Products.Show />
           },
           {
+            path: ':id/edit',
+            element: <Views.Products.Edit />,
+            loader: async ({ params }) => Axios().get(`/products/${params.id}/edit`).then(({ data }) => data)
+          },
+          {
             path: 'create',
             element: <Views.Products.Create />,
-            loader: async () => Axios().get(`/products/create`).then(({data}) => data)
+            loader: async () => Axios().get(`/products/create`).then(({ data }) => data)
           }
         ]
       },
