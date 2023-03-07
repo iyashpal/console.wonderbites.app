@@ -104,10 +104,10 @@ export default function useProductForm(fields: ProductFormFields) {
             setIsProcessing(false)
             flash.set('product_updated', true)
             navigateTo(`/app/products/${data.id}`)
-        }).catch(({ data }) => {
+        }).catch(({ response }) => {
             setIsProcessing(false)
             flash.set('product_updated', false)
-            setErrors(data?.errors)
+            setErrors(response?.data?.errors ?? {})
         })
     }
 

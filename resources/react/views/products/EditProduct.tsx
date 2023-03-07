@@ -16,7 +16,7 @@ export default function EditProduct() {
         name: product.name,
         sku: product.sku,
         price: product.price,
-        categoryId: category.id,
+        categoryId: category ? category.id : 0,
         description: product.description,
         publishedAt: DateTime.now(),
         status: product.status,
@@ -61,7 +61,7 @@ export default function EditProduct() {
                   <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="categoryId" defaultValue={category.id}  onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="categoryId" defaultValue={form.input.value('categoryId')}  onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option>Select Category</option>
                     {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
