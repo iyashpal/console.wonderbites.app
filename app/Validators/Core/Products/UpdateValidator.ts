@@ -44,7 +44,14 @@ export default class UpdateValidator {
       rules.required()
     ]),
 
-    publishedAt: schema.date.nullableAndOptional()
+    publishedAt: schema.date.nullableAndOptional(),
+
+    thumbnail: schema.file({
+      size: '1mb',
+      extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
+    }, [
+      rules.required(),
+    ]),
   })
 
   /**
