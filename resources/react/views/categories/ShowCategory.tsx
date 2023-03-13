@@ -43,7 +43,7 @@ export default function ShowCategory() {
               </div>
               <div className="text-sm">
                 <p>Created on: {DateTime.fromISO(category.created_at).toLocaleString(DateTime.DATE_MED)}</p>
-                {/*<p>By: {category.user?.fullname || 'Unknown'}</p>*/}
+                {/* <p>By: {category.user?.name || 'Unknown'}</p> */}
               </div>
             </div>
             <div>

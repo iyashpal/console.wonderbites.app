@@ -122,7 +122,7 @@ export default function ListCuisines() {
                   </Index.Td>
                   <Index.Td>
                     <Link to={`/app/users/${cuisine.user?.id}`} className={'hover:text-red-primary inline-flex items-center'}>
-                      <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.user?.fullname}
+                      <LinkIcon className={'w-3 h-3 mr-1'}/> {cuisine.user?.name}
                     </Link>
                   </Index.Td>
                   <Index.Td className={'text-center'}>

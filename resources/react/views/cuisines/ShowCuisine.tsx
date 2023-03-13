@@ -59,7 +59,7 @@ export default function ShowCuisine() {
                 </div>
                 <div className="text-sm">
                   <p>Created on: {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATE_MED)}</p>
-                  <p>By: {cuisine.user?.fullname || 'Unknown'}</p>
+                  <p>By: {cuisine.user?.name || 'Unknown'}</p>
                 </div>
               </div>
               <div>
