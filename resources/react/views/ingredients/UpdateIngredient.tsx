@@ -46,7 +46,8 @@ export default function UpdateIngredient() {
           <Form method='post' onSubmit={form.onSubmit} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
               <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3 relative">
+
+                <div className="col-span-6 relative">
                   <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
@@ -54,12 +55,12 @@ export default function UpdateIngredient() {
                   <InputError show={form.errors?.name}>{form.errors.name}</InputError>
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
-                    ID <sup className='text-red-primary'>*</sup>
+                <div className="col-span-6">
+                  <label htmlFor="description" className="block text-sm font-bold text-gray-700">
+                    Description
                   </label>
-                  <input type="text" onChange={form.input.onChange.id} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.sku}>{form.errors.sku}</InputError>
+                  <textarea defaultValue={ingredient.description} onChange={form.input.onChange.description} name="description" id="description" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+                  <InputError show={form.errors?.description}>{form.errors.description}</InputError>
                 </div>
 
 
@@ -123,7 +124,7 @@ export default function UpdateIngredient() {
                   <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 block w-full  border border-gray-300 py-1.5 px-1.5 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1"/>
                   <InputError show={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
                 </div>
 

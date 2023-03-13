@@ -75,8 +75,8 @@ export default function useUpdateIngredient() {
     setCreateForm(payload => ({...payload, name: e.target.value}))
   }
 
-  function onChangeID(e) {
-    setCreateForm(payload => ({...payload, sku: e.target.value}))
+  function onChangeDescription(e) {
+    setCreateForm(payload => ({...payload, description: e.target.value}))
   }
 
   function onChangeCategoryID(e) {
@@ -123,8 +123,8 @@ export default function useUpdateIngredient() {
         return createForm[key]
       },
       onChange: {
-        id: onChangeID,
         name: onChangeName,
+        description: onChangeDescription,
         categoryId: onChangeCategoryID,
         price: onChangePrice,
         unit: onChangeUnit,
