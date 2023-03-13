@@ -1,3 +1,5 @@
+import Cuisine from "./Cuisine";
+
 export default interface Category {
   id: number,
   name: string,
@@ -6,5 +8,7 @@ export default interface Category {
   type: string,
   status: number,
   created_at: string,
-  updated_at: string
+  updated_at: string,
+
+  cuisines?: Cuisine[]
 }

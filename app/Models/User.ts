@@ -128,7 +128,7 @@ export default class User extends Notifiable {
   public role: BelongsTo<typeof Role>
 
   @computed()
-  public get fullname () {
+  public get name () {
     return [this.firstName, this.lastName].join(' ')
   }
 

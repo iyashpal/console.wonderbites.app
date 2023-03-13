@@ -5,5 +5,5 @@ export default interface User {
 
   last_name: string,
 
-  fullname: string,
+  name: string,
 }

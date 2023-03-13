@@ -50,9 +50,12 @@ export default class ProductsController {
 
   public async show({ params, response }: HttpContextContract) {
     try {
-      const product = await Product.findByOrFail('id', params.id)
+      const product = await Product.query()
+        .preload('user').preload('ingredients')
+        .preload('categories', query => query.preload('cuisines'))
+        .where('id', params.id).firstOrFail()
 
-      response.ok(product.toObject())
+      response.ok({ product })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }

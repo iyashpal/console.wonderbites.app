@@ -1,4 +1,5 @@
 import Category from "./Category";
+import User from "./User";
 
 export default interface Product {
   id: number,
@@ -14,6 +15,10 @@ export default interface Product {
   thumbnail_url: string,
 
   status: number,
+
+  created_at: string,
+
+  user: User,
 
   categories?: Category[],
 

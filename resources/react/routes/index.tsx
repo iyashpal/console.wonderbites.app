@@ -191,7 +191,8 @@ export const AppRoutes = [
           },
           {
             path: ':id',
-            element: <Views.Products.Show />
+            element: <Views.Products.Show />,
+            loader: async ({ params }) => Axios().get(`/products/${params.id}`).then(({ data }) => data)
           },
           {
             path: ':id/edit',
