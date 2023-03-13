@@ -1,4 +1,5 @@
 import Category from "./Category";
+import Ingredient from "./Ingredient";
 import User from "./User";
 
 export default interface Product {
@@ -21,6 +22,8 @@ export default interface Product {
   user: User,
 
   categories?: Category[],
+
+  ingredients?: Ingredient[],
 
   meta: {
     media_count?: number

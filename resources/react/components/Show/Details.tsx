@@ -36,12 +36,12 @@ export default function Details({ title, module, by, date, fields, onClickTrash,
                                 <tr className='bg-gray-100 border-gray-300 border-t'>
 
                                     {fields.map((field, index) => (
-                                        <th key={index} scope="col" className={`${index === 0 ? 'py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8' : 'px-3 py-3.5'} text-left text-sm font-semibold text-gray-900`}>
+                                        <th key={index} scope="col" className={`${index === 0 ? 'py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8' : 'px-3 py-3.5'} text-left text-sm font-semibold text-gray-900 uppercase`}>
                                             {field.name}
                                         </th>
                                     ))}
 
-                                    <th key={fields.length} scope="col" className="py-3.5 text-right text-sm font-semibold text-gray-900 pl-3 pr-4 sm:pr-6 lg:pr-8">
+                                    <th key={fields.length} scope="col" className="py-3.5 text-right text-sm font-semibold text-gray-900 pl-3 pr-4 sm:pr-6 lg:pr-8 uppercase">
                                         Action
                                     </th>
 
