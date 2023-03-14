@@ -17,9 +17,9 @@ export default function useIngredientForm(fields: IngredientForm) {
     fetcher.post('ingredients', generateFormData()).then(() => {
       setIsProcessing(false)
       navigateTo('/app/ingredients')
-    }).catch(({data}) => {
+    }).catch(({response}) => {
       setIsProcessing(false)
-      setErrors(data?.errors)
+      setErrors(response?.data?.errors ?? {})
     })
   }
 
@@ -30,9 +30,9 @@ export default function useIngredientForm(fields: IngredientForm) {
     fetcher.put(`ingredients/${form.id}`, generateFormData()).then(() => {
       setIsProcessing(false)
       navigateTo('/app/ingredients')
-    }).catch(({data}) => {
+    }).catch(({response}) => {
       setIsProcessing(false)
-      setErrors(data?.errors)
+      setErrors(response?.data?.errors ?? {})
     })
   }
 
