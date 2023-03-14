@@ -1,13 +1,15 @@
 import {DateTime} from "luxon";
 import * as Loaders from '~/components/loaders'
 import {Form, Link} from "react-router-dom";
-import {useCreateIngredient} from "@/hooks/forms";
+import {useIngredientForm} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
 
 export default function CreateIngredient() {
 
-  const form = useCreateIngredient()
+  const form = useIngredientForm({
+    name: '', description: '', categoryId: 0, price: 0, unit: '', quantity: 0, maxQuantity: 0, minQuantity: 0, thumbnail: null, publishedAt: ''
+  })
 
 
   return <>
@@ -23,7 +25,7 @@ export default function CreateIngredient() {
             <h1 className={'font-semibold'}>Add Ingredient</h1>
           </div>
 
-          <Form method='post' onSubmit={form.onSubmit} encType='multipart/form-data'>
+          <Form method='post' onSubmit={form.onSubmit.create} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
               <div className="grid grid-cols-6 gap-6">
                 <div className="col-span-6 relative">
@@ -48,7 +50,7 @@ export default function CreateIngredient() {
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
                   <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={''}>Select Category</option>
+                    <option value={0}>Select Category</option>
                     <option value={1}>Category 1</option>
                     <option value={2}>Category 2</option>
                     <option value={3}>Category 3</option>
