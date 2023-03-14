@@ -68,7 +68,7 @@ export default function UpdateIngredient() {
                   <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="categoryId" defaultValue={category?.id ?? 0} onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={0}>Select Category</option>
                     {categories.map((category, index) => (<option key={index} value={category.id}>{category.name}</option>))}
                   </select>

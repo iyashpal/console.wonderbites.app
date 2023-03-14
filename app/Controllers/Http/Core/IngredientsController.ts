@@ -34,13 +34,17 @@ export default class IngredientsController {
       const user = auth.use('api').user!
 
       const {
-        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail,
+        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail, categoryId,
       } = await request.validate(StoreValidator)
 
       const ingredient = await Ingredient.create({
         userId: user.id, name, price, description, quantity, unit, maxQuantity, minQuantity,
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
+
+      if (categoryId) {
+        await ingredient.related('categories').sync([categoryId])
+      }
 
       response.ok(ingredient)
     } catch (error) {
@@ -79,7 +83,7 @@ export default class IngredientsController {
   public async update ({request, response, params}: HttpContextContract) {
     try {
       const {
-        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail,
+        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail, categoryId,
       } = await request.validate(UpdateValidator)
 
       const ingredient = await Ingredient.findByOrFail('id', params.id)
@@ -94,6 +98,10 @@ export default class IngredientsController {
         minQuantity: minQuantity ?? ingredient.minQuantity,
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : ingredient.thumbnail,
       }).save()
+
+      if (categoryId) {
+        await ingredient.related('categories').sync([categoryId])
+      }
 
       response.ok(ingredient)
     } catch (error) {
