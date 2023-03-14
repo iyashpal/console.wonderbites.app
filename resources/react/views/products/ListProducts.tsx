@@ -121,6 +121,9 @@ export default function ListProducts() {
                         <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" ref={checkbox} checked={checked} onChange={toggleAll} />
                       </th>
                       <th scope="col" className="w-14 py-3.5 pr-3 text-center text-sm font-semibold text-gray-900 uppercase">
+                        ID
+                      </th>
+                      <th scope="col" className="w-14 py-3.5 pr-3 text-center text-sm font-semibold text-gray-900 uppercase">
                         SKU
                       </th>
                       <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 uppercase">
@@ -150,6 +153,9 @@ export default function ListProducts() {
                               e.target.checked ? [...selected, product] : selected.filter((p) => p !== product)
                             )}
                             />
+                          </td>
+                          <td {...classNames('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(product) ? 'text-red-600' : 'text-gray-900')}>
+                            {product.id}
                           </td>
                           <td {...classNames('whitespace-nowrap py-3 pr-3 text-sm font-medium text-center', selected.includes(product) ? 'text-red-600' : 'text-gray-900')}>
                             {product.sku}
