@@ -41,7 +41,9 @@ export default class ProductsController {
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
-      await product.related('categories').attach([categoryId])
+      if (categoryId) {
+        await product.related('categories').attach([categoryId])
+      }
 
       response.json(product.toObject())
     } catch (error) {
@@ -70,11 +72,13 @@ export default class ProductsController {
         .whereNull('deleted_at').where('id', params.id)
         .preload('categories').firstOrFail()
 
+      const [ category ] = product.categories
+
       const categories = await Category.query()
-        .where('type', 'All').orWhere('type', 'Product').whereNull('deleted_at')
+        .whereNull('deletedAt').where('type', 'All').orWhere('type', 'Product')
         .orderBy('name', 'asc')
 
-      response.ok({ product, categories, category: product.categories[0] })
+      response.ok({ product, categories, category })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
@@ -85,13 +89,17 @@ export default class ProductsController {
       const product = await Product.findByOrFail('id', params.id)
 
       const {
-        name, price, sku, description, publishedAt, thumbnail,
+        name, price, sku, description, publishedAt, thumbnail, categoryId,
       } = await request.validate(UpdateValidator)
 
       await product.merge({
         name, price, sku, description, publishedAt,
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : product.thumbnail,
       }).save()
+
+      if (categoryId) {
+        await product.related('categories').attach([categoryId])
+      }
 
       response.ok(product.toObject())
     } catch (error) {
