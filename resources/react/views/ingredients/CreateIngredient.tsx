@@ -1,9 +1,10 @@
 import {DateTime} from "luxon";
 import * as Loaders from '~/components/loaders'
-import {Form, Link} from "react-router-dom";
+import {Form, Link, useLoaderData} from "react-router-dom";
 import {useIngredientForm} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
+import {Category} from "@/types/models";
 
 export default function CreateIngredient() {
 
@@ -11,6 +12,7 @@ export default function CreateIngredient() {
     name: '', description: '', categoryId: 0, price: 0, unit: '', quantity: 0, maxQuantity: 0, minQuantity: 0, thumbnail: null, publishedAt: ''
   })
 
+  const {categories} = useLoaderData() as {categories: Category[]}
 
   return <>
     <div className="py-6">
@@ -51,9 +53,7 @@ export default function CreateIngredient() {
                   </label>
                   <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={0}>Select Category</option>
-                    <option value={1}>Category 1</option>
-                    <option value={2}>Category 2</option>
-                    <option value={3}>Category 3</option>
+                    {categories.map((category, index) => (<option key={index} value={category.id}>{category.name}</option>))}
                   </select>
                   <InputError show={form.errors?.categoryId}>{form.errors.categoryId}</InputError>
                 </div>
@@ -105,7 +105,7 @@ export default function CreateIngredient() {
                   <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1"/>
+                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-2"/>
                   <InputError show={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
                 </div>
 

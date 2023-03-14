@@ -1,4 +1,4 @@
-import {Ingredient} from 'App/Models'
+import {Category, Ingredient} from 'App/Models'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
@@ -8,11 +8,22 @@ import UpdateValidator from 'App/Validators/Core/Ingredients/UpdateValidator'
 export default class IngredientsController {
   public async index ({request, response}: HttpContextContract) {
     try {
-      const {page = 1, limit = 10} = <{page: number, limit: number}>request.all()
+      const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
 
       const ingredients = await Ingredient.query().whereNull('deleted_at').paginate(page, limit)
 
       response.status(200).json(ingredients)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
+  }
+
+  public async create ({auth, request, response}: HttpContextContract) {
+    try {
+      const categories = await Category.query()
+        .whereNull('deleted_at').where('type', 'All').orWhere('type', 'Ingredient')
+
+      response.ok({categories})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }

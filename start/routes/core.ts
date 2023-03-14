@@ -24,7 +24,7 @@ Route.group(() => {
 
     Route.resource('categories', 'CategoriesController')
 
-    Route.resource('ingredients', 'IngredientsController').apiOnly()
+    Route.resource('ingredients', 'IngredientsController')
   }).middleware('api.core.auth')
 
   /**
