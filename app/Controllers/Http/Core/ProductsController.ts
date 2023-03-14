@@ -19,7 +19,7 @@ export default class ProductsController {
   public async create ({ response }: HttpContextContract) {
     try {
       const categories = await Category.query()
-        .where('type', 'All').orWhere('type', 'Product').whereNull('deleted_at')
+        .whereNull('deleted_at').where('type', 'All').orWhere('type', 'Product')
         .orderBy('name', 'asc')
 
       response.ok({ categories })
