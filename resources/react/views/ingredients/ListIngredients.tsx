@@ -1,194 +1,234 @@
-import {useFetch} from '@/hooks'
+import {useFlash} from '@/hooks'
 import Skeleton from './skeleton'
-import {classNames} from '@/helpers'
-import {useEffect, useState} from 'react'
 import {Ingredient} from '@/types/models'
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
 import Pagination from '~/components/Pagination'
-import {PaginatorMeta} from '@/types/paginators'
+import TrashModal from '@/components/TrashModal'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {Link, useLocation, useSearchParams} from 'react-router-dom'
+import {Link, useLoaderData, useNavigate} from 'react-router-dom'
+import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import IngredientsPaginator from '@/types/paginators/IngredientsPaginator'
-import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from '@heroicons/react/24/outline'
+import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
+import {TableRowsSkeleton} from "@/components/skeletons";
+import {PaginatorMeta} from "@/types/paginators";
 
 export default function ListIngredients() {
-  const fetcher = useFetch()
-  const location = useLocation()
-  const [searchParams] = useSearchParams()
+  const flash = useFlash()
+  const navigateTo = useNavigate()
+  const paginator = useLoaderData() as IngredientsPaginator
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
+  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
-  const [selected] = useState<number[]>([])
+
+  const [checked, setChecked] = useState(false)
+  const checkbox = useRef<HTMLInputElement>(null)
+  const [indeterminate, setIndeterminate] = useState(false)
+  const [selected, setSelected] = useState<Ingredient[]>([])
+
+  const [ingredient, setIngredient] = useState<Ingredient>({} as Ingredient)
+  const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   useEffect(() => {
-    fetchIngredients()
-  }, [location])
+    setMeta(paginator.meta)
+    setIngredients(paginator.data)
+    setIsLoaded(true)
+    setIsLoading(false)
+  }, [ingredients])
 
-  function fetchIngredients(): void {
-    setIsLoading(true)
-    fetcher.get('/ingredients', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: IngredientsPaginator }) => {
-        setIsLoading(false)
-        setIsLoaded(true)
-        setIngredients(response.data)
-        setMeta(response.meta)
-      })
-      .catch(() => {
-        setIsLoading(false)
-      })
+  useLayoutEffect(() => {
+    const isIndeterminate = selected.length > 0 && selected.length < ingredients.length
+    setChecked(selected.length === ingredients.length)
+    setIndeterminate(isIndeterminate)
+    if (checkbox.current) {
+      checkbox.current.indeterminate = isIndeterminate
+    }
+  }, [selected])
+
+
+  /**
+   * Toggle all checkboxes.
+   *
+   * @return void
+   */
+  function toggleAll() {
+    setSelected(checked || indeterminate ? [] : ingredients)
+    // setChecked(!checked && !indeterminate)
+    // setIndeterminate(false)
+  }
+
+  function onDelete() {
+    setIsTrashing(false)
+    flash.set('ingredient_deleted', true)
+    navigateTo('/app/ingredients')
+  }
+
+  function onClose() {
+    setIsTrashing(false)
+    setIngredient({} as Ingredient)
+  }
+
+  function onCheckChange(e) {
+    let current = ingredients.find(({id}) => id == e.target.value) as Ingredient
+
+    setSelected(selected.includes(current) ? selected.filter(({id}) => id != e.target.value) : [...selected, current as Ingredient])
+
   }
 
   return <>
     {isLoaded ?
-      <div className="py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-          <Breadcrumb pages={[{name: 'Ingredients'}]}/>
-        </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5">
-          <Index.Filters sortBy={[
-            {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
-            {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
-          ]} create={{url: '/app/ingredients/create', label: 'Add Ingredient'}}/>
+      <>
+        <div className="py-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+            <Breadcrumb pages={[{name: 'Ingredients'}]}/>
+          </div>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5">
 
-          <Index.Table>
-            <Index.THead>
-              <Index.Tr>
-                <Index.ThCheck isChecked={false}/>
-                <Index.Th>
-                  ID
-                </Index.Th>
-                <Index.Th className={'text-left'}>
-                  Ingredient Name
-                </Index.Th>
-                <Index.Th>
-                  UoM
-                </Index.Th>
-                <Index.Th>
-                  QTY
-                </Index.Th>
-                <Index.Th>
-                  MIN QTY
-                </Index.Th>
-                <Index.Th>
-                  MAX QTY
-                </Index.Th>
-                <Index.Th>
-                  Price
-                </Index.Th>
-                <Index.Th>
-                  Category
-                </Index.Th>
-                <Index.Th className={'text-center'}>
-                  Image
-                </Index.Th>
-                <Index.Th>
-                  Action
-                </Index.Th>
-              </Index.Tr>
-            </Index.THead>
+            {flash.get('ingredient_deleted') && <>
+              <Alert.Success className={'mb-6'}>Ingredient deleted successfully</Alert.Success>
+            </>}
 
-            <Index.TBody>
-              {isLoading ? <><TableRowsSkeleton/></> : <>
-                {ingredients.map(ingredient => <Index.Tr key={ingredient.id}>
-                  <Index.TdCheck isChecked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
-                  <Index.Td>
-                    {ingredient.id}
-                  </Index.Td>
-                  <Index.Td className={'text-left'}>
-                    <Link to={`/app/ingredients/${ingredient.id}/edit`}>
-                      {ingredient.name}
-                    </Link>
-                  </Index.Td>
-                  <Index.Td>
-                    {ingredient.unit}
-                  </Index.Td>
-                  <Index.Td>
-                    {ingredient.quantity}
-                  </Index.Td>
-                  <Index.Td>
-                    {ingredient.minQuantity}
-                  </Index.Td>
-                  <Index.Td>
-                    {ingredient.maxQuantity}
-                  </Index.Td>
-                  <Index.Td>
-                    {ingredient.price}
-                  </Index.Td>
-                  <Index.Td>
+            <Index.Filters sortBy={[
+              {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
+              {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
+            ]} create={{url: '/app/ingredients/create', label: 'Add Ingredient'}}/>
+
+            <Index.Table>
+              <Index.THead>
+                <Index.Tr>
+                  <Index.ThCheck isChecked={checked} ref={checkbox} onChange={toggleAll}/>
+                  <Index.Th>
+                    ID
+                  </Index.Th>
+                  <Index.Th className={'text-left'}>
+                    Ingredient Name
+                  </Index.Th>
+                  <Index.Th>
+                    UoM
+                  </Index.Th>
+                  <Index.Th>
+                    QTY
+                  </Index.Th>
+                  <Index.Th>
+                    MIN QTY
+                  </Index.Th>
+                  <Index.Th>
+                    MAX QTY
+                  </Index.Th>
+                  <Index.Th>
+                    Price
+                  </Index.Th>
+                  <Index.Th>
                     Category
-                  </Index.Td>
-                  <Index.Td>
-                    <img className={'w-9 h-9 rounded-full object-cover mx-auto'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
-                  </Index.Td>
-                  <Index.Td className={'text-center'}>
-                    <button>
-                      <EllipsisVerticalIcon {...classNames('h-5 w-5')} />
-                    </button>
-                  </Index.Td>
-                </Index.Tr>)}
-                {ingredients.length === 0 && <>
-                  <Index.Tr>
-                    <Index.Td colSpan={11}>
-                      <Alert.Warning>
-                        No ingredients available.{' '}
-                        <Link to={'/app/ingredients/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                          Click here to add more ingredients.
+                  </Index.Th>
+                  <Index.Th className={'text-center'}>
+                    Image
+                  </Index.Th>
+                  <Index.Th>
+                    Action
+                  </Index.Th>
+                </Index.Tr>
+              </Index.THead>
+
+              <Index.TBody>
+                {isLoading ? <>
+                  <TableRowsSkeleton
+                    limit={10}
+                    actions={true}
+                    checkboxes={true}
+                    columns={[
+                      {label: 'ID'},
+                      {label: 'Category Name'},
+                      {label: 'Type'},
+                      {label: 'ID'},
+                      {label: 'Category Name'},
+                      {label: 'Type'},
+                      {label: 'ID'},
+                      {label: 'Category Name'},
+                      {label: 'Type'},
+                    ]}
+                  />
+                </> : <>
+                  {ingredients.map(ingredient => (
+                    <Index.Tr key={ingredient.id}>
+                      <Index.TdCheck isChecked={selected.includes(ingredient)} onChange={onCheckChange} value={ingredient.id}/>
+                      <Index.Td>
+                        {ingredient.id}
+                      </Index.Td>
+                      <Index.Td className={'text-left'}>
+                        <Link to={`/app/ingredients/${ingredient.id}`}>
+                          {ingredient.name}
                         </Link>
-                      </Alert.Warning>
-                    </Index.Td>
-                  </Index.Tr>
+                      </Index.Td>
+                      <Index.Td>
+                        {ingredient.unit}
+                      </Index.Td>
+                      <Index.Td>
+                        {ingredient.quantity}
+                      </Index.Td>
+                      <Index.Td>
+                        {ingredient.minQuantity}
+                      </Index.Td>
+                      <Index.Td>
+                        {ingredient.maxQuantity}
+                      </Index.Td>
+                      <Index.Td>
+                        {ingredient.price}L
+                      </Index.Td>
+                      <Index.Td>
+                        Category
+                      </Index.Td>
+                      <Index.Td>
+                        <img className={'w-9 h-9 rounded-full object-cover mx-auto border-2 shadow'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
+                      </Index.Td>
+                      <Index.Td className={'text-center'}>
+                        <div className="flex item-center justify-center gap-x-1">
+                          <Link to={`/app/ingredients/${ingredient.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                            <PencilSquareIcon className={'w-5 h-5'}/>
+                          </Link>
+
+                          <Link to={`/app/ingredients/${ingredient.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                            <EyeIcon className={'w-5 h-5'}/>
+                          </Link>
+                          <button onClick={() => {
+                            setIngredient(ingredient);
+                            setIsTrashing(true);
+                          }} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                            <TrashIcon className={'w-5 h-5'}/>
+                          </button>
+                        </div>
+                      </Index.Td>
+                    </Index.Tr>
+                  ))}
+                  {ingredients.length === 0 && <>
+                    <Index.Tr>
+                      <Index.Td colSpan={11}>
+                        <Alert.Warning>
+                          No ingredients available.{' '}
+                          <Link to={'/app/ingredients/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                            Click here to add more ingredients.
+                          </Link>
+                        </Alert.Warning>
+                      </Index.Td>
+                    </Index.Tr>
+                  </>}
                 </>}
-              </>}
-            </Index.TBody>
-          </Index.Table>
-          <Pagination meta={meta}/>
+              </Index.TBody>
+            </Index.Table>
+            <Pagination meta={meta}/>
+          </div>
         </div>
-      </div>
+        <TrashModal
+          show={isTrashing}
+          onClose={onClose}
+          onDelete={onDelete}
+          title={'Delete Ingredient'}
+          url={`/ingredients/${ingredient.id}`}
+          description={<>Are you sure you want to delete "<b>{ingredient.name}</b>"?</>}
+        />
+      </>
+
       : <Skeleton.List.Page/>}
-  </>
-}
-
-
-function TableRowsSkeleton() {
-  return <>
-    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(item => (
-      <tr key={`${item}-skeleton`} className={'animate-pulse'}>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-5 h-5 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-full h-4 rounded-md bg-gray-200'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-8 h-8 rounded-full bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-        <td className={'px-3 py-3 '}>
-          <div className={'w-3 h-8 rounded-md bg-gray-200 mx-auto'}></div>
-        </td>
-      </tr>
-    ))}
   </>
 }

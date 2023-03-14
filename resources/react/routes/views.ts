@@ -60,6 +60,7 @@ import ListFeedbacks from '~/views/feedbacks/ListFeedbacks';
 /**
  * Ingredients Views
  */
+import ShowIngredient from '~/views/ingredients/ShowIngredient';
 import ListIngredients from '~/views/ingredients/ListIngredients';
 import CreateIngredient from '~/views/ingredients/CreateIngredient';
 import UpdateIngredient from '~/views/ingredients/UpdateIngredient';
@@ -158,9 +159,10 @@ const Views = {
   },
 
   Ingredients: {
+    Show: ShowIngredient,
+    List: ListIngredients,
     Create: CreateIngredient,
     Update: UpdateIngredient,
-    List: ListIngredients
   },
 
   Orders: {
