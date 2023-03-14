@@ -1,19 +1,19 @@
 import { useFlash } from '@/hooks'
-import { Product } from '@/types/models'
+import {Ingredient, Product} from '@/types/models'
 import { Fragment, useState } from "react"
 import * as Alerts from '@/components/alerts'
 import { Details } from '@/components/Show'
 import TrashModal from '@/components/TrashModal'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { Listbox, Transition } from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid'
-import { PlusIcon } from '@heroicons/react/24/outline'
 
 export default function ShowProduct() {
   const flash = useFlash()
   const navigateTo = useNavigate()
-  const { product } = useLoaderData() as { product: Product }
+  const { product, ingredients } = useLoaderData() as { product: Product, ingredients: Ingredient[] }
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   const [category] = product.categories ?? []
@@ -59,12 +59,12 @@ export default function ShowProduct() {
               { name: 'Price', value: `${product.price}L` },
               { name: 'Category', value: category.name },
               { name: 'Description', value: product.description, textWrap: true },
-              { name: 'Image', value: <img src={product.thumbnail_url} className="w-10 h-10 rounded-full" /> }
+              { name: 'Image', value: <img alt={product.name} src={product.thumbnail_url} className="w-10 h-10 rounded-full" /> }
             ]}
           />
 
           <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
-            <ProductIngredients product={product} />
+            <ProductIngredients product={product} ingredients={ingredients} />
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function ShowProduct() {
   </>
 }
 
-function ProductIngredients({ product }: { product: Product }) {
+function ProductIngredients({ product, ingredients }: { product: Product, ingredients: Ingredient[] }) {
   return (
     <>
       <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8">
@@ -195,7 +195,7 @@ function ProductIngredients({ product }: { product: Product }) {
         </div>
       </div>
 
-      <CreateNewIngredient />
+      <CreateNewIngredient ingredients={ingredients} />
 
       <div className='flex items-center justify-start px-3 py-4'>
         <button className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
@@ -208,17 +208,7 @@ function ProductIngredients({ product }: { product: Product }) {
   )
 }
 
-function CreateNewIngredient() {
-
-  const ingredients = [
-    { id: '001', name: 'Mascarpone', qty: '20 gr', price: '100 L', category: 'Cheese', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '002', name: 'Parmesan', qty: '20 gr', price: '100 L', category: 'Cheese', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '003', name: 'Monterey Jack cheese', qty: '20 gr', price: '100 L', category: 'Cheese', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '004', name: 'Mushrooms', qty: '20 gr', price: '100 L', category: 'Topping', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '005', name: 'Tomatoes', qty: '20 gr', price: '100 L', category: 'Topping', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '006', name: 'Black Pepper', qty: '20 gr', price: '100 L', category: 'Topping', add: false, remove: false, image: '/images/placeholder/square.svg' },
-    { id: '007', name: 'Garlic', qty: '20 gr', price: '100 L', category: 'Topping', add: false, remove: false, image: '/images/placeholder/square.svg' },
-  ]
+function CreateNewIngredient({ingredients}: {ingredients: Ingredient[]}) {
 
   const [defaultSelectedIngredients] = ingredients
 
