@@ -18,7 +18,7 @@ export default class IngredientsController {
     }
   }
 
-  public async create ({auth, request, response}: HttpContextContract) {
+  public async create ({response}: HttpContextContract) {
     try {
       const categories = await Category.query()
         .whereNull('deleted_at').where('type', 'All').orWhere('type', 'Ingredient')
@@ -53,6 +53,24 @@ export default class IngredientsController {
       const ingredient = await Ingredient.query().where('id', params.id).firstOrFail()
 
       response.json(ingredient)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
+  }
+
+  public async edit ({response, params}: HttpContextContract) {
+    try {
+      const ingredient = await Ingredient.query()
+        .whereNull('deleted_at').where('id', params.id)
+        .preload('categories')
+        .firstOrFail()
+
+      const [category] = ingredient.categories
+
+      const categories = await Category.query()
+        .whereNull('deleted_at').where('type', 'All').orWhere('type', 'Ingredient')
+
+      response.ok({categories, ingredient, category})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }

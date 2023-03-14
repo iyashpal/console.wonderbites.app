@@ -101,6 +101,9 @@ export default function useIngredientForm(fields: IngredientForm) {
     data: form,
     isProcessing,
     input: {
+      set(key: string, value: any) {
+        setForm(e => ({...e, [key]: value}))
+      },
       value(key) {
         return form[key]
       },

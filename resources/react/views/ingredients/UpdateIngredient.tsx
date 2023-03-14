@@ -1,34 +1,34 @@
 import {DateTime} from "luxon";
-import {Form, Link, useParams} from "react-router-dom";
-import {useUpdateIngredient} from "@/hooks/forms";
+import * as Loaders from "@/components/loaders";
+import {useIngredientForm} from "@/hooks/forms";
+import {Category, Ingredient} from "@/types/models";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
-import {useEffect, useState} from "react";
-import {useFetch} from "@/hooks";
-import {Ingredient} from "@/types/models";
-import * as Loaders from "@/components/loaders";
+import {Form, Link, useLoaderData} from "react-router-dom";
+
+type RouteLoaderData = {
+  category: Category,
+  categories: Category[],
+  ingredient: Ingredient
+}
 
 export default function UpdateIngredient() {
-  const {id} = useParams()
-  const fetcher = useFetch()
-  const form = useUpdateIngredient()
-  const [ingredient, setIngredient] = useState<Ingredient>({} as Ingredient)
 
-  useEffect(() => {
-    fetchIngredient()
-  }, [id])
+  const {categories, category, ingredient} = useLoaderData() as RouteLoaderData
 
-  useEffect(() => {
-    form.syncData(ingredient)
-  }, [ingredient])
-
-
-  function fetchIngredient() {
-    fetcher.get(`/ingredients/${id}`).then(({data}) => {
-      setIngredient(data)
-    })
-  }
-
+  const form = useIngredientForm({
+    id: ingredient.id,
+    categoryId: category?.id ?? 0,
+    name: ingredient.name,
+    description: ingredient.description,
+    price: ingredient.price,
+    unit: ingredient.unit,
+    quantity: ingredient.quantity,
+    minQuantity: ingredient.minQuantity,
+    maxQuantity: ingredient.maxQuantity,
+    thumbnail: null,
+    publishedAt: ingredient.publishedAt,
+  })
 
   return <>
     <div className="py-6">
@@ -43,7 +43,7 @@ export default function UpdateIngredient() {
             <h1 className={'font-semibold'}>Modify Ingredient</h1>
           </div>
 
-          <Form method='post' onSubmit={form.onSubmit} encType='multipart/form-data'>
+          <Form method='post' onSubmit={form.onSubmit.update} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
               <div className="grid grid-cols-6 gap-6">
 
@@ -69,10 +69,8 @@ export default function UpdateIngredient() {
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
                   <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={''}>Select Category</option>
-                    <option value={1}>Category 1</option>
-                    <option value={2}>Category 2</option>
-                    <option value={3}>Category 3</option>
+                    <option value={0}>Select Category</option>
+                    {categories.map((category, index) => (<option key={index} value={category.id}>{category.name}</option>))}
                   </select>
                   <InputError show={form.errors?.categoryId}>{form.errors.categoryId}</InputError>
                 </div>

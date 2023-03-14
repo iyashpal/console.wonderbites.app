@@ -101,11 +101,12 @@ export const AppRoutes = [
           {
             path: 'create',
             element: <Views.Ingredients.Create />,
-            loader: async ({ params }) => Axios().get(`/ingredients/create`).then(({ data }) => data)
+            loader: async () => Axios().get(`/ingredients/create`).then(({ data }) => data)
           },
           {
-            path: ':id/update',
-            element: <Views.Ingredients.Update />
+            path: ':id/edit',
+            element: <Views.Ingredients.Update />,
+            loader: async ({ params }) => Axios().get(`/ingredients/${params.id}/edit`).then(({ data }) => data)
           },
         ]
       },
