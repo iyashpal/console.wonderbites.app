@@ -1,16 +1,16 @@
-import {useEffect, useState} from "react";
-import {Ingredient} from "@/types/models";
+import {useFetch} from '@/hooks'
+import Skeleton from './skeleton'
+import {classNames} from '@/helpers'
+import {useEffect, useState} from 'react'
+import {Ingredient} from '@/types/models'
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
-import Skeleton from './skeleton'
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import {Link, useLocation, useSearchParams} from "react-router-dom";
-import {PaginatorMeta} from "@/types/paginators";
 import Pagination from '~/components/Pagination'
-import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from "@heroicons/react/24/outline";
-import {useFetch} from "@/hooks";
-import {classNames} from "@/helpers";
-import IngredientsPaginator from "@/types/paginators/IngredientsPaginator";
+import {PaginatorMeta} from '@/types/paginators'
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {Link, useLocation, useSearchParams} from 'react-router-dom'
+import IngredientsPaginator from '@/types/paginators/IngredientsPaginator'
+import {BookmarkIcon, EllipsisVerticalIcon, HashtagIcon} from '@heroicons/react/24/outline'
 
 export default function ListIngredients() {
   const fetcher = useFetch()
@@ -97,7 +97,7 @@ export default function ListIngredients() {
                     {ingredient.id}
                   </Index.Td>
                   <Index.Td className={'text-left'}>
-                    <Link to={`/app/ingredients/${ingredient.id}/update`}>
+                    <Link to={`/app/ingredients/${ingredient.id}/edit`}>
                       {ingredient.name}
                     </Link>
                   </Index.Td>
