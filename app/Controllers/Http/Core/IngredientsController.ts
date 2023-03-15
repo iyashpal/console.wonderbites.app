@@ -57,9 +57,13 @@ export default class IngredientsController {
 
   public async show ({response, params}: HttpContextContract) {
     try {
-      const ingredient = await Ingredient.query().where('id', params.id).firstOrFail()
+      const ingredient = await Ingredient.query()
+        .whereNull('deleted_at').where('id', params.id)
+        .preload('user')
+        .preload('categories', query => query.preload('cuisines'))
+        .firstOrFail()
 
-      response.json(ingredient)
+      response.ok({ingredient})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }

@@ -1,3 +1,5 @@
+import {Category, User} from "@/types/models/index";
+
 export default interface Ingredient {
   id: number,
 
@@ -21,5 +23,9 @@ export default interface Ingredient {
 
   publishedAt: string,
 
+  created_at: string,
+
   status: string,
+  user?: User,
+  categories?: Category[]
 }
