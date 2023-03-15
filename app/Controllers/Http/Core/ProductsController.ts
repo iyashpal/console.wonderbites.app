@@ -58,7 +58,9 @@ export default class ProductsController {
         .preload('categories', query => query.preload('cuisines'))
         .where('id', params.id).firstOrFail()
 
-      const ingredients = await Ingredient.query().whereNull('deleted_at')
+      const ingredients = await Ingredient.query()
+        .whereNull('deleted_at')
+        .preload('categories', query => query.select('id', 'name', 'type'))
 
       response.ok({ product, ingredients })
     } catch (error) {
