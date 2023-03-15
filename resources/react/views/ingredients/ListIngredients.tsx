@@ -1,3 +1,4 @@
+import {Axios} from '@/helpers'
 import {useFlash} from '@/hooks'
 import Skeleton from './skeleton'
 import {Ingredient} from '@/types/models'
@@ -8,11 +9,10 @@ import TrashModal from '@/components/TrashModal'
 import {PaginatorMeta} from '@/types/paginators'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {TableRowsSkeleton} from '@/components/skeletons'
-import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import IngredientsPaginator from '@/types/paginators/IngredientsPaginator'
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
-import {Axios} from "@/helpers";
 
 export default function ListIngredients() {
   const flash = useFlash()
