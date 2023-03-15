@@ -78,7 +78,7 @@ export default function ListCategories() {
           <Index.Table>
             <Index.THead>
               <Index.Tr>
-                <Index.ThCheck isChecked={false}/>
+                <Index.ThCheck checked={false}/>
                 <Index.Th>
                   ID
                 </Index.Th>
@@ -102,7 +102,7 @@ export default function ListCategories() {
                 <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
               </> : <>
                 {categories.map(category => <Index.Tr key={category.id}>
-                  <Index.TdCheck isChecked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
+                  <Index.TdCheck checked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
                   <Index.Td>
                     {category.id}
                   </Index.Td>

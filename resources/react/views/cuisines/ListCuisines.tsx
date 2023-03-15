@@ -78,7 +78,7 @@ export default function ListCuisines() {
           <Index.Table>
             <Index.THead>
               <Index.Tr>
-                <Index.ThCheck isChecked={false}/>
+                <Index.ThCheck checked={false}/>
                 <Index.Th>
                   ID
                 </Index.Th>
@@ -105,7 +105,7 @@ export default function ListCuisines() {
                 <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
               </> : <>
                 {cuisines.map(cuisine => <Index.Tr key={cuisine.id}>
-                  <Index.TdCheck isChecked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
+                  <Index.TdCheck checked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
                   <Index.Td>
                     {cuisine.id}
                   </Index.Td>
