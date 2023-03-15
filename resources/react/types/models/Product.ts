@@ -1,5 +1,5 @@
 import Category from "./Category";
-import Ingredient from "./Ingredient";
+import {IngredientProduct} from "./pivot";
 import User from "./User";
 
 export default interface Product {
@@ -23,7 +23,7 @@ export default interface Product {
 
   categories?: Category[],
 
-  ingredients?: Ingredient[],
+  ingredients?: IngredientProduct[],
 
   meta: {
     media_count?: number

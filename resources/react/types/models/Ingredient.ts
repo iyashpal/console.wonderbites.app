@@ -27,5 +27,9 @@ export default interface Ingredient {
 
   status: string,
   user?: User,
-  categories?: Category[]
+  categories?: Category[],
+
+  meta: {
+
+  }
 }
