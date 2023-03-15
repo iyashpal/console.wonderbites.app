@@ -13,7 +13,7 @@ import {ChevronUpDownIcon, CloudArrowUpIcon, EyeIcon, PencilSquareIcon, QueueLis
 export default function ShowProduct() {
   const flash = useFlash()
   const navigateTo = useNavigate()
-  const {product, ingredients} = useLoaderData() as { product: Product, ingredients: Ingredient[] }
+  const {product } = useLoaderData() as { product: Product, ingredients: Ingredient[] }
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   const [category] = product.categories ?? []
@@ -64,7 +64,7 @@ export default function ShowProduct() {
           />
 
           <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
-            <ProductIngredients product={product} ingredients={ingredients}/>
+            <ProductIngredients product={product} />
           </div>
         </div>
       </div>
@@ -275,7 +275,7 @@ function CreateNewIngredient() {
                               {ingredient.name} <span className={'text-gray-400 font-light'}>({resolveCategoryName(ingredient)})</span>
                             </span>
                           </div>
-                          {(!!selected.id && active) && (
+                          {(selected && active) && (
                             <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-gray-600'}`}></span>
                           )}
                         </>
