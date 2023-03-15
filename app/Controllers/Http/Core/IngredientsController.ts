@@ -10,7 +10,10 @@ export default class IngredientsController {
     try {
       const {page = 1, limit = 10} = <{ page: number, limit: number }>request.all()
 
-      const ingredients = await Ingredient.query().whereNull('deleted_at').paginate(page, limit)
+      const ingredients = await Ingredient.query()
+        .whereNull('deleted_at')
+        .preload('categories')
+        .paginate(page, limit)
 
       response.status(200).json(ingredients)
     } catch (error) {

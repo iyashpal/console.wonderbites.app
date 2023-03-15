@@ -96,10 +96,7 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Ingredients.List />,
-            loader: async ({request}) => {
-              return Axios().get(`/ingredients${(new URL(request.url)).search}`).then(({ data }) => data)
-            }
+            element: <Views.Ingredients.List />
           },
           {
             path: 'create',

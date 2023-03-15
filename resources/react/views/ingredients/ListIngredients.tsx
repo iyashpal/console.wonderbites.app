@@ -5,22 +5,26 @@ import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
+import {PaginatorMeta} from '@/types/paginators'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {Link, useLoaderData, useNavigate} from 'react-router-dom'
+import {TableRowsSkeleton} from '@/components/skeletons'
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import IngredientsPaginator from '@/types/paginators/IngredientsPaginator'
 import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
-import {TableRowsSkeleton} from "@/components/skeletons";
-import {PaginatorMeta} from "@/types/paginators";
+import {Axios} from "@/helpers";
 
 export default function ListIngredients() {
   const flash = useFlash()
+  const location = useLocation()
   const navigateTo = useNavigate()
-  const paginator = useLoaderData() as IngredientsPaginator
-  const [ingredients, setIngredients] = useState<Ingredient[]>([])
-  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
+  const [searchParams] = useSearchParams()
+
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
+  const [ingredients, setIngredients] = useState<Ingredient[]>([])
 
   const [checked, setChecked] = useState(false)
   const checkbox = useRef<HTMLInputElement>(null)
@@ -31,20 +35,30 @@ export default function ListIngredients() {
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   useEffect(() => {
-    setMeta(paginator.meta)
-    setIngredients(paginator.data)
-    setIsLoaded(true)
-    setIsLoading(false)
-  }, [ingredients])
+    fetchIngredients()
+  }, [location])
 
   useLayoutEffect(() => {
-    const isIndeterminate = selected.length > 0 && selected.length < ingredients.length
     setChecked(selected.length === ingredients.length)
-    setIndeterminate(isIndeterminate)
+    setIndeterminate(selected.length > 0 && selected.length < ingredients.length)
     if (checkbox.current) {
-      checkbox.current.indeterminate = isIndeterminate
+      checkbox.current.indeterminate = indeterminate
     }
   }, [selected])
+
+  function fetchIngredients(): void {
+    setIsLoading(true)
+    Axios().get('/ingredients', {params: {page: searchParams.get('page') ?? 1}})
+      .then(({data: response}: { data: IngredientsPaginator }) => {
+        setIsLoading(false)
+        setIsLoaded(true)
+        setIngredients(response.data)
+        setMeta(response.meta)
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
+  }
 
 
   /**
@@ -54,8 +68,8 @@ export default function ListIngredients() {
    */
   function toggleAll() {
     setSelected(checked || indeterminate ? [] : ingredients)
-    // setChecked(!checked && !indeterminate)
-    // setIndeterminate(false)
+    setChecked(!checked && !indeterminate)
+    setIndeterminate(false)
   }
 
   function onDelete() {
@@ -69,11 +83,13 @@ export default function ListIngredients() {
     setIngredient({} as Ingredient)
   }
 
-  function onCheckChange(e) {
-    let current = ingredients.find(({id}) => id == e.target.value) as Ingredient
+  function ingredientCategory(ingredient) {
+    let [category] = ingredient.categories
 
-    setSelected(selected.includes(current) ? selected.filter(({id}) => id != e.target.value) : [...selected, current as Ingredient])
-
+    if (category.id) {
+      return (<Link to={`/app/categories/${category.id}`} className={'text-red-primary'}>{category.name}</Link>)
+    }
+    return '-'
   }
 
   return <>
@@ -97,88 +113,41 @@ export default function ListIngredients() {
             <Index.Table>
               <Index.THead>
                 <Index.Tr>
-                  <Index.ThCheck isChecked={checked} ref={checkbox} onChange={toggleAll}/>
-                  <Index.Th>
-                    ID
-                  </Index.Th>
-                  <Index.Th className={'text-left'}>
-                    Ingredient Name
-                  </Index.Th>
-                  <Index.Th>
-                    UoM
-                  </Index.Th>
-                  <Index.Th>
-                    QTY
-                  </Index.Th>
-                  <Index.Th>
-                    MIN QTY
-                  </Index.Th>
-                  <Index.Th>
-                    MAX QTY
-                  </Index.Th>
-                  <Index.Th>
-                    Price
-                  </Index.Th>
-                  <Index.Th>
-                    Category
-                  </Index.Th>
-                  <Index.Th className={'text-center'}>
-                    Image
-                  </Index.Th>
-                  <Index.Th>
-                    Action
-                  </Index.Th>
+                  <Index.ThCheck checked={checked} ref={checkbox} onChange={toggleAll}/>
+                  <Index.Th>ID</Index.Th>
+                  <Index.Th className={'text-left'}>Ingredient Name</Index.Th>
+                  <Index.Th> UoM </Index.Th>
+                  <Index.Th> QTY </Index.Th>
+                  <Index.Th> MIN QTY </Index.Th>
+                  <Index.Th> MAX QTY </Index.Th>
+                  <Index.Th> Price </Index.Th>
+                  <Index.Th className={"text-left"}> Category </Index.Th>
+                  <Index.Th className={'text-center'}> Image </Index.Th>
+                  <Index.Th> Action </Index.Th>
                 </Index.Tr>
               </Index.THead>
 
               <Index.TBody>
                 {isLoading ? <>
-                  <TableRowsSkeleton
-                    limit={10}
-                    actions={true}
-                    checkboxes={true}
-                    columns={[
-                      {label: 'ID'},
-                      {label: 'Category Name'},
-                      {label: 'Type'},
-                      {label: 'ID'},
-                      {label: 'Category Name'},
-                      {label: 'Type'},
-                      {label: 'ID'},
-                      {label: 'Category Name'},
-                      {label: 'Type'},
-                    ]}
-                  />
+                  <TableRowsSkeleton limit={10} actions={true} checkboxes={true} columns={[
+                    {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''},
+                  ]}/>
                 </> : <>
                   {ingredients.map(ingredient => (
                     <Index.Tr key={ingredient.id}>
-                      <Index.TdCheck isChecked={selected.includes(ingredient)} onChange={onCheckChange} value={ingredient.id}/>
-                      <Index.Td>
-                        {ingredient.id}
-                      </Index.Td>
+                      <Index.TdCheck checked={selected.includes(ingredient)} onChange={(e) => setSelected(
+                        e.target.checked ? [...selected, ingredient] : selected.filter((i) => i !== ingredient)
+                      )} value={ingredient.id}/>
+                      <Index.Td> {ingredient.id} </Index.Td>
                       <Index.Td className={'text-left'}>
-                        <Link to={`/app/ingredients/${ingredient.id}`}>
-                          {ingredient.name}
-                        </Link>
+                        <Link to={`/app/ingredients/${ingredient.id}`} className={'text-red-primary'}> {ingredient.name} </Link>
                       </Index.Td>
-                      <Index.Td>
-                        {ingredient.unit}
-                      </Index.Td>
-                      <Index.Td>
-                        {ingredient.quantity}
-                      </Index.Td>
-                      <Index.Td>
-                        {ingredient.minQuantity}
-                      </Index.Td>
-                      <Index.Td>
-                        {ingredient.maxQuantity}
-                      </Index.Td>
-                      <Index.Td>
-                        {ingredient.price}L
-                      </Index.Td>
-                      <Index.Td>
-                        Category
-                      </Index.Td>
+                      <Index.Td> {ingredient.unit} </Index.Td>
+                      <Index.Td> {ingredient.quantity} </Index.Td>
+                      <Index.Td> {ingredient.minQuantity} </Index.Td>
+                      <Index.Td> {ingredient.maxQuantity} </Index.Td>
+                      <Index.Td> {ingredient.price}L </Index.Td>
+                      <Index.Td className={"text-left"}> {ingredientCategory(ingredient)} </Index.Td>
                       <Index.Td>
                         <img className={'w-9 h-9 rounded-full object-cover mx-auto border-2 shadow'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
                       </Index.Td>
