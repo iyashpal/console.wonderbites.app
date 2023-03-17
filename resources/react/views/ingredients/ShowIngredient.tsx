@@ -9,16 +9,13 @@ import {Link, useLoaderData, useNavigate} from "react-router-dom";
 export default function ShowIngredient() {
   const flash = useFlash()
   const navigateTo = useNavigate()
-  const { ingredient } = useLoaderData() as { ingredient: Ingredient }
+  const {ingredient} = useLoaderData() as { ingredient: Ingredient }
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
-
-  const [category] = ingredient.categories ?? []
-
-  const [cuisine] = category.cuisines ?? []
 
   function onEditHandler() {
     navigateTo(`/app/ingredients/${ingredient.id}/edit`)
   }
+
   function onTrashHandler() {
     setIsTrashing(true)
   }
@@ -32,10 +29,28 @@ export default function ShowIngredient() {
   function onCloseTrash() {
     setIsTrashing(false)
   }
+
+  function resolveCategoryName(ingredient: Ingredient, placeholder: string = '-') {
+    let [category] = ingredient.categories ?? []
+
+    return category?.id ? (
+      <Link to={`/app/categories/${category.id}`} className={'text-red-primary'}>{category.name}</Link>
+    ) : placeholder
+  }
+
+  function resolveCuisineName(ingredient: Ingredient, placeholder: string = '-') {
+    let [category] = ingredient.categories ?? []
+    let [cuisine] = category?.cuisines ?? []
+
+    return cuisine?.id ? (
+      <Link to={`/app/cuisines/${cuisine.id}`} className={'text-red-primary'}>{cuisine.name}</Link>
+    ) : placeholder
+  }
+
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{ name: 'Ingredient', href: '/app/ingredients' }, { name: 'Ingredient Details' }]} />
+        <Breadcrumb pages={[{name: 'Ingredient', href: '/app/ingredients'}, {name: 'Ingredient Details'}]}/>
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <div className="py-4">
@@ -47,13 +62,13 @@ export default function ShowIngredient() {
             onClickEdit={onEditHandler}
             onClickTrash={onTrashHandler}
             fields={[
-              { name: 'Name', value: ingredient.name },
-              { name: 'ID', value: ingredient.id },
-              { name: 'Cuisine', value: (<Link to={`/app/cuisines/${cuisine.id}`} className={'text-red-primary'}>{cuisine.name}</Link>) },
-              { name: 'Price', value: `${ingredient.price}L` },
-              { name: 'Category', value: (<Link to={`/app/categories/${category.id}`} className={'text-red-primary'}>{category.name}</Link>) },
-              { name: 'Description', value: ingredient.description, textWrap: true },
-              { name: 'Image', value: <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full" /> }
+              {name: 'Name', value: ingredient.name},
+              {name: 'ID', value: ingredient.id},
+              {name: 'Cuisine', value: resolveCuisineName(ingredient)},
+              {name: 'Price', value: `${ingredient.price}L`},
+              {name: 'Category', value: resolveCategoryName(ingredient)},
+              {name: 'Description', value: ingredient.description, textWrap: true},
+              {name: 'Image', value: <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full"/>}
             ]}
           />
 

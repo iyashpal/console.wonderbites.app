@@ -83,13 +83,12 @@ export default function ListIngredients() {
     setIngredient({} as Ingredient)
   }
 
-  function ingredientCategory(ingredient) {
+  function ingredientCategory(ingredient, placeholder: string = '-') {
     let [category] = ingredient.categories
 
-    if (category.id) {
-      return (<Link to={`/app/categories/${category.id}`} className={'text-red-primary'}>{category.name}</Link>)
-    }
-    return '-'
+    return category?.id ? (
+      <Link to={`/app/categories/${category.id}`} className={'text-red-primary'}>{category.name}</Link>
+    ) : placeholder
   }
 
   return <>
