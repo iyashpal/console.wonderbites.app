@@ -45,7 +45,7 @@ export default class ProductsController {
         await product.related('categories').attach([categoryId])
       }
 
-      response.json(product.toObject())
+      response.json(product)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
