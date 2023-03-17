@@ -54,8 +54,9 @@ export default class ProductsController {
   public async show ({ params, response }: HttpContextContract) {
     try {
       const product = await Product.query()
-        .preload('user').preload('ingredients')
+        .preload('user')
         .preload('categories', query => query.preload('cuisines'))
+        .preload('ingredients', query => query.preload('categories'))
         .where('id', params.id).firstOrFail()
 
       const ingredients = await Ingredient.query()
