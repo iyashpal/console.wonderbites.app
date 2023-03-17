@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 
 export default class UpdateValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor (protected ctx: HttpContextContract) { }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -25,23 +25,23 @@ export default class UpdateValidator {
    */
   public schema = schema.create({
     name: schema.string({}, [
-      rules.required()
+      rules.required(),
     ]),
 
     categoryId: schema.number([
-      rules.required()
+      rules.required(),
     ]),
 
     price: schema.number([
-      rules.required()
+      rules.required(),
     ]),
 
     description: schema.string({}, [
-      rules.required()
+      rules.required(),
     ]),
 
     sku: schema.string({}, [
-      rules.required()
+      rules.required(),
     ]),
 
     publishedAt: schema.date.nullableAndOptional(),
