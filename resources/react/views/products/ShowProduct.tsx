@@ -1,5 +1,4 @@
 import {useFlash} from '@/hooks'
-import Modal from "@/components/Modal";
 import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import React, {Fragment, useState} from 'react'
@@ -7,18 +6,18 @@ import TrashModal from '@/components/TrashModal'
 import {Ingredient, Product} from '@/types/models'
 import {Combobox, Transition} from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {Link, useLoaderData, useNavigate} from 'react-router-dom'
-import {ChevronUpDownIcon, CloudArrowUpIcon, EyeIcon, PencilSquareIcon, QueueListIcon, TrashIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import {useLoaderData, useNavigate} from 'react-router-dom'
+import {ChevronUpDownIcon, CloudArrowUpIcon, QueueListIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ShowProduct() {
   const flash = useFlash()
   const navigateTo = useNavigate()
-  const {product } = useLoaderData() as { product: Product, ingredients: Ingredient[] }
+  const {product} = useLoaderData() as { product: Product, ingredients: Ingredient[] }
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   const [category] = product.categories ?? []
 
-  const [cuisine] = category.cuisines ?? []
+  const [cuisine] = category?.cuisines ?? []
 
   function onEditHandler() {
     navigateTo(`/app/products/${product.id}/edit`)
@@ -55,16 +54,16 @@ export default function ShowProduct() {
             fields={[
               {name: 'Name', value: product.name},
               {name: 'ID', value: product.id},
-              {name: 'Cuisine', value: cuisine.name},
+              {name: 'Cuisine', value: cuisine?.name ?? '-'},
               {name: 'Price', value: `${product.price}L`},
-              {name: 'Category', value: category.name},
+              {name: 'Category', value: category?.name ?? '-'},
               {name: 'Description', value: product.description, onModal: true},
               {name: 'Image', value: <img alt={product.name} src={product.thumbnail_url} className="w-10 h-10 rounded-full"/>}
             ]}
           />
 
           <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
-            <ProductIngredients product={product} />
+            <ProductIngredients product={product}/>
           </div>
         </div>
       </div>
@@ -111,9 +110,7 @@ function ProductIngredients({product}: { product: Product }) {
                   <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
                     <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
                   </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
-                    Image
-                  </th>
+
                   <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">
                     Name
                   </th>
@@ -129,29 +126,31 @@ function ProductIngredients({product}: { product: Product }) {
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
                     Category
                   </th>
+                  {/*<th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">*/}
+                  {/*  Locked*/}
+                  {/*</th>*/}
                   <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">
-                    Locked
+                    Add <span className="sr-only">Required</span>
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">
-                    Required
+                    Remove <span className="sr-only">Optional</span>
                   </th>
-                  <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">
-                    Optional
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
+                    Image
                   </th>
-                  <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase">
+                  <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">
                     Action
                   </th>
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
+
                 {product?.ingredients?.map((ingredient, index) => (
                   <tr key={index}>
                     <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
                       <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
                     </th>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md" />
-                    </td>
+
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
                       {ingredient.name}
                     </td>
@@ -159,7 +158,7 @@ function ProductIngredients({product}: { product: Product }) {
                       {ingredient.id}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {ingredient.meta.pivot_quantity}
+                      {ingredient.meta.pivot_quantity} {ingredient.unit}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {ingredient.meta.pivot_price}
@@ -167,26 +166,22 @@ function ProductIngredients({product}: { product: Product }) {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       Member
                     </td>
-                    <td className="px-3 py-4 text-sm text-gray-500 text-center">
-                      <input type="checkbox" checked={ingredient.meta.pivot_is_locked} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
-                    </td>
+                    {/*<td className="px-3 py-4 text-sm text-gray-500 text-center">*/}
+                    {/*  <input type="checkbox" checked={ingredient.meta.pivot_is_locked} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>*/}
+                    {/*</td>*/}
                     <td className="px-3 py-4 text-sm text-gray-500 text-center">
                       <input type="checkbox" checked={ingredient.meta.pivot_is_required} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
                     </td>
                     <td className="px-3 py-4 text-sm text-gray-500 text-center">
                       <input type="checkbox" checked={ingredient.meta.pivot_is_optional} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
                     </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md"/>
+                    </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                       <div className="flex item-center justify-center gap-x-1">
-                        <Link to={``} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                          <PencilSquareIcon className={'w-5 h-5'} />
-                        </Link>
-
-                        <Link to={``} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
-                          <EyeIcon className={'w-5 h-5'} />
-                        </Link>
                         <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                          <TrashIcon className={'w-5 h-5'} />
+                          <TrashIcon className={'w-5 h-5'}/>
                         </button>
                       </div>
                     </td>
@@ -210,6 +205,10 @@ function ProductIngredients({product}: { product: Product }) {
       </div>
 
       <CreateNewIngredient/>
+
+      <div className="flex items-center justify-end">
+
+      </div>
     </>
 
   )
@@ -224,9 +223,13 @@ function CreateNewIngredient() {
   const filteredIngredients = (query === '' ? ingredients : ingredients.filter(queryIngredients)).filter(excludeSelectedIngredients)
 
   function excludeSelectedIngredients(ingredient) {
-    let IDs = product.ingredients?.map(({id}) => id)
-    return !IDs?.includes(ingredient.id)
+    if (ingredient) {
+      let IDs = product.ingredients?.map(({id}) => id)
+      return !IDs?.includes(ingredient.id)
+    }
+    return false
   }
+
   function queryIngredients(ingredient) {
     return ingredient.name
       .toLowerCase()
@@ -234,19 +237,15 @@ function CreateNewIngredient() {
       .includes(query.toLowerCase().replace(/\s+/g, ''))
   }
 
-  function resolveCategoryName(ingredient: Ingredient) {
+  function resolveCategoryName(ingredient: Ingredient, placeholder: string = '-') {
     const [category] = ingredient.categories ?? []
 
-    if (category.id) {
-      return category.name
-    }
-
-    return null
+    return category?.id ? category.name : placeholder
   }
 
   return <>
-    <div className='flex border-y border-gray-300 divide-x divide-gray-300'>
-      <div className={'text-sm text-gray-500 flex-auto relative'}>
+    <div className='grid grid-cols-10 border border-gray-300 divide-x divide-gray-300'>
+      <div className={'col-span-2 text-sm text-gray-500 flex-auto relative max-w-sm'}>
         <Combobox value={selected} onChange={setSelected}>
           <div className="relative">
             <div className="relative w-full cursor-default overflow-hidden bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
@@ -265,14 +264,14 @@ function CreateNewIngredient() {
                     Nothing found.
                   </div>
                 ) : (
-                  filteredIngredients.map((ingredient) => (
-                    <Combobox.Option value={ingredient} key={ingredient.id} className={({active}) => `relative cursor-default select-none py-2 px-4 ${active ? 'bg-gray-600 text-white' : 'text-gray-900'}`}>
+                  filteredIngredients.map((ingredient, index) => (
+                    <Combobox.Option value={ingredient} key={index} className={({active}) => `relative cursor-default select-none py-2 px-4 ${active ? 'bg-gray-600 text-white' : 'text-gray-900'}`}>
                       {({selected, active}) => (
                         <>
                           <div className="flex items-center">
                             <img src={ingredient.thumbnailUrl} alt="" className="h-5 w-5 flex-shrink-0 rounded-full border-2"/>
                             <span className={`${selected ? 'font-semibold' : 'font-normal'} ml-3 block truncate'`}>
-                              {ingredient.name} <span className={'text-gray-400 font-light'}>({resolveCategoryName(ingredient)})</span>
+                              {ingredient.name} {(!!ingredient?.categories?.length) && <span className={'text-gray-400 font-light'}>({resolveCategoryName(ingredient)})</span>}
                             </span>
                           </div>
                           {(selected && active) && (
@@ -288,77 +287,30 @@ function CreateNewIngredient() {
           </div>
         </Combobox>
       </div>
+      <div className={'flex items-center justify-center'}>
+        {selected.id}
+      </div>
+      <div className={''}>
+        {(!!selected?.id) && <input type={'number'} min={0} defaultValue={selected.quantity} name="" id="" className={'w-full h-full border-0'}/>}
+      </div>
+      <div className={''}>
+        {(!!selected?.id) && <input type={'number'} min={0} defaultValue={selected.price} name="" id="" className={'w-full h-full border-0'}/>}
+      </div>
+      <div className={'flex items-center justify-center bg-gray-100'}>
+        {resolveCategoryName(selected)}
+      </div>
+      <div className={'flex items-center justify-center'}>
+        {(!!selected?.id) && <input type={'checkbox'} name="" id="" className={'border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4'}/>}
+      </div>
+      <div className={'flex items-center justify-center'}>
+        {(!!selected?.id) && <input type={'checkbox'} name="" id="" className={'border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4'}/>}
+      </div>
+      <div className={'bg-gray-100 flex items-center justify-center'}>
+        <img alt={selected.name} src={selected.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md"/>
+      </div>
+      <div className={''}>
+        {/*Actions*/}
+      </div>
     </div>
-
-    <Modal show={selected.id !== undefined} className={'max-w-4xl'}>
-      <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="ml-4 mt-4">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">Add Ingredient</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit quam corrupti consectetur.
-            </p>
-          </div>
-          <div className="ml-4 mt-4 flex-shrink-0">
-            <button onClick={() => setSelected({} as Ingredient)} type="button" className="hidden">
-              <XMarkIcon className={'w-6 h-6'}/>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="p-4 p-5 sm:p-6">
-        <div className="grid grid-cols-6 gap-6">
-
-          <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-            <label htmlFor="quantity" className="block text-sm font-medium leading-6 text-gray-900">Qty</label>
-            <input type="number" min={1} defaultValue={selected.quantity} name="quantity" id="quantity" autoComplete="address-level2" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-            <label htmlFor="min-quantity" className="block text-sm font-medium leading-6 text-gray-900">Min Qty</label>
-            <input type="number" min={1} defaultValue={selected.minQuantity} name="min-quantity" id="min-quantity" autoComplete="address-level1" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-            <label htmlFor="max-quantity" className="block text-sm font-medium leading-6 text-gray-900">Max Qty</label>
-            <input type="number" min={1} defaultValue={selected.maxQuantity} name="max-quantity" id="max-quantity" autoComplete="postal-code" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-          </div>
-
-
-          <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-            <label htmlFor="is-locked" className="block text-sm font-medium leading-6 text-gray-900">Locked</label>
-            <input type="text" name="is-locked" id="is-locked" autoComplete="address-level2" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-            <p className="text-xs text-gray-400 mt-1">This is input help text</p>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-            <label htmlFor="is-required" className="block text-sm font-medium leading-6 text-gray-900">Required</label>
-            <input type="text" name="is-required" id="is-required" autoComplete="address-level1" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-            <p className="text-xs text-gray-400 mt-1">This is input help text</p>
-          </div>
-
-          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-            <label htmlFor="is-optional" className="block text-sm font-medium leading-6 text-gray-900">Optional</label>
-            <input type="text" name="is-optional" id="is-optional" autoComplete="postal-code" className="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"/>
-            <p className="text-xs text-gray-400 mt-1">This is input help text</p>
-          </div>
-
-        </div>
-      </div>
-      <div className="border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
-        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="ml-4 mt-4">
-          </div>
-          <div className="ml-4 mt-4 flex-shrink-0 space-x-3">
-            <button onClick={() => setSelected({} as Ingredient)} type="button" className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-              Cancel
-            </button>
-            <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    </Modal>
   </>
 }
