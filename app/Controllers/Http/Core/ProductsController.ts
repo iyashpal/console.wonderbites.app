@@ -90,7 +90,6 @@ export default class ProductsController {
   public async update ({ response, request, params }: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)
-
       const {
         name, price, sku, description, publishedAt, thumbnail, categoryId,
       } = await request.validate(UpdateValidator)
@@ -103,8 +102,7 @@ export default class ProductsController {
       if (categoryId) {
         await product.related('categories').attach([categoryId])
       }
-
-      response.ok(product.toObject())
+      response.ok(product)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
