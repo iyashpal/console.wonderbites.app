@@ -1,48 +1,40 @@
-import { test } from '@japa/runner'
+import {test} from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { ProductFactory, UserFactory } from 'Database/factories'
+import {ProductFactory, UserFactory} from 'Database/factories'
 
-test.group('Core products show', (group) => {
+test.group('Core [products.show]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('it do not allow access to a guest user.', async ({ client, route }) => {
+  test('it throws 401 status code when the user is not logged in.', async ({client, route}) => {
     const product = await ProductFactory.create()
 
     const response = await client.get(route('core.products.show', product))
 
     response.assertStatus(401)
 
-    response.assertBodyContains({ message: 'Unauthorized access' })
+    response.assertBodyContains({message: 'Unauthorized access'})
   }).tags(['@core', '@core.products.show'])
 
-  test('it do not allow access to a non-management user.', async ({ client, route }) => {
-    const user = await UserFactory.create()
+  test(
+    'it throws 401 status code when the user is logged in but don\'t have correct role assigned.',
 
-    const product = await ProductFactory.create()
+    async ({client, route}) => {
+      const user = await UserFactory.create()
 
-    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
+      const product = await ProductFactory.create()
 
-    response.assertStatus(401)
+      const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
 
-    response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.products.show'])
+      response.assertStatus(401)
 
-  test('it allows access to a non-management user.', async ({ client, route }) => {
-    const user = await UserFactory.create()
+      response.assertBodyContains({message: 'Unauthorized access'})
+    }
+  ).tags(['@core', '@core.products.show'])
 
-    const product = await ProductFactory.create()
-
-    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
-
-    response.assertStatus(401)
-
-    response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.products.show'])
-
-  test('it allows access to a management user.', async ({ client, route }) => {
+  test('it shows product when the user is logged in and have correct role assigned.', async ({client, route}) => {
     const product = await ProductFactory.create()
     const user = await UserFactory.with('role').create()
 
@@ -50,6 +42,6 @@ test.group('Core products show', (group) => {
 
     response.assertStatus(200)
 
-    response.assertBodyContains({ id: product.id })
+    response.assertBodyContains({product: {id: product.id}})
   }).tags(['@core', '@core.products.show'])
 })
