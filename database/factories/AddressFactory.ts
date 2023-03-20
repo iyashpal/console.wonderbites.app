@@ -9,7 +9,7 @@ export default Factory.define(Address, ({ faker }) => {
     lastName: faker.name.lastName(),
     street: faker.address.street(),
     city: faker.address.city(),
-    phone: faker.phone.number(),
+    phone: faker.phone.number('+91 ##### #####'),
     email: faker.internet.email(),
     location: { lat: faker.address.latitude(), lng: faker.address.longitude() },
     type: 'home',
