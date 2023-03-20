@@ -1,1 +1,2 @@
-import './fetch'
+import './axios'
+import './nprogress'

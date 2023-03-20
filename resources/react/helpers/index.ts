@@ -1,8 +1,8 @@
-import axios from 'axios'
 import Cookies from 'js-cookie'
+import axios from '@/config/axios'
 
 export function classNames(...classes) {
-  return { className: classes.filter(Boolean).join(' ') }
+  return {className: classes.filter(Boolean).join(' ')}
 }
 
 
@@ -19,15 +19,14 @@ export function flash(key, defaultValue = null) {
 
 export function Axios(config = {}) {
 
-  let options = { baseURL: '/core' }
-
   if (Cookies.get('token')) {
-    Object.assign(options, {
-      headers: {
-        'Authorization': `Bearer ${Cookies.get('token')}`,
-      }
-    })
+
+    axios.defaults.headers['Authorization'] = `Bearer ${Cookies.get('token')}`
+
   }
 
-  return axios.create({ ...options, ...config })
+  axios.defaults = {...axios.defaults, ...config}
+
+
+  return axios
 }
