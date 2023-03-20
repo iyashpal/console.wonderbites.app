@@ -1,9 +1,9 @@
-import {Category} from "@/types/models";
-import * as Loaders from '@/components/loaders';
-import {useCategoryForm} from '@/hooks/forms';
-import InputError from '@/components/Form/InputError';
-import Breadcrumb from '@/layouts/AuthLayout/Breadcrumb';
-import {Form, Link, useLoaderData} from 'react-router-dom';
+import {Category} from '@/types/models'
+import {useCategoryForm} from '@/hooks/forms'
+import * as Loaders from '@/components/loaders'
+import InputError from '@/components/Form/InputError'
+import Breadcrumb from '@/layouts/AuthLayout/Breadcrumb'
+import {Form, Link, useLoaderData} from 'react-router-dom'
 
 export default function EditCategory() {
   const {categories, category} = useLoaderData() as { category: Category, categories: Category[] }
@@ -11,10 +11,10 @@ export default function EditCategory() {
   const form = useCategoryForm({
     id: category.id,
     name: category.name,
-    description: category.description,
-    parent: Number(category.parent) > 0 ? category.parent : null,
     type: category.type,
     status: category.status,
+    description: category.description,
+    parent: Number(category.parent) > 0 ? category.parent : null,
   })
 
   return <>
@@ -38,10 +38,26 @@ export default function EditCategory() {
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.name}>{form.errors.name}</InputError>
+                  <InputError error={form.errors?.name} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
+                    Image <sup className='text-red-primary'>*</sup>
+                  </label>
+                  <input type="file" name={'thumbnail'} id={'thumbnail'} onChange={form.input.onChange.thumbnail} className={'mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none'} />
+                  <InputError error={form.errors?.thumbnail} />
+                </div>
+
+                <div className="col-span-6">
+                  <label htmlFor="description" className="block text-sm font-bold text-gray-700">
+                    Description
+                  </label>
+                  <textarea rows={3} name={'description'} id={'description'} onChange={form.input.onChange.description} className={'mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'} />
+                  <InputError error={form.errors?.description} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-2">
                   <label htmlFor="parent" className="block text-sm font-bold text-gray-700">
                     Parent
                   </label>
@@ -49,10 +65,10 @@ export default function EditCategory() {
                     <option value={''}>Select Category</option>
                     {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
-                  <InputError show={form.errors?.parent}>{form.errors.parent}</InputError>
+                  <InputError error={form.errors?.parent} />
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
+                <div className="col-span-6 sm:col-span-2">
                   <label htmlFor="type" className="block text-sm font-bold text-gray-700">
                     Type
                   </label>
@@ -62,10 +78,10 @@ export default function EditCategory() {
                     <option value={'Ingredient'}>Ingredient</option>
                     <option value={'Product'}>Product</option>
                   </select>
-                  <InputError show={form.errors?.type}>{form.errors.type}</InputError>
+                  <InputError error={form.errors?.type} />
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
+                <div className="col-span-6 sm:col-span-2">
                   <label htmlFor="status" className="block text-sm font-bold text-gray-700">
                     Status <sup className='text-red-primary'>*</sup>
                   </label>
@@ -73,7 +89,7 @@ export default function EditCategory() {
                     <option value={1}>Public</option>
                     <option value={0}>Private</option>
                   </select>
-                  <InputError show={form.errors?.status}>{form.errors.status}</InputError>
+                  <InputError error={form.errors?.status} />
                 </div>
               </div>
 

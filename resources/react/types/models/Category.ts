@@ -9,6 +9,7 @@ export default interface Category {
   status: number,
   created_at: string,
   updated_at: string,
-
-  cuisines?: Cuisine[]
+  thumbnail_url: string,
+  cuisines?: Cuisine[],
+  category?: Category,
 }

@@ -8,12 +8,12 @@ type DetailsProps = {
   date: string,
   title: string,
   module: string,
-  onClickEdit?: () => void,
-  onClickTrash?: () => void,
+  onEdit?: () => void,
+  onTrash?: () => void,
   fields: { name: string, value: any, textWrap?: boolean, onModal?: boolean }[],
 }
 
-export default function Details({title, module, by, date, fields, onClickTrash, onClickEdit}: DetailsProps) {
+export default function Details({title, module, by, date, fields, onTrash, onEdit}: DetailsProps) {
   const [show, setShow] = useState(false)
   const [showField, setShowField] = useState<{ name: string, value: any }>()
 
@@ -68,11 +68,11 @@ export default function Details({title, module, by, date, fields, onClickTrash, 
 
                 <td key={fields.length} className="relative whitespace-nowrap py-4 pl-3 pr-4 sm:pr-6 lg:pr-8">
                   <div className="flex item-center justify-end gap-x-1">
-                    <button onClick={onClickEdit} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                    <button onClick={onEdit} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
                       <PencilSquareIcon className={'w-5 h-5'}/>
                     </button>
 
-                    <button onClick={onClickTrash} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                    <button onClick={onTrash} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
                       <TrashIcon className={'w-5 h-5'}/>
                     </button>
                   </div>
@@ -88,8 +88,8 @@ export default function Details({title, module, by, date, fields, onClickTrash, 
 
     <Modal show={show} onClose={() => setShow(false)} className={'max-w-2xl px-4 pt-5 pb-4'}>
       <div className="sm:flex sm:items-start">
-        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-          <QueueListIcon className="h-6 w-6 text-blue-600" aria-hidden="true"/>
+        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+          <QueueListIcon className="h-6 w-6 text-red-600" aria-hidden="true"/>
         </div>
         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
           <h3 className="text-base font-semibold leading-6 text-gray-900">

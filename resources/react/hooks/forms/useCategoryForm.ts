@@ -1,13 +1,16 @@
 import {useFetch, useFlash} from "@/hooks";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
+
 export default function useCategoryForm(fields: CategoryFormFields) {
   const flash = useFlash()
   const fetcher = useFetch()
   const navigateTo = useNavigate()
   const [form, setForm] = useState<CategoryFormFields>(fields)
-  const [isProcessing, setIsProcessing] = useState<boolean>(false)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
+  const [thumbnail, setThumbnail] = useState<string | Blob>('')
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
+
   /**
    * Event handler for the name field.
    * @param event
@@ -49,22 +52,57 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     setForm(payload => ({...payload, status: Number(event.target.value)}))
   }
 
+  /**
+   * Event handler for the thumbnail field.
+   * @param event
+   */
+  function onChangeThumbnail(event: ChangeEvent<HTMLInputElement>) {
+    if (!event.target.files) return;
+
+    setThumbnail(event.target.files[0])
+
+    setForm(payload => ({...payload, thumbnail: event.target.value}))
+  }
+
   function touchCategoryParent() {
     setForm(payload => ({...payload, parent: Number(payload.parent) > 0 ? Number(payload.parent) : null}))
+  }
+
+  /**
+   * Generate FormData instance.
+   *
+   * @returns FormData
+   */
+  function generateFormData() {
+    let formData = new FormData()
+
+    for (let key in form) {
+      if (key === 'thumbnail') {
+        formData.append('thumbnail', thumbnail, form[key])
+        continue
+      }
+
+      if (form[key]) {
+        formData.append(key, form[key])
+      }
+    }
+
+    return formData
   }
 
   function onUpdate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     touchCategoryParent()
     setIsProcessing(true)
-    fetcher.put(`categories/${form?.id}`, form).then(({data}) => {
+    fetcher.put(`categories/${form?.id}`, generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('category_updated', true)
       navigateTo(`/app/categories/${data.id}`)
-    }).catch(({data}) => {
+      setErrors({} as FormErrors)
+    }).catch(({response}) => {
       setIsProcessing(false)
       flash.set('category_updated', false)
-      setErrors(data?.errors)
+      setErrors(response?.data?.errors ?? {})
     })
   }
 
@@ -72,14 +110,15 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     e.preventDefault()
     touchCategoryParent()
     setIsProcessing(true)
-    fetcher.post('categories', form).then(({data}) => {
+    fetcher.post('categories', generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('category_created', true)
       navigateTo(`/app/categories/${data.id}`)
-    }).catch(({data}) => {
+      setErrors({} as FormErrors)
+    }).catch(({response}) => {
       setIsProcessing(false)
       flash.set('category_created', false)
-      setErrors(data?.errors)
+      setErrors(response?.data?.errors ?? {})
     })
   }
 
@@ -94,8 +133,9 @@ export default function useCategoryForm(fields: CategoryFormFields) {
         name: onChangeName,
         type: onChangeType,
         parent: onChangeParent,
-        description: onChangeDescription,
         status: onChangeStatus,
+        thumbnail: onChangeThumbnail,
+        description: onChangeDescription,
       },
     },
     onSubmit: {
@@ -121,4 +161,5 @@ type FormErrors = {
   type: string,
   parent: string,
   status: string,
+  thumbnail: string,
 }
