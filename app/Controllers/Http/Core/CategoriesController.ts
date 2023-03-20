@@ -5,6 +5,7 @@ import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Categories/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Categories/UpdateValidator'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class CategoriesController {
   public async index ({request, response}: HttpContextContract) {
@@ -26,26 +27,32 @@ export default class CategoriesController {
 
   public async store ({request, response}: HttpContextContract) {
     try {
-      const payload = await request.validate(StoreValidator)
+      const {name, description, type, parent, status} = await request.validate(StoreValidator)
 
-      const category = await Category.create(payload)
+      const category = await Category.create({
+        name, description, type, parent, status,
+        thumbnail: Attachment.fromFile(request.file('thumbnail')!),
+      })
 
       response.json(category)
     } catch (error) {
+      console.log(error)
       ExceptionResponse.use(error).resolve(response)
     }
   }
 
   public async show ({response, params}: HttpContextContract) {
     try {
-      const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
+      const category = await Category.query()
+        .preload('category')
+        .where('id', params.id).whereNull('deleted_at').firstOrFail()
       response.json({category})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
   }
 
-  public async edit ({ response, params}: HttpContextContract) {
+  public async edit ({response, params}: HttpContextContract) {
     try {
       const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
       const categories = await Category.query().where('id', '<>', params.id).withScopes(scopes => scopes.root())
@@ -64,9 +71,10 @@ export default class CategoriesController {
       await category.merge({
         name: payload.name ?? category.name,
         type: payload.type ?? category.type,
-        description: payload.description ?? category.description,
         parent: payload.parent ?? category.parent,
         status: payload.status ?? category.status,
+        description: payload.description ?? category.description,
+        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : category.thumbnail,
       }).save()
 
       response.json(category)

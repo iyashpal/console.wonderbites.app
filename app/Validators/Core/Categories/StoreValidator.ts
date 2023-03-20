@@ -34,6 +34,10 @@ export default class StoreValidator {
     parent: schema.number.optional([
       rules.exists({table: 'categories', column: 'id'}),
     ]),
+    thumbnail: schema.file.optional({
+      size: '1mb',
+      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
+    }, [rules.required()]),
     status: schema.number(),
   })
 

@@ -1,6 +1,8 @@
 import {DateTime} from 'luxon'
+import Storage from 'App/Helpers/Storage'
 import {Cuisine, Product, Ingredient} from '.'
 import {BaseModel, BelongsTo, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {belongsTo, column, computed, manyToMany, scope} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
@@ -19,6 +21,9 @@ export default class Category extends BaseModel {
   @column()
   public description: string
 
+  @attachment({ folder: 'categories', preComputeUrl: true })
+  public thumbnail: AttachmentContract
+
   @column()
   public status: number
 
@@ -30,6 +35,20 @@ export default class Category extends BaseModel {
 
   @column.dateTime()
   public deletedAt: DateTime
+
+  /**
+   * Get product default thumbnail based on imagePath column value.
+   *
+   * @returns {String}
+   */
+  @computed()
+  public get thumbnail_url () {
+    if (this.thumbnail?.url) {
+      return this.thumbnail.url
+    }
+
+    return Storage.public('/images/placeholder/square.svg')
+  }
 
   @computed()
   public get isForProduct () {
