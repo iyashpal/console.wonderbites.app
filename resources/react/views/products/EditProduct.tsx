@@ -8,7 +8,7 @@ import { Link, Form, useLoaderData } from "react-router-dom";
 import { ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export default function EditProduct() {
-  
+
   const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
     const {category, categories, product } = useLoaderData() as { categories: Category[], product: Product, category: Category }
     const form = useProductForm({
@@ -21,7 +21,7 @@ export default function EditProduct() {
         publishedAt: DateTime.now(),
         status: product.status,
       })
-  
+
   function toggleUploadProgress() {
     setIsShowFiles(e => !e)
   }
@@ -45,7 +45,7 @@ export default function EditProduct() {
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError show={form.errors?.name}>{form.errors?.name}</InputError>
+                  <InputError error={form.errors?.name}>{form.errors?.name}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -53,7 +53,7 @@ export default function EditProduct() {
                     SKU <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError show={form.errors?.sku}>{form.errors?.sku}</InputError>
+                  <InputError error={form.errors?.sku}>{form.errors?.sku}</InputError>
                 </div>
 
 
@@ -65,7 +65,7 @@ export default function EditProduct() {
                     <option>Select Category</option>
                     {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
-                  <InputError show={form.errors?.categoryId}>{form.errors?.categoryId}</InputError>
+                  <InputError error={form.errors?.categoryId}>{form.errors?.categoryId}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -73,7 +73,7 @@ export default function EditProduct() {
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError show={form.errors?.price}>{form.errors?.price}</InputError>
+                  <InputError error={form.errors?.price}>{form.errors?.price}</InputError>
                 </div>
 
                 <div className="col-span-6">
@@ -81,7 +81,7 @@ export default function EditProduct() {
                     Description <sup className='text-red-primary'>*</sup>
                   </label>
                   <textarea name="description" defaultValue={form.input.value('description')} onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-                  <InputError show={form.errors?.description}>{form.errors?.description}</InputError>
+                  <InputError error={form.errors?.description}>{form.errors?.description}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -89,7 +89,7 @@ export default function EditProduct() {
                     Image
                   </label>
                   <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 block" />
-                  <InputError show={form.errors?.thumbnail}>{form.errors?.thumbnail}</InputError>
+                  <InputError error={form.errors?.thumbnail}>{form.errors?.thumbnail}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -100,10 +100,10 @@ export default function EditProduct() {
                     <option value={''}>Draft</option>
                     <option value={DateTime.now().toString()}>Published</option>
                   </select>
-                  <InputError show={form.errors?.status}>{form.errors?.status}</InputError>
+                  <InputError error={form.errors?.status}>{form.errors?.status}</InputError>
                 </div>
 
-                {false && <>
+                {isShowFiles && <>
                   <div className="col-span-6">
                     <label htmlFor="file-uploads" className="block text-sm font-bold text-gray-700">
                       Images  <sup className='text-gray-400'>(Not yet ready)</sup>

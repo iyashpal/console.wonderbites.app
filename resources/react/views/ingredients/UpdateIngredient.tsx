@@ -52,7 +52,7 @@ export default function UpdateIngredient() {
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" defaultValue={ingredient.name} onChange={form.input.onChange.name} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.name}>{form.errors.name}</InputError>
+                  <InputError error={form.errors?.name}>{form.errors.name}</InputError>
                 </div>
 
                 <div className="col-span-6">
@@ -60,7 +60,7 @@ export default function UpdateIngredient() {
                     Description
                   </label>
                   <textarea defaultValue={ingredient.description} onChange={form.input.onChange.description} name="description" id="description" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-                  <InputError show={form.errors?.description}>{form.errors.description}</InputError>
+                  <InputError error={form.errors?.description}>{form.errors.description}</InputError>
                 </div>
 
 
@@ -72,7 +72,7 @@ export default function UpdateIngredient() {
                     <option value={0}>Select Category</option>
                     {categories.map((category, index) => (<option key={index} value={category.id}>{category.name}</option>))}
                   </select>
-                  <InputError show={form.errors?.categoryId}>{form.errors.categoryId}</InputError>
+                  <InputError error={form.errors?.categoryId}>{form.errors.categoryId}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -80,7 +80,7 @@ export default function UpdateIngredient() {
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" defaultValue={ingredient.price} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.price}>{form.errors.price}</InputError>
+                  <InputError error={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -91,7 +91,7 @@ export default function UpdateIngredient() {
                     <option value={''}>Select a measure</option>
                     <option value={'gram'}>Gram</option>
                   </select>
-                  <InputError show={form.errors?.unit}>{form.errors.unit}</InputError>
+                  <InputError error={form.errors?.unit}>{form.errors.unit}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -99,7 +99,7 @@ export default function UpdateIngredient() {
                     Quantity <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" defaultValue={ingredient.quantity} onChange={form.input.onChange.quantity} name="quantity" id="quantity" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.price}>{form.errors.price}</InputError>
+                  <InputError error={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -107,7 +107,7 @@ export default function UpdateIngredient() {
                     Min Quantity <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" defaultValue={ingredient.minQuantity} onChange={form.input.onChange.minQuantity} name="min-quantity" id="min-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.price}>{form.errors.price}</InputError>
+                  <InputError error={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -115,7 +115,7 @@ export default function UpdateIngredient() {
                     Max Quantity <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number" defaultValue={ingredient.maxQuantity} onChange={form.input.onChange.maxQuantity} name="max-quantity" id="max-quantity" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.price}>{form.errors.price}</InputError>
+                  <InputError error={form.errors?.price}>{form.errors.price}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -123,7 +123,7 @@ export default function UpdateIngredient() {
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1"/>
-                  <InputError show={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
+                  <InputError error={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -134,7 +134,7 @@ export default function UpdateIngredient() {
                     <option value={DateTime.now().toString()}>Public</option>
                     <option value={''}>Private</option>
                   </select>
-                  <InputError show={form.errors?.publishedAt}>{form.errors.publishedAt}</InputError>
+                  <InputError error={form.errors?.publishedAt}>{form.errors.publishedAt}</InputError>
                 </div>
               </div>
 

@@ -61,7 +61,7 @@ export default function Login() {
             </span>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
-          <InputError show={errors?.email}>{errors.email}</InputError>
+          <InputError error={errors?.email}>{errors.email}</InputError>
         </div>
 
         <div className="w-full">
@@ -73,7 +73,7 @@ export default function Login() {
             </span>
             <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
-          <InputError show={errors?.password}>{errors.password}</InputError>
+          <InputError error={errors?.password}>{errors.password}</InputError>
         </div>
 
         <div className="flex flex-col items-center w-full pt-3 space-y-4">

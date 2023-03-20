@@ -27,7 +27,7 @@ export default function CreateCuisines() {
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" onChange={form.input.onChange.name} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.name}>{form.errors.name}</InputError>
+                  <InputError error={form.errors?.name}>{form.errors.name}</InputError>
                 </div>
 
                 <div className="col-span-6 relative">
@@ -35,7 +35,7 @@ export default function CreateCuisines() {
                     Description
                   </label>
                   <textarea onChange={form.input.onChange.description} name="description" id="description" rows={5} className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
-                  <InputError show={form.errors?.description}>{form.errors.description}</InputError>
+                  <InputError error={form.errors?.description}>{form.errors.description}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3 relative">
@@ -43,7 +43,7 @@ export default function CreateCuisines() {
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="file" onChange={form.input.onChange.thumbnail} accept={'image/*'} name="image" id="image" className="mt-1"/>
-                  <InputError show={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
+                  <InputError error={form.errors?.thumbnail}>{form.errors.thumbnail}</InputError>
                 </div>
 
                 <div className="col-span-6 sm:col-span-3 relative">
@@ -54,7 +54,7 @@ export default function CreateCuisines() {
                     <option value={1}>Public</option>
                     <option value={0}>Private</option>
                   </select>
-                  <InputError show={form.errors?.status}>{form.errors.status}</InputError>
+                  <InputError error={form.errors?.status}>{form.errors.status}</InputError>
                 </div>
 
               </div>

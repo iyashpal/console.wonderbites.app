@@ -49,8 +49,8 @@ export default function ShowProduct() {
             title={product.name}
             by={product?.user.name}
             date={product.created_at}
-            onClickEdit={onEditHandler}
-            onClickTrash={onTrashHandler}
+            onEdit={onEditHandler}
+            onTrash={onTrashHandler}
             fields={[
               {name: 'Name', value: product.name},
               {name: 'ID', value: product.id},

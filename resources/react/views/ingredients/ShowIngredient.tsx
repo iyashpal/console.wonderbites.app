@@ -59,8 +59,8 @@ export default function ShowIngredient() {
             title={ingredient.name}
             by={ingredient?.user?.name ?? ''}
             date={ingredient.created_at}
-            onClickEdit={onEditHandler}
-            onClickTrash={onTrashHandler}
+            onEdit={onEditHandler}
+            onTrash={onTrashHandler}
             fields={[
               {name: 'Name', value: ingredient.name},
               {name: 'ID', value: ingredient.id},
