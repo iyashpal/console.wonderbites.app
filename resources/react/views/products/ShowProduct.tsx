@@ -245,7 +245,7 @@ function CreateNewIngredient() {
 
   return <>
     <div className='grid grid-cols-10 border border-gray-300 divide-x divide-gray-300'>
-      <div className={'col-span-2 text-sm text-gray-500 flex-auto relative max-w-sm'}>
+      <div className={'col-span-3 text-sm text-gray-500 flex-auto relative max-w-sm'}>
         <Combobox value={selected} onChange={setSelected}>
           <div className="relative">
             <div className="relative w-full cursor-default overflow-hidden bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
@@ -286,27 +286,6 @@ function CreateNewIngredient() {
             </Transition>
           </div>
         </Combobox>
-      </div>
-      <div className={'flex items-center justify-center'}>
-        {selected.id}
-      </div>
-      <div className={''}>
-        {(!!selected?.id) && <input type={'number'} min={0} defaultValue={selected.quantity} name="" id="" className={'w-full h-full border-0'}/>}
-      </div>
-      <div className={''}>
-        {(!!selected?.id) && <input type={'number'} min={0} defaultValue={selected.price} name="" id="" className={'w-full h-full border-0'}/>}
-      </div>
-      <div className={'flex items-center justify-center bg-gray-100'}>
-        {resolveCategoryName(selected)}
-      </div>
-      <div className={'flex items-center justify-center'}>
-        {(!!selected?.id) && <input type={'checkbox'} name="" id="" className={'border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4'}/>}
-      </div>
-      <div className={'flex items-center justify-center'}>
-        {(!!selected?.id) && <input type={'checkbox'} name="" id="" className={'border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4'}/>}
-      </div>
-      <div className={'bg-gray-100 flex items-center justify-center'}>
-        <img alt={selected.name} src={selected.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md"/>
       </div>
       <div className={''}>
         {/*Actions*/}
