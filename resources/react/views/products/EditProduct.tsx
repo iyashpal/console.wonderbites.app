@@ -88,7 +88,7 @@ export default function EditProduct() {
                   <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
                     Image
                   </label>
-                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 block" />
+                  <input type="file" onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
                   <InputError error={form.errors?.thumbnail}>{form.errors?.thumbnail}</InputError>
                 </div>
 
