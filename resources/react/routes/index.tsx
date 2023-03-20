@@ -110,7 +110,7 @@ export const AppRoutes = [
           },
           {
             path: ':id/edit',
-            element: <Views.Ingredients.Update />,
+            element: <Views.Ingredients.Edit />,
             loader: async ({ params }) => Axios().get(`/ingredients/${params.id}/edit`).then(({ data }) => data)
           },
         ]
