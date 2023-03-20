@@ -52,11 +52,10 @@ export default class StoreValidator {
     maxQuantity: schema.number([
       rules.required(),
     ]),
-    thumbnail: schema.file({
+    thumbnail: schema.file.optional({
       size: '1mb',
-    }, [
-      rules.required(),
-    ]),
+      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
+    }, [rules.required()]),
 
     publishedAt: schema.date.optional(),
   })
