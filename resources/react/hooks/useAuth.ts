@@ -1,23 +1,24 @@
 import {useFetch} from "./index"
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from '@/store/hooks'
-import {setUser} from '~/store/features/auth/authSlice'
+import {setUser} from "@/store/features/auth/userSlice";
+import {setUser as setAuthUser} from '~/store/features/auth/authSlice'
 import {setAuthToken} from '~/store/features/auth/authSlice'
+import {Axios} from "@/helpers";
 
 export default function useAuth() {
   const dispatch = useDispatch()
 
   const auth = useSelector(state => state.authSlice)
 
-  const [token, setToken] = useState<string>(auth.token)
+  const [token, setToken] = useState<string|null>(auth.token)
 
   useEffect(() => {
 
-  }, [])
+  }, [auth.user])
 
 
-
-  function useToken(authToken: string) {
+  function useToken(authToken: string | null) {
     setToken(authToken)
 
     dispatch(setAuthToken(authToken))
@@ -27,6 +28,7 @@ export default function useAuth() {
 
   function syncUser(user) {
     dispatch(setUser(user))
+    dispatch(setAuthUser(user))
   }
 
   /**
@@ -41,7 +43,16 @@ export default function useAuth() {
     useFetch().get('auth')
   }
 
+  function logout() {
+    return Axios().post('logout').then(() => {
+      syncUser({})
+      useToken(null)
+      return Promise.resolve()
+    })
+  }
+
   return {
+    logout,
     check,
     syncUser,
     useToken,

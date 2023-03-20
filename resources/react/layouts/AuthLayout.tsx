@@ -1,11 +1,13 @@
 import {useAuth} from '~/hooks'
 import {useEffect, useState} from 'react'
 import {Header, Sidebar} from './AuthLayout/index'
-import {Outlet, useNavigate} from 'react-router-dom'
+import {Outlet, useLoaderData, useNavigate} from 'react-router-dom'
 
 export default function AuthLayout() {
   const auth = useAuth()
+  const user = useLoaderData()
   const navigateTo = useNavigate()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!auth.isLoggedIn()) {
@@ -14,7 +16,10 @@ export default function AuthLayout() {
   }, [])
 
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  useEffect(() => {
+    auth.syncUser(user)
+  }, [user])
+
 
   function onToggleSidebar() {
     setSidebarOpen(value => !value)

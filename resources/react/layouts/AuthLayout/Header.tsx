@@ -1,8 +1,9 @@
 import {Fragment} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Menu, Popover, Transition} from "@headlessui/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import {Bars3CenterLeftIcon, BellIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
+import {useAuth} from "@/hooks";
 
 const user = {
   name: 'Chelsea Hagon',
@@ -10,12 +11,15 @@ const user = {
   imageUrl: 'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 
-const userNavigation = [
-  {name: 'Your Profile', href: '/app/dashboard'},
-  {name: 'Sign out', href: '/app/dashboard'},
-]
-
 export default function Header({onToggleSidebar}: { onToggleSidebar: () => void }) {
+  const auth = useAuth()
+  const navigateTo = useNavigate()
+
+  function logout() {
+    auth.logout().then(() => {
+      navigateTo('/')
+    })
+  }
   return <>
     {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
     <Popover as="header" className={({open}) => [open && 'fixed inset-0 z-40 overflow-y-auto', 'bg-white shadow-md lg:static lg:overflow-y-visible'].join(' ')}>
@@ -81,15 +85,20 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({active}) => (
-                            <Link to={item.href} className={[active && 'bg-gray-100', 'block py-2 px-4 text-sm text-gray-700'].join(' ')}>
-                              {item.name}
-                            </Link>
-                          )}
-                        </Menu.Item>
-                      ))}
+                      <Menu.Item>
+                        {({active}) => (
+                          <Link to={'/app/dashboard'} className={[active && 'bg-gray-100', 'block py-2 px-4 text-sm text-gray-700'].join(' ')}>
+                            Your Profile
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({active}) => (
+                          <button onClick={logout} className={[active && 'bg-gray-100', 'block w-full text-left py-2 px-4 text-sm text-gray-700'].join(' ')}>
+                            Sign out
+                          </button>
+                        )}
+                      </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </Menu>
