@@ -17,7 +17,7 @@ export default function Login() {
   const [password, setPassword] = useState("")
 
 
-  const [errorCode, setErrorCode] = useState(null)
+  const [errorCode] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<{ email?: string, password?: string }>({})
 
@@ -36,10 +36,12 @@ export default function Login() {
       setIsLoading(false)
       auth.useToken(data.token)
       navigateTo(dashboardURI)
-    }).catch(({ data }) => {
-      setErrorCode(data.code)
-      setIsLoading(false)
-      setErrors(data?.errors)
+    }).catch((error) => {
+      console.log(error.code)
+      // console.log(response)
+      // setErrorCode(response?.data?.code)
+      // setIsLoading(false)
+      // setErrors(response?.data?.errors)
     })
   }
 
@@ -61,7 +63,7 @@ export default function Login() {
             </span>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="" placeholder='Username' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.email && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
-          <InputError error={errors?.email}>{errors.email}</InputError>
+          <InputError error={errors?.email} />
         </div>
 
         <div className="w-full">
@@ -73,7 +75,7 @@ export default function Login() {
             </span>
             <input type="password" name="" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className={`border-0 flex-auto focus:outline-none focus:ring-0 py-3 px-5 placeholder:uppercase placeholder:text-xs placeholder:font-semibold ${!!errors?.password && 'placeholder:text-red-300 text-red-500'}`} />
           </div>
-          <InputError error={errors?.password}>{errors.password}</InputError>
+          <InputError error={errors?.password} />
         </div>
 
         <div className="flex flex-col items-center w-full pt-3 space-y-4">
