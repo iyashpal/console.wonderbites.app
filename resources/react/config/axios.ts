@@ -19,17 +19,20 @@ if (Cookies.get('token')) {
 
 const request = axios.interceptors.request.use(function (config) {
   if (nProgress.isStarted() === false) {
-
     nProgress.start()
-
   }
 
   return config
+}, function (error) {
+  return Promise.reject(error)
 })
 
 const response = axios.interceptors.response.use(function (response) {
   nProgress.done()
   return response;
+}, function (error) {
+  nProgress.done()
+  return Promise.reject(error)
 })
 
 
