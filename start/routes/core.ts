@@ -21,6 +21,7 @@ Route.group(() => {
     Route.post('cuisines/:id/categories', 'CuisinesController.categories').as('cuisines.categories')
 
     Route.resource('products', 'ProductsController')
+    Route.post('products/:id/ingredient', 'ProductsController.ingredient').as('products.ingredient')
 
     Route.resource('categories', 'CategoriesController')
 
