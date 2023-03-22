@@ -7,10 +7,10 @@ export default function useProductForm(fields: ProductFormFields) {
     const flash = useFlash()
     const fetcher = useFetch()
     const navigateTo = useNavigate()
-    const [thumbnail, setThumbnail] = useState<string | Blob>('')
-    const [isProcessing, setIsProcessing] = useState<boolean>(false)
     const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
+    const [thumbnail, setThumbnail] = useState<string | Blob>('')
     const [createForm, setCreateForm] = useState<ProductFormFields>(fields)
+    const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
     /**
      * Event handler for the name field.
@@ -75,7 +75,7 @@ export default function useProductForm(fields: ProductFormFields) {
 
     /**
      * Generate FormData instance.
-     * 
+     *
      * @returns FormData
      */
     function generateFormData() {

@@ -1,3 +1,4 @@
+import {Axios} from '@/helpers'
 import {useFlash} from '@/hooks'
 import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
@@ -5,8 +6,9 @@ import React, {Fragment, useState} from 'react'
 import TrashModal from '@/components/TrashModal'
 import {Ingredient, Product} from '@/types/models'
 import {Combobox, Transition} from '@headlessui/react'
+import {IngredientProduct} from '@/types/models/pivot'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {useLoaderData, useNavigate} from 'react-router-dom'
+import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
 import {ChevronUpDownIcon, CloudArrowUpIcon, QueueListIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ShowProduct() {
@@ -81,6 +83,38 @@ export default function ShowProduct() {
 }
 
 function ProductIngredients({product}: { product: Product }) {
+  const location = useLocation()
+  const navigateTo = useNavigate()
+  const [isAdding, setIsAdding] = useState<boolean>(false)
+
+  function onChange(ingredient) {
+    Axios().post(`products/${product.id}/ingredient`, {
+      id: ingredient.id,
+      pivot: {
+        price: ingredient.price,
+        quantity: ingredient.quantity,
+        min_quantity: ingredient.minQuantity,
+        max_quantity: ingredient.maxQuantity,
+        is_locked: true,
+        is_required: false,
+        is_optional: false,
+      }
+    }).then(() => {
+      navigateTo(location)
+      setIsAdding(false)
+    })
+  }
+
+  function resolveCategoryName(ingredient: IngredientProduct) {
+    const [category] = ingredient.categories ?? []
+
+    if (category?.id) {
+      return category.name
+    }
+
+    return '-'
+  }
+
   return (
     <>
       <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
@@ -101,6 +135,7 @@ function ProductIngredients({product}: { product: Product }) {
           </div>
         </div>
         <div className="mt-4 sm:mt-6 flow-root">
+
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle">
               <table className="min-w-full divide-y divide-gray-300">
@@ -117,18 +152,15 @@ function ProductIngredients({product}: { product: Product }) {
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
                     ID
                   </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">
                     QTY
                   </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">
                     Price
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
                     Category
                   </th>
-                  {/*<th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">*/}
-                  {/*  Locked*/}
-                  {/*</th>*/}
                   <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">
                     Add <span className="sr-only">Required</span>
                   </th>
@@ -158,22 +190,19 @@ function ProductIngredients({product}: { product: Product }) {
                       {ingredient.id}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {ingredient.meta.pivot_quantity} {ingredient.unit}
+                      <input defaultValue={ingredient.meta.pivot_quantity} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-red-primary focus:border-none border-none'}/>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {ingredient.meta.pivot_price}
+                      <input defaultValue={ingredient.meta.pivot_price} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-red-primary focus:border-none border-none'}/>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      Member
-                    </td>
-                    {/*<td className="px-3 py-4 text-sm text-gray-500 text-center">*/}
-                    {/*  <input type="checkbox" checked={ingredient.meta.pivot_is_locked} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>*/}
-                    {/*</td>*/}
-                    <td className="px-3 py-4 text-sm text-gray-500 text-center">
-                      <input type="checkbox" checked={ingredient.meta.pivot_is_required} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
+                      {resolveCategoryName(ingredient)}
                     </td>
                     <td className="px-3 py-4 text-sm text-gray-500 text-center">
-                      <input type="checkbox" checked={ingredient.meta.pivot_is_optional} disabled className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
+                      <input type="checkbox" defaultChecked={ingredient.meta.pivot_is_required} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
+                    </td>
+                    <td className="px-3 py-4 text-sm text-gray-500 text-center">
+                      <input type="checkbox" defaultChecked={ingredient.meta.pivot_is_optional} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4"/>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md"/>
@@ -187,6 +216,7 @@ function ProductIngredients({product}: { product: Product }) {
                     </td>
                   </tr>
                 ))}
+
 
                 {product?.ingredients?.length === 0 && (
                   <tr>
@@ -203,19 +233,13 @@ function ProductIngredients({product}: { product: Product }) {
           </div>
         </div>
       </div>
-
-      <CreateNewIngredient/>
-
-      <div className="flex items-center justify-end">
-
-      </div>
+      <CreateNewIngredient adding={isAdding} onAdd={() => setIsAdding(true)} onCancel={() => setIsAdding(false)} onChange={onChange}/>
     </>
 
   )
 }
 
-function CreateNewIngredient() {
-
+function CreateNewIngredient({onChange, onAdd, onCancel, adding}: { adding: boolean, onAdd: () => void, onCancel: () => void, onChange: (ingredient) => void }) {
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Ingredient>({} as Ingredient)
   const {ingredients, product} = useLoaderData() as { ingredients: Ingredient[], product: Product }
@@ -243,52 +267,68 @@ function CreateNewIngredient() {
     return category?.id ? category.name : placeholder
   }
 
+  function onSelectCategory(category) {
+    onChange(category)
+    setSelected({} as Ingredient)
+  }
+
   return <>
     <div className='grid grid-cols-10 border border-gray-300 divide-x divide-gray-300'>
-      <div className={'col-span-3 text-sm text-gray-500 flex-auto relative max-w-sm'}>
-        <Combobox value={selected} onChange={setSelected}>
-          <div className="relative">
-            <div className="relative w-full cursor-default overflow-hidden bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-              <Combobox.Button className="absolute inset-y-0 left-0 flex items-center pl-2">
-                <QueueListIcon className="h-5 w-5 text-gray-400" aria-hidden="true"/>
-              </Combobox.Button>
-              <Combobox.Input placeholder={'Search Ingredient'} displayValue={(ingredient: Ingredient) => ingredient.name} onChange={(event) => setQuery(event.target.value)} className="w-full border-none py-5 px-10 text-sm leading-5 text-gray-900 focus:ring-0"/>
-              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400 " aria-hidden="true"/>
-              </Combobox.Button>
-            </div>
-            <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setQuery('')}>
-              <Combobox.Options className="absolute bottom-14 mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {filteredIngredients.length === 0 && query !== '' ? (
-                  <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                    Nothing found.
-                  </div>
-                ) : (
-                  filteredIngredients.map((ingredient, index) => (
-                    <Combobox.Option value={ingredient} key={index} className={({active}) => `relative cursor-default select-none py-2 px-4 ${active ? 'bg-gray-600 text-white' : 'text-gray-900'}`}>
-                      {({selected, active}) => (
-                        <>
-                          <div className="flex items-center">
-                            <img src={ingredient.thumbnailUrl} alt="" className="h-5 w-5 flex-shrink-0 rounded-full border-2"/>
-                            <span className={`${selected ? 'font-semibold' : 'font-normal'} ml-3 block truncate'`}>
+      {adding && <>
+        <div className={'col-span-3 text-sm text-gray-500 flex-auto relative max-w-sm'}>
+          <Combobox value={selected} onChange={onSelectCategory}>
+            <div className="relative">
+              <div className="relative w-full cursor-default overflow-hidden bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                <Combobox.Button className="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <QueueListIcon className="h-5 w-5 text-gray-400" aria-hidden="true"/>
+                </Combobox.Button>
+                <Combobox.Input placeholder={'Search Ingredient'} displayValue={(ingredient: Ingredient) => ingredient.name} onChange={(event) => setQuery(event.target.value)} className="w-full border-none py-5 px-10 text-sm leading-5 text-gray-900 focus:ring-0"/>
+                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronUpDownIcon className="h-5 w-5 text-gray-400 " aria-hidden="true"/>
+                </Combobox.Button>
+              </div>
+              <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setQuery('')}>
+                <Combobox.Options className="absolute bottom-14 mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-md ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  {filteredIngredients.length === 0 && query !== '' ? (
+                    <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                      Nothing found.
+                    </div>
+                  ) : (
+                    filteredIngredients.map((ingredient, index) => (
+                      <Combobox.Option value={ingredient} key={index} className={({active}) => `relative cursor-default select-none py-2 px-4 ${active ? 'bg-gray-600 text-white' : 'text-gray-900'}`}>
+                        {({selected, active}) => (
+                          <>
+                            <div className="flex items-center">
+                              <img src={ingredient.thumbnailUrl} alt="" className="h-5 w-5 flex-shrink-0 rounded-full border-2"/>
+                              <span className={`${selected ? 'font-semibold' : 'font-normal'} ml-3 block truncate'`}>
                               {ingredient.name} {(!!ingredient?.categories?.length) && <span className={'text-gray-400 font-light'}>({resolveCategoryName(ingredient)})</span>}
                             </span>
-                          </div>
-                          {(selected && active) && (
-                            <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-gray-600'}`}></span>
-                          )}
-                        </>
-                      )}
-                    </Combobox.Option>
-                  ))
-                )}
-              </Combobox.Options>
-            </Transition>
-          </div>
-        </Combobox>
-      </div>
-      <div className={''}>
-        {/*Actions*/}
+                            </div>
+                            {(selected && active) && (
+                              <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-gray-600'}`}></span>
+                            )}
+                          </>
+                        )}
+                      </Combobox.Option>
+                    ))
+                  )}
+                </Combobox.Options>
+              </Transition>
+            </div>
+          </Combobox>
+        </div>
+      </>}
+
+      <div className={'flex items-center justify-center min-h-[60px]'}>
+        {adding ? <>
+          <button onClick={onCancel} type="button" className="inline-flex items-center rounded-md border  bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-600 shadow-sm hover:text-gray-50 hover:bg-gray-700 hover:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+            Cancel
+          </button>
+        </> : <>
+          <button onClick={onAdd} type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+            Add New
+          </button>
+        </>}
       </div>
     </div>
   </>
