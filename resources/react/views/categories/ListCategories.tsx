@@ -88,6 +88,12 @@ export default function ListCategories() {
                 <Index.Th>
                   Parent
                 </Index.Th>
+                <Index.Th className={'text-left'}>
+                  Group
+                </Index.Th>
+                <Index.Th>
+                  Image
+                </Index.Th>
                 <Index.Th>
                   Status
                 </Index.Th>
@@ -113,6 +119,12 @@ export default function ListCategories() {
                   </Index.Td>
                   <Index.Td>
                     {category.parent ?? '-'}
+                  </Index.Td>
+                  <Index.Td className={'text-left'}>
+                    {category.type}
+                  </Index.Td>
+                  <Index.Td>
+                    <img className={'w-9 h-9 rounded-full mx-auto'} src={category.thumbnail_url} alt={category.name} />
                   </Index.Td>
                   <Index.Td className={'font-semibold'}>
                     {category.status ? <><span className={'text-red-primary'}>Active</span></> : 'In-active'}
