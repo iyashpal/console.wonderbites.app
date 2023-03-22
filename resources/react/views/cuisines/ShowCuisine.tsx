@@ -44,7 +44,7 @@ export default function ShowCuisine() {
           {flash.get('cuisine_updated') && <>
             <Alert.Success className={'mt-4'}>Cuisine updated successfully.</Alert.Success>
           </>}
-          
+
           {flash.get('cuisine_category_attached') && <>
             <Alert.Success className={'mt-4'}>Cuisine category added successfully.</Alert.Success>
           </>}
@@ -88,7 +88,7 @@ export default function ShowCuisine() {
                         </td>
                         <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
                           <div className={''}>
-                            <img className={'w-10 h-10 rounded-full object-cover shadow border-2 border-gray-300'} src={cuisine.default_thumbnail} alt="Product Image" />
+                            <img src={cuisine.thumbnail_url} alt={cuisine.name} className={'w-10 h-10 rounded-full object-cover shadow border-2 border-gray-300'}/>
                           </div>
                         </td>
                         <td className={'text-left px-4 sm:px-6 py-2'}>

@@ -86,6 +86,9 @@ export default function ListCuisines() {
                   Cuisine Name
                 </Index.Th>
                 <Index.Th>
+                  Image
+                </Index.Th>
+                <Index.Th>
                   Status
                 </Index.Th>
                 <Index.Th>
@@ -113,6 +116,9 @@ export default function ListCuisines() {
                     <Link to={`/app/cuisines/${cuisine.id}`} className={'hover:text-red-primary inline-flex items-center'}>
                       {cuisine.name}
                     </Link>
+                  </Index.Td>
+                  <Index.Td>
+                    <img className={'w-9 h-9 rounded-full mx-auto'} src={cuisine.thumbnail_url} alt={cuisine.name} />
                   </Index.Td>
                   <Index.Td>
                     {cuisine.status === 1 ? <><span className={'text-red-600'}>Active</span></> : 'Inactive'}

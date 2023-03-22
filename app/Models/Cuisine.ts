@@ -36,7 +36,7 @@ export default class Cuisine extends BaseModel {
   public deletedAt: DateTime | null
 
   @computed()
-  public get default_thumbnail () {
+  public get thumbnail_url () {
     if (this.thumbnail) {
       return this.thumbnail.url
     }
