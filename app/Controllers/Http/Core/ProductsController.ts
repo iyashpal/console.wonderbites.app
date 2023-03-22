@@ -124,11 +124,19 @@ export default class ProductsController {
     try {
       const product = await Product.findByOrFail('id', params.id)
 
-      const data = await product.related('ingredients').attach({
-        [request.input('id')]: {...request.input('pivot', {})},
-      })
+      switch (request.input('action', 'attach')) {
+        case 'detach':
+          await product.related('ingredients').detach(request.input('detachable', []))
+          break
 
-      response.ok(data)
+        default:
+          await product.related('ingredients').sync({
+            [request.input('id')]: {...request.input('pivot', {})},
+          }, false)
+          break
+      }
+
+      response.ok({success: true})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
