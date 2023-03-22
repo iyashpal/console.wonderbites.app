@@ -38,6 +38,14 @@ export default function useAuth() {
     return !!token;
   }
 
+  function user(key: string, defaultValue = null) {
+    if (auth.user[key]) {
+      return auth.user[key]
+    }
+
+    return defaultValue
+  }
+
 
   function check() {
     useFetch().get('auth')
@@ -52,6 +60,7 @@ export default function useAuth() {
   }
 
   return {
+    user,
     logout,
     check,
     syncUser,

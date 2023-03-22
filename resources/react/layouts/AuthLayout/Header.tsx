@@ -1,15 +1,9 @@
 import {Fragment} from "react";
+import {useAuth} from "@/hooks";
 import {Link, useNavigate} from "react-router-dom";
 import {Menu, Popover, Transition} from "@headlessui/react";
 import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import {Bars3CenterLeftIcon, BellIcon, EnvelopeIcon} from "@heroicons/react/24/outline";
-import {useAuth} from "@/hooks";
-
-const user = {
-  name: 'Chelsea Hagon',
-  email: 'chelsea.hagon@example.com',
-  imageUrl: 'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 
 export default function Header({onToggleSidebar}: { onToggleSidebar: () => void }) {
   const auth = useAuth()
@@ -72,7 +66,7 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
                   <div>
                     <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-red-primary focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt=""/>
+                      <img className="h-8 w-8 rounded-full" src={auth.user('avatar_url')} alt={auth.user('name')}/>
                     </Menu.Button>
                   </div>
                   <Transition
