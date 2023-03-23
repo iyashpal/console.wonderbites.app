@@ -14,7 +14,7 @@ export default function EditCategory() {
     type: category.type,
     status: category.status,
     description: category.description,
-    parent: Number(category.parent) > 0 ? category.parent : null,
+    parent: category.parent?.toString(),
   })
 
   return <>
@@ -43,7 +43,7 @@ export default function EditCategory() {
 
                 <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
-                    Image <sup className='text-red-primary'>*</sup>
+                    Image
                   </label>
                   <input type="file" accept={'image/*'} name={'thumbnail'} id={'thumbnail'} onChange={form.input.onChange.thumbnail} className={'mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none'} />
                   <InputError error={form.errors?.thumbnail} />
@@ -53,7 +53,7 @@ export default function EditCategory() {
                   <label htmlFor="description" className="block text-sm font-bold text-gray-700">
                     Description
                   </label>
-                  <textarea rows={3} name={'description'} id={'description'} onChange={form.input.onChange.description} className={'mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'} />
+                  <textarea rows={3} name={'description'} id={'description'} defaultValue={form.input.value('description')} onChange={form.input.onChange.description} className={'mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm'} />
                   <InputError error={form.errors?.description} />
                 </div>
 

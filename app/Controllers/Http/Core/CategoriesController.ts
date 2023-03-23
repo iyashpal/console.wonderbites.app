@@ -66,15 +66,11 @@ export default class CategoriesController {
     try {
       const category = await Category.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
 
-      const payload = await request.validate(UpdateValidator)
+      const {name, type, parent, status, description, thumbnail} = await request.validate(UpdateValidator)
 
       await category.merge({
-        name: payload.name ?? category.name,
-        type: payload.type ?? category.type,
-        parent: payload.parent ?? category.parent,
-        status: payload.status ?? category.status,
-        description: payload.description ?? category.description,
-        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : category.thumbnail,
+        name, type, parent, status, description: description ?? '',
+        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : category.thumbnail,
       }).save()
 
       response.json(category)

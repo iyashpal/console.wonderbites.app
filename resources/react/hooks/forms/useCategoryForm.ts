@@ -1,12 +1,12 @@
-import {useFetch, useFlash} from "@/hooks";
+import {Axios} from "@/helpers";
+import {useFlash} from "@/hooks";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
 
-export default function useCategoryForm(fields: CategoryFormFields) {
+export default function useCategoryForm(fields: FormFields) {
   const flash = useFlash()
-  const fetcher = useFetch()
   const navigateTo = useNavigate()
-  const [form, setForm] = useState<CategoryFormFields>(fields)
+  const [form, setForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
@@ -32,8 +32,7 @@ export default function useCategoryForm(fields: CategoryFormFields) {
    * @param event
    */
   function onChangeParent(event: ChangeEvent<HTMLSelectElement>) {
-    let parent = Number(event.target.value)
-    setForm(payload => ({...payload, parent: parent > 0 ? parent : null}))
+    setForm(payload => ({...payload, parent: Number(event.target.value) > 0 ? event.target.value : null}))
   }
 
   /**
@@ -64,9 +63,6 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     setForm(payload => ({...payload, thumbnail: event.target.value}))
   }
 
-  function touchCategoryParent() {
-    setForm(payload => ({...payload, parent: Number(payload.parent) > 0 ? Number(payload.parent) : null}))
-  }
 
   /**
    * Generate FormData instance.
@@ -77,24 +73,27 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     let formData = new FormData()
 
     for (let key in form) {
-      if (key === 'thumbnail') {
-        formData.append('thumbnail', thumbnail, form[key])
-        continue
-      }
-
-      if (form[key]) {
-        formData.append(key, form[key])
+      switch (key) {
+        case 'thumbnail':
+          formData.append('thumbnail', thumbnail, form[key])
+          break
+        case 'parent':
+          if (form[key])
+            formData.append(key, form[key] ?? '')
+          break
+        default:
+          formData.append(key, form[key])
+          break
       }
     }
 
     return formData
   }
 
-  function onUpdate(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    touchCategoryParent()
+  function onUpdate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     setIsProcessing(true)
-    fetcher.put(`categories/${form?.id}`, generateFormData()).then(({data}) => {
+    Axios().put(`categories/${form?.id}`, generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('category_updated', true)
       navigateTo(`/app/categories/${data.id}`)
@@ -106,11 +105,10 @@ export default function useCategoryForm(fields: CategoryFormFields) {
     })
   }
 
-  function onCreate(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    touchCategoryParent()
+  function onCreate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
     setIsProcessing(true)
-    fetcher.post('categories', generateFormData()).then(({data}) => {
+    Axios().post('categories', generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('category_created', true)
       navigateTo(`/app/categories/${data.id}`)
@@ -145,11 +143,11 @@ export default function useCategoryForm(fields: CategoryFormFields) {
   }
 }
 
-type CategoryFormFields = {
+type FormFields = {
   id?: number,
   name: string,
   type: string,
-  parent: number | null,
+  parent: string | null,
   description: string,
   status: number,
   created_at?: string,

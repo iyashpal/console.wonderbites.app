@@ -31,7 +31,7 @@ export default class UpdateValidator {
     type: schema.string({trim: true}, [
       rules.required(),
     ]),
-    parent: schema.number.optional([
+    parent: schema.number.nullableAndOptional([
       rules.exists({table: 'categories', column: 'id'}),
     ]),
     thumbnail: schema.file.optional({
