@@ -2,56 +2,14 @@ import {useState} from 'react'
 import {useFetch} from '@/hooks'
 import {useNavigate} from 'react-router-dom'
 
-export default function useIngredientForm(fields: IngredientForm) {
+export default function useIngredientForm(fields: FormFields) {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
-  const [form, setForm] = useState<IngredientForm>(fields)
+  const [form, setForm] = useState<FormFields>(fields)
+  const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
-  const [errors, setErrors] = useState<IngredientFormErrors>({} as IngredientFormErrors)
 
-  function handleCreate(e) {
-    e.preventDefault()
-    setIsProcessing(true)
-
-    fetcher.post('ingredients', generateFormData()).then(() => {
-      setIsProcessing(false)
-      navigateTo('/app/ingredients')
-    }).catch(({response}) => {
-      setIsProcessing(false)
-      setErrors(response?.data?.errors ?? {})
-    })
-  }
-
-  function handleUpdate(e) {
-    e.preventDefault()
-    setIsProcessing(true)
-
-    fetcher.put(`ingredients/${form.id}`, generateFormData()).then(() => {
-      setIsProcessing(false)
-      navigateTo('/app/ingredients')
-    }).catch(({response}) => {
-      setIsProcessing(false)
-      setErrors(response?.data?.errors ?? {})
-    })
-  }
-
-  function generateFormData() {
-    let formData = new FormData()
-
-    for (let key in form) {
-      if (key === 'thumbnail' && form[key]) {
-        formData.append('thumbnail', thumbnail, form[key])
-        continue
-      }
-
-      if (form[key]) {
-        formData.append(key, form[key])
-      }
-    }
-
-    return formData
-  }
 
   function onChangeName(e) {
     setForm(payload => ({...payload, name: e.target.value}))
@@ -96,6 +54,50 @@ export default function useIngredientForm(fields: IngredientForm) {
   }
 
 
+  function generateFormData() {
+    let formData = new FormData()
+
+    for (let key in form) {
+      switch (key) {
+        case 'thumbnail':
+          formData.append('thumbnail', thumbnail, form[key])
+          break
+        default:
+          formData.append(key, form[key])
+          break
+      }
+    }
+
+    return formData
+  }
+
+  function handleCreate(e) {
+    e.preventDefault()
+    setIsProcessing(true)
+
+    fetcher.post('ingredients', generateFormData()).then(() => {
+      setIsProcessing(false)
+      navigateTo('/app/ingredients')
+    }).catch(({response}) => {
+      setIsProcessing(false)
+      setErrors(response?.data?.errors ?? {})
+    })
+  }
+
+  function handleUpdate(e) {
+    e.preventDefault()
+    setIsProcessing(true)
+
+    fetcher.put(`ingredients/${form.id}`, generateFormData()).then(() => {
+      setIsProcessing(false)
+      navigateTo('/app/ingredients')
+    }).catch(({response}) => {
+      setIsProcessing(false)
+      setErrors(response?.data?.errors ?? {})
+    })
+  }
+
+
   return {
     errors,
     data: form,
@@ -128,7 +130,7 @@ export default function useIngredientForm(fields: IngredientForm) {
   }
 }
 
-type IngredientForm = {
+type FormFields = {
   id?: number,
   categoryId: number,
   name: string,
@@ -138,10 +140,9 @@ type IngredientForm = {
   quantity: number,
   minQuantity: number,
   maxQuantity: number,
-  thumbnail: any,
   publishedAt: string,
 }
-type IngredientFormErrors = {
+type FormErrors = {
   categoryId: string,
   name: string,
   description: string,

@@ -9,7 +9,7 @@ import {Category} from "@/types/models";
 export default function CreateIngredient() {
 
   const form = useIngredientForm({
-    name: '', description: '', categoryId: 0, price: 0, unit: '', quantity: 0, maxQuantity: 0, minQuantity: 0, thumbnail: null, publishedAt: ''
+    name: '', description: '', categoryId: 0, price: 0, unit: '', quantity: 0, maxQuantity: 0, minQuantity: 0, publishedAt: ''
   })
 
   const {categories} = useLoaderData() as {categories: Category[]}
