@@ -138,7 +138,8 @@ export const AppRoutes = [
           },
           {
             path: ':id/edit',
-            element: <Views.Cuisines.Edit />
+            element: <Views.Cuisines.Edit />,
+            loader: async ({ params }) => Axios().get(`/cuisines/${params.id}/edit`).then(({ data }) => data)
           }
         ]
       },
