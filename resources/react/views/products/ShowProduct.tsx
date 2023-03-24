@@ -8,8 +8,10 @@ import {Combobox, Transition} from '@headlessui/react'
 import {IngredientProduct} from '@/types/models/pivot'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import React, {Fragment, useEffect, useState} from 'react'
+import * as Loaders from '~/components/loaders'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
-import {ChevronUpDownIcon, CloudArrowUpIcon, MagnifyingGlassIcon, TrashIcon} from '@heroicons/react/24/outline'
+import {ChevronUpDownIcon, CloudArrowUpIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, TrashIcon} from '@heroicons/react/24/outline'
+import Modal from "@/components/Modal";
 
 export default function ShowProduct() {
   const flash = useFlash()
@@ -72,6 +74,26 @@ export default function ShowProduct() {
 }
 
 function ProductIngredients({product}: { product: Product }) {
+  const location = useLocation()
+  const navigateTo = useNavigate()
+  const ingredientProduct = useIngredientProduct({product})
+  const [ingredient, setIngredient] = useState({} as IngredientProduct)
+
+  function onTrash(ingredient: IngredientProduct) {
+    setIngredient(ingredient)
+  }
+
+  function onClose() {
+    setIngredient({} as IngredientProduct)
+  }
+
+  function executeTrash() {
+    ingredientProduct.detach([ingredient.id]).then(() => {
+      navigateTo(location)
+      onClose()
+    })
+  }
+
   return (
     <>
       <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
@@ -134,7 +156,7 @@ function ProductIngredients({product}: { product: Product }) {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
 
-                {product?.ingredients?.map((ingredient, index) => (<IngredientRow key={index} ingredient={ingredient}/>))}
+                {product?.ingredients?.map((ingredient, index) => (<IngredientRow key={index} ingredient={ingredient} onTrash={onTrash}/>))}
 
 
                 {product?.ingredients?.length === 0 && (
@@ -154,12 +176,36 @@ function ProductIngredients({product}: { product: Product }) {
       </div>
 
       <CreateNewIngredient/>
+
+      <Modal show={ingredient?.id !== undefined} onClose={onClose} className={'max-w-lg'}>
+        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className="sm:flex sm:items-start">
+            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <ExclamationTriangleIcon className="h-6 w-6 text-red-600"/>
+            </div>
+            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Delete Ingredient</h3>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">Are you sure you want to remove <b>{ingredient.name}</b> from the product? All of the ingredient configuration data will be permanently removed. This action cannot be undone.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button onClick={executeTrash} type="button" className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+            {ingredientProduct.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'}/> : 'Delete'}
+          </button>
+          <button onClick={onClose} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </>
 
   )
 }
 
-function IngredientRow({ingredient}: { ingredient: IngredientProduct }) {
+function IngredientRow({ingredient, onTrash}: { ingredient: IngredientProduct, onTrash: (ingredient: IngredientProduct) => void }) {
   const [isTouched, setIsTouched] = useState('')
   const {product} = useLoaderData() as { product: Product }
   const ingredientProduct = useIngredientProduct({product})
@@ -244,7 +290,7 @@ function IngredientRow({ingredient}: { ingredient: IngredientProduct }) {
     </td>
     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
       <div className="flex item-center justify-center gap-x-1">
-        <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+        <button onClick={() => onTrash(ingredient)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
           <TrashIcon className={'w-5 h-5'}/>
         </button>
       </div>
@@ -315,7 +361,7 @@ function CreateNewIngredient() {
                   </div>
                 ) : (
                   filtered.map((ingredient, index) => (
-                    <Combobox.Option value={ingredient} key={index} className={({active}) => `relative cursor-default select-none py-2 px-4 ${active ? 'bg-gray-100' : 'text-gray-900'}`}>
+                    <Combobox.Option value={ingredient} key={index} className={({active}) => `relative cursor-pointer select-none py-2 px-4 ${active ? 'bg-gray-100' : 'text-gray-900'}`}>
                       {({selected}) => (
                         <>
                           <div className="flex items-center">

@@ -1,9 +1,10 @@
 import {Axios} from '@/helpers'
 import {Ingredient, Product} from '@/types/models'
 import {IngredientProduct} from '@/types/models/pivot'
+import {useState} from "react";
 
 export default function useIngredientProduct({product}: { product: Product }) {
-
+  const [isProcessing, setIsProcessing] = useState(false)
 
   function sync(ingredient: IngredientProduct) {
     return post({
@@ -42,12 +43,21 @@ export default function useIngredientProduct({product}: { product: Product }) {
   }
 
   function post(data: object) {
+    setIsProcessing(true)
     return Axios().post(`products/${product.id}/ingredient`, data)
+      .then((data) => {
+        setIsProcessing(false)
+        return Promise.resolve(data)
+      }).catch(error => {
+        setIsProcessing(false)
+        return Promise.reject(error)
+      })
   }
 
   return {
     sync,
     attach,
     detach,
+    isProcessing,
   }
 }
