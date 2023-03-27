@@ -24,7 +24,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Get the query instance.
-   * 
+   *
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   public query (): ModelQueryBuilderContract<typeof Product, Product> {
@@ -33,7 +33,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Preload the product state in user wishlist.
-   * 
+   *
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   protected preloadUserWishlist (): ProductQuery {
@@ -46,7 +46,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Preload the product media.
-   * 
+   *
    * @returns ProductQuery
    */
   protected preloadMedia (): ProductQuery {
@@ -60,7 +60,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Preload the product reviews.
-   * 
+   *
    * @returns ProductQuery
    */
   protected preloadReviews (): ProductQuery {
@@ -74,7 +74,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Preload the product ingredients.
-   * 
+   *
    * @returns ProductQuery
    */
   protected preloadIngredients (): ProductQuery {
@@ -91,7 +91,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Filter products by categories.
-   * 
+   *
    * @returns ProductQuery
    */
   protected filterInCategories (): ProductQuery {
@@ -106,7 +106,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Filter products by search keyword.
-   * 
+   *
    * @returns ProductQuery
    */
   protected filterSearch (): ProductQuery {
@@ -121,7 +121,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Filter products based on rating.
-   * 
+   *
    * @returns ProductQuery
    */
   protected filterTopRated () {
@@ -130,7 +130,7 @@ export default class ProductQuery extends Query {
       query => {
         let AvgReviews = Database.from('reviews')
           .avg('rating').where('reviewable', 'Product')
-          .whereRaw('reviewable_id=`products`.`id`').as('avg_reviews')
+          .whereRaw('reviewable_id=products.id').as('avg_reviews')
 
         return query.from(Database.from('products')
           .select('*', AvgReviews).as('products'))
@@ -143,7 +143,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Filter products based on today's pick.
-   * 
+   *
    * @returns ProductQuery
    */
   protected filterTodaysPick () {
@@ -158,7 +158,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Filter products based on product popularity state.
-   * 
+   *
    * @returns ProductQuery
    */
   protected filterPopular () {
@@ -173,7 +173,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Preload the product counts.
-   * 
+   *
    * @returns ProductQuery
    */
   protected countReviews (): ProductQuery {
@@ -187,7 +187,7 @@ export default class ProductQuery extends Query {
 
   /**
    * Aggregate the product reviews.
-   * 
+   *
    * @returns ProductQuery
    */
   protected aggregateReviews (): ProductQuery {
