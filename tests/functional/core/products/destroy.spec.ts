@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { ProductFactory, UserFactory } from 'Database/factories'
 
-test.group('Core products destroy', (group) => {
+test.group('Core [products.destroy]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()

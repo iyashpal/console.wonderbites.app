@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {CategoryFactory, UserFactory} from 'Database/factories'
 
-test.group('Core categories index', (group) => {
+test.group('Core [categories.index]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
