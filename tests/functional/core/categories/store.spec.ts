@@ -1,8 +1,9 @@
 import { test } from '@japa/runner'
-import {CategoryFactory, UserFactory} from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Application from '@ioc:Adonis/Core/Application'
+import {CategoryFactory, UserFactory} from 'Database/factories'
 
-test.group('Core categories store', (group) => {
+test.group('Core [categories.store]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
@@ -29,11 +30,12 @@ test.group('Core categories store', (group) => {
 
     const category = await CategoryFactory.create()
     const response = await client.post(route('core.categories.store'))
-      .guard('api').loginAs(user).json({
+      .guard('api').loginAs(user)
+      .file('thumbnail', Application.publicPath('/images/logo.svg'))
+      .fields({
         name: category.name,
         description: category.description,
         type: category.type,
-        parent: category.parent,
         status: category.status,
       })
 
@@ -122,10 +124,11 @@ test.group('Core categories store', (group) => {
 
     const category = await CategoryFactory.create()
     const response = await client.post(route('core.categories.store'))
-      .guard('api').loginAs(user).json({
+      .guard('api').loginAs(user)
+      .file('thumbnail', Application.publicPath('/images/logo.svg'))
+      .fields({
         name: category.name,
         type: category.type,
-        parent: null,
         status: category.status,
       })
 
@@ -137,10 +140,11 @@ test.group('Core categories store', (group) => {
 
     const category = await CategoryFactory.create()
     const response = await client.post(route('core.categories.store'))
-      .guard('api').loginAs(user).json({
+      .guard('api').loginAs(user)
+      .file('thumbnail', Application.publicPath('/images/logo.svg'))
+      .fields({
         name: 'Demo',
         type: category.type,
-        parent: null,
         status: category.status,
       })
 

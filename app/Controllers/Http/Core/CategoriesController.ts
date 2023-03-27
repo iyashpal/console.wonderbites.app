@@ -1,11 +1,11 @@
 import {DateTime} from 'luxon'
 import {Category} from 'App/Models'
 import {types} from '@ioc:Adonis/Core/Helpers'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Categories/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Categories/UpdateValidator'
-import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class CategoriesController {
   public async index ({request, response}: HttpContextContract) {
@@ -36,7 +36,6 @@ export default class CategoriesController {
 
       response.json(category)
     } catch (error) {
-      console.log(error)
       ExceptionResponse.use(error).resolve(response)
     }
   }
