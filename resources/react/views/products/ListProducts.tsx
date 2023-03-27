@@ -171,7 +171,7 @@ export default function ListProducts() {
                           </td>
                           <td className="whitespace-nowrap text-center">
                             <div className={'rounded-full overflow-hidden group w-9 h-9 mx-auto relative cursor-pointer z-0'}>
-                              <img className={'w-9 h-9 rounded-full'} src={product.thumbnail_url} alt="Product Name" />
+                              <img className={'w-9 h-9 rounded-full'} src={product.thumbnail_url} alt={product.name} />
                               {((product.meta.media_count ?? 0) > 0) && <>
                                 <span className="hidden group-hover:flex items-center justify-center font-semibold text-xs absolute inset-0 text-white bg-gray-900/30">+{product.meta.media_count}</span>
                               </>}
