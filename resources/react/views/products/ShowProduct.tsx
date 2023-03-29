@@ -1,4 +1,5 @@
 import {useFlash} from '@/hooks'
+import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
 import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
@@ -11,7 +12,7 @@ import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import React, {Fragment, useEffect, useState} from 'react'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
 import {useIngredientProductForm, useMediaProductForm} from '@/hooks/forms'
-import {ChevronUpDownIcon, CloudArrowUpIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, PlusIcon, TrashIcon, XMarkIcon} from '@heroicons/react/24/outline'
+
 
 export default function ShowProduct() {
   const flash = useFlash()
@@ -74,21 +75,25 @@ export default function ShowProduct() {
 }
 
 function ProductImages() {
-  const mediaProductForm = useMediaProductForm({})
-  const [show, setShow] = useState(true)
+  const form = useMediaProductForm({attachment: ''})
+  const [show, setShow] = useState(false)
   const {product} = useLoaderData() as { product: Product }
   const [fileType, setFileType] = useState('image')
 
-  function onChangeImage(e) {
-    mediaProductForm.input.onChange.attachment(e)
+  useEffect(() => {
+    form.sync(product)
+  }, [product])
 
+  function onChangeImage(e) {
+    form.input.onChange.create(e)
   }
+
   return <>
     <div className="relative group">
       <img className={'w-12 h-12 rounded-full ring-2 ring-white '} src={product.thumbnail_url} alt={product.name}/>
 
-      <button onClick={() => setShow(true)} className="group-hover:block absolute top-0 left-0 w-12 h-12 rounded-full ring-2 ring-white bg-gray-900/70 hover:bg-gray-900/70 border-0 focus:outline-none inline-flex items-center justify-center transition-colors ease-in-out duration-300">
-        {product.media?.length === 0 ? <PlusIcon className={'inline-flex h-5 w-5 text-white'}/> : `+${product.media?.length}`}
+      <button onClick={() => setShow(true)} className="hidden group-hover:inline-flex group-hover:items-center group-hover:justify-center absolute top-0 left-0 w-12 h-12 rounded-full ring-2 ring-white bg-gray-900/70 hover:bg-gray-900/70 border-0 focus:outline-none text-white transition-colors ease-in-out duration-300">
+        {product.media?.length === 0 ? <Icons.Outline.Plus className={'inline-flex h-5 w-5'}/> : `+${product.media?.length}`}
       </button>
     </div>
 
@@ -99,7 +104,7 @@ function ProductImages() {
         </div>
 
         <button onClick={() => setShow(false)}>
-          <XMarkIcon className={'w-5 h-5'}/>
+          <Icons.Outline.XMark className={'w-5 h-5'}/>
         </button>
       </div>
       <div className="flow-root">
@@ -108,7 +113,7 @@ function ProductImages() {
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
               <tr className="divide-x divide-gray-200">
-                <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900">Preview</th>
+                <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 w-28">Preview</th>
                 <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Caption</th>
                 <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Order</th>
                 <th scope="col" className="py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
@@ -118,10 +123,25 @@ function ProductImages() {
               {product.media?.map((media, index) => {
                 return (
                   <tr key={index} className="divide-x divide-gray-200">
-                    <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Lindsay Walton</td>
-                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">Front-end Developer</td>
-                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">lindsay.walton@example.com</td>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">Member</td>
+                    <td className="whitespace-nowrap py-2 px-4 text-sm font-medium text-gray-900">
+                      <img src={media.attachment_url} alt={media.title} className={'h-10 aspect-video object-cover rounded-md'}/>
+                    </td>
+                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">
+                      {media.title}
+                    </td>
+                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">
+                      {media.meta.pivot_order}
+                    </td>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
+                      <div className="flex item-center justify-center gap-x-1">
+                        <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                          <Icons.Outline.Star className={'w-5 h-5'}/>
+                        </button>
+                        <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                          <Icons.Outline.Trash className={'w-5 h-5'}/>
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 )
               })}
@@ -191,7 +211,7 @@ function ProductIngredients({product}: { product: Product }) {
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-              <CloudArrowUpIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
+              <Icons.Outline.CloudArrowUp className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
               Import
             </button>
           </div>
@@ -264,7 +284,7 @@ function ProductIngredients({product}: { product: Product }) {
         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <ExclamationTriangleIcon className="h-6 w-6 text-red-600"/>
+              <Icons.Outline.ExclamationTriangle className="h-6 w-6 text-red-600"/>
             </div>
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Delete Ingredient</h3>
@@ -374,7 +394,7 @@ function IngredientRow({ingredient, onTrash}: { ingredient: IngredientProduct, o
     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
       <div className="flex item-center justify-center gap-x-1">
         <button onClick={() => onTrash(ingredient)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-          <TrashIcon className={'w-5 h-5'}/>
+          <Icons.Outline.Trash className={'w-5 h-5'}/>
         </button>
       </div>
     </td>
@@ -429,11 +449,11 @@ function CreateNewIngredient() {
           <div className="relative">
             <div className="relative w-full cursor-default overflow-hidden bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
               <Combobox.Button className="absolute inset-y-0 left-0 flex items-center">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true"/>
+                <Icons.Outline.MagnifyingGlass className="h-5 w-5 text-gray-400" aria-hidden="true"/>
               </Combobox.Button>
               <Combobox.Input placeholder={'Search Ingredient'} displayValue={(ingredient: Ingredient) => ingredient.name} onChange={(event) => setQuery(event.target.value)} className="w-full border-none py-4 px-10 text-sm leading-5 text-gray-900 focus:ring-0"/>
               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400 " aria-hidden="true"/>
+                <Icons.Outline.ChevronUpDown className="h-5 w-5 text-gray-400 " aria-hidden="true"/>
               </Combobox.Button>
             </div>
             <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setQuery('')}>
