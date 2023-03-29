@@ -26,7 +26,7 @@ test.group('API [users.avatar]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ avatar: null })
-  })
+  }).tags(['@users', '@users.avatar'])
 
   test('it can allow users to add/update avatar to their profile.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -37,5 +37,5 @@ test.group('API [users.avatar]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ avatar: { extname: 'svg', mimeType: 'image/svg' } })
-  })
+  }).tags(['@users', '@users.avatar'])
 })

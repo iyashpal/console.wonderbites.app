@@ -1,11 +1,10 @@
 import {User} from 'App/Models'
-import {DateTime} from "luxon"
+import {DateTime} from 'luxon'
 import Drive from '@ioc:Adonis/Core/Drive'
 import {file} from '@ioc:Adonis/Core/Helpers'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
-import {AddressFactory, CartFactory, OrderFactory, WishlistFactory} from './index'
-import RoleFactory from "Database/factories/RoleFactory";
+import {AddressFactory, CartFactory, OrderFactory, WishlistFactory, RoleFactory} from './index'
 
 export default Factory.define(User, async ({faker}) => {
   // User profile attachment
@@ -18,7 +17,7 @@ export default Factory.define(User, async ({faker}) => {
 
   attachment.isPersisted = true
 
-  await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)
+  await Drive.put(attachment.name, (await file.generatePng('1kb')).contents)
 
   return {
     roleId: null,

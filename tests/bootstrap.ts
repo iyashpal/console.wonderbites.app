@@ -5,10 +5,11 @@
  * file.
  */
 
-import { expect } from '@japa/expect'
-import type { Config } from '@japa/runner'
+import {expect} from '@japa/expect'
+import type {Config} from '@japa/runner'
+import Drive from '@ioc:Adonis/Core/Drive'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
-import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
+import {assert, runFailedTests, specReporter, apiClient} from '@japa/preset-adonis'
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,11 @@ export const reporters: Config['reporters'] = [specReporter()]
 |
 */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [() => TestUtils.ace().loadCommands(), () => TestUtils.db().migrate()],
+  setup: [
+    () => Drive.fake(), // Fake the drive disk
+    () => TestUtils.ace().loadCommands(),
+    () => TestUtils.db().migrate(),
+  ],
   teardown: [],
 }
 
