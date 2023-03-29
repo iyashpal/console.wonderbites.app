@@ -55,7 +55,7 @@ export default class ProductsController {
     try {
       const product = await Product.query()
         .preload('user')
-        .preload('media')
+        .preload('media', query => query.orderBy('pivot_order'))
         .preload('categories', query => query.preload('cuisines'))
         .preload('ingredients', query => query.preload('categories'))
         .where('id', params.id).firstOrFail()

@@ -67,7 +67,10 @@ export default class Product extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @manyToMany(() => Media)
+  @manyToMany(() => Media, {
+    pivotColumns: ['is_default', 'order'],
+    pivotTimestamps: true,
+  })
   public media: ManyToMany<typeof Media>
 
   @manyToMany(() => Category)
@@ -75,22 +78,22 @@ export default class Product extends BaseModel {
 
   @manyToMany(() => Ingredient, {
     pivotColumns: [
-    'id', 'price', 'max_quantity', 'min_quantity', 'quantity', 'is_locked', 'is_required', 'is_optional'
+      'id', 'price', 'max_quantity', 'min_quantity', 'quantity', 'is_locked', 'is_required', 'is_optional',
     ],
     pivotTimestamps: true,
-    })
+  })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Cart, {
     pivotColumns: ['id', 'cart_id', 'product_id', 'qty'],
-    pivotTimestamps: true
-    })
+    pivotTimestamps: true,
+  })
   public carts: ManyToMany<typeof Cart>
 
   @manyToMany(() => Order, {
     pivotColumns: ['id', 'price', 'qty'],
     pivotTimestamps: true,
-    })
+  })
   public orders: ManyToMany<typeof Order>
 
   @hasOne(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})

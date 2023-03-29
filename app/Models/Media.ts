@@ -5,6 +5,11 @@ import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLit
 import Storage from 'App/Helpers/Storage'
 
 export default class Media extends BaseModel {
+  /**
+   * Serialize the `$extras` object as it is
+   */
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
@@ -26,7 +31,9 @@ export default class Media extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => Product)
+  @manyToMany(() => Product, {
+    pivotColumns:['is_default', 'order'],
+  })
   public products: ManyToMany<typeof Product>
 
   @computed()
