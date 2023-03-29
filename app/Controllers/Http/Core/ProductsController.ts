@@ -55,6 +55,7 @@ export default class ProductsController {
     try {
       const product = await Product.query()
         .preload('user')
+        .preload('media')
         .preload('categories', query => query.preload('cuisines'))
         .preload('ingredients', query => query.preload('categories'))
         .where('id', params.id).firstOrFail()
@@ -113,28 +114,6 @@ export default class ProductsController {
       const product = await Product.findByOrFail('id', params.id)
 
       await product.delete()
-
-      response.ok({success: true})
-    } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
-    }
-  }
-
-  public async ingredient ({request, response, params}: HttpContextContract) {
-    try {
-      const product = await Product.findByOrFail('id', params.id)
-
-      switch (request.input('action', 'attach')) {
-        case 'detach':
-          await product.related('ingredients').detach(request.input('detachable', []))
-          break
-
-        default:
-          await product.related('ingredients').sync({
-            [request.input('id')]: {...request.input('pivot', {})},
-          }, false)
-          break
-      }
 
       response.ok({success: true})
     } catch (error) {

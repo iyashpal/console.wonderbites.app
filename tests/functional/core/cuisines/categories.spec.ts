@@ -10,46 +10,45 @@ test.group('Core [cuisines.categories]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-
   test('it do not allow access to a guest user.', async ({ client, route }) => {
     const cuisine = await CuisineFactory.create()
 
-    const response = await client.post(route('core.cuisines.categories', cuisine))
+    const response = await client.post(route('core.actions.category.cuisine', cuisine))
 
     response.assertStatus(401)
 
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 
   test('it do not allow access to a non-management user.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
     const cuisine = await CuisineFactory.create()
 
-    const response = await client.post(route('core.cuisines.categories', cuisine)).guard('api').loginAs(user)
+    const response = await client.post(route('core.actions.category.cuisine', cuisine)).guard('api').loginAs(user)
 
     response.assertStatus(401)
 
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 
   test('it throws 404 error if the cuisine is trashed.', async ({ client, route }) => {
     const cuisine = await CuisineFactory.merge({ deletedAt: DateTime.now() }).create()
 
     const user = await UserFactory.with('role').create()
 
-    const response = await client.post(route('core.cuisines.categories', cuisine)).guard('api').loginAs(user)
+    const response = await client.post(route('core.actions.category.cuisine', cuisine)).guard('api').loginAs(user)
 
     response.assertStatus(404)
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 
   test('it throws 404 error if the cuisine does not exists.', async ({ client, route }) => {
     const user = await UserFactory.with('role').create()
 
-    const response = await client.post(route('core.cuisines.categories', { id: 50 })).guard('api').loginAs(user)
+    const response = await client.post(route('core.actions.category.cuisine', { id: 50 })).guard('api').loginAs(user)
 
     response.assertStatus(404)
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 
   test('it attach the categories to cuisine.', async ({ client, route }) => {
     const cuisine = await CuisineFactory.create()
@@ -58,13 +57,13 @@ test.group('Core [cuisines.categories]', (group) => {
 
     const category = await CategoryFactory.create()
 
-    const response = await client.post(route('core.cuisines.categories', cuisine))
+    const response = await client.post(route('core.actions.category.cuisine', cuisine))
       .guard('api').loginAs(user).json({ action: 'attach', categories: [category.id] })
-    
+
     response.assertStatus(200)
 
     response.assertBodyContains({ cuisine: { id: cuisine.id, categories: [{ id: category.id }] } })
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 
   test('it detach the categories from cuisine.', async ({ client, route }) => {
     const category = await CategoryFactory.create()
@@ -73,11 +72,11 @@ test.group('Core [cuisines.categories]', (group) => {
 
     await cuisine.related('categories').attach([category.id])
 
-    const response = await client.post(route('core.cuisines.categories', cuisine))
+    const response = await client.post(route('core.actions.category.cuisine', cuisine))
       .guard('api').loginAs(user).json({ action: 'detach', categories: [category.id] })
 
     response.assertStatus(200)
-    
+
     response.assertBodyContains({ cuisine: { id: cuisine.id } })
-  }).tags(['@core', '@core.cuisines.categories'])
+  }).tags(['@core', '@core.actions.category.cuisine'])
 })

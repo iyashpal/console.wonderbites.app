@@ -3,7 +3,7 @@ import {Ingredient, Product} from '@/types/models'
 import {IngredientProduct} from '@/types/models/pivot'
 import {useState} from "react";
 
-export default function useIngredientProduct({product}: { product: Product }) {
+export default function useIngredientProductForm({product}: { product: Product }) {
   const [isProcessing, setIsProcessing] = useState(false)
 
   function sync(ingredient: IngredientProduct) {

@@ -11,7 +11,7 @@ export default class MediaProducts extends BaseSchema {
 
       table.bigInteger('product_id').unsigned().notNullable().references('products.id').onDelete('CASCADE')
 
-      table.boolean('is_default').defaultTo(false)
+      table.bigInteger('order').defaultTo(0)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -44,4 +44,63 @@ test.group('Core [products.show]', (group) => {
 
     response.assertBodyContains({product: {id: product.id}})
   }).tags(['@core', '@core.products.show'])
+
+  test('it reads the id of referenced product.', async ({client, route}) => {
+    const product = await ProductFactory.create()
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+
+    response.assertBodyContains({product: {id: product.id}})
+  }).tags(['@core', '@core.products.show'])
+
+  test('it reads the list of referenced product categories.', async ({client, route}) => {
+    const product = await ProductFactory.with('categories', 1).create()
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+
+    response.assertBodyContains({
+      product: {
+        id: product.id,
+        categories: product.categories.map(({id, name}) => ({id, name})),
+      },
+    })
+  }).tags(['@core', '@core.products.show'])
+
+  test('it reads the list of referenced product ingredients.', async ({client, route}) => {
+    const product = await ProductFactory.with('ingredients', 5).create()
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+
+    response.assertBodyContains({
+      product: {
+        id: product.id,
+        ingredients: product.ingredients.map(({id, name}) => ({id, name})),
+      },
+    })
+  }).tags(['@core', '@core.products.show'])
+
+  test('it reads the product media in response.', async ({client, route}) => {
+    const product = await ProductFactory.with('media', 5).create()
+    const user = await UserFactory.with('role').create()
+
+    const response = await client.get(route('core.products.show', product)).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+
+    response.assertBodyContains({
+      product: {
+        id: product.id,
+        media: product.media.map(({id, title}) => ({id, title})),
+      },
+    })
+  }).tags(['@core', '@core.products.show'])
 })

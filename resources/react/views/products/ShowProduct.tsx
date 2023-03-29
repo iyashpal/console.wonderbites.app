@@ -1,17 +1,17 @@
 import {useFlash} from '@/hooks'
+import Modal from '@/components/Modal'
 import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
+import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
-import {useIngredientProduct} from '@/hooks/forms'
 import {Ingredient, Product} from '@/types/models'
 import {Combobox, Transition} from '@headlessui/react'
 import {IngredientProduct} from '@/types/models/pivot'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import React, {Fragment, useEffect, useState} from 'react'
-import * as Loaders from '~/components/loaders'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
-import {ChevronUpDownIcon, CloudArrowUpIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, TrashIcon} from '@heroicons/react/24/outline'
-import Modal from "@/components/Modal";
+import {useIngredientProductForm, useMediaProductForm} from '@/hooks/forms'
+import {ChevronUpDownIcon, CloudArrowUpIcon, ExclamationTriangleIcon, MagnifyingGlassIcon, PlusIcon, TrashIcon, XMarkIcon} from '@heroicons/react/24/outline'
 
 export default function ShowProduct() {
   const flash = useFlash()
@@ -51,26 +51,7 @@ export default function ShowProduct() {
               {name: 'Price', value: `${product.price}L`},
               {name: 'Category', value: category?.name ?? '-'},
               {name: 'Description', value: product.description, onModal: true},
-              {
-                name: 'Images', value: <>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex flex-shrink-0 -space-x-1">
-
-                      <img className="h-6 w-6 max-w-none rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Dries Vincent"/>
-
-                      <img className="h-6 w-6 max-w-none rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Lindsay Walton"/>
-
-                      <img className="h-6 w-6 max-w-none rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Courtney Henry"/>
-
-                      <img className="h-6 w-6 max-w-none rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="Tom Cook"/>
-
-                    </div>
-
-                    <span className="flex-shrink-0 text-xs font-medium leading-5">+8</span>
-                  </div>
-                  {/*<img alt={product.name} src={product.thumbnail_url} className="w-10 h-10 rounded-full"/>*/}
-                </>
-              }
+              {name: 'Images', value: <ProductImages/>}
             ]}
           />
 
@@ -92,10 +73,93 @@ export default function ShowProduct() {
   </>
 }
 
+function ProductImages() {
+  const mediaProductForm = useMediaProductForm({})
+  const [show, setShow] = useState(true)
+  const {product} = useLoaderData() as { product: Product }
+  const [fileType, setFileType] = useState('image')
+
+  function onChangeImage(e) {
+    mediaProductForm.input.onChange.attachment(e)
+
+  }
+  return <>
+    <div className="relative group">
+      <img className={'w-12 h-12 rounded-full ring-2 ring-white '} src={product.thumbnail_url} alt={product.name}/>
+
+      <button onClick={() => setShow(true)} className="group-hover:block absolute top-0 left-0 w-12 h-12 rounded-full ring-2 ring-white bg-gray-900/70 hover:bg-gray-900/70 border-0 focus:outline-none inline-flex items-center justify-center transition-colors ease-in-out duration-300">
+        {product.media?.length === 0 ? <PlusIcon className={'inline-flex h-5 w-5 text-white'}/> : `+${product.media?.length}`}
+      </button>
+    </div>
+
+    <Modal show={show} className={'max-w-3xl divide-y'} onClose={() => setShow(false)}>
+      <div className={'p-3 sm:p-4 flex items-center justify-between'}>
+        <div>
+          <h3 className={'font-semibold'}>Images</h3>
+        </div>
+
+        <button onClick={() => setShow(false)}>
+          <XMarkIcon className={'w-5 h-5'}/>
+        </button>
+      </div>
+      <div className="flow-root">
+        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead>
+              <tr className="divide-x divide-gray-200">
+                <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900">Preview</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Caption</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Order</th>
+                <th scope="col" className="py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
+              </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+              {product.media?.map((media, index) => {
+                return (
+                  <tr key={index} className="divide-x divide-gray-200">
+                    <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Lindsay Walton</td>
+                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">Front-end Developer</td>
+                    <td className="whitespace-nowrap p-4 text-sm text-gray-500">lindsay.walton@example.com</td>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">Member</td>
+                  </tr>
+                )
+              })}
+
+              {product.media?.length === 0 && (
+                <tr>
+                  <td colSpan={4} className={'whitespace-nowrap p-4 text-sm text-gray-500'}>
+                    <Alerts.Warning>
+                      Product images not available.
+                    </Alerts.Warning>
+                  </td>
+                </tr>
+              )}
+
+              <tr className="bg-gray-50">
+                <td colSpan={4} className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
+                  <div className={'flex items-center border border-gray-300 text-slate-500 bg-white divide-x'}>
+                    <select defaultValue={fileType} onChange={(e) => setFileType(e.target.value)} className={'py-1.5 bg-white text-sm border-0 focus:border-0 focus:outline-none focus:ring-0'}>
+                      <option value="image">Image</option>
+                      <option value="video">Video</option>
+                    </select>
+                    <input onChange={onChangeImage} type="file" accept={fileType === 'image' ? 'image/*' : 'video/*'} name="attachment" id="attachment" className="p-0.5 text-sm block w-full file:mr-4 file:py-1.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none"/>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  </>
+}
+
 function ProductIngredients({product}: { product: Product }) {
   const location = useLocation()
   const navigateTo = useNavigate()
-  const ingredientProduct = useIngredientProduct({product})
+  const ingredientProduct = useIngredientProductForm({product})
   const [ingredient, setIngredient] = useState({} as IngredientProduct)
 
   function onTrash(ingredient: IngredientProduct) {
@@ -227,7 +291,7 @@ function ProductIngredients({product}: { product: Product }) {
 function IngredientRow({ingredient, onTrash}: { ingredient: IngredientProduct, onTrash: (ingredient: IngredientProduct) => void }) {
   const [isTouched, setIsTouched] = useState('')
   const {product} = useLoaderData() as { product: Product }
-  const ingredientProduct = useIngredientProduct({product})
+  const ingredientProduct = useIngredientProductForm({product})
   const [pivotIngredientProduct, setPivotIngredientProduct] = useState<IngredientProduct>(ingredient)
 
   useEffect(() => {
@@ -323,7 +387,7 @@ function CreateNewIngredient() {
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Ingredient>({} as Ingredient)
   const {ingredients, product} = useLoaderData() as { ingredients: Ingredient[], product: Product }
-  const ingredientProduct = useIngredientProduct({product})
+  const ingredientProduct = useIngredientProductForm({product})
   const filtered = (query === '' ? ingredients : ingredients.filter(queryIngredients)).filter(excludeSelectedIngredients)
 
   function excludeSelectedIngredients(ingredient) {

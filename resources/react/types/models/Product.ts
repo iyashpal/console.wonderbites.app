@@ -1,6 +1,5 @@
-import Category from "./Category";
 import {IngredientProduct} from "./pivot";
-import User from "./User";
+import {Category, Media, User} from "@/types/models";
 
 export default interface Product {
   id: number,
@@ -25,6 +24,7 @@ export default interface Product {
 
   ingredients?: IngredientProduct[],
 
+  media?: Media[],
   meta: {
     media_count?: number
   }
