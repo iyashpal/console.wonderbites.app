@@ -1,6 +1,6 @@
 import {test} from '@japa/runner'
-import Database from '@ioc:Adonis/Lucid/Database'
 import {UserFactory} from 'Database/factories'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 test.group('Core [users.index]', (group) => {
   group.each.setup(async () => {
