@@ -5,11 +5,11 @@ import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
-import {Ingredient, Product} from '@/types/models'
+import {Ingredient, Media, Product} from '@/types/models'
 import {Combobox, Transition} from '@headlessui/react'
 import {IngredientProduct} from '@/types/models/pivot'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
 import {useIngredientProductForm, useMediaProductForm} from '@/hooks/forms'
 
@@ -75,9 +75,11 @@ export default function ShowProduct() {
 }
 
 function ProductImages() {
-  const form = useMediaProductForm({attachment: ''})
+
   const [show, setShow] = useState(false)
+  const form = useMediaProductForm({attachment: ''})
   const {product} = useLoaderData() as { product: Product }
+  const imageField = useRef<HTMLInputElement>(null)
   const [fileType, setFileType] = useState('image')
 
   useEffect(() => {
@@ -85,7 +87,40 @@ function ProductImages() {
   }, [product])
 
   function onChangeImage(e) {
-    form.input.onChange.create(e)
+    form.input.onChange.create(e).then(() => {
+      if (imageField.current) {
+        imageField.current.value = ''
+      }
+    })
+  }
+
+  function MediaOrder({media}: { media: Media }) {
+    const form = useMediaProductForm({id: media.id})
+    useEffect(() => {
+      form.sync(product)
+    }, [])
+    return (
+      <input onChange={form.input.onChange.update} className={'w-24 rounded border-gray-300 focus:ring-gray-500 focus:border-gray-500'} type="number" min={0} defaultValue={media.meta.pivot_order}/>
+    )
+  }
+
+  function TrashMedia({media}: { media: Media }) {
+    const form = useMediaProductForm({id: media.id})
+
+    useEffect(() => {
+      form.sync(product)
+    }, [])
+
+
+    function moveToTrash() {
+      form.deleteProductMedia()
+    }
+
+    return (
+      <button onClick={moveToTrash} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+        {form.isProcessing ? <Loaders.Circle className={'w-5 h-5 animate-spin'}/> : <Icons.Outline.Trash className={'w-5 h-5'}/>}
+      </button>
+    )
   }
 
   return <>
@@ -115,7 +150,7 @@ function ProductImages() {
               <tr className="divide-x divide-gray-200">
                 <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 w-28">Preview</th>
                 <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Caption</th>
-                <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Order</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 ">Order</th>
                 <th scope="col" className="py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
               </tr>
               </thead>
@@ -123,25 +158,28 @@ function ProductImages() {
               {product.media?.map((media, index) => {
                 return (
                   <tr key={index} className="divide-x divide-gray-200">
+
                     <td className="whitespace-nowrap py-2 px-4 text-sm font-medium text-gray-900">
                       <img src={media.attachment_url} alt={media.title} className={'h-10 aspect-video object-cover rounded-md'}/>
                     </td>
+
                     <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                       {media.title}
                     </td>
+
                     <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                      {media.meta.pivot_order}
+                      <MediaOrder media={media}/>
                     </td>
+
                     <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0">
                       <div className="flex item-center justify-center gap-x-1">
                         <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
                           <Icons.Outline.Star className={'w-5 h-5'}/>
                         </button>
-                        <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                          <Icons.Outline.Trash className={'w-5 h-5'}/>
-                        </button>
+                        <TrashMedia media={media}/>
                       </div>
                     </td>
+
                   </tr>
                 )
               })}
@@ -163,7 +201,7 @@ function ProductImages() {
                       <option value="image">Image</option>
                       <option value="video">Video</option>
                     </select>
-                    <input onChange={onChangeImage} type="file" accept={fileType === 'image' ? 'image/*' : 'video/*'} name="attachment" id="attachment" className="p-0.5 text-sm block w-full file:mr-4 file:py-1.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none"/>
+                    <input ref={imageField} onChange={onChangeImage} type="file" accept={fileType === 'image' ? 'image/*' : 'video/*'} name="attachment" id="attachment" className="p-0.5 text-sm block w-full file:mr-4 file:py-1.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none"/>
                   </div>
                 </td>
               </tr>
@@ -304,7 +342,6 @@ function ProductIngredients({product}: { product: Product }) {
         </div>
       </Modal>
     </>
-
   )
 }
 

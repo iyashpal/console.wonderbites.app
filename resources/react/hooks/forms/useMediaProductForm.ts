@@ -56,6 +56,52 @@ export default function useMediaProductForm(fields: FormFields) {
       })
   }
 
+  function onChangeUpdate(e) {
+    let formData = new FormData()
+    formData.append('order', e.target.value)
+
+    return Axios().put(`/products/${product.id}/media/${form.id}`, formData)
+      .then((data) => {
+        setIsProcessing(false)
+        navigateTo(location)
+        return Promise.resolve(data)
+      }).catch((error) => {
+        setIsProcessing(false)
+        setErrors(error.response?.data?.errors ?? {})
+        return Promise.reject(error)
+      })
+  }
+
+  function setMediaAsDefault(e) {
+    let formData = new FormData()
+    formData.append('order', e.target.value)
+
+    return Axios().put(`/products/${product.id}/media/${form.id}`, formData)
+      .then((data) => {
+        setIsProcessing(false)
+        navigateTo(location)
+        return Promise.resolve(data)
+      }).catch((error) => {
+        setIsProcessing(false)
+        setErrors(error.response?.data?.errors ?? {})
+        return Promise.reject(error)
+      })
+  }
+
+  function deleteProductMedia() {
+    setIsProcessing(true)
+    return Axios().delete(`/products/${product.id}/media/${form.id}`)
+      .then((data) => {
+        setIsProcessing(false)
+        navigateTo(location)
+        return Promise.resolve(data)
+      }).catch((error) => {
+        setIsProcessing(false)
+        setErrors(error.response?.data?.errors ?? {})
+        return Promise.reject(error)
+      })
+  }
+
   function handleCreate(e) {
     e.preventDefault()
     setIsProcessing(true)
@@ -99,10 +145,12 @@ export default function useMediaProductForm(fields: FormFields) {
       },
       onChange: {
         attachment: onChangeAttachment,
-        create: onChangeCreate
+        create: onChangeCreate,
+        update: onChangeUpdate,
       },
     },
-
+    setMediaAsDefault,
+    deleteProductMedia,
     onSubmit: {
       create: handleCreate,
       update: handleUpdate,
