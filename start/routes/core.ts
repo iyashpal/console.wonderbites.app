@@ -18,6 +18,7 @@ Route.group(() => {
     Route.post('logout', 'LogoutController').as('logout')
 
     // Resource routes
+    Route.resource('users', 'UsersController')
     Route.resource('cuisines', 'CuisinesController')
     Route.resource('products', 'ProductsController')
     Route.resource('categories', 'CategoriesController')
