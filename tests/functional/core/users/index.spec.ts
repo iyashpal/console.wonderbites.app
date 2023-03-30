@@ -31,6 +31,25 @@ test.group('Core [users.index]', (group) => {
     response.assertBodyContains({data: [{id: user.id, first_name: user.firstName, last_name: user.lastName}]})
   }).tags(['@core', '@core.users.index'])
 
+  test('it can read user role in the response.', async ({client, route}) => {
+    const user = await UserFactory.with('role').create()
+    const response = await client.get(route('core.users.index')).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+    response.assertBodyContains({
+      data: [
+        {
+          id: user.id,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          role: {
+            id: user.roleId,
+          },
+        },
+      ],
+    })
+  }).tags(['@core', '@core.users.index'])
+
   test('it can read the page number {$i}.').with([1, 2, 3, 4]).run(async ({client, route}, page) => {
     const users = await UserFactory.with('role').createMany(40)
     const [user] = users

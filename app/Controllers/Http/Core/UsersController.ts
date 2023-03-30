@@ -6,7 +6,7 @@ export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
     try {
       const {page = 1, limit = 10} = request.all() as { page: number, limit: number }
-      const users = await User.query().paginate(page, limit)
+      const users = await User.query().preload('role').paginate(page, limit)
       response.ok(users)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
