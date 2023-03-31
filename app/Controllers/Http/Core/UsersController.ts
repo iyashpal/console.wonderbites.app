@@ -1,6 +1,7 @@
-import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {User} from 'App/Models'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import StoreValidator from 'App/Validators/Core/Users/StoreValidator'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
@@ -16,7 +17,22 @@ export default class UsersController {
   public async create ({}: HttpContextContract) {
   }
 
-  public async store ({}: HttpContextContract) {
+  public async store ({request, response}: HttpContextContract) {
+    try {
+      const payload = await request.validate(StoreValidator)
+
+      const user = await User.create({
+        firstName: payload.first_name,
+        lastName: payload.last_name,
+        mobile: payload.phone,
+        email: payload.email,
+        password: payload.password,
+      })
+
+      response.ok(user)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async show ({}: HttpContextContract) {

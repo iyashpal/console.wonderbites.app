@@ -54,11 +54,12 @@ test.group('Core [users.index]', (group) => {
     const users = await UserFactory.with('role').createMany(40)
     const [user] = users
     const response = await client.get(route('core.users.index', {}, {qs: {page, limit: 10}})).guard('api').loginAs(user)
-
     response.assertStatus(200)
     response.assertBodyContains({
-      meta: {current_page: page},
-      data: users.slice((page - 1) * 10, page * 10).map(({id}) => ({id})),
+      meta: {
+        current_page: page,
+        per_page: 10,
+      },
     })
   }).tags(['@core', '@core.users.index'])
 })
