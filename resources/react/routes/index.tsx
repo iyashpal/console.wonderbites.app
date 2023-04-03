@@ -42,7 +42,11 @@ export const AppRoutes = [
           {
             path: 'create',
             element: <Views.Users.Create/>,
-          }
+          },
+          {
+            path: ':id/edit',
+            element: <Views.Users.Edit/>,
+          },
         ]
       },
 
