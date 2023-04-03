@@ -1,9 +1,28 @@
 import Icons from '~/helpers/icons'
 import {useSelector} from "@/store/hooks";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import {DateTime} from "luxon";
+import {useEffect, useState} from "react";
 
 export default function Dashboard() {
   const {user} = useSelector(state => state.authSlice)
+  const [hour, setHour] = useState<number>(0)
+
+  useEffect(() => {
+    setHour(DateTime.local().hour)
+  }, [])
+
+  function greeting() {
+    if (hour > 16) {
+      return 'Good Evening'
+    }
+
+    if (hour > 11) {
+      return 'Good Afternoon'
+    }
+    return 'Good Morning'
+  }
+
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -12,7 +31,9 @@ export default function Dashboard() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <div className="py-4">
           <div>
-            <h2 className={`text-2xl font-bold text-red-primary`}>Good Morning</h2>
+            <h2 className={`text-2xl font-bold text-red-primary`}>
+              {greeting()}
+            </h2>
             <p className={`mt-1`}>Welcome Back {user.id ? user.name : 'User'}</p>
           </div>
           <div className={`grid grid-cols-4 gap-4 sm:gap-6 mt-5`}>
