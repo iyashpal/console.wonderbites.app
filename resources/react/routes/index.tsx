@@ -177,6 +177,10 @@ export const AppRoutes = [
           {
             path: '',
             element: <Views.Orders.List/>
+          },
+          {
+            path: 'create',
+            element: <Views.Orders.Create />,
           }
         ]
       },

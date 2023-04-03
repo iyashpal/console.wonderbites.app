@@ -69,6 +69,7 @@ import EditIngredient from '@/views/ingredients/EditIngredient';
  * Orders Views
  */
 import ListOrders from '~/views/orders/ListOrders';
+import CreateOrder from '~/views/orders/CreateOrder';
 
 /**
  * Pages Views
@@ -168,7 +169,8 @@ const Views = {
   },
 
   Orders: {
-    List: ListOrders
+    List: ListOrders,
+    Create: CreateOrder,
   },
 
   Pages: {
