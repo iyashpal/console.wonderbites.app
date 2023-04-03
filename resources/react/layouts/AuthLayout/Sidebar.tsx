@@ -10,25 +10,25 @@ import {
 } from '@heroicons/react/24/outline'
 
 const navigation = [
-  {name: 'Dashboard', href: '/app/dashboard', icon: DashboardIcon},
-  {name: 'Users', href: '/app/users', icon: UsersIcon},
-  {name: 'Categories', href: '/app/categories', icon: FolderIcon},
-  {name: 'Reviews', href: '/app/reviews', icon: PageStar},
-  {name: 'Ingredients', href: '/app/ingredients', icon: Vegan},
-  {name: 'Cuisines', href: '/app/cuisines', icon: BookOpenIcon},
-  {name: 'Subscriptions', href: '/app/subscriptions', icon: RectangleStackIcon},
-  {name: 'Orders', href: '/app/orders', icon: NumberedListLeft},
-  {name: 'Chat', href: '/app/chats', icon: ChatBubbleOvalLeftEllipsisIcon},
-  {name: 'Products', href: '/app/products', icon: BoxIso},
-  {name: 'Clients', href: '/app/clients', icon: UserGroupIcon},
-  {name: 'Banners', href: '/app/banners', icon: PhotoIcon},
-  {name: 'Pages', href: '/app/pages', icon: DocumentTextIcon},
-  {name: 'Feedback', href: '/app/feedbacks', icon: FeedbackIcon},
-  {name: 'Wonderpoints', href: '/app/wonderpoints', icon: WonderPointsIcon},
-  {name: 'Coupons', href: '/app/coupons', icon: TicketIcon},
-  {name: 'Reservations', href: '/app/reservations', icon: CalendarDaysIcon},
-  {name: 'Waitlist', href: '/app/waitlist', icon: ClockIcon},
-  {name: 'Settings', href: '/app/settings', icon: CogIcon},
+  {name: 'Dashboard', href: '/app/dashboard', icon: DashboardIcon, disabled: false},
+  {name: 'Users', href: '/app/users', icon: UsersIcon, disabled: false},
+  {name: 'Categories', href: '/app/categories', icon: FolderIcon, disabled: false},
+  {name: 'Reviews', href: '/app/reviews', icon: PageStar, disabled: true},
+  {name: 'Ingredients', href: '/app/ingredients', icon: Vegan, disabled: false},
+  {name: 'Cuisines', href: '/app/cuisines', icon: BookOpenIcon, disabled: false},
+  {name: 'Subscriptions', href: '/app/subscriptions', icon: RectangleStackIcon, disabled: true},
+  {name: 'Orders', href: '/app/orders', icon: NumberedListLeft, disabled: false},
+  {name: 'Chat', href: '/app/chats', icon: ChatBubbleOvalLeftEllipsisIcon, disabled: true},
+  {name: 'Products', href: '/app/products', icon: BoxIso, disabled: false},
+  {name: 'Clients', href: '/app/clients', icon: UserGroupIcon, disabled: true},
+  {name: 'Banners', href: '/app/banners', icon: PhotoIcon, disabled: true},
+  {name: 'Pages', href: '/app/pages', icon: DocumentTextIcon, disabled: true},
+  {name: 'Feedback', href: '/app/feedbacks', icon: FeedbackIcon, disabled: true},
+  {name: 'Wonderpoints', href: '/app/wonderpoints', icon: WonderPointsIcon, disabled: true},
+  {name: 'Coupons', href: '/app/coupons', icon: TicketIcon, disabled: true},
+  {name: 'Reservations', href: '/app/reservations', icon: CalendarDaysIcon, disabled: true},
+  {name: 'Waitlist', href: '/app/waitlist', icon: ClockIcon, disabled: true},
+  {name: 'Settings', href: '/app/settings', icon: CogIcon, disabled: true},
 ]
 
 export default function Sidebar({show, onToggleSidebar}: { show: boolean, onToggleSidebar: () => void }) {
@@ -92,8 +92,16 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
                     </span>
                     <ArrowTopRightOnSquareIcon className={'w-4 h-4'} aria-hidden="true"/>
                   </a>
-                  {navigation.map((item) => (
-                    <Link onClick={onToggleSidebar} key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-4 py-2 text-base font-medium gap-x-2'].join(' ')}>
+                  {navigation.map((item) => item.disabled ? (
+                    <span key={item.name + '-disabled-mobile'} className={`w-full  text-slate-300 group flex items-center justify-between px-4 py-2 text-base font-medium gap-x-2`}>
+                      <span className={'inline-flex items-center gap-x-2'} aria-hidden="true">
+                        <item.icon className={`flex-shrink-0 h-4 w-4`} aria-hidden="true"/>
+                        {item.name}
+                      </span>
+                      <ChevronRightIcon className={'w-4 h-4'}/>
+                    </span>
+                  ) : (
+                    <Link onClick={onToggleSidebar} key={item.name + '-enabled-mobile'} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between px-4 py-2 text-base font-medium gap-x-2'].join(' ')}>
                       <span className={'inline-flex items-center gap-x-2'} aria-hidden="true">
                         <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
                         {item.name}
@@ -125,8 +133,16 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
               </span>
               <ArrowTopRightOnSquareIcon className={'w-4 h-4'}/>
             </a>
-            {navigation.map((item) => (
-              <Link onClick={onToggleSidebar} key={item.name} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between pl-4 sm:pl-6 pr-2 sm:pr-4 py-2 text-sm font-medium gap-x-2'].join(' ')}>
+            {navigation.map((item) => item.disabled ? (
+              <span key={item.name + '-disabled-desktop'} className={`w-full text-slate-300 flex items-center justify-between pl-4 sm:pl-6 pr-2 sm:pr-4 py-2 text-sm font-medium gap-x-2`}>
+                <span className={'inline-flex gap-x-2 items-center'}>
+                  <item.icon className={`flex-shrink-0 h-4 w-4`} aria-hidden="true"/>
+                  {item.name}
+                </span>
+                <ChevronRightIcon className={'w-4 h-4'}/>
+              </span>
+            ) : (
+              <Link onClick={onToggleSidebar} key={item.name + '-enabled-desktop'} to={item.href} className={[isMatchWithCurrent(item.href) ? 'bg-red-primary text-white' : 'text-slate-900 hover:bg-red-primary hover:text-white', 'group flex items-center justify-between pl-4 sm:pl-6 pr-2 sm:pr-4 py-2 text-sm font-medium gap-x-2'].join(' ')}>
                 <span className={'inline-flex gap-x-2 items-center'}>
                   <item.icon className={[isMatchWithCurrent(item.href) ? 'text-white' : 'text-slate-900 group-hover:text-white', 'flex-shrink-0 h-4 w-4'].join(' ')} aria-hidden="true"/>
                   {item.name}
