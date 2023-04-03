@@ -1,8 +1,9 @@
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {schema, rules, CustomMessages} from '@ioc:Adonis/Core/Validator'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class StoreValidator {
-  constructor (protected ctx: HttpContextContract) {}
+  constructor (protected ctx: HttpContextContract) {
+  }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -37,6 +38,7 @@ export default class StoreValidator {
     email: schema.string({trim: true}, [
       rules.email(),
       rules.required(),
+      rules.unique({column: 'email', table: 'users'}),
     ]),
     phone: schema.string({trim: true}, [
       rules.required(),
