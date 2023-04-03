@@ -5,7 +5,7 @@ import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 export default function Dashboard() {
   const {user} = useSelector(state => state.authSlice)
   return <>
-    <div className="">
+    <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <Breadcrumb pages={[{name: 'Dashboard'}]}/>
       </div>
