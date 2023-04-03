@@ -2,6 +2,7 @@ import {User} from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import StoreValidator from 'App/Validators/Core/Users/StoreValidator'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
@@ -26,6 +27,7 @@ export default class UsersController {
         lastName: payload.last_name,
         mobile: payload.phone,
         email: payload.email,
+        avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null,
         password: payload.password,
       })
 

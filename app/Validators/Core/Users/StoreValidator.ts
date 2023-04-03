@@ -35,6 +35,9 @@ export default class StoreValidator {
       rules.maxLength(50),
       rules.minLength(1),
     ]),
+    avatar: schema.file.optional({
+      size: '1mb',
+    }),
     email: schema.string({trim: true}, [
       rules.email(),
       rules.required(),
