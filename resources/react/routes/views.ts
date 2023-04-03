@@ -99,6 +99,7 @@ import ListSubscriptions from '~/views/subscriptions/ListSubscriptions';
  * Users Views
  */
 import ListUsers from '~/views/users/ListUsers';
+import CreateUser from '~/views/users/CreateUser';
 
 /**
  * Wait list Views
@@ -197,7 +198,8 @@ const Views = {
   },
 
   Users: {
-    List: ListUsers
+    List: ListUsers,
+    Create: CreateUser,
   },
 
   WaitList: {

@@ -38,6 +38,10 @@ export const AppRoutes = [
             path: '',
             element: <Views.Users.List/>,
             loader: async () => Axios().get('/users').then(({data}) => data).catch(({response}) => response)
+          },
+          {
+            path: 'create',
+            element: <Views.Users.Create/>,
           }
         ]
       },
