@@ -47,6 +47,10 @@ export const AppRoutes = [
             path: ':id/edit',
             element: <Views.Users.Edit/>,
           },
+          {
+            path: ':id',
+            element: <Views.Users.Show/>,
+          },
         ]
       },
 
