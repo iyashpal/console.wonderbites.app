@@ -16,10 +16,18 @@ export default function Dashboard() {
             <p className={`mt-1`}>Welcome Back {user.id ? user.name : 'User'}</p>
           </div>
           <div className={`grid grid-cols-4 gap-4 sm:gap-6 mt-5`}>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50"></div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50"></div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50"></div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50"></div>
+            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+              Coming soon...
+            </div>
+            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+              Coming soon...
+            </div>
+            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+              Coming soon...
+            </div>
+            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+              Coming soon...
+            </div>
           </div>
           <div className={`grid grid-cols-4 gap-4 sm:gap-6 mt-5`}>
             <div className="col-span-3 space-y-3">
@@ -84,7 +92,9 @@ export default function Dashboard() {
                   <h2 className={`text-lg font-semibold`}>General Info</h2>
                   <p className={`text-sm`}>Statistics</p>
                 </div>
-                <div className="h-40 bg-gray-50 rounded mt-5"></div>
+                <div className="h-40 bg-gray-50 rounded mt-5 text-gray-300 flex items-center justify-center">
+                  Coming soon...
+                </div>
               </div>
             </div>
             <div className="rounded-md border border-gray-100 shadow-md relative p-4 sm:p-6">
@@ -111,7 +121,9 @@ export default function Dashboard() {
                 <h2 className={`text-lg font-semibold`}>Total Users</h2>
                 <p className={`text-sm`}>All users on this site</p>
               </div>
-              <div className="h-40 bg-gray-50 rounded mt-5"></div>
+              <div className="h-40 bg-gray-50 rounded mt-5 text-gray-300 flex items-center justify-center">
+                Coming soon...
+              </div>
             </div>
           </div>
         </div>
