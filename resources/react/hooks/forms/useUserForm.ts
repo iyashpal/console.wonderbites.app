@@ -27,6 +27,9 @@ export default function useUserForm(fields: FormFields) {
     errors,
     isProcessing,
     input: {
+      value(key, defaultValue = '') {
+        return form[key] ?? defaultValue
+      },
       onChange: {
         avatar(event: ChangeEvent<HTMLInputElement>) {
           if (!event.target.files) return;

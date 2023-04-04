@@ -46,6 +46,7 @@ export const AppRoutes = [
           {
             path: ':id/edit',
             element: <Views.Users.Edit/>,
+            loader: async ({params}) => Axios().get(`/users/${params.id}/edit`).then(({data}) => data).catch(({response}) => response)
           },
           {
             path: ':id',

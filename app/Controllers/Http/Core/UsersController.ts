@@ -3,6 +3,7 @@ import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import StoreValidator from 'App/Validators/Core/Users/StoreValidator'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import UpdateValidator from 'App/Validators/Core/Users/UpdateValidator'
 
 export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
@@ -50,7 +51,25 @@ export default class UsersController {
     }
   }
 
-  public async update ({}: HttpContextContract) {
+  public async update ({params, request, response}: HttpContextContract) {
+    try {
+      const user = await User.findOrFail(params.id)
+
+      const payload = await request.validate(UpdateValidator)
+
+      await user.merge({
+        firstName: payload.first_name,
+        lastName: payload.last_name,
+        mobile: payload.phone,
+        email: payload.email,
+        avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : user.avatar,
+        ...(payload.password ? {password: payload.password}: {}),
+      }).save()
+
+      response.ok(user)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async destroy ({}: HttpContextContract) {

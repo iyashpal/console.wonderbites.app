@@ -5,6 +5,7 @@ export default interface User {
   last_name: string,
   name: string,
   email: string,
+  mobile: string,
   avatar_url: string,
   status: number,
   created_at: string,
