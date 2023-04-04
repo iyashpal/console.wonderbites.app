@@ -1,8 +1,8 @@
 import {User} from 'App/Models'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import StoreValidator from 'App/Validators/Core/Users/StoreValidator'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
@@ -40,7 +40,14 @@ export default class UsersController {
   public async show ({}: HttpContextContract) {
   }
 
-  public async edit ({}: HttpContextContract) {
+  public async edit ({params,response}: HttpContextContract) {
+    try {
+      const user = await User.findOrFail(params.id)
+
+      response.ok({user})
+    } catch(error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   public async update ({}: HttpContextContract) {
