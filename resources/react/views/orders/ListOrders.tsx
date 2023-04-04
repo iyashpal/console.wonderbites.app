@@ -1,10 +1,12 @@
-import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import {Link} from "react-router-dom";
-import IndexFilters from "@/components/IndexFilters";
+import {DateTime} from "luxon";
 import * as Index from "@/components/Index";
-import { CalendarDaysIcon, EnvelopeIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 import * as Alert from "@/components/alerts";
-// import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination";
+import {OrdersPaginator} from "@/types/paginators";
+import IndexFilters from "@/components/IndexFilters";
+import {Link, useLoaderData} from "react-router-dom";
+import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
+import { CalendarDaysIcon, EnvelopeIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 const sortByFilters = [
   {label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true"/>},
@@ -13,7 +15,7 @@ const sortByFilters = [
 ]
 
 export default function ListOrders() {
-  const users = []
+  const {data: orders, meta} = useLoaderData() as OrdersPaginator
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -56,28 +58,39 @@ export default function ListOrders() {
           </Index.THead>
 
           <Index.TBody>
-            {users.map((user, index) => (
+            {orders.map((order, index) => (
               <Index.Tr key={index}>
                 <Index.TdCheck/>
-                <Index.Td className={"inline-flex items-center gap-x-1"}>
-
+                <Index.Td className={''}>{order.id}</Index.Td>
+                <Index.Td>
+                  {DateTime.fromISO(order.created_at).toLocaleString(DateTime.DATETIME_SHORT)}
                 </Index.Td>
                 <Index.Td>
-
+                  {(!!order?.user?.id ? <>
+                    <Link to={`/app/users/${order?.user?.id}`} className={`text-red-primary hover:underline`}>{order?.user?.name}</Link>
+                  </> : <>
+                    <span>-</span>
+                  </>)}
                 </Index.Td>
-                <Index.Td>
-                </Index.Td>
-                <Index.Td>
-                </Index.Td>
+                <Index.Td>-</Index.Td>
+                <Index.Td>-</Index.Td>
+                <Index.Td>-</Index.Td>
+                <Index.Td>-</Index.Td>
                 <Index.Td className={`uppercase text-xs font-semibold`}>
+                  {order.status === 0 && <span>Placed</span>}
+                  {order.status === 1 && <span>Confirmed</span>}
+                  {order.status === 2 && <span>Preparing</span>}
+                  {order.status === 3 && <span>In-Transit</span>}
+                  {order.status === 4 && <span>Delivered</span>}
+                  {order.status === 5 && <span>Canceled</span>}
                 </Index.Td>
                 <Index.Td>
                   <div className="flex item-center justify-center gap-x-1">
-                    <Link to={`/app/users/0/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                    <Link to={`/app/users/${order.id}/edit`} className={'hidden bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
                       <PencilSquareIcon className={'w-5 h-5'} />
                     </Link>
 
-                    <Link to={`/app/users/0`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                    <Link to={`/app/orders/${order.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                       <EyeIcon className={'w-5 h-5'} />
                     </Link>
 
@@ -89,9 +102,9 @@ export default function ListOrders() {
               </Index.Tr>
             ))}
 
-            {users.length === 0 && <>
+            {orders.length === 0 && <>
               <Index.Tr>
-                <Index.Td colSpan={7}>
+                <Index.Td colSpan={10}>
                   <Alert.Warning>
                     No orders available.
                   </Alert.Warning>
@@ -101,7 +114,7 @@ export default function ListOrders() {
           </Index.TBody>
         </Index.Table>
 
-        {/*<Pagination meta={meta} />*/}
+        <Pagination meta={meta} />
       </div>
     </div>
   </>

@@ -6,7 +6,7 @@ export default class OrdersController {
   public async index ({request, response}: HttpContextContract) {
     try {
       const {page = 1, limit = 10} = request.all() as {page: number, limit: number}
-      const orders = await Order.query().paginate(page, limit)
+      const orders = await Order.query().preload('user').paginate(page, limit)
 
       response.ok(orders)
     } catch (error) {

@@ -181,11 +181,20 @@ export const AppRoutes = [
         children: [
           {
             path: '',
-            element: <Views.Orders.List/>
+            element: <Views.Orders.List/>,
+            loader: async () => Axios().get(`/orders`).then(({data}) => data)
           },
           {
             path: 'create',
             element: <Views.Orders.Create />,
+          },
+          {
+            path: ':id/edit',
+            element: <Views.Orders.Edit />,
+          },
+          {
+            path: ':id',
+            element: <Views.Orders.Show />,
           }
         ]
       },

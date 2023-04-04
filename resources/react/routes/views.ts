@@ -68,6 +68,8 @@ import EditIngredient from '@/views/ingredients/EditIngredient';
 /**
  * Orders Views
  */
+import ShowOrder from '~/views/orders/ShowOrder';
+import EditOrder from '~/views/orders/EditOrder';
 import ListOrders from '~/views/orders/ListOrders';
 import CreateOrder from '~/views/orders/CreateOrder';
 
@@ -170,6 +172,8 @@ const Views = {
   },
 
   Orders: {
+    Edit: EditOrder,
+    Show: ShowOrder,
     List: ListOrders,
     Create: CreateOrder,
   },
