@@ -19,6 +19,7 @@ Route.group(() => {
 
     // Resource routes
     Route.resource('users', 'UsersController')
+    Route.resource('orders', 'OrdersController')
     Route.resource('cuisines', 'CuisinesController')
     Route.resource('products', 'ProductsController')
     Route.resource('categories', 'CategoriesController')
