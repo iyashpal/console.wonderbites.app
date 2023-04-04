@@ -41,12 +41,12 @@ export default class UsersController {
   public async show ({}: HttpContextContract) {
   }
 
-  public async edit ({params,response}: HttpContextContract) {
+  public async edit ({params, response}: HttpContextContract) {
     try {
       const user = await User.findOrFail(params.id)
 
       response.ok({user})
-    } catch(error) {
+    } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
   }
@@ -63,7 +63,7 @@ export default class UsersController {
         mobile: payload.phone,
         email: payload.email,
         avatar: payload.avatar ? Attachment.fromFile(request.file('avatar')!) : user.avatar,
-        ...(payload.password ? {password: payload.password}: {}),
+        ...(payload.password ? {password: payload.password} : {}),
       }).save()
 
       response.ok(user)
@@ -72,6 +72,19 @@ export default class UsersController {
     }
   }
 
-  public async destroy ({}: HttpContextContract) {
+  public async destroy ({auth, params, response}: HttpContextContract) {
+    try {
+      const authUser = auth.use('api').user!
+      const user = await User.findOrFail(params.id)
+
+      if (authUser.id !== user.id) {
+        await user.delete()
+        return response.ok({success: true})
+      }
+
+      response.unauthorized({message: 'You can not delete your own account.'})
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 }
