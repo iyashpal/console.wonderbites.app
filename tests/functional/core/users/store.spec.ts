@@ -2,7 +2,7 @@ import {test} from '@japa/runner'
 import {UserFactory} from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
 
-test.group('Core [users.create]', (group) => {
+test.group('Core [users.store]', (group) => {
   group.each.setup(async () => {
     await Database.beginGlobalTransaction()
     return () => Database.rollbackGlobalTransaction()
@@ -80,9 +80,7 @@ test.group('Core [users.create]', (group) => {
         field: 'phone',
         value: '+12025550184',
         code: 200,
-        assert: {
-
-        },
+        assert: {},
       },
       {
         situation: 'password is empty',
@@ -144,4 +142,20 @@ test.group('Core [users.create]', (group) => {
         response.assertBodyContains(field.assert)
       }
     }).tags(['@core', '@core.users.store'])
+
+  test('it reads 422 status code when user try to create multiple users with one email', async ({client, route}) => {
+    const user = await UserFactory.with('role').create()
+    const response = await client.post(route('core.users.store')).guard('api').loginAs(user)
+      .json({
+        first_name: 'Yash',
+        last_name: 'Pal',
+        email: user.email,
+        phone: '+919882426384',
+        password: 'Welcome123',
+        password_confirmation: 'Welcome123',
+      })
+
+    response.assertStatus(422)
+    response.assertBodyContains({errors: {email: 'unique validation failure'}})
+  }).tags(['@core', '@core.users.store'])
 })
