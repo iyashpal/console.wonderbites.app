@@ -1,8 +1,9 @@
-import { mapKeys, mapValues } from 'lodash'
-import { types } from '@ioc:Adonis/Core/Helpers'
-import { User, Cart, Product } from 'App/Models'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {mapKeys, mapValues} from 'lodash'
+import {types} from '@ioc:Adonis/Core/Helpers'
+import {User, Cart, Product} from 'App/Models'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 
 export default class CartsController {
   /**
@@ -10,7 +11,7 @@ export default class CartsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({ request, auth, response }: HttpContextContract) {
+  public async show ({request, auth, response}: HttpContextContract) {
     const user = auth.use('api').user!
 
     const cart = await this.cartWithRequestedData(request, await this.cart(request, user))
@@ -23,7 +24,7 @@ export default class CartsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({ auth, request, response }: HttpContextContract) {
+  public async update ({auth, request, response}: HttpContextContract) {
     const user = auth.use('api').user!
 
     let cart = await this.cart(request, user)
@@ -48,33 +49,39 @@ export default class CartsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async quick ({ auth, request, response }: HttpContextContract) {
-    const user = auth.use('api').user!
+  public async quick ({auth, request, response}: HttpContextContract) {
+    try {
+      const products = request.input('products', [])
+      const user = auth.use('api').user!
+      let cart = await this.cart(request, user)
 
-    let cart = await this.cart(request, user)
+      for (let index in products) {
+        await Product.findOrFail(products[index])
+          .then(async product => {
+            await product?.load('ingredients')
 
-    await Product.findOrFail(request.input('products'))
-      .then(async product => {
-        await product?.load('ingredients')
+            let mappedIngredients = mapValues(
+              mapKeys(
+                product?.ingredients.map(ingredient => ({
+                  id: ingredient.id,
+                  product_id: product.id,
+                  qty: ingredient.$extras.pivot_min_quantity,
+                  price: ingredient.$extras.pivot_price,
+                })), (data) => data.id
+              ),
+              data => ({product_id: data.product_id, qty: data.qty, price: data.price})
+            )
 
-        let mappedIngredients = mapValues(
-          mapKeys(
-            product?.ingredients.map(ingredient => ({
-              id: ingredient.id,
-              product_id: product.id,
-              qty: ingredient.$extras.pivot_min_quantity,
-              price: ingredient.$extras.pivot_price,
-            })), (data) => data.id
-          ),
-          data => ({ product_id: data.product_id, qty: data.qty, price: data.price})
-        )
+            await cart.related('products').attach([product.id])
 
-        await cart.related('products').attach([product.id])
+            await cart.related('ingredients').attach(mappedIngredients)
+          })
+      }
 
-        await cart.related('ingredients').attach(mappedIngredients)
-      })
-
-    response.json(await this.cartWithRequestedData(request, cart))
+      response.json(await this.cartWithRequestedData(request, cart))
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   /**
@@ -90,7 +97,7 @@ export default class CartsController {
         .where('ipAddress', request.ip()).first()
 
       if (types.isNull(guestCart)) {
-        return await Cart.create({ ipAddress: request.ip() })
+        return await Cart.create({ipAddress: request.ip()})
       }
 
       return guestCart
@@ -99,7 +106,7 @@ export default class CartsController {
     await user.load('cart')
 
     if (types.isNull(user.cart)) {
-      return await user.related('cart').create({ ipAddress: request.ip() })
+      return await user.related('cart').create({ipAddress: request.ip()})
     }
 
     return user.cart
@@ -146,7 +153,7 @@ export default class CartsController {
 
   /**
    * Remove all ingredients from cart if the request is to update the cart.
-   * 
+   *
    * @param request RequestContract
    * @param cart Cart
    */
@@ -161,7 +168,7 @@ export default class CartsController {
 
   /**
    * Get the cart with requested data.
-   * 
+   *
    * @param request RequestContract
    * @param cart Cart
    * @returns Cart
