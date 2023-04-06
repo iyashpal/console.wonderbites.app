@@ -28,13 +28,14 @@ export default Env.rules({
   SESSION_DRIVER: Env.schema.string(),
   DRIVE_DISK: Env.schema.enum(['local', 'gcs'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
-  // Postgres database
+  // Database connection
   DB_CONNECTION: Env.schema.string(),
-  PG_HOST: Env.schema.string({format: 'host'}),
-  PG_PORT: Env.schema.number(),
-  PG_USER: Env.schema.string(),
-  PG_PASSWORD: Env.schema.string.optional(),
-  PG_DB_NAME: Env.schema.string(),
+  // MySQL database
+  MYSQL_HOST: Env.schema.string({ format: 'host' }),
+  MYSQL_PORT: Env.schema.number(),
+  MYSQL_USER: Env.schema.string(),
+  MYSQL_PASSWORD: Env.schema.string.optional(),
+  MYSQL_DB_NAME: Env.schema.string(),
   // Redis
   REDIS_CONNECTION: Env.schema.enum(['local'] as const),
   REDIS_HOST: Env.schema.string({format: 'host'}),
@@ -45,7 +46,6 @@ export default Env.rules({
   SMTP_PORT: Env.schema.number(),
   SMTP_USERNAME: Env.schema.string(),
   SMTP_PASSWORD: Env.schema.string.optional(),
-
   // Google Cloud Drive
   GCS_KEY_FILENAME: Env.schema.string(),
   GCS_BUCKET: Env.schema.string(),

@@ -19,13 +19,15 @@ export default class extends BaseSchema {
     })
 
     this.schema.table('users', (table) => {
-      table.bigInteger('role_id').after('id').nullable().references('roles.id').onDelete('RESTRICT')
+      table.bigInteger('role_id').unsigned().nullable().after('id')
+
+      table.foreign('role_id').references('roles.id').onDelete('CASCADE')
     })
   }
 
   public async down () {
     this.schema.table('users', (table) => {
-      table.dropColumn('role_id')
+      table.dropForeign('role_id')
     })
     this.schema.dropTable(this.tableName)
   }
