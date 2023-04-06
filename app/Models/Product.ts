@@ -41,6 +41,9 @@ export default class Product extends BaseModel {
   @column.dateTime()
   public publishedAt: DateTime | null
 
+  @column()
+  public isCustomizable: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

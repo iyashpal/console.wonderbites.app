@@ -28,6 +28,27 @@ test.group('API [products.index]', (group) => {
     })
   }).tags(['@products', '@products.index'])
 
+  test('it reads the customizable property within product data.', async ({client, route}) => {
+    const user = await UserFactory.create()
+
+    const products = await ProductFactory.createMany(10)
+
+    const $response = await client.get(route('api.products.index'))
+      .guard('api').loginAs(user)
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({
+      data: products.reverse().map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price.toString(),
+        description: product.description,
+        is_customizable: Number(product.isCustomizable),
+      })),
+    })
+  }).tags(['@products', '@products.index'])
+
   test('it can allow access to un-authenticated user.', async ({client, route}) => {
     const products = await ProductFactory.createMany(10)
 
@@ -180,7 +201,7 @@ test.group('API [products.index]', (group) => {
 
     const $response = await client.get(route('api.products.index', {}, {qs}))
 
-    // $response.assertStatus(200)
+    $response.assertStatus(200)
 
     $response.assertBodyContains({
       data: [

@@ -25,6 +25,7 @@ export default Factory.define(Product, async ({ faker }) => {
     sku: faker.datatype.number({ min: 10000, max: 100000 }).toString(),
     calories: faker.datatype.number({ min: 0, max: 1000 }).toString(),
     price: faker.datatype.number({ min: 0, max: 1500 }),
+    isCustomizable:faker.datatype.boolean(),
     status: 1,
   }
 })

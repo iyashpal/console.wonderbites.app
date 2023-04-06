@@ -37,6 +37,16 @@ test.group('API [products.show]', (group) => {
     $response.assertBodyContains({ id: product.id })
   }).tags(['@products', '@products.show'])
 
+  test('it reads the customizable property', async ({client, route}) => {
+    const product = await ProductFactory.create()
+
+    const $response = await client.get(route('api.products.show', product))
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({ id: product.id, is_customizable: Number(product.isCustomizable), })
+  }).tags(['@products', '@products.show'])
+
   test('it can load the product media.', async ({ client, route }) => {
     const user = await UserFactory.create()
 
