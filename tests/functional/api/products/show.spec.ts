@@ -44,7 +44,7 @@ test.group('API [products.show]', (group) => {
 
     $response.assertStatus(200)
 
-    $response.assertBodyContains({ id: product.id, is_customizable: Number(product.isCustomizable), })
+    $response.assertBodyContains({ id: product.id, is_customizable: Number(product.isCustomizable) })
   }).tags(['@products', '@products.show'])
 
   test('it can load the product media.', async ({ client, route }) => {
