@@ -33,11 +33,13 @@ export default class ProductsController {
       const userId = auth.use('api').user?.id
 
       const {
-        name, price, description, sku, publishedAt, categoryId, thumbnail,
+        name, price, description,
+        sku, publishedAt, categoryId,
+        thumbnail, isCustomizable,
       } = await request.validate(CreateValidator)
 
       const product = await Product.create({
-        sku, name, price, userId, publishedAt, description,
+        sku, name, price, userId, publishedAt, description, isCustomizable,
         thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
