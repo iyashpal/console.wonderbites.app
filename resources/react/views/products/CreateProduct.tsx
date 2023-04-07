@@ -44,7 +44,7 @@ export default function CreateProduct() {
                   <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="text" onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
                   <InputError error={form.errors?.name} />
                 </div>
 
@@ -52,7 +52,7 @@ export default function CreateProduct() {
                   <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
                     SKU <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="text" onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
                   <InputError error={form.errors?.sku} />
                 </div>
 
@@ -72,7 +72,7 @@ export default function CreateProduct() {
                   <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number"  onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} min={0} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
                   <InputError error={form.errors?.price} />
                 </div>
 
@@ -80,7 +80,7 @@ export default function CreateProduct() {
                   <label htmlFor="calories" className="block text-sm font-bold text-gray-700">
                     Calories
                   </label>
-                  <input type="text"  onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="text" defaultValue={form.input.value('calories')} onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
                   <InputError error={form.errors?.calories} />
                 </div>
 
@@ -88,7 +88,7 @@ export default function CreateProduct() {
                   <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
                     Customization
                   </label>
-                  <select defaultValue={1} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={1}>Enable</option>
                     <option value={0}>Disable</option>
                   </select>
@@ -98,7 +98,7 @@ export default function CreateProduct() {
                   <label htmlFor="description" className="block text-sm font-bold text-gray-700">
                     Description <sup className='text-red-primary'>*</sup>
                   </label>
-                  <textarea name="description"  onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+                  <textarea name="description" defaultValue={form.input.value('description')} onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
                   <InputError error={form.errors?.description} />
                 </div>
 
@@ -114,7 +114,7 @@ export default function CreateProduct() {
                   <label htmlFor="status" className="block text-sm font-bold text-gray-700">
                     Status <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="publishedAt" onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="publishedAt" defaultValue={form.input.value('publishedAt')} onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={''}>Draft</option>
                     <option value={DateTime.now().toString()}>Published</option>
                   </select>

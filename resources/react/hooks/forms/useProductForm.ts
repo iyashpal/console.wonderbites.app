@@ -53,11 +53,11 @@ export default function useProductForm(fields: FormFields) {
   }
 
   /**
-   * Event handler for the status field.
+   * Event handler for the customization field.
    * @param event
    */
   function onChangeIsCustomizable(event: ChangeEvent<HTMLSelectElement>) {
-    setCreateForm(payload => ({...payload, isCustomizable: Boolean(event.target.value)}))
+    setCreateForm(payload => ({...payload, isCustomizable: Number(event.target.value) === 1}))
   }
 
   /**
@@ -70,7 +70,7 @@ export default function useProductForm(fields: FormFields) {
 
 
   /**
-   * Event handler for the status field.
+   * Event handler for the calories field.
    * @param event
    */
   function onChangeCalories(event: ChangeEvent<HTMLInputElement>) {

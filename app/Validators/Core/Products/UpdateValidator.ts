@@ -27,30 +27,24 @@ export default class UpdateValidator {
     name: schema.string({}, [
       rules.required(),
     ]),
-
     categoryId: schema.number([
       rules.required(),
     ]),
-
     price: schema.number([
       rules.required(),
     ]),
-
     description: schema.string({}, [
       rules.required(),
     ]),
-
     sku: schema.string({}, [
       rules.required(),
     ]),
-
+    calories: schema.string.optional({trim: true}),
     publishedAt: schema.date.nullableAndOptional(),
-
     thumbnail: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
     }),
-
     isCustomizable: schema.boolean(),
   })
 

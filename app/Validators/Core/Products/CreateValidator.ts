@@ -1,8 +1,9 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import {schema, rules, CustomMessages} from '@ioc:Adonis/Core/Validator'
 
 export default class CreateValidator {
-  constructor (protected ctx: HttpContextContract) { }
+  constructor(protected ctx: HttpContextContract) {
+  }
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
@@ -24,36 +25,27 @@ export default class CreateValidator {
    *    ```
    */
   public schema = schema.create({
-
     name: schema.string({}, [
       rules.required(),
     ]),
-
     categoryId: schema.number([
       rules.required(),
     ]),
-
     price: schema.number([
       rules.required(),
     ]),
-
     description: schema.string({}, [
       rules.required(),
     ]),
-
     sku: schema.string({}, [
       rules.required(),
     ]),
-
+    calories: schema.string.optional({trim: true}),
     thumbnail: schema.file({
       size: '1mb',
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
-    }, [
-      rules.required(),
-    ]),
-
+    }, [rules.required()]),
     publishedAt: schema.date.nullableAndOptional(),
-
     isCustomizable: schema.boolean(),
   })
 

@@ -74,7 +74,7 @@ export default function EditProduct() {
                   <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
+                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} min={0} name="price" id="price" autoComplete="price" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError error={form.errors?.price}>{form.errors?.price}</InputError>
                 </div>
 
@@ -90,7 +90,7 @@ export default function EditProduct() {
                   <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
                     Customization
                   </label>
-                  <select  defaultValue={form.input.value('calories')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select  defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={1}>Enable</option>
                     <option value={0}>Disable</option>
                   </select>

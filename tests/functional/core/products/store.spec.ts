@@ -109,7 +109,6 @@ test.group('Core [products.store]', (group) => {
   test('it can draft new product.', async ({client, route, assert}) => {
     const category = await CategoryFactory.create()
     const user = await UserFactory.with('role').create()
-
     const response = await client.post(route('core.products.store'))
       .guard('api').loginAs(user)
       .file('thumbnail', Application.publicPath('/images/logo.svg'))
