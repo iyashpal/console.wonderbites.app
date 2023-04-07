@@ -10,7 +10,7 @@ import {PaginatorMeta} from '~/types/paginators'
 import IndexFilters from "@/components/IndexFilters";
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import {Link, useNavigate, useSearchParams} from 'react-router-dom'
+import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline"
 import {BookmarkIcon, CurrencyDollarIcon, HashtagIcon, CalendarDaysIcon} from "@heroicons/react/24/outline";
 
@@ -23,6 +23,7 @@ const sortByFilters = [
 
 export default function ListProducts() {
   const flash = useFlash()
+  const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
   const loader = useDataLoader<{ data: Product[], meta: PaginatorMeta }>(`/products`)
@@ -38,7 +39,7 @@ export default function ListProducts() {
 
   useEffect(() => {
     loader.sync({params: {page: searchParams.get('page') ?? 1}})
-  }, [searchParams])
+  }, [searchParams, location])
 
   useLayoutEffect(() => {
     const isIndeterminate = selected.length > 0 && selected.length < products.length
