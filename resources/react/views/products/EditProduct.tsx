@@ -1,26 +1,28 @@
-import { DateTime } from 'luxon';
-import { useState } from 'react';
-import { useProductForm } from '@/hooks/forms';
-import { Category, Product } from '@/types/models';
+import {DateTime} from 'luxon';
+import {useState} from 'react';
+import {useProductForm} from '@/hooks/forms';
+import {Category, Product} from '@/types/models';
 import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import { Link, Form, useLoaderData } from "react-router-dom";
-import { ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {Link, Form, useLoaderData} from "react-router-dom";
+import {ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
 
 export default function EditProduct() {
 
   const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
-    const {category, categories, product } = useLoaderData() as { categories: Category[], product: Product, category: Category }
-    const form = useProductForm({
-        id: product.id,
-        name: product.name,
-        sku: product.sku,
-        price: product.price,
-        categoryId: category ? category.id : 0,
-        description: product.description,
-        publishedAt: DateTime.now(),
-        status: product.status,
-      })
+  const {category, categories, product} = useLoaderData() as { categories: Category[], product: Product, category: Category }
+  const form = useProductForm({
+    id: product.id,
+    name: product.name,
+    sku: product.sku,
+    price: product.price,
+    calories: product.calories,
+    isCustomizable: product.is_customizable,
+    categoryId: category ? category.id : 0,
+    description: product.description,
+    publishedAt: DateTime.now(),
+    status: product.status,
+  })
 
   function toggleUploadProgress() {
     setIsShowFiles(e => !e)
@@ -29,7 +31,7 @@ export default function EditProduct() {
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{ name: 'Products', href: '/app/products' }, { name: 'Modify Product' }]} />
+        <Breadcrumb pages={[{name: 'Products', href: '/app/products'}, {name: 'Modify Product'}]}/>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
@@ -44,7 +46,7 @@ export default function EditProduct() {
                   <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError error={form.errors?.name}>{form.errors?.name}</InputError>
                 </div>
 
@@ -52,7 +54,7 @@ export default function EditProduct() {
                   <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
                     SKU <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError error={form.errors?.sku}>{form.errors?.sku}</InputError>
                 </div>
 
@@ -61,7 +63,7 @@ export default function EditProduct() {
                   <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="categoryId" defaultValue={form.input.value('categoryId')}  onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="categoryId" defaultValue={form.input.value('categoryId')} onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option>Select Category</option>
                     {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
@@ -72,8 +74,26 @@ export default function EditProduct() {
                   <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"/>
                   <InputError error={form.errors?.price}>{form.errors?.price}</InputError>
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="calories" className="block text-sm font-bold text-gray-700">
+                    Calories
+                  </label>
+                  <input type="text" defaultValue={form.input.value('calories')} onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <InputError error={form.errors?.calories} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
+                    Customization
+                  </label>
+                  <select  defaultValue={form.input.value('calories')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={1}>Enable</option>
+                    <option value={0}>Disable</option>
+                  </select>
                 </div>
 
                 <div className="col-span-6">
@@ -88,7 +108,7 @@ export default function EditProduct() {
                   <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
                     Image
                   </label>
-                  <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
+                  <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none"/>
                   <InputError error={form.errors?.thumbnail}>{form.errors?.thumbnail}</InputError>
                 </div>
 
@@ -106,21 +126,21 @@ export default function EditProduct() {
                 {isShowFiles && <>
                   <div className="col-span-6">
                     <label htmlFor="file-uploads" className="block text-sm font-bold text-gray-700">
-                      Images  <sup className='text-gray-400'>(Not yet ready)</sup>
+                      Images <sup className='text-gray-400'>(Not yet ready)</sup>
                     </label>
                     <div className={''}>
                       <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                         <div className="space-y-1 text-center">
 
                           <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
 
                           <div className="flex text-sm text-gray-600">
                             <p className="pr-1">Drop your file(s) here or</p>
                             <label htmlFor="file-upload" className="relative cursor-pointer  bg-white font-medium text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-500 focus-within:ring-offset-2 hover:text-red-500">
                               <span>browse</span>
-                              <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                              <input id="file-upload" name="file-upload" type="file" className="sr-only"/>
                             </label>
                           </div>
                           <p className="text-xs text-gray-500">PNG, JPG, GIF up to 20MB</p>
@@ -130,7 +150,7 @@ export default function EditProduct() {
                       <div className={'py-4 space-y-3'}>
                         <div className={'flex items-center justify-center text-sm'}>
                           <button onClick={toggleUploadProgress} className={'inline-flex items-center space-x-3'}>
-                            All Files {isShowFiles ? <ChevronDownIcon className={'w-5 h-5'} /> : <ChevronRightIcon className={'w-5 h-5'} />}
+                            All Files {isShowFiles ? <ChevronDownIcon className={'w-5 h-5'}/> : <ChevronRightIcon className={'w-5 h-5'}/>}
                           </button>
                         </div>
 
@@ -143,10 +163,10 @@ export default function EditProduct() {
                               <div className={'flex items-center text-sm'}>50% - 12 seconds remaining</div>
                               <div className={'flex items-center'}>
                                 <button className={'text-gray-300 hover:text-gray-500'}>
-                                  <PauseCircleIcon className={'h-6 w-6'} />
+                                  <PauseCircleIcon className={'h-6 w-6'}/>
                                 </button>
                                 <button className={'text-gray-300 hover:text-gray-500'}>
-                                  <XCircleIcon className={'h-6 w-6'} />
+                                  <XCircleIcon className={'h-6 w-6'}/>
                                 </button>
                               </div>
                             </div>

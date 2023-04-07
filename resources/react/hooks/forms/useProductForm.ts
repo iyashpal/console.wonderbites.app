@@ -1,12 +1,12 @@
 import {DateTime} from "luxon";
-import {useFetch, useFlash} from "@/hooks";
+import {Axios} from "~/helpers";
+import { useFlash} from "@/hooks";
 import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
 
 export default function useProductForm(fields: FormFields) {
-  const flash = useFlash()
-  const fetcher = useFetch()
   const navigateTo = useNavigate()
+  const flash = useFlash()
   const [createForm, setCreateForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
@@ -56,8 +56,25 @@ export default function useProductForm(fields: FormFields) {
    * Event handler for the status field.
    * @param event
    */
+  function onChangeIsCustomizable(event: ChangeEvent<HTMLSelectElement>) {
+    setCreateForm(payload => ({...payload, isCustomizable: Boolean(event.target.value)}))
+  }
+
+  /**
+   * Event handler for the status field.
+   * @param event
+   */
   function onChangePrice(event: ChangeEvent<HTMLInputElement>) {
     setCreateForm(payload => ({...payload, price: Number(event.target.value)}))
+  }
+
+
+  /**
+   * Event handler for the status field.
+   * @param event
+   */
+  function onChangeCalories(event: ChangeEvent<HTMLInputElement>) {
+    setCreateForm(payload => ({...payload, calories: event.target.value}))
   }
 
 
@@ -100,7 +117,7 @@ export default function useProductForm(fields: FormFields) {
     e.preventDefault()
 
     setIsProcessing(true)
-    fetcher.put(`products/${createForm?.id}`, generateFormData()).then(({data}) => {
+    Axios().put(`products/${createForm?.id}`, generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('product_updated', true)
       navigateTo(`/app/products/${data.id}`)
@@ -116,7 +133,7 @@ export default function useProductForm(fields: FormFields) {
 
     setIsProcessing(true)
 
-    fetcher.post('products', generateFormData()).then(({data}) => {
+    Axios().post('products', generateFormData()).then(({data}) => {
       setIsProcessing(false)
       flash.set('product_created', true)
       navigateTo(`/app/products/${data.id}`)
@@ -141,10 +158,12 @@ export default function useProductForm(fields: FormFields) {
         sku: onChangeSku,
         name: onChangeName,
         price: onChangePrice,
+        calories: onChangeCalories,
         thumbnail: onChangeThumbnail,
         categoryId: onChangeCategoryId,
         description: onChangeDescription,
         publishedAt: onChangePublishedAt,
+        isCustomizable: onChangeIsCustomizable,
       },
     },
     onSubmit: {
@@ -159,9 +178,11 @@ type FormFields = {
   categoryId: number,
   name: string,
   sku: string,
+  calories: string,
   price: number | null,
   description: string,
   status?: number,
+  isCustomizable: boolean,
   publishedAt: DateTime | string,
   createdAt?: DateTime | string,
   updatedAt?: DateTime | string,
@@ -170,6 +191,7 @@ type FormErrors = {
   sku: string,
   name: string,
   price: string,
+  calories: string,
   status: string,
   thumbnail: string,
   categoryId: string,

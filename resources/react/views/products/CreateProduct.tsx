@@ -12,8 +12,10 @@ export default function CreateProduct() {
     name: '',
     sku: '',
     price: 0,
+    calories: '0',
     categoryId: 0,
     description: '',
+    isCustomizable: false,
     publishedAt: DateTime.now(),
     status: 1,
   })
@@ -43,7 +45,7 @@ export default function CreateProduct() {
                     Name <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.name}>{form.errors?.name}</InputError>
+                  <InputError error={form.errors?.name} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -51,7 +53,7 @@ export default function CreateProduct() {
                     SKU <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="text" onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.sku}>{form.errors?.sku}</InputError>
+                  <InputError error={form.errors?.sku} />
                 </div>
 
 
@@ -59,11 +61,11 @@ export default function CreateProduct() {
                   <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
                     Category <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="categoryId"  onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option>Select Category</option>
                     {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                   </select>
-                  <InputError error={form.errors?.categoryId}>{form.errors?.categoryId}</InputError>
+                  <InputError error={form.errors?.categoryId} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -71,7 +73,25 @@ export default function CreateProduct() {
                     Price <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="number"  onChange={form.input.onChange.price} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.price}>{form.errors?.price}</InputError>
+                  <InputError error={form.errors?.price} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="calories" className="block text-sm font-bold text-gray-700">
+                    Calories
+                  </label>
+                  <input type="text"  onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+                  <InputError error={form.errors?.calories} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
+                    Customization
+                  </label>
+                  <select defaultValue={1} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={1}>Enable</option>
+                    <option value={0}>Disable</option>
+                  </select>
                 </div>
 
                 <div className="col-span-6">
@@ -79,7 +99,7 @@ export default function CreateProduct() {
                     Description <sup className='text-red-primary'>*</sup>
                   </label>
                   <textarea name="description"  onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-                  <InputError error={form.errors?.description}>{form.errors?.description}</InputError>
+                  <InputError error={form.errors?.description} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -87,7 +107,7 @@ export default function CreateProduct() {
                     Image <sup className='text-red-primary'>*</sup>
                   </label>
                   <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
-                  <InputError error={form.errors?.thumbnail}>{form.errors?.thumbnail}</InputError>
+                  <InputError error={form.errors?.thumbnail} />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -98,7 +118,7 @@ export default function CreateProduct() {
                     <option value={''}>Draft</option>
                     <option value={DateTime.now().toString()}>Published</option>
                   </select>
-                  <InputError error={form.errors?.status}>{form.errors?.status}</InputError>
+                  <InputError error={form.errors?.status} />
                 </div>
 
                 {isShowFiles && <>
