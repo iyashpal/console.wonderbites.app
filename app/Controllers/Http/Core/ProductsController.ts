@@ -32,19 +32,21 @@ export default class ProductsController {
     try {
       const userId = auth.use('api').user?.id
 
-      const {
-        name, price, description,
-        sku, publishedAt, categoryId,
-        thumbnail, isCustomizable,
-      } = await request.validate(CreateValidator)
+      const payload = await request.validate(CreateValidator)
 
       const product = await Product.create({
-        sku, name, price, userId, publishedAt, description, isCustomizable,
-        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
+        userId,
+        sku: payload.sku,
+        name: payload.name,
+        price: payload.price,
+        description: payload.description,
+        publishedAt: payload.publishedAt,
+        isCustomizable: payload.isCustomizable,
+        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
-      if (categoryId) {
-        await product.related('categories').attach([categoryId])
+      if (payload.categoryId) {
+        await product.related('categories').attach([payload.categoryId])
       }
 
       response.json(product)
@@ -93,17 +95,20 @@ export default class ProductsController {
   public async update ({response, request, params}: HttpContextContract) {
     try {
       const product = await Product.findByOrFail('id', params.id)
-      const {
-        name, price, sku, description, publishedAt, thumbnail, categoryId,
-      } = await request.validate(UpdateValidator)
+      const payload = await request.validate(UpdateValidator)
 
       await product.merge({
-        name, price, sku, description, publishedAt,
-        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : product.thumbnail,
+        name: payload.name,
+        price: payload.price,
+        sku: payload.sku,
+        description: payload.description,
+        publishedAt: payload.publishedAt,
+        isCustomizable: payload.isCustomizable,
+        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : product.thumbnail,
       }).save()
 
-      if (categoryId) {
-        await product.related('categories').attach([categoryId])
+      if (payload.categoryId) {
+        await product.related('categories').attach([payload.categoryId])
       }
       response.ok(product)
     } catch (error) {

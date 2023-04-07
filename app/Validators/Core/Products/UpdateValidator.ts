@@ -50,6 +50,8 @@ export default class UpdateValidator {
       size: '1mb',
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
     }),
+
+    isCustomizable: schema.boolean(),
   })
 
   /**

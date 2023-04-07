@@ -14,7 +14,7 @@ test.group('Core [products.show]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads 401 status code when the user is logged in with invalid role.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -23,7 +23,7 @@ test.group('Core [products.show]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it shows product when the user is logged in and have correct role assigned.', async ({client, route}) => {
     const product = await ProductFactory.create()
@@ -32,7 +32,7 @@ test.group('Core [products.show]', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains({product: {id: product.id}})
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads the id of referenced product.', async ({client, route}) => {
     const product = await ProductFactory.create()
@@ -41,7 +41,7 @@ test.group('Core [products.show]', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains({product: {id: product.id}})
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads the list of referenced product categories.', async ({client, route}) => {
     const product = await ProductFactory.with('categories', 1).create()
@@ -54,7 +54,7 @@ test.group('Core [products.show]', (group) => {
         id: product.id, categories: product.categories.map(({id, name}) => ({id, name})),
       },
     })
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads the list of referenced product ingredients.', async ({client, route}) => {
     const product = await ProductFactory.with('ingredients', 5).create()
@@ -68,7 +68,7 @@ test.group('Core [products.show]', (group) => {
         id: product.id, ingredients: product.ingredients.map(({id, name}) => ({id, name})),
       },
     })
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads the product media in response.', async ({client, route}) => {
     const product = await ProductFactory.with('media', 5).create()
@@ -81,7 +81,7 @@ test.group('Core [products.show]', (group) => {
         id: product.id, media: product.media.map(({id, title}) => ({id, title})),
       },
     })
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 
   test('it reads the product media meta fields.', async ({client, route}) => {
     const user = await UserFactory.with('role').create()
@@ -96,5 +96,5 @@ test.group('Core [products.show]', (group) => {
         })),
       },
     })
-  }).tags(['@core', '@core.products.show'])
+  }).tags(['@core', '@core.products', '@core.products.show'])
 })

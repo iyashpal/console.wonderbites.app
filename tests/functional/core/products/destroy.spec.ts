@@ -16,7 +16,7 @@ test.group('Core [products.destroy]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.products.destroy'])
+  }).tags(['@core', '@core.products', '@core.products.destroy'])
 
   test('it do not allow access to a non-management user.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -27,7 +27,7 @@ test.group('Core [products.destroy]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@core', '@core.products.destroy'])
+  }).tags(['@core', '@core.products', '@core.products.destroy'])
 
   test('it allows to deletion of a product to a management user.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -36,5 +36,5 @@ test.group('Core [products.destroy]', (group) => {
     const response = await client.delete(route('core.products.destroy', product)).guard('api').loginAs(user)
 
     response.assertStatus(200)
-  }).tags(['@core', '@core.products.destroy'])
+  }).tags(['@core', '@core.products', '@core.products.destroy'])
 })

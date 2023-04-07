@@ -15,7 +15,7 @@ test.group('Core [products.index]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.index'])
+  }).tags(['@core', '@core.products', '@core.products.index'])
 
   test('it do not allow none core user to list the products.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -24,7 +24,7 @@ test.group('Core [products.index]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.index'])
+  }).tags(['@core', '@core.products', '@core.products.index'])
 
   test('it allows a core user to list the products.', async ({client, route}) => {
     await ProductFactory.createMany(6)
@@ -36,7 +36,7 @@ test.group('Core [products.index]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({meta: {total: 6}})
-  }).tags(['@core', '@core.products.index'])
+  }).tags(['@core', '@core.products', '@core.products.index'])
 
   test('it do not list deleted products', async ({ client, route}) => {
     await ProductFactory.createMany(6)
@@ -50,7 +50,7 @@ test.group('Core [products.index]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({meta: { total: 6}})
-  }).tags(['@core', '@core.products.index'])
+  }).tags(['@core', '@core.products', '@core.products.index'])
 
   test('it allows user to switch between pages.', async ({client, route}) => {
     await ProductFactory.createMany(40)
@@ -63,5 +63,5 @@ test.group('Core [products.index]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({ meta: { total: 40, first_page: 1, last_page: 2, current_page: 2 }})
-  }).tags(['@core', '@core.products.index'])
+  }).tags(['@core', '@core.products', '@core.products.index'])
 })

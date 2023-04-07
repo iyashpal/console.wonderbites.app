@@ -17,7 +17,7 @@ test.group('Core [products.update]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it throws 401 error code when user don\'t have role assigned.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -29,7 +29,7 @@ test.group('Core [products.update]', (group) => {
     response.assertStatus(401)
 
     response.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it throws 200 status code when user has role assigned.', async ({client, route}) => {
     const {
@@ -41,11 +41,11 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        categoryId: category.id, name, description, publishedAt, price, sku,
+        categoryId: category.id, name, description, publishedAt, price, sku, isCustomizable: false,
       })
 
     response.assertStatus(200)
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it do not allow user to remove product name.', async ({client, route, assert}) => {
     const product = await ProductFactory.with('categories', 1).create()
@@ -60,12 +60,13 @@ test.group('Core [products.update]', (group) => {
         price: 50,
         sku: 'SKU563',
         description: 'asdlkfj',
+        isCustomizable: false,
       })
 
     response.assertStatus(422)
 
     assert.properties(response.body().errors, ['name'])
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it do not allow user to remove product description.', async ({client, route, assert}) => {
     const product = await ProductFactory.with('categories', 1).create()
@@ -80,12 +81,13 @@ test.group('Core [products.update]', (group) => {
         price: 50,
         sku: 'SKU563',
         description: '',
+        isCustomizable: false,
       })
 
     response.assertStatus(422)
 
     assert.properties(response.body().errors, ['description'])
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it do not allow user to remove product sku.', async ({client, route, assert}) => {
     const product = await ProductFactory.create()
@@ -100,12 +102,13 @@ test.group('Core [products.update]', (group) => {
         publishedAt: null,
         price: 50,
         sku: '',
+        isCustomizable: false,
       })
 
     response.assertStatus(422)
 
     assert.properties(response.body().errors, ['sku'])
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it do not allow user to remove product category.', async ({client, route, assert}) => {
     const {
@@ -116,13 +119,13 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        name, description, sku, publishedAt, price,
+        name, description, sku, publishedAt, price, isCustomizable: false,
       })
 
     response.assertStatus(422)
 
     assert.properties(response.body().errors, ['categoryId'])
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it do not allow user to remove product price.', async ({client, route, assert}) => {
     const product = await ProductFactory.with('categories', 1).create()
@@ -137,12 +140,13 @@ test.group('Core [products.update]', (group) => {
         sku: 'SKU563',
         publishedAt: null,
         price: '',
+        isCustomizable: false,
       })
 
     response.assertStatus(422)
 
     assert.properties(response.body().errors, ['price'])
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it allow user to mark product as unpublished.', async ({client, route}) => {
     const user = await UserFactory.with('role').create()
@@ -154,11 +158,11 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user)
-      .json({categoryId: category.id, name, price, description, sku, publishedAt: null})
+      .json({categoryId: category.id, name, price, description, sku, publishedAt: null, isCustomizable: false})
 
     response.assertStatus(200)
     response.assertBodyContains({published_at: null})
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it allow user to mark product as published.', async ({client, route, assert}) => {
     const user = await UserFactory.with('role').create()
@@ -169,12 +173,14 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user)
-      .json({categoryId: category.id, name, price, description, sku, publishedAt: DateTime.now()})
-
+      .json({
+        categoryId: category.id, name, price, description, sku, publishedAt: DateTime.now(), isCustomizable: false,
+      })
+    // response.dumpBody()
     response.assertStatus(200)
 
-    assert.notEmpty(response.body().published_at)
-  }).tags(['@core', '@core.products.update'])
+    assert.isNotNull(response.body().published_at)
+  }).tags(['@core', '@core.products', '@core.products.update'])
 
   test('it allows user to change product information by passing the validation rules.', async ({client, route}) => {
     const user = await UserFactory.with('role').create()
@@ -191,6 +197,7 @@ test.group('Core [products.update]', (group) => {
         description: 'Demo description updated...',
         sku: 'SKU563',
         publishedAt: DateTime.now(),
+        isCustomizable: false,
       })
 
     response.assertStatus(200)
@@ -198,5 +205,5 @@ test.group('Core [products.update]', (group) => {
     response.assertBodyContains({
       id, name: 'Demo Updated', description: 'Demo description updated...', sku: 'SKU563',
     })
-  }).tags(['@core', '@core.products.update'])
+  }).tags(['@core', '@core.products', '@core.products.update'])
 })
