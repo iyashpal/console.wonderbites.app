@@ -109,9 +109,16 @@ export default class ProductsController {
         thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : product.thumbnail,
       }).save()
 
+      // Update the category ID
       if (payload.categoryId) {
-        await product.related('categories').attach([payload.categoryId])
+        await product.related('categories').sync([payload.categoryId])
       }
+
+      // Remove all ingredients from product when product customization set to disabled
+      if (payload.isCustomizable === false) {
+        await product.related('ingredients').sync([])
+      }
+
       response.ok(product)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
