@@ -31,13 +31,13 @@ export default function EditProduct() {
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <Breadcrumb pages={[{name: 'Products', href: '/app/products'}, {name: 'Modify Product'}]}/>
+        <Breadcrumb pages={[{name: 'Products', href: '/app/products'}, {name: 'Edit Product'}]}/>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
         <div className="shadow border">
           <div className="p-4 sm:p-6 border-b">
-            <h1 className={'font-semibold'}>Modify Product</h1>
+            <h1 className={'font-semibold'}>Edit Product</h1>
           </div>
           <Form method='post' onSubmit={form.onSubmit.update} encType='multipart/form-data'>
             <div className="p-4 sm:p-6 md:p-8">
