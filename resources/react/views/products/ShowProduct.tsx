@@ -55,10 +55,11 @@ export default function ShowProduct() {
               {name: 'Images', value: <ProductImages/>}
             ]}
           />
-
-          <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
-            <ProductIngredients product={product}/>
-          </div>
+          {(!!product.is_customizable) && (
+            <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
+              <ProductIngredients product={product}/>
+            </div>
+          )}
         </div>
       </div>
     </div>
