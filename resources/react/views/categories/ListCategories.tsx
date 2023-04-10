@@ -1,47 +1,29 @@
 import {Category} from '~/types/models'
 import {useEffect, useState} from 'react'
-import {useFetch, useFlash} from '@/hooks'
+import {useDataLoader, useFlash} from '@/hooks'
 import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {CategoriesPaginator, PaginatorMeta} from '@/types/paginators'
+import {PaginatorMeta} from '@/types/paginators'
 import {ListPageSkeleton, TableRowsSkeleton} from '@/components/skeletons'
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ListCategories() {
+  const loader = useDataLoader<{data: Category[], meta: PaginatorMeta}>(`/categories`)
   const flash = useFlash()
-  const fetcher = useFetch()
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
   const [selected] = useState<number[]>([])
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const [category, setCategory] = useState<Category>({} as Category)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
-  const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
-    fetchCategories()
-  }, [location])
-
-  function fetchCategories(): void {
-    setIsLoading(true)
-    fetcher.get('/categories', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: CategoriesPaginator }) => {
-        setIsLoading(false)
-        setIsLoaded(true)
-        setCategories(response.data)
-        setMeta(response.meta)
-      })
-      .catch(() => {
-        setIsLoading(false)
-      })
-  }
+    loader.sync({params: {page: searchParams.get('page') ?? 1}})
+  }, [location, searchParams])
 
   function toggleTrash(category) {
     setCategory(category);
@@ -60,7 +42,7 @@ export default function ListCategories() {
   }
 
   return <>
-    {isLoaded ? <>
+    {loader.isProcessed() ? <>
       <div className="py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
           <Breadcrumb pages={[{name: 'Categories'}]}/>
@@ -104,10 +86,10 @@ export default function ListCategories() {
             </Index.THead>
 
             <Index.TBody>
-              {isLoading ? <>
+              {loader.isProcessing() ? <>
                 <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
               </> : <>
-                {categories.map(category => <Index.Tr key={category.id}>
+                {loader.response.data.map(category => <Index.Tr key={category.id}>
                   <Index.TdCheck checked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
                   <Index.Td>
                     {category.id}
@@ -144,7 +126,7 @@ export default function ListCategories() {
                     </div>
                   </Index.Td>
                 </Index.Tr>)}
-                {categories.length === 0 && <>
+                {loader.response.data.length === 0 && <>
                   <Index.Tr>
                     <Index.Td colSpan={5}>
                       <Alert.Warning>
@@ -159,7 +141,7 @@ export default function ListCategories() {
               </>}
             </Index.TBody>
           </Index.Table>
-          <Pagination meta={meta}/>
+          <Pagination meta={loader.response.meta}/>
         </div>
       </div>
       <TrashModal
