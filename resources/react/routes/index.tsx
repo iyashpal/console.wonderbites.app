@@ -180,7 +180,6 @@ export const AppRoutes = [
           {
             path: '',
             element: <Views.Orders.List/>,
-            loader: async () => Axios().get(`/orders`).then(({data}) => data)
           },
           {
             path: 'create',

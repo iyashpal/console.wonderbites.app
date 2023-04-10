@@ -2,11 +2,14 @@ import {DateTime} from "luxon";
 import * as Index from "@/components/Index";
 import * as Alert from "@/components/alerts";
 import Pagination from "@/components/Pagination";
-import {OrdersPaginator} from "@/types/paginators";
 import IndexFilters from "@/components/IndexFilters";
-import {Link, useLoaderData} from "react-router-dom";
+import {Link, useLocation, useSearchParams} from "react-router-dom";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import { CalendarDaysIcon, EnvelopeIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import {useDataLoader} from "@/hooks";
+import {useEffect} from "react";
+import {Order} from "@/types/models";
+import {PaginatorMeta} from "@/types/paginators";
 
 const sortByFilters = [
   {label: 'ID', value: 'id', icon: <HashtagIcon className="h-5 w-5" aria-hidden="true"/>},
@@ -15,9 +18,16 @@ const sortByFilters = [
 ]
 
 export default function ListOrders() {
-  const {data: orders, meta} = useLoaderData() as OrdersPaginator
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const loader = useDataLoader<{data: Order[], meta: PaginatorMeta}>(`/orders`)
+
+  useEffect(() => {
+    loader.sync({params: {page: searchParams.get('page') ?? 1}})
+  }, [location, searchParams])
+
   return <>
-    <div className="py-6">
+    {loader.isProcessed() && <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <Breadcrumb pages={[{name: 'Orders'}]}/>
       </div>
@@ -58,7 +68,7 @@ export default function ListOrders() {
           </Index.THead>
 
           <Index.TBody>
-            {orders.map((order, index) => (
+            {loader.response.data.map((order, index) => (
               <Index.Tr key={index}>
                 <Index.TdCheck/>
                 <Index.Td className={''}>{order.id}</Index.Td>
@@ -102,7 +112,7 @@ export default function ListOrders() {
               </Index.Tr>
             ))}
 
-            {orders.length === 0 && <>
+            {loader.response.data.length === 0 && <>
               <Index.Tr>
                 <Index.Td colSpan={10}>
                   <Alert.Warning>
@@ -114,8 +124,9 @@ export default function ListOrders() {
           </Index.TBody>
         </Index.Table>
 
-        <Pagination meta={meta} />
+        <Pagination meta={loader.response.meta} />
       </div>
-    </div>
+    </div>}
+
   </>
 }
