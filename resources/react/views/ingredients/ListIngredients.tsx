@@ -1,5 +1,4 @@
-import {Axios} from '@/helpers'
-import {useFlash} from '@/hooks'
+import {useDataLoader, useFlash} from '@/hooks'
 import Skeleton from './skeleton'
 import {Ingredient} from '@/types/models'
 import * as Index from '~/components/Index'
@@ -10,21 +9,15 @@ import {PaginatorMeta} from '@/types/paginators'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {TableRowsSkeleton} from '@/components/skeletons'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import IngredientsPaginator from '@/types/paginators/IngredientsPaginator'
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
 
 export default function ListIngredients() {
+  const loader = useDataLoader<{data: Ingredient[], meta: PaginatorMeta}>(`/ingredients`)
   const flash = useFlash()
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
-  const [ingredients, setIngredients] = useState<Ingredient[]>([])
 
   const [checked, setChecked] = useState(false)
   const checkbox = useRef<HTMLInputElement>(null)
@@ -35,30 +28,16 @@ export default function ListIngredients() {
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   useEffect(() => {
-    fetchIngredients()
-  }, [location])
+    loader.sync({params: {page: searchParams.get('page') ?? 1}})
+  }, [location, searchParams])
 
   useLayoutEffect(() => {
-    setChecked(selected.length === ingredients.length)
-    setIndeterminate(selected.length > 0 && selected.length < ingredients.length)
+    setChecked(selected.length === loader.response?.data?.length)
+    setIndeterminate(selected.length > 0 && selected.length < loader.response?.data?.length)
     if (checkbox.current) {
       checkbox.current.indeterminate = indeterminate
     }
   }, [selected])
-
-  function fetchIngredients(): void {
-    setIsLoading(true)
-    Axios().get('/ingredients', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: IngredientsPaginator }) => {
-        setIsLoading(false)
-        setIsLoaded(true)
-        setIngredients(response.data)
-        setMeta(response.meta)
-      })
-      .catch(() => {
-        setIsLoading(false)
-      })
-  }
 
 
   /**
@@ -67,7 +46,7 @@ export default function ListIngredients() {
    * @return void
    */
   function toggleAll() {
-    setSelected(checked || indeterminate ? [] : ingredients)
+    setSelected(checked || indeterminate ? [] : loader.response.data)
     setChecked(!checked && !indeterminate)
     setIndeterminate(false)
   }
@@ -92,7 +71,7 @@ export default function ListIngredients() {
   }
 
   return <>
-    {isLoaded ?
+    {loader.isProcessed() ?
       <>
         <div className="py-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -127,12 +106,12 @@ export default function ListIngredients() {
               </Index.THead>
 
               <Index.TBody>
-                {isLoading ? <>
+                {loader.isProcessing() ? <>
                   <TableRowsSkeleton limit={10} actions={true} checkboxes={true} columns={[
                     {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''},
                   ]}/>
                 </> : <>
-                  {ingredients.map(ingredient => (
+                  {loader.response.data.map(ingredient => (
                     <Index.Tr key={ingredient.id}>
                       <Index.TdCheck checked={selected.includes(ingredient)} onChange={(e) => setSelected(
                         e.target.checked ? [...selected, ingredient] : selected.filter((i) => i !== ingredient)
@@ -169,7 +148,7 @@ export default function ListIngredients() {
                       </Index.Td>
                     </Index.Tr>
                   ))}
-                  {ingredients.length === 0 && <>
+                  {loader.response.data?.length === 0 && <>
                     <Index.Tr>
                       <Index.Td colSpan={11}>
                         <Alert.Warning>
@@ -184,7 +163,7 @@ export default function ListIngredients() {
                 </>}
               </Index.TBody>
             </Index.Table>
-            <Pagination meta={meta}/>
+            <Pagination meta={loader.response.meta}/>
           </div>
         </div>
         <TrashModal
