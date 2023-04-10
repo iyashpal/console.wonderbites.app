@@ -1,7 +1,7 @@
 import {DateTime} from "luxon";
 import {Cuisine} from "@/types/models";
 import {useEffect, useState} from "react";
-import {useFetch, useFlash} from "@/hooks";
+import {useDataLoader, useFlash} from "@/hooks";
 import * as Index from "@/components/Index";
 import * as Alert from "@/components/alerts";
 import TrashModal from "@/components/TrashModal";
@@ -9,42 +9,23 @@ import Pagination from "@/components/Pagination";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {TableRowsSkeleton} from "@/components/skeletons";
 import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
-import {CuisinesPaginator, PaginatorMeta} from "@/types/paginators";
+import {PaginatorMeta} from "@/types/paginators";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {BookmarkIcon, HashtagIcon, LinkIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 export default function ListCuisines() {
-
+  const loader = useDataLoader<{data: Cuisine[], meta: PaginatorMeta}>(`/cuisines`)
   const flash = useFlash()
-  const fetcher = useFetch()
   const location = useLocation()
   const navigateTo = useNavigate()
   const [cuisine, setCuisine] = useState<Cuisine>({} as Cuisine)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
   const [searchParams] = useSearchParams()
-  const [cuisines, setCuisines] = useState<Cuisine[]>([])
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [meta, setMeta] = useState<PaginatorMeta>({} as PaginatorMeta)
   const [selected] = useState<number[]>([])
 
   useEffect(() => {
-    fetchCuisines()
-  }, [location])
-
-  function fetchCuisines(): void {
-    setIsLoading(true)
-    fetcher.get('/cuisines', {params: {page: searchParams.get('page') ?? 1}})
-      .then(({data: response}: { data: CuisinesPaginator }) => {
-        setIsLoading(false)
-        setIsLoaded(true)
-        setCuisines(response.data)
-        setMeta(response.meta)
-      })
-      .catch(() => {
-        setIsLoading(false)
-      })
-  }
+    loader.sync({params: {page: searchParams.get('page') ?? 1}})
+  }, [location, searchParams])
 
 
   function onDeleteCuisine() {
@@ -59,7 +40,7 @@ export default function ListCuisines() {
   }
 
   return <>
-    {isLoaded ?
+    {loader.isProcessed() ?
       <div className="py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
           <Breadcrumb pages={[{name: 'Cuisines'}]}/>
@@ -104,10 +85,10 @@ export default function ListCuisines() {
             </Index.THead>
 
             <Index.TBody>
-              {isLoading ? <>
+              {loader.isProcessing() ? <>
                 <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
               </> : <>
-                {cuisines.map(cuisine => <Index.Tr key={cuisine.id}>
+                {loader.response.data.map(cuisine => <Index.Tr key={cuisine.id}>
                   <Index.TdCheck checked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
                   <Index.Td>
                     {cuisine.id}
@@ -149,7 +130,7 @@ export default function ListCuisines() {
                     </div>
                   </Index.Td>
                 </Index.Tr>)}
-                {cuisines.length === 0 && <>
+                {loader.response.data.length === 0 && <>
                   <Index.Tr>
                     <Index.Td colSpan={7}>
                       <Alert.Warning>
@@ -164,7 +145,7 @@ export default function ListCuisines() {
               </>}
             </Index.TBody>
           </Index.Table>
-          <Pagination meta={meta}/>
+          <Pagination meta={loader.response.meta}/>
         </div>
         <TrashModal
           show={isTrashing}
