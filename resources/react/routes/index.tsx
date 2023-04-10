@@ -64,7 +64,6 @@ export const AppRoutes = [
           {
             path: '',
             element: <Views.Categories.List/>,
-            loader: async () => Axios().get('/categories').then(({data}) => data),
           },
 
           {
