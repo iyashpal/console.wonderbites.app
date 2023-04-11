@@ -16,7 +16,7 @@ export default class ProductsController {
         .asUser(user)
         .resolveQueryWithPrefix('products')
         .query()
-        .whereNull('published_at')
+        .whereNotNull('published_at')
         .orderBy('id', 'desc')
         .paginate(request.input('page', 1), request.input('limit', 10))
 
@@ -38,7 +38,7 @@ export default class ProductsController {
       const product = await (new ProductQuery(request))
         .asUser(user)
         .resolveQueryWithPrefix('product')
-        .query().where('id', id).whereNull('published_at').firstOrFail()
+        .query().where('id', id).whereNotNull('published_at').firstOrFail()
 
       response.status(200).json(product)
     } catch (error) {
