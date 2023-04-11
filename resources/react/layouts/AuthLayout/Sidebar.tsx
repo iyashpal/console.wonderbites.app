@@ -21,7 +21,7 @@ const navigation = [
   {name: 'Chat', href: '/app/chats', icon: ChatBubbleOvalLeftEllipsisIcon, disabled: true},
   {name: 'Products', href: '/app/products', icon: BoxIso, disabled: false},
   {name: 'Clients', href: '/app/clients', icon: UserGroupIcon, disabled: true},
-  {name: 'Banners', href: '/app/banners', icon: PhotoIcon, disabled: true},
+  {name: 'Banners', href: '/app/banners', icon: PhotoIcon, disabled: false},
   {name: 'Pages', href: '/app/pages', icon: DocumentTextIcon, disabled: true},
   {name: 'Feedback', href: '/app/feedbacks', icon: FeedbackIcon, disabled: true},
   {name: 'Wonderpoints', href: '/app/wonderpoints', icon: WonderPointsIcon, disabled: true},
