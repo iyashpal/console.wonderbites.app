@@ -3,6 +3,7 @@ import {useSelector} from "@/store/hooks";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {DateTime} from "luxon";
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 export default function Dashboard() {
   const {user} = useSelector(state => state.authSlice)
@@ -58,53 +59,53 @@ export default function Dashboard() {
                   <p className={`text-sm`}>Get Started</p>
                 </div>
                 <div className={`grid grid-cols-3 gap-4 pt-5`}>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Outline.BookOpen className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={`/app/cuisines`} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Manage Cuisines
-                    </div>
+                    </Link>
                   </div>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Outline.Ticket className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={``} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Add Coupon
-                    </div>
+                    </Link>
                   </div>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Outline.CalendarDays className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={``} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Add Reservation
-                    </div>
+                    </Link>
                   </div>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Outline.User className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={`/app/users/create`} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Add User
-                    </div>
+                    </Link>
                   </div>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Iconoir.PageStar className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={``} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Manage Reviews
-                    </div>
+                    </Link>
                   </div>
-                  <div className="flex items-center p-3 sm:p-4">
-                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white">
+                  <div className="flex items-center p-3 sm:p-4 group">
+                    <div className="bg-red-primary p-3 sm:p-4 aspect-square rounded-full -m-3 sm:-m-4 z-10 text-white group-hover:bg-gray-600 transition ease-in-out duration-300">
                       <Icons.Iconoir.BoxIso className={`h-6 w-6`}/>
                     </div>
-                    <div className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm`}>
+                    <Link to={`/app/products/create`} className={`flex-auto border border-red-primary rounded-r-full p-3 text-center font-bold text-sm group-hover:border-gray-600 group-hover:text-gray-600 transition ease-in-out duration-300`}>
                       Add Product
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </div>
