@@ -79,6 +79,7 @@ Route.group(() => {
     Route.resource('products', 'ProductsController').apiOnly()
 
     Route.resource('advertisements', 'AdvertisementsController').apiOnly().only(['index', 'show'])
+    Route.resource('banners', 'BannersController').apiOnly().only(['index', 'show'])
 
     Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
   })
