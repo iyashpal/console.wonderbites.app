@@ -164,8 +164,7 @@ export default class ProductQuery extends Query {
   protected filterPopular () {
     this.$query.match([
       this.input('filters', []).includes(ExtraFieldName.POPULAR),
-      query => query.whereHas('extraFields', builder => builder
-        .where('field', ExtraFieldName.POPULAR).where('data', 'true')),
+      query => query.where('is_popular', true),
     ])
 
     return this

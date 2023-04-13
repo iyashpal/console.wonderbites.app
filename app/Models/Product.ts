@@ -44,6 +44,9 @@ export default class Product extends BaseModel {
   @column()
   public isCustomizable: boolean
 
+  @column()
+  public isPopular: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
