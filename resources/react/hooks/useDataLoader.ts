@@ -1,7 +1,7 @@
 import {Axios} from '@/helpers'
 import {useEffect, useState} from 'react'
 
-export default function useDataLoader<T extends unknown>(url: string, config = {}) {
+export default function useDataLoader<T>(url: string, config = {}) {
   const [data, setData] = useState<T>({} as T)
   const [isProcessed, setIsProcessed] = useState<boolean>(false)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
