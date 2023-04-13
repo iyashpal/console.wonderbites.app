@@ -1,57 +1,43 @@
 import {classNames} from "@/helpers";
-import {useState} from "react";
+import {useState, ChangeEvent, forwardRef, ForwardedRef} from "react";
 
 export default function ListTable(props: TableProps) {
   const [headings] = useState(props.thead ?? [])
 
   return <>
     <Table>
-      {headings.length > 0 && (
-        <TableHead className={`shadow-inner`}>
-          <TableRow>
-            <TableHeadColumn>
-              <input type={"checkbox"}/>
-            </TableHeadColumn>
+      <TableHead className={`shadow-inner`}>
+        <TableRow>
 
-            {headings.map((column, key) => (
-              <TableHeadColumn key={`${column.name}-${key}`}>
-                {column.value ?? column.name}
-              </TableHeadColumn>
-            ))}
+          <TableHeadCheckboxCell/>
 
-            <TableHeadColumn>
-              Action
-            </TableHeadColumn>
-          </TableRow>
-        </TableHead>
-      )}
+          {headings.map((column, key) => (
+            <TableHeadCell className={column.options.className} key={`${column.name}-${key}`}>
+              {column.value ?? column.name}
+            </TableHeadCell>
+          ))}
+
+          <TableHeadCell>Action</TableHeadCell>
+        </TableRow>
+      </TableHead>
 
       <TableBody>
         {props.tbody?.map((row, key) => (
           <TableRow key={key}>
-            <TableDataColumn>
-              <input type={"checkbox"}/>
-            </TableDataColumn>
+
+            <TableDataCheckboxCell/>
 
             {row.map((data, index) => {
-              let column = props.thead ? props.thead[index] : {name: ''}
-              return (
-                <TableDataColumn key={`${column?.name}-${index}`}>
-                  {data ?? '-'}
-                </TableDataColumn>
-              )
+              let column = props.thead?.find((value, key) => key === index)
+              return (<TableDataCell {...column?.options} key={`${column?.name}-${index}`}>{data ?? '-'}</TableDataCell>)
             })}
+
           </TableRow>
         ))}
       </TableBody>
 
     </Table>
   </>
-}
-
-type TableProps = {
-  thead?: { name: string, value?: any, options: { [key: string]: string } }[],
-  tbody?: any[][]
 }
 
 
@@ -85,14 +71,43 @@ export function TableRow(props: { className?: string, children?: any }) {
   </tr>
 }
 
-export function TableHeadColumn(props: { className?: string, colSpan?: number, children?: any }) {
+export function TableHeadCell(props: { className?: string, colSpan?: number, children?: any }) {
   return <th colSpan={props.colSpan} {...classNames('py-3.5 px-3 text-sm font-semibold text-gray-900 uppercase', props.className)}>
     {props.children}
   </th>
 }
 
-export function TableDataColumn(props: { className?: string, colSpan?: number, children?: any }) {
+export function TableDataCell(props: { className?: string, colSpan?: number, children?: any }) {
   return <td colSpan={props.colSpan} {...classNames('whitespace-nowrap py-3 px-3 text-sm font-medium', props.className)}>
     {props.children}
   </td>
+}
+
+export const TableHeadCheckboxCell = forwardRef((props: CheckPropsType, forwardedRef: ForwardedRef<HTMLInputElement>) => (
+  <th scope="col" {...classNames("relative w-12 px-6 sm:w-16 sm:px-8", props.className)}>
+    <input type="checkbox" ref={forwardedRef} defaultChecked={props.checked} onChange={props.onChange} value={props.value} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
+  </th>
+))
+
+export const TableDataCheckboxCell = forwardRef((props: CheckPropsType, forwardedRef: ForwardedRef<HTMLInputElement>) => {
+
+  return (
+    <td {...classNames('relative w-12 px-6 sm:w-16 sm:px-8', props.className)}>
+      {props.checked && (<div className="absolute inset-y-0 left-0 w-0.5 bg-red-600"/>)}
+      <input ref={forwardedRef} defaultChecked={props.checked} type="checkbox" onChange={props.onChange} value={props.value} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
+    </td>
+  )
+})
+
+
+type TableProps = {
+  thead?: { name: string, value?: any, options: { [key: string]: string } }[],
+  tbody?: any[][]
+}
+
+type CheckPropsType = {
+  value?: number,
+  checked?: boolean,
+  className?: string,
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
 }
