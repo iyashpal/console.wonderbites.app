@@ -19,16 +19,17 @@ export default class BannersController {
   public async create ({}: HttpContextContract) {
   }
 
-  public async store ({request, response}: HttpContextContract) {
+  public async store ({auth, request, response}: HttpContextContract) {
     try {
+      const user = auth.use('api').user!
       const payload = await request.validate(StoreValidator)
 
       const banner = await Banner.create({
+        userId: user.id,
         title: payload.title,
-        description: payload.description,
-        attachment: Attachment.fromFile(request.file('attachment')!),
-        options: payload.options,
         status: payload.status,
+        options: payload.options,
+        attachment: Attachment.fromFile(request.file('attachment')!),
       })
 
       response.ok(banner)
@@ -64,10 +65,9 @@ export default class BannersController {
 
       await banner.merge({
         title: payload.title,
-        description: payload.description,
-        attachment: payload.attachment ? Attachment.fromFile(request.file('attachment')!) : banner.attachment,
-        options: payload.options,
         status: payload.status,
+        options: payload.options,
+        attachment: payload.attachment ? Attachment.fromFile(request.file('attachment')!) : banner.attachment,
       })
 
       response.ok(banner)

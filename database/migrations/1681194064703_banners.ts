@@ -8,7 +8,6 @@ export default class extends BaseSchema {
       table.bigIncrements('id')
       table.bigInteger('user_id').unsigned().references('users.id').onDelete('RESTRICT')
       table.string('title')
-      table.text('description').nullable()
       table.json('attachment').nullable()
       table.jsonb('options').nullable()
       table.string('status').defaultTo('active')
