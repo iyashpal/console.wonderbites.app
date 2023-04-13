@@ -41,7 +41,7 @@ export default class BannersController {
 
   public async show ({params, response}: HttpContextContract) {
     try {
-      const banner = await Banner.query().where('id', params.id).firstOrFail()
+      const banner = await Banner.query().preload('user').where('id', params.id).firstOrFail()
 
       response.ok({banner})
     } catch (error) {
