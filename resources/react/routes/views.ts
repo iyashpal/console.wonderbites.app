@@ -35,7 +35,10 @@ import CreateCuisines from '~/views/cuisines/CreateCuisines'
 /**
  * Banners Views
  */
+import EditBanner from '~/views/banners/EditBanner'
+import ShowBanner from '~/views/banners/ShowBanner'
 import ListBanners from '~/views/banners/ListBanners'
+import CreateBanner from '~/views/banners/CreateBanner'
 
 /**
  * Chats Views
@@ -129,7 +132,10 @@ const Views = {
   },
 
   Banners: {
-    List: ListBanners
+    List: ListBanners,
+    Edit: EditBanner,
+    Show: ShowBanner,
+    Create: CreateBanner,
   },
 
   Categories: {

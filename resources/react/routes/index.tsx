@@ -183,15 +183,15 @@ export const AppRoutes = [
           },
           {
             path: 'create',
-            element: <Views.Orders.Create />,
+            element: <Views.Orders.Create/>,
           },
           {
             path: ':id/edit',
-            element: <Views.Orders.Edit />,
+            element: <Views.Orders.Edit/>,
           },
           {
             path: ':id',
-            element: <Views.Orders.Show />,
+            element: <Views.Orders.Show/>,
           }
         ]
       },
@@ -263,6 +263,18 @@ export const AppRoutes = [
           {
             path: '',
             element: <Views.Banners.List/>
+          },
+          {
+            path: 'create',
+            element: <Views.Banners.Create/>
+          },
+          {
+            path: ':id/edit',
+            element: <Views.Banners.Edit />
+          },
+          {
+            path: ':id',
+            element: <Views.Banners.Show/>
           }
         ]
       },
