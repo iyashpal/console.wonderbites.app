@@ -1,10 +1,9 @@
 import Banner from 'App/Models/Banner'
-import Factory from '@ioc:Adonis/Lucid/Factory'
-import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import Drive from '@ioc:Adonis/Core/Drive'
 import {file} from '@ioc:Adonis/Core/Helpers'
-import {AdvertisementOptions} from 'App/Models/Enums/Advertisement'
+import Factory from '@ioc:Adonis/Lucid/Factory'
 import {UserFactory} from 'Database/factories/index'
+import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default Factory.define(Banner, async ({ faker }) => {
   const attachment = new Attachment({
@@ -21,8 +20,12 @@ export default Factory.define(Banner, async ({ faker }) => {
   return {
     attachment,
     title: faker.lorem.words(3),
-    description: faker.lorem.paragraph(),
-    options: {} as AdvertisementOptions,
+    options: {
+      page: faker.lorem.words(1),
+      section: faker.lorem.words(1),
+      type: faker.lorem.words(1),
+      link: faker.lorem.words(1),
+    },
     status: 'active',
   }
 })
