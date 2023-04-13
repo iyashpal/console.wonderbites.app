@@ -9,7 +9,8 @@ export default class BannersController {
   public async index ({request, response}: HttpContextContract) {
     try {
       const {page = 1, limit = 10} = request.all() as { page: number, limit: number }
-      const banners = await Banner.query().paginate(page, limit)
+      const banners = await Banner.query().orderBy('id', 'desc').paginate(page, limit)
+
       response.ok(banners)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
