@@ -50,6 +50,10 @@ export default function Pagination({className, meta, url}: ComponentProps) {
   }
 
   function lastItem() {
+    if ((meta.per_page * meta.current_page) > meta.total) {
+      return meta.total
+    }
+
     return meta.per_page * meta.current_page
   }
 
@@ -146,13 +150,12 @@ export default function Pagination({className, meta, url}: ComponentProps) {
 
 
   return <>
-    {meta.first_page !== meta.last_page &&
-      <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 shadow border flex items-center justify-between'}`}>
+    <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 border flex items-center justify-between'}`}>
 
-        <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
+      <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
 
-        <div className={'flex items-center justify-end gap-x-3'}>
-
+      <div className={'flex items-center justify-end gap-x-3'}>
+        {meta.first_page !== meta.last_page && <>
           {meta.current_page === meta.first_page ? <>
             <button className={'rounded-full relative inline-flex items-center bg-gray-100 p-2 text-sm font-medium text-gray-400 focus:z-10 focus:border-red-500 focus:outline-none cursor-not-allowed'}>
               <ChevronLeftIcon className={'w-5 h-5'}/>
@@ -189,9 +192,8 @@ export default function Pagination({className, meta, url}: ComponentProps) {
               <ChevronRightIcon className={'w-5 h-5'}/>
             </Link>
           </>}
-
-        </div>
+        </>}
       </div>
-    }
+    </div>
   </>
 }
