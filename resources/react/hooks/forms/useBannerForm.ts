@@ -17,20 +17,15 @@ export default function useCategoryForm(fields: FormFields) {
     setForm(payload => ({...payload, title: event.target.value}))
   }
 
-  /**
-   * Event handler for the description field.
-   * @param event
-   */
-  function onChangeDescription(event: ChangeEvent<HTMLTextAreaElement>) {
-    setForm(payload => ({...payload, description: event.target.value}))
-  }
-
-
   function onChangePage(event: ChangeEvent<HTMLSelectElement>) {
     setForm(payload => ({...payload, options: {...payload.options, page: event.target.value}}))
   }
   function onChangeSection(event: ChangeEvent<HTMLSelectElement>) {
     setForm(payload => ({...payload, options: {...payload.options, section: event.target.value}}))
+  }
+
+  function onChangeLink(event: ChangeEvent<HTMLInputElement>) {
+    setForm(payload => ({...payload, options: {...payload.options, link: event.target.value}}))
   }
 
   /**
@@ -78,6 +73,7 @@ export default function useCategoryForm(fields: FormFields) {
         case 'options':
           formData.append('options[page]', form.options.page)
           formData.append('options[type]', form.options.type)
+          formData.append('options[link]', form.options.link)
           formData.append('options[section]', form.options.section)
           break;
         default:
@@ -104,7 +100,6 @@ export default function useCategoryForm(fields: FormFields) {
 
   function onCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    console.log(form)
     setIsProcessing(true)
     Axios().post('banners', generateFormData()).then(({data}) => {
       setIsProcessing(false)
@@ -134,10 +129,10 @@ export default function useCategoryForm(fields: FormFields) {
         options: {
           page: onChangePage,
           type: onChangeType,
+          link: onChangeLink,
           section: onChangeSection,
         },
         attachment: onChangeAttachment,
-        description: onChangeDescription,
       },
     },
     onSubmit: {
@@ -151,11 +146,11 @@ type FormFields = {
   id?: number,
   user_id?: number,
   title: string,
-  description: string,
   options: {
     page: string,
     section: string,
     type: string,
+    link: string,
   },
   status: string,
   created_at?: string,

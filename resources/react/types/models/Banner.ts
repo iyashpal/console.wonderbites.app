@@ -1,7 +1,12 @@
 export default interface Banner {
   id: number,
   title: string,
-  description: string,
+  options: {
+    page: string,
+    section: string,
+    type: string,
+    link: string,
+  },
   status: string,
   created_at: string,
   updated_at: string,
