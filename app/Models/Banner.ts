@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import {User} from 'App/Models/index'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import {BaseModel, BelongsTo, belongsTo, column, scope} from '@ioc:Adonis/Lucid/Orm'
-import {AdvertisementOptions, AdvertisementStatus} from 'App/Models/Enums/Advertisement'
+import { AdvertisementStatus} from 'App/Models/Enums/Advertisement'
 
 export default class Banner extends BaseModel {
   @column({ isPrimary: true })
@@ -21,7 +21,7 @@ export default class Banner extends BaseModel {
   public attachment: AttachmentContract
 
   @column()
-  public options: AdvertisementOptions
+  public options: {page: string, section: string, type: string}
 
   @column()
   public status: string
