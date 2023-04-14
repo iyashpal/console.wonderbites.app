@@ -45,7 +45,7 @@ export default function ListOrders() {
 
         <ListTable
           thead={columns}
-          tbody={loader.response.data.map((order, index) => ([
+          tbody={loader.response.data.map((order) => ([
             order.id,
             DateTime.fromISO(order.created_at).toLocaleString(DateTime.DATETIME_SHORT),
             (!!order?.user?.id ? <>

@@ -73,7 +73,7 @@ export default function ListProducts() {
 
           <ListTable
             thead={columns}
-            tbody={loader.response.data.map((product, index) => ([
+            tbody={loader.response.data.map((product) => ([
               product.id,
               product.sku,
               <Link to={`/app/products/${product.id}`}>
