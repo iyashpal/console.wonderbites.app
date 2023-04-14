@@ -34,6 +34,14 @@ export default function ListTable(props: TableProps) {
 
           </TableRow>
         ))}
+
+        {props.tbody?.length === 0 && <>
+          <TableRow>
+            <TableDataCell colSpan={headings.length + 2}>
+              {props.empty ?? 'No data available.'}
+            </TableDataCell>
+          </TableRow>
+        </>}
       </TableBody>
 
     </Table>
@@ -102,7 +110,8 @@ export const TableDataCheckboxCell = forwardRef((props: CheckPropsType, forwarde
 
 type TableProps = {
   thead?: { name: string, value?: any, options: { [key: string]: string } }[],
-  tbody?: any[][]
+  tbody?: any[][],
+  empty?: any,
 }
 
 type CheckPropsType = {

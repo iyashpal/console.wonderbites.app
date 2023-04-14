@@ -9,6 +9,7 @@ import ListTable from "@/components/page/ListTable";
 import ListFilters from "@/components/page/ListFilters";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline";
+import * as Alert from "@/components/alerts";
 
 export default function ListBanners() {
   const location = useLocation()
@@ -86,6 +87,14 @@ export default function ListBanners() {
                   </div>
                 ]
               })}
+              empty={(
+                <Alert.Warning>
+                  No banners available.{' '}
+                  <Link to={'/app/banners/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                    Click here to add more banners.
+                  </Link>
+                </Alert.Warning>
+              )}
             />
 
             <Pagination meta={loader.response.meta}/>
