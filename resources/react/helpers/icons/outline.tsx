@@ -24,14 +24,19 @@ import {
   ExclamationTriangleIcon as ExclamationTriangle,
   ArrowTopRightOnSquareIcon as ArrowTopRightOnSquare,
   ChatBubbleOvalLeftEllipsisIcon as ChatBubbleOvalLeftEllipsis,
+
   BookmarkIcon as Bookmark,
   EnvelopeIcon as Envelope,
   EyeIcon as Eye,
   HashtagIcon as Hashtag,
   PencilSquareIcon as PencilSquare,
+  LinkIcon as Link,
+  CurrencyDollarIcon as CurrencyDollar,
 } from '@heroicons/react/24/outline'
 
 export {
+  CurrencyDollar,
+  Link,
   Eye,
   Bookmark,
   Envelope,

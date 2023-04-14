@@ -1,25 +1,38 @@
+import Icons from '~/helpers/icons'
 import {Category} from '~/types/models'
 import {useEffect, useState} from 'react'
-import {useDataLoader, useFlash} from '@/hooks'
-import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
+import {useDataLoader, useFlash} from '@/hooks'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
-import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {PaginatorMeta} from '@/types/paginators'
-import {ListPageSkeleton, TableRowsSkeleton} from '@/components/skeletons'
+import {ListPageSkeleton} from '@/components/skeletons'
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {ListFilters, ListTable} from "@/components/page";
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
-import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
+
+const columns = [
+  {name: 'ID', options: {className: 'text-center'}},
+  {name: 'Category Name', options: {className: 'text-left'}},
+  {name: 'PARENT', options: {className: 'text-left'}},
+  {name: 'Group', options: {className: 'text-left'}},
+  {name: 'Image', options: {className: 'text-center'}},
+  {name: 'status', options: {className: 'text-left'}},
+]
+
+const sortByFilters = [
+  {label: 'ID', value: 'id', icon: <Icons.Outline.Hashtag className={'w-5 h-5'}/>},
+  {label: 'Name', value: 'name', icon: <Icons.Outline.Bookmark className={'w-5 h-5'}/>}
+]
 
 export default function ListCategories() {
-  const loader = useDataLoader<{data: Category[], meta: PaginatorMeta}>(`/categories`)
   const flash = useFlash()
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-  const [selected] = useState<number[]>([])
   const [category, setCategory] = useState<Category>({} as Category)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
+  const loader = useDataLoader<{ data: Category[], meta: PaginatorMeta }>(`/categories`)
 
   useEffect(() => {
     loader.sync({params: {page: searchParams.get('page') ?? 1}})
@@ -52,95 +65,42 @@ export default function ListCategories() {
             <Alert.Success className={'mb-6'}>Category deleted successfully</Alert.Success>
           </>}
 
-          <Index.Filters sortBy={[
-            {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
-            {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
-          ]} create={{url: '/app/categories/create', label: 'Add Category'}}/>
+          <ListFilters sortBy={sortByFilters} create={{url: '/app/categories/create', label: 'Add Category'}}/>
 
-          <Index.Table>
-            <Index.THead>
-              <Index.Tr>
-                <Index.ThCheck checked={false}/>
-                <Index.Th>
-                  ID
-                </Index.Th>
-                <Index.Th className={'text-left'}>
-                  Category Name
-                </Index.Th>
-                <Index.Th>
-                  Parent
-                </Index.Th>
-                <Index.Th className={'text-left'}>
-                  Group
-                </Index.Th>
-                <Index.Th>
-                  Image
-                </Index.Th>
-                <Index.Th>
-                  Status
-                </Index.Th>
-                <Index.Th className={'w-24'}>
-                  Action
-                </Index.Th>
-              </Index.Tr>
-            </Index.THead>
+          <ListTable
+            thead={columns}
+            tbody={loader.response.data.map(category =>([
+              category.id,
+              <Link to={`/app/categories/${category.id}`}>
+                {category.name}
+              </Link>,
+              category.parent ?? '-',
+              category.type,
+              <img className={'w-9 h-9 rounded-full mx-auto'} src={category.thumbnail_url} alt={category.name}/>,
+              category.status ? <><span className={'text-red-primary'}>Active</span></> : 'In-active',
+              <div className="flex item-center justify-center gap-x-1">
+                <Link to={`/app/categories/${category.id}/edit`} className={'action:button button:blue'}>
+                  <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
+                </Link>
 
-            <Index.TBody>
-              {loader.isProcessing() ? <>
-                <TableRowsSkeleton columns={[{label: 'ID'}, {label: 'Category Name'}, {label: 'Type'}]} limit={10}/>
-              </> : <>
-                {loader.response.data.map(category => <Index.Tr key={category.id}>
-                  <Index.TdCheck checked={false} onChange={(e) => selected.push(Number(e.target.value ?? 0))} value={1}/>
-                  <Index.Td>
-                    {category.id}
-                  </Index.Td>
-                  <Index.Td className={'text-left'}>
-                    <Link to={`/app/categories/${category.id}`}>
-                      {category.name}
-                    </Link>
-                  </Index.Td>
-                  <Index.Td>
-                    {category.parent ?? '-'}
-                  </Index.Td>
-                  <Index.Td className={'text-left'}>
-                    {category.type}
-                  </Index.Td>
-                  <Index.Td>
-                    <img className={'w-9 h-9 rounded-full mx-auto'} src={category.thumbnail_url} alt={category.name} />
-                  </Index.Td>
-                  <Index.Td className={'font-semibold'}>
-                    {category.status ? <><span className={'text-red-primary'}>Active</span></> : 'In-active'}
-                  </Index.Td>
-                  <Index.Td className={'text-center'}>
-                    <div className="flex item-center justify-center gap-x-1">
-                      <Link to={`/app/categories/${category.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                        <PencilSquareIcon className={'w-5 h-5'}/>
-                      </Link>
+                <Link to={`/app/categories/${category.id}`} className={'action:button button:green'}>
+                  <Icons.Outline.Eye className={'w-5 h-5'}/>
+                </Link>
+                <button onClick={() => toggleTrash(category)} className={'action:button button:red'}>
+                  <Icons.Outline.Trash className={'w-5 h-5'}/>
+                </button>
+              </div>
+            ]))}
+            empty={(
+              <Alert.Warning>
+                No categories available.{' '}
+                <Link to={'/app/categories/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                  Click here to add more categories.
+                </Link>
+              </Alert.Warning>
+            )}
+          />
 
-                      <Link to={`/app/categories/${category.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
-                        <EyeIcon className={'w-5 h-5'}/>
-                      </Link>
-                      <button onClick={() => toggleTrash(category)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                        <TrashIcon className={'w-5 h-5'}/>
-                      </button>
-                    </div>
-                  </Index.Td>
-                </Index.Tr>)}
-                {loader.response.data.length === 0 && <>
-                  <Index.Tr>
-                    <Index.Td colSpan={5}>
-                      <Alert.Warning>
-                        No categories available.{' '}
-                        <Link to={'/app/categories/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                          Click here to add more categories.
-                        </Link>
-                      </Alert.Warning>
-                    </Index.Td>
-                  </Index.Tr>
-                </>}
-              </>}
-            </Index.TBody>
-          </Index.Table>
           <Pagination meta={loader.response.meta}/>
         </div>
       </div>

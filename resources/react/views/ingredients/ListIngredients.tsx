@@ -1,28 +1,38 @@
-import {useDataLoader, useFlash} from '@/hooks'
 import Skeleton from './skeleton'
+import Icons from '~/helpers/icons'
+import {useEffect, useState} from 'react'
 import {Ingredient} from '@/types/models'
-import * as Index from '~/components/Index'
 import * as Alert from '~/components/alerts'
+import {useDataLoader, useFlash} from '@/hooks'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
 import {PaginatorMeta} from '@/types/paginators'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {TableRowsSkeleton} from '@/components/skeletons'
-import {useEffect, useLayoutEffect, useRef, useState} from 'react'
+import {ListFilters, ListTable} from "@/components/page";
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
-import {BookmarkIcon, EyeIcon, HashtagIcon, PencilSquareIcon, TrashIcon} from '@heroicons/react/24/outline'
+
+const columns = [
+  {name: 'ID', options: {className: 'text-center'}},
+  {name: 'Ingredient Name', options: {className: 'text-left'}},
+  {name: 'UoM', options: {className: 'text-left'}},
+  {name: 'QTY', options: {className: 'text-center'}},
+  {name: 'MIN QTY', options: {className: 'text-center'}},
+  {name: 'MAX QTY', options: {className: 'text-center'}},
+  {name: 'Price', options: {className: 'text-center'}},
+  {name: 'Category', options: {className: 'text-center'}},
+  {name: 'Image', options: {className: 'text-center'}},
+]
+const sortByFilters = [
+  {label: 'ID', value: 'id', icon: <Icons.Outline.Hashtag className={'w-5 h-5'}/>},
+  {label: 'Name', value: 'name', icon: <Icons.Outline.Bookmark className={'w-5 h-5'}/>}
+]
 
 export default function ListIngredients() {
-  const loader = useDataLoader<{data: Ingredient[], meta: PaginatorMeta}>(`/ingredients`)
+  const loader = useDataLoader<{ data: Ingredient[], meta: PaginatorMeta }>(`/ingredients`)
   const flash = useFlash()
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-
-  const [checked, setChecked] = useState(false)
-  const checkbox = useRef<HTMLInputElement>(null)
-  const [indeterminate, setIndeterminate] = useState(false)
-  const [selected, setSelected] = useState<Ingredient[]>([])
 
   const [ingredient, setIngredient] = useState<Ingredient>({} as Ingredient)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
@@ -30,26 +40,6 @@ export default function ListIngredients() {
   useEffect(() => {
     loader.sync({params: {page: searchParams.get('page') ?? 1}})
   }, [location, searchParams])
-
-  useLayoutEffect(() => {
-    setChecked(selected.length === loader.response?.data?.length)
-    setIndeterminate(selected.length > 0 && selected.length < loader.response?.data?.length)
-    if (checkbox.current) {
-      checkbox.current.indeterminate = indeterminate
-    }
-  }, [selected])
-
-
-  /**
-   * Toggle all checkboxes.
-   *
-   * @return void
-   */
-  function toggleAll() {
-    setSelected(checked || indeterminate ? [] : loader.response.data)
-    setChecked(!checked && !indeterminate)
-    setIndeterminate(false)
-  }
 
   function onDelete() {
     setIsTrashing(false)
@@ -60,6 +50,11 @@ export default function ListIngredients() {
   function onClose() {
     setIsTrashing(false)
     setIngredient({} as Ingredient)
+  }
+
+  function toggleTrash(ingredient: Ingredient) {
+    setIngredient(ingredient);
+    setIsTrashing(true);
   }
 
   function ingredientCategory(ingredient, placeholder: string = '-') {
@@ -83,89 +78,48 @@ export default function ListIngredients() {
               <Alert.Success className={'mb-6'}>Ingredient deleted successfully</Alert.Success>
             </>}
 
-            <Index.Filters sortBy={[
-              {label: 'ID', value: 'id', icon: <HashtagIcon className={'w-5 h-5'}/>},
-              {label: 'Name', value: 'name', icon: <BookmarkIcon className={'w-5 h-5'}/>}
-            ]} create={{url: '/app/ingredients/create', label: 'Add Ingredient'}}/>
+            <ListFilters sortBy={sortByFilters} create={{url: '/app/ingredients/create', label: 'Add Ingredient'}}/>
 
-            <Index.Table>
-              <Index.THead>
-                <Index.Tr>
-                  <Index.ThCheck checked={checked} ref={checkbox} onChange={toggleAll}/>
-                  <Index.Th>ID</Index.Th>
-                  <Index.Th className={'text-left'}>Ingredient Name</Index.Th>
-                  <Index.Th> UoM </Index.Th>
-                  <Index.Th> QTY </Index.Th>
-                  <Index.Th> MIN QTY </Index.Th>
-                  <Index.Th> MAX QTY </Index.Th>
-                  <Index.Th> Price </Index.Th>
-                  <Index.Th className={"text-left"}> Category </Index.Th>
-                  <Index.Th className={'text-center'}> Image </Index.Th>
-                  <Index.Th> Action </Index.Th>
-                </Index.Tr>
-              </Index.THead>
+            <ListTable
+              thead={columns}
 
-              <Index.TBody>
-                {loader.isProcessing() ? <>
-                  <TableRowsSkeleton limit={10} actions={true} checkboxes={true} columns={[
-                    {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''}, {label: ''},
-                  ]}/>
-                </> : <>
-                  {loader.response.data.map(ingredient => (
-                    <Index.Tr key={ingredient.id}>
-                      <Index.TdCheck checked={selected.includes(ingredient)} onChange={(e) => setSelected(
-                        e.target.checked ? [...selected, ingredient] : selected.filter((i) => i !== ingredient)
-                      )} value={ingredient.id}/>
-                      <Index.Td> {ingredient.id} </Index.Td>
-                      <Index.Td className={'text-left'}>
-                        <Link to={`/app/ingredients/${ingredient.id}`} className={'text-red-primary'}> {ingredient.name} </Link>
-                      </Index.Td>
-                      <Index.Td> {ingredient.unit} </Index.Td>
-                      <Index.Td> {ingredient.quantity} </Index.Td>
-                      <Index.Td> {ingredient.minQuantity} </Index.Td>
-                      <Index.Td> {ingredient.maxQuantity} </Index.Td>
-                      <Index.Td> {ingredient.price}L </Index.Td>
-                      <Index.Td className={"text-left"}> {ingredientCategory(ingredient)} </Index.Td>
-                      <Index.Td>
-                        <img className={'w-9 h-9 rounded-full object-cover mx-auto border-2 shadow'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>
-                      </Index.Td>
-                      <Index.Td className={'text-center'}>
-                        <div className="flex item-center justify-center gap-x-1">
-                          <Link to={`/app/ingredients/${ingredient.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                            <PencilSquareIcon className={'w-5 h-5'}/>
-                          </Link>
+              tbody={loader.response.data.map(ingredient => ([
+                ingredient.id,
+                <Link to={`/app/ingredients/${ingredient.id}`} className={'text-red-primary'}> {ingredient.name} </Link>,
+                ingredient.unit,
+                ingredient.quantity,
+                ingredient.minQuantity,
+                ingredient.maxQuantity,
+                `${ingredient.price}L`,
+                ingredientCategory(ingredient),
+                <img className={'w-9 h-9 rounded-full object-cover mx-auto border-2 shadow'} src={ingredient.thumbnailUrl} alt={ingredient.name}/>,
+                <div className="flex item-center justify-center gap-x-1">
+                  <Link to={`/app/ingredients/${ingredient.id}/edit`} className={'action:button button:blue'}>
+                    <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
+                  </Link>
 
-                          <Link to={`/app/ingredients/${ingredient.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
-                            <EyeIcon className={'w-5 h-5'}/>
-                          </Link>
-                          <button onClick={() => {
-                            setIngredient(ingredient);
-                            setIsTrashing(true);
-                          }} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                            <TrashIcon className={'w-5 h-5'}/>
-                          </button>
-                        </div>
-                      </Index.Td>
-                    </Index.Tr>
-                  ))}
-                  {loader.response.data?.length === 0 && <>
-                    <Index.Tr>
-                      <Index.Td colSpan={11}>
-                        <Alert.Warning>
-                          No ingredients available.{' '}
-                          <Link to={'/app/ingredients/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                            Click here to add more ingredients.
-                          </Link>
-                        </Alert.Warning>
-                      </Index.Td>
-                    </Index.Tr>
-                  </>}
-                </>}
-              </Index.TBody>
-            </Index.Table>
+                  <Link to={`/app/ingredients/${ingredient.id}`} className={'action:button button:green'}>
+                    <Icons.Outline.Eye className={'w-5 h-5'}/>
+                  </Link>
+                  <button onClick={() => toggleTrash(ingredient)} className={'action:button button:red'}>
+                    <Icons.Outline.Trash className={'w-5 h-5'}/>
+                  </button>
+                </div>
+              ]))}
+
+              empty={(
+                <Alert.Warning>
+                  No ingredients available.{' '}
+                  <Link to={'/app/ingredients/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                    Click here to add more ingredients.
+                  </Link>
+                </Alert.Warning>
+              )}/>
+
             <Pagination meta={loader.response.meta}/>
           </div>
         </div>
+
         <TrashModal
           show={isTrashing}
           onClose={onClose}

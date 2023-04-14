@@ -26,10 +26,14 @@ import {
   EnvelopeIcon as Envelope,
   EyeIcon as Eye,
   HashtagIcon as Hashtag,
+  LinkIcon as Link,
+  CurrencyDollarIcon as CurrencyDollar,
   PencilSquareIcon as PencilSquare,
 } from '@heroicons/react/24/solid'
 
 export {
+  CurrencyDollar,
+  Link,
   Home,
   Star,
   Cog,

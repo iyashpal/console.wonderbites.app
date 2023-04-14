@@ -12,6 +12,7 @@ export default interface Product {
   is_popular: boolean,
   is_customizable: boolean,
   status: number,
+  published_at: string,
   created_at: string,
   user: User,
   categories?: Category[],
