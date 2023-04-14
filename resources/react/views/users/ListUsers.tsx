@@ -66,6 +66,7 @@ export default function ListUsers() {
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
           <ListFilters sortBy={sortByFilters} create={{url: '/app/users/create', label: 'Create User'}}/>
+
           <ListTable
             thead={columns}
             tbody={loader.response.data.map(user => ([
@@ -76,20 +77,20 @@ export default function ListUsers() {
               user.created_at ? DateTime.fromISO(user.created_at).toLocaleString(DateTime.DATETIME_SHORT) : '-',
               user.status === 1 ? 'Active' : 'In-active',
               <div className="flex item-center justify-center gap-x-1">
-                <Link to={`/app/users/${user.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
+                <Link to={`/app/users/${user.id}/edit`} className={'action:button button:blue'}>
                   <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
                 </Link>
 
-                <Link to={`/app/users/${user.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
+                <Link to={`/app/users/${user.id}`} className={'action:button button:green'}>
                   <Icons.Outline.Eye className={'w-5 h-5'}/>
                 </Link>
 
                 {authUser?.id !== user.id ? (
-                  <button onClick={() => toggleTrash(user)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+                  <button onClick={() => toggleTrash(user)} className={'action:button button:red'}>
                     <Icons.Outline.Trash className={'w-5 h-5'}/>
                   </button>
                 ) : (
-                  <button className={'bg-gray-50 border border-gray-200 text-gray-300 rounded-lg p-1 cursor-not-allowed'}>
+                  <button disabled className={'action:button button:disabled'}>
                     <Icons.Outline.Trash className={'w-5 h-5'}/>
                   </button>
                 )}

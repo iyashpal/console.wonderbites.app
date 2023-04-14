@@ -75,15 +75,15 @@ export default function ListBanners() {
                 banner.status === 'active' ? <span className={`font-semibold uppercase text-red-primary`}>Active</span> : <span className={`font-semibold uppercase`}>In-Active</span>,
                 <div className="flex item-center justify-center gap-x-1">
 
-                  <Link to={`/app/banners/${banner.id}/edit`} className={'action-button button-blue'}>
+                  <Link to={`/app/banners/${banner.id}/edit`} className={'action:button button:blue'}>
                     <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
                   </Link>
 
-                  <Link to={`/app/banners/${banner.id}`} className={'action-button button-green'}>
+                  <Link to={`/app/banners/${banner.id}`} className={'action:button button:green'}>
                     <Icons.Outline.Eye className={'w-5 h-5'}/>
                   </Link>
 
-                  <button onClick={() => toggleTrash(banner)} className={'action-button button-red'}>
+                  <button onClick={() => toggleTrash(banner)} className={'action:button button:red'}>
                     <Icons.Outline.Trash className={'w-5 h-5'}/>
                   </button>
 
