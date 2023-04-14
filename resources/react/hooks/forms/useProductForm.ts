@@ -61,6 +61,14 @@ export default function useProductForm(fields: FormFields) {
   }
 
   /**
+   * Event handler for the customization field.
+   * @param event
+   */
+  function onChangeIsPopular(event: ChangeEvent<HTMLSelectElement>) {
+    setCreateForm(payload => ({...payload, isPopular: Number(event.target.value) === 1}))
+  }
+
+  /**
    * Event handler for the status field.
    * @param event
    */
@@ -160,6 +168,7 @@ export default function useProductForm(fields: FormFields) {
         price: onChangePrice,
         calories: onChangeCalories,
         thumbnail: onChangeThumbnail,
+        isPopular: onChangeIsPopular,
         categoryId: onChangeCategoryId,
         description: onChangeDescription,
         publishedAt: onChangePublishedAt,
@@ -175,6 +184,7 @@ export default function useProductForm(fields: FormFields) {
 
 type FormFields = {
   id?: number,
+  isPopular: boolean,
   categoryId: number,
   name: string,
   sku: string,
@@ -193,6 +203,7 @@ type FormErrors = {
   price: string,
   calories: string,
   status: string,
+  isPopular: string,
   thumbnail: string,
   categoryId: string,
   description: string,

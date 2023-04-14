@@ -15,8 +15,9 @@ export default function CreateProduct() {
     calories: '0',
     categoryId: 0,
     description: '',
+    isPopular: false,
     isCustomizable: false,
-    publishedAt: DateTime.now(),
+    publishedAt: '',
     status: 1,
   })
   const [isShowFiles, setIsShowFiles] = useState<boolean>(false)
@@ -85,13 +86,11 @@ export default function CreateProduct() {
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
-                    Customization
+                  <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
+                    Image <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={1}>Enable</option>
-                    <option value={0}>Disable</option>
-                  </select>
+                  <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
+                  <InputError error={form.errors?.thumbnail} />
                 </div>
 
                 <div className="col-span-6">
@@ -102,19 +101,32 @@ export default function CreateProduct() {
                   <InputError error={form.errors?.description} />
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
-                    Image <sup className='text-red-primary'>*</sup>
+                <div className="col-span-6 sm:col-span-2">
+                  <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
+                    Is Customizable ?<sup className='text-red-primary'>*</sup>
                   </label>
-                  <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
-                  <InputError error={form.errors?.thumbnail} />
+                  <select defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={1}>Yes</option>
+                    <option value={0}>No</option>
+                  </select>
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
+                <div className="col-span-6 sm:col-span-2">
+                  <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
+                    Is Popular ?<sup className='text-red-primary'>*</sup>
+                  </label>
+                  <select id="popular" defaultValue={form.input.value('isPopular')} onChange={form.input.onChange.isPopular} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={0}>No</option>
+                    <option value={1}>Yes</option>
+                  </select>
+                  <InputError error={form.errors?.isPopular} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-2">
                   <label htmlFor="status" className="block text-sm font-bold text-gray-700">
                     Status <sup className='text-red-primary'>*</sup>
                   </label>
-                  <select id="publishedAt" defaultValue={form.input.value('publishedAt')} onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                  <select id="status" defaultValue={form.input.value('publishedAt')} onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={''}>Draft</option>
                     <option value={DateTime.now().toString()}>Published</option>
                   </select>

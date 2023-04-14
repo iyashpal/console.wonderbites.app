@@ -9,6 +9,7 @@ export default interface Product {
   sku: string,
   calories: string,
   thumbnail_url: string,
+  is_popular: boolean,
   is_customizable: boolean,
   status: number,
   created_at: string,

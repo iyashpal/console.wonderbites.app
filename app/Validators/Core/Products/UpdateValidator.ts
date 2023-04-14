@@ -46,6 +46,7 @@ export default class UpdateValidator {
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
     }),
     isCustomizable: schema.boolean(),
+    isPopular: schema.boolean(),
   })
 
   /**
