@@ -22,6 +22,11 @@ import {
   ExclamationTriangleIcon as ExclamationTriangle,
   ArrowTopRightOnSquareIcon as ArrowTopRightOnSquare,
   ChatBubbleOvalLeftEllipsisIcon as ChatBubbleOvalLeftEllipsis,
+  BookmarkIcon as Bookmark,
+  EnvelopeIcon as Envelope,
+  EyeIcon as Eye,
+  HashtagIcon as Hashtag,
+  PencilSquareIcon as PencilSquare,
 } from '@heroicons/react/24/solid'
 
 export {
@@ -36,6 +41,11 @@ export {
   Trash,
   XMark,
   Users,
+  Eye,
+  Bookmark,
+  Envelope,
+  Hashtag,
+  PencilSquare,
   BookOpen,
   UserGroup,
   CalendarDays,
