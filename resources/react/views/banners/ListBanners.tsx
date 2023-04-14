@@ -62,34 +62,33 @@ export default function ListBanners() {
         </div>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5">
           <div className={``}>
-
             <ListFilters sortBy={sortByFilters} create={{url: '/app/banners/create', label: 'Add Banner'}}/>
 
             <ListTable
               thead={columns}
-              tbody={loader.response.data.map(banner => {
-                return [
-                  banner.id,
-                  banner.title,
-                  banner.options.page,
-                  banner.options.type,
-                  banner.updated_at,
-                  banner.status === 'active' ? <span className={`font-semibold uppercase text-red-primary`}>Active</span> : <span className={`font-semibold uppercase`}>In-Active</span>,
-                  <div className="flex item-center justify-center gap-x-1">
-                    <Link to={`/app/banners/${banner.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                      <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
-                    </Link>
+              tbody={loader.response.data.map(banner => ([
+                banner.id,
+                banner.title,
+                banner.options.page,
+                banner.options.type,
+                banner.updated_at,
+                banner.status === 'active' ? <span className={`font-semibold uppercase text-red-primary`}>Active</span> : <span className={`font-semibold uppercase`}>In-Active</span>,
+                <div className="flex item-center justify-center gap-x-1">
 
-                    <Link to={`/app/banners/${banner.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
-                      <Icons.Outline.Eye className={'w-5 h-5'}/>
-                    </Link>
+                  <Link to={`/app/banners/${banner.id}/edit`} className={'action-button button-blue'}>
+                    <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
+                  </Link>
 
-                    <button onClick={() => toggleTrash(banner)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                      <Icons.Outline.Trash className={'w-5 h-5'}/>
-                    </button>
-                  </div>
-                ]
-              })}
+                  <Link to={`/app/banners/${banner.id}`} className={'action-button button-green'}>
+                    <Icons.Outline.Eye className={'w-5 h-5'}/>
+                  </Link>
+
+                  <button onClick={() => toggleTrash(banner)} className={'action-button button-red'}>
+                    <Icons.Outline.Trash className={'w-5 h-5'}/>
+                  </button>
+
+                </div>
+              ]))}
               empty={(
                 <Alert.Warning>
                   No banners available.{' '}
