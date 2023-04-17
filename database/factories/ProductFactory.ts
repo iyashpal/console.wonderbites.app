@@ -1,3 +1,4 @@
+import {DateTime} from 'luxon'
 import Product from 'App/Models/Product'
 import Drive from '@ioc:Adonis/Core/Drive'
 import { file } from '@ioc:Adonis/Core/Helpers'
@@ -25,6 +26,8 @@ export default Factory.define(Product, async ({ faker }) => {
     sku: faker.datatype.number({ min: 10000, max: 100000 }).toString(),
     calories: faker.datatype.number({ min: 0, max: 1000 }).toString(),
     price: faker.datatype.number({ min: 0, max: 1500 }),
+    publishedAt: DateTime.now(),
+    isPopular: faker.datatype.boolean(),
     isCustomizable:faker.datatype.boolean(),
     status: 1,
   }
