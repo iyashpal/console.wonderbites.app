@@ -13,7 +13,7 @@ export default class BannerQuery extends Query {
 
     this.$preloads.push(...['User'])
 
-    this.$filters.push(...['Status', 'Location', 'Page', 'Section', 'Type'])
+    this.$filters.push(...['Status', 'Page', 'Section', 'Type'])
   }
 
   /**
