@@ -11,7 +11,7 @@ test.group('API [carts.show]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('Guest users can access the cart', async ({ client, route }) => {
+  test('Guest users can access the cart', async ({ client, route, assert }) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)

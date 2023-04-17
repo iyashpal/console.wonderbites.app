@@ -143,7 +143,7 @@ test.group('API [orders.show]', (group) => {
     request.assertBodyContains({ id: order.id, user: { id: user.id } })
   }).tags(['@api', '@api.orders', '@api.orders.show'])
 
-  test('it can show the order with products, address, coupon, user etc.', async ({ client, route }) => {
+  test('it can show the order with products, address, coupon, user etc.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
 
     const product = await ProductFactory.with('media', 5).with('ingredients', 3).create()
