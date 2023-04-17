@@ -19,7 +19,7 @@ test.group('API [advertisements.show]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ id: advertisement.id })
-  }).tags(['@advertisements', '@advertisements.show'])
+  }).tags(['@api', '@api.advertisements', '@api.advertisements.show'])
 
   test('it can list advertisement with user.', async ({ client, route }) => {
     const advertisement = await AdvertisementFactory.with('user').create()
@@ -37,5 +37,5 @@ test.group('API [advertisements.show]', (group) => {
         id: advertisement.user.id,
       },
     })
-  }).tags(['@advertisements', '@advertisements.show'])
+  }).tags(['@api', '@api.advertisements', '@api.advertisements.show'])
 })

@@ -16,7 +16,7 @@ test.group('API [notifications.update]', (group) => {
 
     $response.assertStatus(401)
     $response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@notifications', '@notifications.update'])
+  }).tags(['@api', '@api.notifications', '@api.notifications.update'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -26,7 +26,7 @@ test.group('API [notifications.update]', (group) => {
       .guard('api').loginAs(user).json({ action: 'unread' })
 
     $response.assertStatus(200)
-  }).tags(['@notifications', '@notifications.update'])
+  }).tags(['@api', '@api.notifications', '@api.notifications.update'])
 
   test('it can mark the notification as read.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -40,7 +40,7 @@ test.group('API [notifications.update]', (group) => {
     assert.notEmpty($response.body().read_at)
 
     $response.assertBodyContains({ id: notification.id })
-  }).tags(['@notifications', '@notifications.update'])
+  }).tags(['@api', '@api.notifications', '@api.notifications.update'])
 
   test('it can mark the notification as unread.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -52,5 +52,5 @@ test.group('API [notifications.update]', (group) => {
     $response.assertStatus(200)
     assert.isNull($response.body().read_at)
     $response.assertBodyContains({ id: notification.id })
-  }).tags(['@notifications', '@notifications.update'])
+  }).tags(['@api', '@api.notifications', '@api.notifications.update'])
 })

@@ -31,7 +31,7 @@ test.group('API [coupons.update]', (group) => {
       description: 'Updated Description for tests.',
       code: 'UPDATED',
     })
-  }).tags(['@coupons', '@coupons.update'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.update'])
 
   test('un-authenticated user can not update a coupon.', async ({ client, route }) => {
     const coupon = await CouponFactory.create()
@@ -41,7 +41,7 @@ test.group('API [coupons.update]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@coupons', '@coupons.update'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.update'])
 
   test('only existing coupons can be updated.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -51,5 +51,5 @@ test.group('API [coupons.update]', (group) => {
       .loginAs(user)
 
     response.assertStatus(400)
-  }).tags(['@coupons', '@coupons.update'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.update'])
 })

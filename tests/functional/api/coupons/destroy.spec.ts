@@ -24,7 +24,7 @@ test.group('API [coupons.destroy]', (group) => {
     assert.notEqual({
       id: couponAfterDelete?.id,
     }, { id: coupon.id })
-  }).tags(['@coupons', '@coupons.destroy'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.destroy'])
 
   test('un-authenticated user can not delete a coupon.', async ({ client, route, assert }) => {
     const coupon = await CouponFactory.create()
@@ -36,5 +36,5 @@ test.group('API [coupons.destroy]', (group) => {
     const couponAfterDelete = await Coupon.find(coupon.id)
 
     assert.equal(couponAfterDelete?.id, coupon.id)
-  }).tags(['@coupons', '@coupons.destroy'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.destroy'])
 })

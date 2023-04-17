@@ -14,7 +14,7 @@ test.group('API [wonderpoints.avail]', (group) => {
   test('Guest users can not avail the wonderpoints.', async ({ client, route }) => {
     const response = await client.get(route('api.wonderpoints.avail'))
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@wonderpoints', '@wonderpoints.avail'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.avail'])
 
   test('Authenticated users can avail the wonderpoints.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -22,7 +22,7 @@ test.group('API [wonderpoints.avail]', (group) => {
       .loginAs(user)
 
     response.assertBodyContains({ wonderpoints: 0 })
-  }).tags(['@wonderpoints', '@wonderpoints.avail'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.avail'])
 
   test('Avail wonderpoints after redemption of some wonderpoints.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -53,7 +53,7 @@ test.group('API [wonderpoints.avail]', (group) => {
       .loginAs(user)
 
     redeemedResponse.assertBodyContains({ wonderpoints: totalPoints - redeemedWonderpoint.points })
-  }).tags(['@wonderpoints', '@wonderpoints.avail'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.avail'])
 
   test('Users can redeem wonderpoints.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -74,5 +74,5 @@ test.group('API [wonderpoints.avail]', (group) => {
       .loginAs(user)
 
     availResponse.assertBodyContains({ wonderpoints: 50 })
-  }).tags(['@wonderpoints', '@wonderpoints.avail'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.avail'])
 })

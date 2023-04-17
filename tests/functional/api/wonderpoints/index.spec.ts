@@ -15,7 +15,7 @@ test.group('API [wonderpoints.index]', (group) => {
     const response = await client.get(route('api.wonderpoints.index'))
 
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@wonderpoints', '@wonderpoints.index'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.index'])
 
   test('Authenticated users can access their wonderpoints earnings.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -41,7 +41,7 @@ test.group('API [wonderpoints.index]', (group) => {
         { id: wonderpoints[1].id, user_id: user.id, action: 'redeem' },
       ],
     })
-  }).tags(['@wonderpoints', '@wonderpoints.index'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.index'])
 
   test('Users can list only earned wonderpoints', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -55,7 +55,7 @@ test.group('API [wonderpoints.index]', (group) => {
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)
-  }).tags(['@wonderpoints', '@wonderpoints.index'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.index'])
 
   test('Users can list only redeemed wonderpoints', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -69,5 +69,5 @@ test.group('API [wonderpoints.index]', (group) => {
       .loginAs(user)
 
     assert.strictEqual(response.body().data.length, 1)
-  }).tags(['@wonderpoints', '@wonderpoints.index'])
+  }).tags(['@api', '@api.wonderpoints', '@api.wonderpoints.index'])
 })

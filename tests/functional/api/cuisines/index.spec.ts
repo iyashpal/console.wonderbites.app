@@ -12,7 +12,7 @@ test.group('API [cuisines.index]', (group) => {
     const $response = await client.get(route('api.cuisines.index'))
 
     $response.assertStatus(200)
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.index'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -20,7 +20,7 @@ test.group('API [cuisines.index]', (group) => {
       .guard('api').loginAs(user)
 
     $response.assertStatus(200)
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.index'])
 
   test('it can list all cuisines.', async ({ client, route }) => {
     const cuisines = await CuisineFactory.createMany(10)
@@ -32,7 +32,7 @@ test.group('API [cuisines.index]', (group) => {
     $response.assertBodyContains(
       cuisines.map(({ id, name, description, status }) => ({ id, name, description, status }))
     )
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.index'])
 
   test('it can list all cuisines and categories under all cuisines.', async ({ client, route }) => {
     const cuisines = await CuisineFactory.createMany(10)
@@ -52,7 +52,7 @@ test.group('API [cuisines.index]', (group) => {
         categories: categories.map(({ id, name }) => ({ id, name })),
       }))
     )
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.index'])
 
   test('it can paginate cuisines.', async ({ client, route }) => {
     const cuisines = await CuisineFactory.createMany(20)
@@ -66,5 +66,5 @@ test.group('API [cuisines.index]', (group) => {
     $response.assertBodyContains(
       cuisines.map(({ id, name, description, status }) => ({ id, name, description, status }))
     )
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.index'])
 })

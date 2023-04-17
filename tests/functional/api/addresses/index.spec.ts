@@ -17,7 +17,7 @@ test.group('API [addresses.index]', (group) => {
     request.assertStatus(401)
 
     request.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@addresses', '@addresses.index'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.index'])
 
   test('address list is accessible to logged in users.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -28,7 +28,7 @@ test.group('API [addresses.index]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains([])
-  }).tags(['@addresses', '@addresses.index'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.index'])
 
   test('it can list the addresses of logged in user.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -43,5 +43,5 @@ test.group('API [addresses.index]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains(addresses.map(({ id, userId, type }) => ({ id, user_id: userId, type })))
-  }).tags(['@addresses', '@addresses.index'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.index'])
 })

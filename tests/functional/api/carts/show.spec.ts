@@ -15,13 +15,13 @@ test.group('API [carts.show]', (group) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
-  }).tags(['@carts', '@carts.show'])
+  }).tags(['@api', '@api.carts', '@api.carts.show'])
 
   test('Authenticated user can access the cart', async ({ client, route }) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
-  }).tags(['@carts', '@carts.show'])
+  }).tags(['@api', '@api.carts', '@api.carts.show'])
 
   test('Only active carts are accessible.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -31,5 +31,5 @@ test.group('API [carts.show]', (group) => {
       .guard('api').loginAs(user)
 
     assert.notEqual(response.body()?.id, cart.id)
-  }).tags(['@carts', '@carts.show'])
+  }).tags(['@api', '@api.carts', '@api.carts.show'])
 })

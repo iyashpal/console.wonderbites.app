@@ -15,7 +15,7 @@ test.group('API [orders.index]', (group) => {
 
     request.assertStatus(401)
     request.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can allow the access to authenticated users.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -25,7 +25,7 @@ test.group('API [orders.index]', (group) => {
 
     request.assertStatus(200)
     request.assertBodyContains({data: []})
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders.', async ({client, route}) => {
     const user = await UserFactory.with('addresses').create()
@@ -41,7 +41,7 @@ test.group('API [orders.index]', (group) => {
         ip_address: ipAddress, options: JSON.stringify(options), note, status,
       })),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list upcoming orders.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -61,7 +61,7 @@ test.group('API [orders.index]', (group) => {
     response.assertStatus(200)
 
     assert.equal(response.body().data.length, 6)
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list past orders.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -77,7 +77,7 @@ test.group('API [orders.index]', (group) => {
     response.assertStatus(200)
 
     assert.equal(response.body().data.length, 2)
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders by status - "{name}".').with([
     {name: 'placed', status: OrderStatus.PLACED},
@@ -107,7 +107,7 @@ test.group('API [orders.index]', (group) => {
         ip_address: ipAddress, options: options, note, status,
       })),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can limit the list of orders.', async ({client, route, assert}) => {
     let limit = 10
@@ -128,7 +128,7 @@ test.group('API [orders.index]', (group) => {
     request.assertStatus(200)
     assert.equal(request.body().data.length, limit)
     request.assertBodyContains({meta: {current_page: 2}, data: orders.map(({id}) => ({id})).slice(limit)})
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders with products.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -149,7 +149,7 @@ test.group('API [orders.index]', (group) => {
         products: products.map(({id, name}) => ({id, name})),
       })),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders with products and product images.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -176,7 +176,7 @@ test.group('API [orders.index]', (group) => {
         })),
       })),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders with ingredients.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -216,7 +216,7 @@ test.group('API [orders.index]', (group) => {
         })),
       })),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders with address.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -235,7 +235,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({
       data: orders.map(({id, deliverTo}) => ({id, deliver_to: JSON.stringify(deliverTo)})),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list orders with coupon.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -256,7 +256,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({
       data: orders.map(({id, coupon}) => ({id, coupon_id: coupon.id, coupon: {id: coupon.id}})),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list orders with user.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -277,7 +277,7 @@ test.group('API [orders.index]', (group) => {
     request.assertBodyContains({
       data: orders.map(({id}) => ({id, user_id: user.id, user: {id: user.id}})),
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list orders with review.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -306,7 +306,7 @@ test.group('API [orders.index]', (group) => {
         review: {id: review.id},
       }],
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list orders with products, address, coupon, user etc.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -364,5 +364,5 @@ test.group('API [orders.index]', (group) => {
         ingredients: ingredients.map(({id}) => ({id})),
       }],
     })
-  }).tags(['@orders', '@orders.index'])
+  }).tags(['@api', '@api.orders', '@api.orders.index'])
 })

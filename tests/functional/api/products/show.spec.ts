@@ -25,7 +25,7 @@ test.group('API [products.show]', (group) => {
       price: product.price.toString(),
       description: product.description,
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it can allow access to un-authenticated user.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -35,7 +35,7 @@ test.group('API [products.show]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ id: product.id })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it reads the customizable property', async ({client, route}) => {
     const product = await ProductFactory.create()
@@ -45,7 +45,7 @@ test.group('API [products.show]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ id: product.id, is_customizable: Number(product.isCustomizable) })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it can load the product media.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -64,7 +64,7 @@ test.group('API [products.show]', (group) => {
       description: product.description,
       media: product.media.map(({ id }) => ({ id })),
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it can load the associated ingredients of product.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -87,7 +87,7 @@ test.group('API [products.show]', (group) => {
       description: product.description,
       ingredients: product.ingredients.map(({ id }) => ({ id })),
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('It can load the product reviews.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -110,7 +110,7 @@ test.group('API [products.show]', (group) => {
       id: product.id,
       reviews: reviews.map(({ id, title }) => ({ id, title })),
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('It can show product with reviews total average.', async ({ client, route }) => {
     const product = await ProductFactory.with('reviews', 9, query => query.with('user')).create()
@@ -128,7 +128,7 @@ test.group('API [products.show]', (group) => {
         reviews_avg: productReviewsAvg,
       },
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it can load the product\'s availability in wishlist of the user.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -151,7 +151,7 @@ test.group('API [products.show]', (group) => {
       description: product.description,
       wishlists: [{ id: wishlist.id }],
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 
   test('it can load the product media, wishlist, reviews, and ingredients.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -185,5 +185,5 @@ test.group('API [products.show]', (group) => {
       media: product.media.map(({ id }) => ({ id })),
       ingredients: product.ingredients.map(({ id, name }) => ({ id, name })),
     })
-  }).tags(['@products', '@products.show'])
+  }).tags(['@api', '@api.products', '@api.products.show'])
 })

@@ -13,7 +13,7 @@ test.group('Auth logout', (group) => {
 
   /**
    * Case: Only authenticated user can logout from a session.
-   * 
+   *
    * ✔ Needs a user.
    * ✔ POST request to `route('api.logout')` with api guard and authentication.
    * ✔ Request status should be OK.
@@ -27,11 +27,11 @@ test.group('Auth logout', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains({ revoked: true })
-  })
+  }).tags(['@api', '@auth', '@api.logout'])
 
   /**
    * Case: Un-authenticated user cannot logout from a session.
-   * 
+   *
    * ✔ POST request to `route('api.logout')` without api guard and authentication.
    * ✔ Request status should be Unauthenticated.
    * ✔ Request response body should contain message field with value 'Unauthenticated'.
@@ -41,5 +41,5 @@ test.group('Auth logout', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  })
+  }).tags(['@api', '@auth', '@api.logout'])
 })

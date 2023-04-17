@@ -20,7 +20,7 @@ test.group('API [cuisines.show]', (group) => {
       name: cuisine.name,
       description: cuisine.description,
     })
-  })
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.show'])
 
   test('It can allow authenticated users to access the cuisine.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -36,7 +36,7 @@ test.group('API [cuisines.show]', (group) => {
       name: cuisine.name,
       description: cuisine.description,
     })
-  })
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.show'])
 
   test('it can list all cuisines and categories under all cuisines.', async ({ client, route }) => {
     const cuisine = await CuisineFactory.create()
@@ -57,5 +57,5 @@ test.group('API [cuisines.show]', (group) => {
       status: cuisine.status,
       categories: categories.map(({ id, name }) => ({ id, name })),
     })
-  }).tags(['@cuisines', '@cuisines.index'])
+  }).tags(['@api', '@api.cuisines', '@api.cuisines.show'])
 })

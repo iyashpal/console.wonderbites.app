@@ -24,7 +24,7 @@ test.group('API [coupons.show]', (group) => {
       description: coupon.description,
       code: coupon.code,
     })
-  }).tags(['@coupons', '@coupons.show'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.show'])
 
   test('only existing coupon is accessible via id or request param.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -33,7 +33,7 @@ test.group('API [coupons.show]', (group) => {
       .loginAs(user)
 
     response.assertStatus(400)
-  }).tags(['@coupons', '@coupons.show'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.show'])
 
   test('un-authenticated user can not see the coupon resource.', async ({ client, route }) => {
     const coupon = await CouponFactory.create()
@@ -42,5 +42,5 @@ test.group('API [coupons.show]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@coupons', '@coupons.show'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.show'])
 })

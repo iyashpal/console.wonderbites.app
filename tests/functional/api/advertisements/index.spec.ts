@@ -17,7 +17,7 @@ test.group('API [advertisements.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains([])
-  }).tags(['@advertisements', '@advertisements.index'])
+  }).tags(['@api', '@api.advertisements', '@api.advertisements.index'])
 
   test('it can list all advertisements.', async ({ client, route, assert }) => {
     const advertisement = await AdvertisementFactory.merge({ options: { location: 'home.banner' } }).create()
@@ -28,7 +28,7 @@ test.group('API [advertisements.index]', (group) => {
     $response.assertBodyContains([{ id: advertisement.id, title: advertisement.title }])
 
     assert.equal($response.body().length, 1)
-  }).tags(['@advertisements', '@advertisements.index'])
+  }).tags(['@api', '@api.advertisements', '@api.advertisements.index'])
 
   test('it can list all advertisements with user.', async ({ client, route, assert }) => {
     const advertisements = await AdvertisementFactory.with('user').createMany(4)
@@ -50,7 +50,7 @@ test.group('API [advertisements.index]', (group) => {
     )
 
     assert.equal($response.body().length, 4)
-  }).tags(['@advertisements', '@advertisements.index'])
+  }).tags(['@api', '@api.advertisements', '@api.advertisements.index'])
 
   test('it can list advertisements with filters - "{$self}"')
     .with(['home', 'meal', 'footer', 'demo', 'global'])
@@ -71,5 +71,5 @@ test.group('API [advertisements.index]', (group) => {
       $response.assertStatus(200)
 
       assert.equal($response.body().length, mergeOptions.filter(({options}) => options.location === location).length)
-    }).tags(['@advertisements', '@advertisements.index'])
+    }).tags(['@api', '@api.advertisements', '@api.advertisements.index'])
 })

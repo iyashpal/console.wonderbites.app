@@ -25,5 +25,5 @@ test.group('API [coupons.remove]', (group) => {
       id: cart.id,
       coupon_id: null,
     })
-  }).tags(['@coupons', '@coupons.remove'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.remove'])
 })

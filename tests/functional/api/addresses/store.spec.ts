@@ -20,7 +20,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertStatus(401)
 
     request.assertBodyContains({message: 'Unauthorized access'})
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('first name is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -34,7 +34,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {firstName: 'First name is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('first name length should be less than 255 characters.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -48,7 +48,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {firstName: 'Maximum 255 characters allowed only'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('last name is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -62,7 +62,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {lastName: 'Last name is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('last name length should be less than 255 characters.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -76,7 +76,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {lastName: 'Maximum 255 characters allowed only'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('street is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -90,7 +90,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {street: 'Street is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('street length should be less than 255 characters.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -104,7 +104,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {street: 'Maximum 255 characters allowed only'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('city is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -118,7 +118,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {city: 'City is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('city length should be less than 255 characters.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -132,7 +132,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {city: 'Maximum 255 characters allowed only'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('phone is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -146,7 +146,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {phone: 'Phone is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('phone length should be less than 20 characters.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -160,7 +160,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {phone: 'Maximum 20 characters allowed only'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('phone is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -174,7 +174,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {phone: 'Phone is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('address type is required to create new address', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -188,7 +188,7 @@ test.group('API [addresses.store]', (group) => {
     request.assertBodyContains({
       errors: {type: 'Address type is required'},
     })
-  }).tags(['@addresses', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('logged in users can create validated address.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -224,7 +224,7 @@ test.group('API [addresses.store]', (group) => {
         phone: address.phone,
       },
     ])
-  }).tags(['@addresses', '@addresses.index', '@addresses.store'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 
   test('creating new address can be set as default.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -253,5 +253,5 @@ test.group('API [addresses.store]', (group) => {
     userRequest.assertStatus(200)
 
     userRequest.assertBodyContains({address_id: defaultAddress.id})
-  }).tags(['@addresses', '@addresses.store', '@users.auth'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.store'])
 })

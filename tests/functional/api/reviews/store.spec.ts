@@ -17,7 +17,7 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertStatus(401)
     request.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@reviews', '@reviews.store'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can allow logged in user to create a review.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -37,7 +37,7 @@ test.group('Api [reviews.store]', (group) => {
       body: review.body,
       rating: review.rating,
     })
-  }).tags(['@reviews', '@reviews.store'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can validate the type id before submitting the review.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -50,7 +50,7 @@ test.group('Api [reviews.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({ messages: { reviewableId: ['Reviewable ID field is required.'] } })
-  }).tags(['@reviews', '@reviews.store'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can validate the review title before submitting the review.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -65,7 +65,7 @@ test.group('Api [reviews.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({ messages: { title: ['Title is required.'] } })
-  }).tags(['@reviews', '@reviews.store'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can validate the review body before submitting the review.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -80,5 +80,5 @@ test.group('Api [reviews.store]', (group) => {
     request.assertStatus(422)
 
     request.assertBodyContains({ messages: { body: ['Body is required.'] } })
-  }).tags(['@reviews', '@reviews.store'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 })

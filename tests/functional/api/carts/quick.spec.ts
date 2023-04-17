@@ -19,5 +19,5 @@ test.group('API [carts.quick]', (group) => {
     response.assertStatus(200)
 
     response.assertBodyContains({})
-  }).tags(['@carts', '@carts.quick'])
+  }).tags(['@api', '@api.carts', '@api.carts.quick'])
 })

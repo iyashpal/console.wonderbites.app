@@ -21,7 +21,7 @@ test.group('API [addresses.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: address.id, type: address.type })
-  }).tags(['@addresses', '@addresses.show'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.show'])
 
   test('it can\'t see a non existing address details.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -30,7 +30,7 @@ test.group('API [addresses.show]', (group) => {
       .guard('api').loginAs(user)
 
     request.assertStatus(404)
-  }).tags(['@addresses', '@addresses.show'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.show'])
 
   test('it can not allow a user to see other\'s address.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -41,5 +41,5 @@ test.group('API [addresses.show]', (group) => {
       .guard('api').loginAs(user)
 
     request.assertStatus(403)
-  }).tags(['@addresses', '@addresses.show'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.show'])
 })

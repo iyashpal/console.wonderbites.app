@@ -14,7 +14,7 @@ test.group('API [wishlists.clean]', (group) => {
     $response.assertStatus(401)
 
     $response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@wishlists', '@wishlists.clean'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.clean'])
 
   test('it can allow access to clean the user wishlist.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('wishlist', 1, query => query.with('products', 5)).create()
@@ -30,5 +30,5 @@ test.group('API [wishlists.clean]', (group) => {
     assert.equal(ingredients?.length, 0)
 
     $response.assertBodyContains({ id: user.wishlist.id, products: [], ingredients: [] })
-  })
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.clean'])
 })

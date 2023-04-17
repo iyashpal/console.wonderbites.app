@@ -21,7 +21,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(401)
 
     request.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can allow access to authenticated users.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -36,7 +36,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with products', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -54,7 +54,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, products: [{ id: product.id }] })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with products and product images.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -78,7 +78,7 @@ test.group('API [orders.show]', (group) => {
     request.assertBodyContains({
       id: order.id, products: [{ id: product.id, media: product.media.map(({ id }) => ({ id })) }],
     })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with ingredients', async ({ client, route }) => {
     const ingredients = {}
@@ -98,7 +98,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, ingredients: product.ingredients.map(({ id }) => ({ id })) })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with coupon.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -114,7 +114,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, coupon: { id: order.coupon.id } })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with address', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -129,7 +129,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, deliver_to: JSON.stringify(order.deliverTo) })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with user', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -141,7 +141,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, user: { id: user.id } })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with products, address, coupon, user etc.', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -192,5 +192,5 @@ test.group('API [orders.show]', (group) => {
       }],
       ingredients: product.ingredients.map(({ id }) => ({ id })),
     })
-  }).tags(['@orders', '@orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show'])
 })

@@ -31,7 +31,7 @@ test.group('API [categories.index]', (group) => {
     authRequest.assert?.equal(5, guestRequest.body()?.length)
 
     assert.containsSubset(authRequest.body(), categories.map(({ id, type, name }) => ({ id, type, name })))
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it should contain the list of products under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -54,7 +54,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products with media under it.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -82,7 +82,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products with ingredients under it', async ({ client, route }) => {
     const product = await ProductFactory.with('ingredients', 5).create()
@@ -115,7 +115,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products with reviews under it', async ({ client, route }) => {
     const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
@@ -148,7 +148,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products with reviews average rating under it', async ({ client, route }) => {
     const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
@@ -183,7 +183,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products with wishlist under it', async ({ client, route }) => {
     const category = await CategoryFactory.create()
@@ -222,7 +222,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products searched by custom keyword under it', async ({ client, route, assert }) => {
     const category = await CategoryFactory.create()
@@ -253,7 +253,7 @@ test.group('API [categories.index]', (group) => {
     }])
 
     assert.equal(0, c.products.length)
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it should list only given type of categories.', async ({ client, route, assert }) => {
     await CategoryFactory.merge([
@@ -292,7 +292,7 @@ test.group('API [categories.index]', (group) => {
     blogCategories.assertStatus(200)
 
     assert.equal(1, blogCategories.body().length)
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it should contain the list of ingredients under it', async ({ client, route }) => {
     const ingredient = await IngredientFactory.create()
@@ -315,7 +315,7 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it should contain the list of cuisines under it', async ({ client, route }) => {
     const cuisine = await CuisineFactory.create()
@@ -338,5 +338,5 @@ test.group('API [categories.index]', (group) => {
         },
       ],
     }])
-  }).tags(['@categories', '@categories.index'])
+  }).tags(['@api', '@api.categories', '@api.categories.index'])
 })

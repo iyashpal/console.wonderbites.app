@@ -26,7 +26,7 @@ test.group('API [coupons.apply]', (group) => {
       discount_type: coupon.discountType,
       discount_value: coupon.discountValue,
     })
-  }).tags(['@coupons', '@coupons.apply'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 
   test('expired coupon code can not be applied to checkout/cart.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -41,7 +41,7 @@ test.group('API [coupons.apply]', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({messages: {coupon: ['Coupon code is expired.']}})
-  }).tags(['@coupons', '@coupons.apply'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 
   test('it throws validation errors when coupon and cart is missing', async ({client, route, assert}) => {
     const user = await UserFactory.create()
@@ -52,7 +52,7 @@ test.group('API [coupons.apply]', (group) => {
     response.assertStatus(422)
 
     assert.properties(response.body().messages, ['coupon', 'cart'])
-  }).tags(['@coupons', '@coupons.apply', '@coupons.debug'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 
   test('unknown coupon can not apply to cart.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -66,5 +66,5 @@ test.group('API [coupons.apply]', (group) => {
 
     response.assertStatus(422)
     response.assertBodyContains({messages: {coupon: ['Invalid coupon code.']}})
-  }).tags(['@coupons', '@coupons.apply'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 })

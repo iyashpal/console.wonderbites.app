@@ -16,7 +16,7 @@ test.group('API [wishlists.show]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@wishlists', '@wishlists.show'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.show'])
 
   test('User can access the wishlist after login', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -43,5 +43,5 @@ test.group('API [wishlists.show]', (group) => {
       response.body(),
       { products: products.map(({ id, name, sku, calories }) => ({ id, name, sku, calories })) }
     )
-  }).tags(['@wishlists', '@wishlists.show'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.show'])
 })

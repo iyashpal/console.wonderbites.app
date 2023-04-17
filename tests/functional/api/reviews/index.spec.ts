@@ -15,7 +15,7 @@ test.group('API [reviews.index]', (group) => {
     const request = await client.get(route('api.reviews.index'))
 
     request.assertStatus(200)
-  }).tags(['@reviews', '@reviews.index'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.index'])
 
   test('it can list the reviews.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
@@ -31,7 +31,7 @@ test.group('API [reviews.index]', (group) => {
     request.assertBodyContains({
       data: reviews.map(({ id, title, body }) => ({ id, title, body })),
     })
-  }).tags(['@reviews', '@reviews.index'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.index'])
 
   test('it can list the reviews with author.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
@@ -49,7 +49,7 @@ test.group('API [reviews.index]', (group) => {
     request.assertBodyContains({
       data: reviews.map(({ id, user }) => ({ id, user_id: user.id, user: { id: user.id } })),
     })
-  }).tags(['@reviews', '@reviews.index'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.index'])
 
   test('it can list the reviews with products.', async ({ client, route, assert }) => {
     const reviews = await ReviewFactory.with('user').with('product').createMany(10)
@@ -65,7 +65,7 @@ test.group('API [reviews.index]', (group) => {
     request.assertBodyContains({
       data: reviews.map(({ id, product }) => ({ id: id, reviewable_id: product.id, product: { id: product.id } })),
     })
-  }).tags(['@reviews', '@reviews.index'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.index'])
 
   test('it can list reviews based on product identifier.', async ({ client, route, assert }) => {
     const product = await ProductFactory.create()
@@ -83,5 +83,5 @@ test.group('API [reviews.index]', (group) => {
     request.assertBodyContains({
       data: reviews.filter((review) => review.reviewableId === product.id).map(({ id }) => ({ id })),
     })
-  }).tags(['@reviews', '@reviews.index'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.index'])
 })

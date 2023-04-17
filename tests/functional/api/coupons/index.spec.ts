@@ -20,11 +20,11 @@ test.group('API [coupons.index]', (group) => {
     response.assertStatus(200)
     response.assertBodyContains(coupons.map(({ id }) => ({ id })))
     assert.equal(response.body().length, coupons.length)
-  }).tags(['@coupons', '@coupons.index'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.index'])
 
   test('guest users can not list the coupons', async ({ client, route }) => {
     const response = await client.get(route('api.coupons.index'))
 
     response.assertStatus(401)
-  }).tags(['@coupons', '@coupons.index'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.index'])
 })

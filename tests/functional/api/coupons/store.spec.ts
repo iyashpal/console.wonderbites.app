@@ -18,7 +18,7 @@ test.group('API [coupons.store]', (group) => {
 
     response.assertStatus(200)
     response.assertBodyContains({ title: coupon.title, description: coupon.description, code: coupon.code })
-  }).tags(['@coupons', '@coupons.store'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.store'])
 
   test('unauthenticated user can not create new coupon', async ({ client, route }) => {
     const coupon = await (await CouponFactory.make()).toObject()
@@ -27,5 +27,5 @@ test.group('API [coupons.store]', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@coupons', '@coupons.store'])
+  }).tags(['@api', '@api.coupons', '@api.coupons.store'])
 })

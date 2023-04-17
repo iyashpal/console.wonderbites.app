@@ -33,7 +33,7 @@ test.group('API [wishlists.update]', (group) => {
         ],
       }
     )
-  }).tags(['@wishlists', '@wishlists.update'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.update'])
 
   test('User can remove product from his wishlist', async ({ client, route, assert }) => {
     const user = await UserFactory.create()
@@ -48,7 +48,7 @@ test.group('API [wishlists.update]', (group) => {
     response.assertStatus(200)
 
     assert.containsSubset(response.body(), { products: [] })
-  }).tags(['@wishlists', '@wishlists.update'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.update'])
 
   test('User can increase the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -77,7 +77,7 @@ test.group('API [wishlists.update]', (group) => {
         },
       ],
     })
-  }).tags(['@wishlists', '@wishlists.update'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.update'])
 
   test('User can decrease the wishlist product quantity.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -106,5 +106,5 @@ test.group('API [wishlists.update]', (group) => {
         },
       ],
     })
-  }).tags(['@wishlists', '@wishlists.update'])
+  }).tags(['@api', '@api.wishlists', '@api.wishlists.update'])
 })

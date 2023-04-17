@@ -13,11 +13,11 @@ test.group('Auth register', (group) => {
 
   /**
    * Case: User cannot create account without his first name.
-   * 
+   *
    * ✔ Need user information (having first_name field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'first_name'. 
+   * ✔ Request response body should contain errors field 'first_name'.
    */
   test('User cannot create account without his first name', async ({ client, route }) => {
     const user = await UserFactory.merge({ firstName: '' }).make()
@@ -29,15 +29,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { first_name: 'First name is required.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without his last name.
-   * 
+   *
    * ✔ Need user information (having last_name field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'last_name'. 
+   * ✔ Request response body should contain errors field 'last_name'.
    */
   test('User cannot create account without his last name', async ({ client, route }) => {
     const user = await UserFactory.merge({ lastName: '' }).make()
@@ -49,15 +49,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { last_name: 'Last name is required.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without email address.
-   * 
+   *
    * ✔ Need user information (having email field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'email'. 
+   * ✔ Request response body should contain errors field 'email'.
    */
   test('User cannot create account without email address', async ({ client, route }) => {
     const user = await UserFactory.merge({ email: '' }).make()
@@ -69,15 +69,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { email: 'Email address is required.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account with an invalid email address.
-   * 
+   *
    * ✔ Need user information (having email field value invalid/incorrect formatted email) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'email'. 
+   * ✔ Request response body should contain errors field 'email'.
    */
   test('User cannot create account with an invalid email address', async ({ client, route }) => {
     const user = await UserFactory.merge({ email: 'infoexample.com' }).make()
@@ -89,15 +89,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { email: 'Enter a valid email.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without mobile.
-   * 
+   *
    * ✔ Need user information (having mobile field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'mobile'. 
+   * ✔ Request response body should contain errors field 'mobile'.
    */
   test('User cannot create account without mobile', async ({ client, route }) => {
     const user = await UserFactory.merge({ mobile: '' }).make()
@@ -109,15 +109,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { mobile: 'Mobile no. is required.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without password.
-   * 
+   *
    * ✔ Need user information (having password field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'password'. 
+   * ✔ Request response body should contain errors field 'password'.
    */
   test('User cannot create account without password', async ({ client, route }) => {
     const user = await UserFactory.make()
@@ -129,15 +129,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { password: 'Choose a password.' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without confirming password.
-   * 
+   *
    * ✔ Need user information (having password_confirmation field empty) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'password_confirmation'. 
+   * ✔ Request response body should contain errors field 'password_confirmation'.
    */
   test('User cannot create account without password confirmation.', async ({ client, route }) => {
     const user = await UserFactory.make()
@@ -149,15 +149,15 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { password_confirmation: 'confirmed validation failed' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: User cannot create account without matching password_confirmation.
-   * 
+   *
    * ✔ Need user information (having password_confirmation field unmatched to password field) to create new account.
    * ✔ POST request to `route('api.register')` without api guard and authentication having user information in the body.
    * ✔ Request status should be Unprocessable (422)
-   * ✔ Request response body should contain errors field 'password_confirmation'. 
+   * ✔ Request response body should contain errors field 'password_confirmation'.
    */
   test('User cannot create account without match of password_confirmation', async ({ client, route }) => {
     const user = await UserFactory.make()
@@ -169,11 +169,11 @@ test.group('Auth register', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({ errors: { password_confirmation: 'confirmed validation failed' } })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: An authenticated user cannot register new account.
-   * 
+   *
    * ✔ Need user from database.
    * ✔ POST request to `route('api.register')` with api guard and authentication data.
    * ✔ Request response status should be Unauthorized (401)
@@ -187,11 +187,11 @@ test.group('Auth register', (group) => {
 
     response.assertStatus(401)
     response.assertBodyContains({ message: 'Unauthorized access' })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 
   /**
    * Case: Guest users can easily register..
-   * 
+   *
    * ✔ Need user information to create account.
    * ✔ POST request to `route('api.register')` without authentication having user data in the body.
    * ✔ Request status should be OK.
@@ -217,5 +217,5 @@ test.group('Auth register', (group) => {
       mobile: '0123456789',
       email: 'yash@brandsonify.com',
     })
-  })
+  }).tags(['@api', '@auth', '@api.register'])
 })

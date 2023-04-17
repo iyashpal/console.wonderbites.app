@@ -35,7 +35,7 @@ test.group('API [categories.show]', (group) => {
       type: category.type,
       description: category.description,
     })
-  }).tags(['@categories', '@categories.show'])
+  }).tags(['@api', '@api.categories', '@api.categories.show'])
 
   test('it can load products under category details', async ({ client, route, assert }) => {
     const category = await CategoryFactory.with('products', 5).create()
@@ -47,7 +47,7 @@ test.group('API [categories.show]', (group) => {
     request.assertBodyContains({ id: category.id, products: [] })
 
     assert.equal(5, request.body().products.length)
-  }).tags(['@categories', '@categories.show'])
+  }).tags(['@api', '@api.categories', '@api.categories.show'])
 
   test('it can load media under category product', async ({ client, route, assert }) => {
     const category = await CategoryFactory.create()
@@ -69,7 +69,7 @@ test.group('API [categories.show]', (group) => {
     assert.equal(1, products.length)
 
     assert.equal(3, products[0]?.media.length)
-  }).tags(['@categories', '@categories.show'])
+  }).tags(['@api', '@api.categories', '@api.categories.show'])
 
   test('it can load ingredients under category details', async ({ client, route, assert }) => {
     const category = await CategoryFactory.with('ingredients', 3).create()
@@ -85,7 +85,7 @@ test.group('API [categories.show]', (group) => {
     const { ingredients } = request.body()
 
     assert.equal(3, ingredients.length)
-  }).tags(['@categories', '@categories.show'])
+  }).tags(['@api', '@api.categories', '@api.categories.show'])
 
   test('it can load cuisines under category details', async ({ client, route, assert }) => {
     const category = await CategoryFactory.with('cuisines', 3).create()
@@ -101,5 +101,5 @@ test.group('API [categories.show]', (group) => {
     const { cuisines } = request.body()
 
     assert.equal(3, cuisines.length)
-  }).tags(['@categories', '@categories.show'])
+  }).tags(['@api', '@api.categories', '@api.categories.show'])
 })

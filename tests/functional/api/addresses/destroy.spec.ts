@@ -19,7 +19,7 @@ test.group('API [addresses.destroy]', (group) => {
     $response.assertStatus(401)
 
     $response.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@addresses', '@addresses.destroy'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.destroy'])
 
   test('it allows users to delete their addresses.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -30,7 +30,7 @@ test.group('API [addresses.destroy]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ deleted: true })
-  }).tags(['@addresses', '@addresses.destroy'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.destroy'])
 
   test('it can not allow others to delete someone\'s address.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -41,5 +41,5 @@ test.group('API [addresses.destroy]', (group) => {
     $response.assertStatus(403)
 
     $response.assertBodyContains({ name: 'AuthorizationException' })
-  }).tags(['@addresses', '@addresses.destroy'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.destroy'])
 })

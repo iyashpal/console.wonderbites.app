@@ -20,7 +20,7 @@ test.group('API [checkout.process]', (group) => {
     })
 
     $response.assertStatus(200)
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('authenticated user can process checkout.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
@@ -58,7 +58,7 @@ test.group('API [checkout.process]', (group) => {
       options: JSON.stringify({ payment: { mode: 'COD' } }),
       note: 'Test note for the order',
     })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user cannot process checkout without cart.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
@@ -90,7 +90,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ errors: { cart: 'required validation failed' } })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user cannot process checkout without invalid cart.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').with('addresses').create()
@@ -123,7 +123,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ errors: { cart: 'exists validation failure' } })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user cannot process checkout without address.', async ({ client, route }) => {
     const user = await UserFactory.with('cart').create()
@@ -155,7 +155,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertBodyContains({
       errors: { address: 'required validation failed' },
     })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user cannot process checkout with a invalid address.', async ({ client, route }) => {
     const user = await UserFactory
@@ -177,7 +177,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ errors: { address: 'object validation failed' } })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user cannot process checkout without payment method.', async ({ client, route }) => {
     const user = await UserFactory
@@ -202,7 +202,7 @@ test.group('API [checkout.process]', (group) => {
     $response.assertBodyContains({
       errors: { 'options.payment.mode': 'required validation failed' },
     })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('user can process checkout with cash on delivery.', async ({ client, route }) => {
     const user = await UserFactory
@@ -233,7 +233,7 @@ test.group('API [checkout.process]', (group) => {
       deliver_to: JSON.stringify(address.serializedForCheckout),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('it can delete the cart on order creation from the referenced cart.', async ({ client, route, assert }) => {
     const user = await UserFactory
@@ -268,5 +268,5 @@ test.group('API [checkout.process]', (group) => {
       products: user.cart.products.map(({ id, name }) => ({ id, name })),
       user: { id: user.id, first_name: user.firstName, last_name: user.lastName },
     })
-  }).tags(['@checkout', '@checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 })

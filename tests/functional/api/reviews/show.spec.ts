@@ -26,7 +26,7 @@ test.group('API [reviews.show]', (group) => {
       body: review.body,
       reviewable_id: product.id,
     })
-  }).tags(['@reviews', '@reviews.show'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.show'])
 
   test('it can access the review user details.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -47,7 +47,7 @@ test.group('API [reviews.show]', (group) => {
         id: review.user.id,
       },
     })
-  }).tags(['@reviews', '@reviews.show'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.show'])
 
   test('it can access the review product details.', async ({ client, route }) => {
     const product = await ProductFactory.create()
@@ -68,7 +68,7 @@ test.group('API [reviews.show]', (group) => {
         id: product.id,
       },
     })
-  }).tags(['@reviews', '@reviews.show'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.show'])
 
   test('it can access the review product details with images.', async ({ client, route }) => {
     const product = await ProductFactory.with('media', 3).create()
@@ -92,7 +92,7 @@ test.group('API [reviews.show]', (group) => {
         media: product.media.map(({ id }) => ({ id })),
       },
     })
-  }).tags(['@reviews', '@reviews.show'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.show'])
 
   test('it can access the review user and product details with images.', async ({ client, route }) => {
     const product = await ProductFactory.with('media', 3).create()
@@ -119,5 +119,5 @@ test.group('API [reviews.show]', (group) => {
         media: product.media.map(({ id }) => ({ id })),
       },
     })
-  }).tags(['@reviews', '@reviews.show'])
+  }).tags(['@api', '@api.reviews', '@api.reviews.show'])
 })

@@ -14,7 +14,7 @@ test.group('API [users.update]', (group) => {
     const $response = await client.put(route('api.users.update', user))
 
     $response.assertStatus(401)
-  }).tags(['@users', '@users.update'])
+  }).tags(['@api', '@api.users', '@api.users.update'])
 
   test('it can not allow user to update their profile without first name.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -24,7 +24,7 @@ test.group('API [users.update]', (group) => {
 
     $response.assertStatus(422)
     $response.assertBodyContains({ errors: { first_name: 'First name is required.' } })
-  }).tags(['@users', '@users.update'])
+  }).tags(['@api', '@api.users', '@api.users.update'])
 
   test('it cannot allow user to update their profile without last name.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -35,7 +35,7 @@ test.group('API [users.update]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ errors: { last_name: 'Last name is required.' } })
-  }).tags(['@users', '@users.update'])
+  }).tags(['@api', '@api.users', '@api.users.update'])
 
   test('it can allow user to update their profile.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -46,5 +46,5 @@ test.group('API [users.update]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({ first_name: 'Yash', last_name: 'Pal' })
-  }).tags(['@users', '@users.update'])
+  }).tags(['@api', '@api.users', '@api.users.update'])
 })

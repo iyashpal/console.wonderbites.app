@@ -12,7 +12,7 @@ test.group('API [feedbacks.store]', (group) => {
     const $response = await client.post(route('api.feedbacks.store')).json([])
 
     $response.assertStatus(401)
-  }).tags(['@feedback', '@feedback.store'])
+  }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 
   test('it allows to create new feedback.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -30,7 +30,7 @@ test.group('API [feedbacks.store]', (group) => {
       source: feedback.source,
       experience: feedback.experience,
     })
-  }).tags(['@feedback', '@feedback.store', 'feedback.testing'])
+  }).tags(['@api', '@api.feedback', '@api.feedback.store', 'feedback.testing'])
 
   test('it denies to create feedback if experience is missing.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -43,7 +43,7 @@ test.group('API [feedbacks.store]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ messages: { experience: ['Experience is required.'] } })
-  }).tags(['@feedback', '@feedback.store'])
+  }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 
   test('it denies to create feedback if body is missing.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -56,7 +56,7 @@ test.group('API [feedbacks.store]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ messages: { body: ['Body is required.'] } })
-  }).tags(['@feedback', '@feedback.store'])
+  }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 
   test('it denies to create feedback if source is missing.', async ({ client, route }) => {
     const user = await UserFactory.create()
@@ -69,5 +69,5 @@ test.group('API [feedbacks.store]', (group) => {
     $response.assertStatus(422)
 
     $response.assertBodyContains({ messages: { source: ['Source is required.'] } })
-  }).tags(['@feedback', '@feedback.store'])
+  }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 })

@@ -1,6 +1,6 @@
-import { test } from '@japa/runner'
+import {test} from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { AddressFactory, UserFactory } from 'Database/factories'
+import {AddressFactory, UserFactory} from 'Database/factories'
 
 test.group('API [addresses.update]', (group) => {
   /**
@@ -11,28 +11,28 @@ test.group('API [addresses.update]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('it can\'t update a non existing address.', async ({ client, route }) => {
+  test('it can\'t update a non existing address.', async ({client, route}) => {
     const user = await UserFactory.create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({userId: user.id}).make()
 
-    const request = await client.put(route('api.addresses.update', { id: 50 }))
+    const request = await client.put(route('api.addresses.update', {id: 50}))
       .guard('api').loginAs(user).json(addressData)
 
     request.assertStatus(404)
-  }).tags(['@addresses', '@addresses.update'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.update'])
 
-  test('guest users are not allowed to update address.', async ({ client, route }) => {
+  test('guest users are not allowed to update address.', async ({client, route}) => {
     const address = await AddressFactory.with('user').create()
 
     const request = await client.put(route('api.addresses.update', address)).json(address.toJSON())
 
     request.assertStatus(401)
 
-    request.assertBodyContains({ message: 'Unauthorized access' })
-  }).tags(['@addresses', '@addresses.update'])
+    request.assertBodyContains({message: 'Unauthorized access'})
+  }).tags(['@api', '@api.addresses', '@api.addresses.update'])
 
-  test('it can not allow a user to update other\'s address', async ({ client, route }) => {
+  test('it can not allow a user to update other\'s address', async ({client, route}) => {
     const user = await UserFactory.create()
     const address = await AddressFactory.with('user').create()
 
@@ -40,14 +40,14 @@ test.group('API [addresses.update]', (group) => {
       .guard('api').loginAs(user).json(address.toJSON())
 
     $response.assertStatus(403)
-  }).tags(['@addresses', '@addresses.update'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.update'])
 
-  test('it can allow logged in users to update address.', async ({ client, route }) => {
+  test('it can allow logged in users to update address.', async ({client, route}) => {
     const user = await UserFactory.create()
 
-    const address = await AddressFactory.merge({ userId: user.id }).create()
+    const address = await AddressFactory.merge({userId: user.id}).create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({userId: user.id}).make()
 
     const $response = await client.put(route('api.addresses.update', address))
       .guard('api').loginAs(user).json(addressData)
@@ -62,17 +62,17 @@ test.group('API [addresses.update]', (group) => {
       city: addressData.city,
       phone: addressData.phone,
     })
-  }).tags(['@addresses', '@addresses.update'])
+  }).tags(['@api', '@api.addresses', '@api.addresses.update'])
 
-  test('updating existing address can be set as default.', async ({ client, route }) => {
+  test('updating existing address can be set as default.', async ({client, route}) => {
     const user = await UserFactory.create()
 
-    const address = await AddressFactory.merge({ userId: user.id }).create()
+    const address = await AddressFactory.merge({userId: user.id}).create()
 
-    const addressData = await AddressFactory.merge({ userId: user.id }).make()
+    const addressData = await AddressFactory.merge({userId: user.id}).make()
 
     const request = await client.put(route('api.addresses.update', address))
-      .guard('api').loginAs(user).json({ ...addressData, is_default: true })
+      .guard('api').loginAs(user).json({...addressData, is_default: true})
 
     request.assertStatus(200)
 
@@ -90,6 +90,6 @@ test.group('API [addresses.update]', (group) => {
 
     userRequest.assertStatus(200)
 
-    userRequest.assertBodyContains({ address_id: address.id })
-  }).tags(['@addresses', '@addresses.update', '@users.auth'])
+    userRequest.assertBodyContains({address_id: address.id})
+  }).tags(['@api', '@api.addresses', '@api.addresses.update'])
 })
