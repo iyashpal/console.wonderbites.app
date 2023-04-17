@@ -97,7 +97,12 @@ test.group('Core [products.store]', (group) => {
     const response = await client.post(route('core.products.store'))
       .guard('api').loginAs(user)
       .file('thumbnail', Application.publicPath('/images/logo.svg')).fields({
-        name: 'Demo', sku: 'P5684', price: 500, description: 'this is demo description...', categoryId: category.id,
+        name: 'Demo',
+        sku: 'P5684',
+        price: 500,
+        description: 'this is demo description...',
+        categoryId: category.id,
+        isPopular: true,
         isCustomizable: false,
       })
 
@@ -113,7 +118,12 @@ test.group('Core [products.store]', (group) => {
       .guard('api').loginAs(user)
       .file('thumbnail', Application.publicPath('/images/logo.svg'))
       .fields({
-        name: 'Demo', sku: 'P5684', price: 500, description: 'this is demo description...', categoryId: category.id,
+        name: 'Demo',
+        sku: 'P5684',
+        price: 500,
+        description: 'this is demo description...',
+        categoryId: category.id,
+        isPopular: true,
         isCustomizable: false,
       })
 
@@ -134,10 +144,11 @@ test.group('Core [products.store]', (group) => {
         name: 'Demo',
         sku: 'P5684',
         price: 500,
+        isPopular: true,
+        isCustomizable: true,
         description: 'this is demo description...',
         categoryId: category.id,
         publishedAt: DateTime.now().toString(),
-        isCustomizable: false,
       })
 
     response.assertStatus(200)

@@ -2,7 +2,7 @@ import {Category, Ingredient, Product} from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import CreateValidator from 'App/Validators/Core/Products/CreateValidator'
+import StoreValidator from 'App/Validators/Core/Products/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
 
 export default class ProductsController {
@@ -32,7 +32,7 @@ export default class ProductsController {
     try {
       const userId = auth.use('api').user?.id
 
-      const payload = await request.validate(CreateValidator)
+      const payload = await request.validate(StoreValidator)
 
       const product = await Product.create({
         userId,
