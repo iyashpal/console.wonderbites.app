@@ -26,7 +26,7 @@ test.group('API [products.index]', (group) => {
         description: product.description,
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it reads the customizable property within product data.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -47,7 +47,7 @@ test.group('API [products.index]', (group) => {
         is_customizable: Number(product.isCustomizable),
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can allow access to un-authenticated user.', async ({client, route}) => {
     const products = await ProductFactory.createMany(10)
@@ -57,11 +57,11 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({data: products.map((product) => ({id: product.id}))})
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can allow users to search products with random keywords - "{search}"')
     .with([{search: 'Sallad'}, {search: 'Soup'}, {search: 'Letuce'}])
-    .run(async ({client, route}, search) => {
+    .run(async ({client, route}, {search}) => {
       const products = await ProductFactory.merge([
         {name: 'Salmon Sallad'},
         {name: 'Pizza Margharita'},
@@ -84,7 +84,7 @@ test.group('API [products.index]', (group) => {
           .filter(({name, description}) => name.includes(`${search}`) || description.includes(`${search}`))
           .map((product) => ({id: product.id})),
       })
-    })
+    }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can list the products with media.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -107,7 +107,7 @@ test.group('API [products.index]', (group) => {
         media: product.media.map(({id}) => ({id})),
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can list the products with ingredients.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -130,7 +130,7 @@ test.group('API [products.index]', (group) => {
         ingredients: product.ingredients.map(({id}) => ({id})),
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can list the products with ingredients and ingredients categories.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -161,7 +161,7 @@ test.group('API [products.index]', (group) => {
         })),
       })),
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('It can list the products with reviews.', async ({client, route}) => {
     const product = await ProductFactory.create()
@@ -188,7 +188,7 @@ test.group('API [products.index]', (group) => {
         },
       ],
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('It can list the products with reviews average.', async ({client, route}) => {
     const product = await ProductFactory.with('reviews', 10, query => query.with('user')).create()
@@ -214,7 +214,7 @@ test.group('API [products.index]', (group) => {
         },
       ],
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('It can list the top rated products.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -244,7 +244,7 @@ test.group('API [products.index]', (group) => {
     $response.assertStatus(200)
 
     $response.assertBodyContains({data: [{id: ProductA.id}]})
-  }).tags(['@products', '@products.index', '@products.debug'])
+  }).tags(['@api', '@api.products', '@api.products.index', '@products.debug'])
 
   test('it can list the products with availability in the wishlist of the user.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -273,7 +273,7 @@ test.group('API [products.index]', (group) => {
         },
       ],
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can list the products with media, wishlist, reviews, and ingredients.', async ({client, route}) => {
     const user = await UserFactory.create()
@@ -311,7 +311,7 @@ test.group('API [products.index]', (group) => {
         },
       ],
     })
-  }).tags(['@products', '@products.index'])
+  }).tags(['@api', '@api.products', '@api.products.index'])
 
   test('it can list products based on selected categories.', async ({client, route}) => {
     const [PA, PB, PC, PD, PE, PF, PG, PH, PI, PJ] = await ProductFactory.createMany(10)

@@ -24,7 +24,7 @@ export default abstract class Query {
 
   /**
    * Set the authenticated user.
-   * 
+   *
    * @param user User
    * @returns ProductQuery
    */
@@ -36,7 +36,7 @@ export default abstract class Query {
 
   /**
    * Get the current auth user.
-   * 
+   *
    * @returns User
    */
   public user () {
@@ -45,14 +45,14 @@ export default abstract class Query {
 
   /**
    * Get the main query instance.
-   * 
+   *
    * @returns ModelQueryBuilderContract<any, any>
    */
   public abstract query (): ModelQueryBuilderContract<any, any>
 
   /**
    * Resolve the query filters, aggregates, counts, preload etc.
-   * 
+   *
    * @returns ProductQuery
    */
   public resolveQuery () {
@@ -75,9 +75,9 @@ export default abstract class Query {
 
   /**
    * Set the query params prefix.
-   * 
+   *
    * @param value
-   * @returns Query 
+   * @returns Query
    */
   public qsPrefix (value: string) {
     this.$prefix = value
@@ -87,7 +87,7 @@ export default abstract class Query {
 
   /**
    * Define the user preloads.
-   * 
+   *
    * @param preloads string[]
    * @returns ProductQuery
    */
@@ -96,7 +96,7 @@ export default abstract class Query {
       try {
         this[string.camelCase(`preload-${preload}`)]()
       } catch (error) {
-        continue
+        //
       }
     }
 
@@ -105,7 +105,7 @@ export default abstract class Query {
 
   /**
    * Apply filters to query builder.
-   * 
+   *
    * @param filters String[]
    * @returns Query
    */
@@ -114,7 +114,7 @@ export default abstract class Query {
       try {
         this[string.camelCase(`filter-${filter}`)]()
       } catch (error) {
-        continue
+        //
       }
     }
 
@@ -123,7 +123,7 @@ export default abstract class Query {
 
   /**
    * Load the relation counts.
-   * 
+   *
    * @param counts String[]
    * @returns Query
    */
@@ -132,7 +132,7 @@ export default abstract class Query {
       try {
         this[string.camelCase(`count-${count}`)]()
       } catch (error) {
-        continue
+        //
       }
     }
 
@@ -141,7 +141,7 @@ export default abstract class Query {
 
   /**
    * Apply the query aggregates to builder.
-   * 
+   *
    * @param aggregates String[]
    * @returns Query
    */
@@ -150,7 +150,7 @@ export default abstract class Query {
       try {
         this[string.camelCase(`aggregate-${aggregate}`)]()
       } catch (error) {
-        continue
+        //
       }
     }
 
@@ -159,7 +159,7 @@ export default abstract class Query {
 
   /**
    * Get the query params prefix.
-   * 
+   *
    * @returns string
    */
   public qs (value: string = ''): string {
@@ -168,7 +168,7 @@ export default abstract class Query {
 
   /**
    * Get the request input.
-   * 
+   *
    * @param key String
    * @param defaultValue Any
    * @returns Any

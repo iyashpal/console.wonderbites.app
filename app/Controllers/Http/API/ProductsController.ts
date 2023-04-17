@@ -11,14 +11,12 @@ export default class ProductsController {
   public async index ({request, response, auth}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
+      const {page = 1, limit = 10} = request.all() as { page: number, limit: number }
 
       const products = await (new ProductQuery(request))
         .asUser(user)
         .resolveQueryWithPrefix('products')
-        .query()
-        .whereNotNull('published_at')
-        .orderBy('id', 'desc')
-        .paginate(request.input('page', 1), request.input('limit', 10))
+        .query().whereNotNull('published_at').orderBy('id', 'desc').paginate(page, limit)
 
       response.status(200).json(products)
     } catch (error) {
