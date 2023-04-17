@@ -41,7 +41,7 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        categoryId: category.id, name, description, publishedAt, price, sku, isCustomizable: false,
+        categoryId: category.id, name, description, publishedAt, price, sku, isCustomizable: false, isPopular: false,
       })
 
     response.assertStatus(200)
@@ -61,6 +61,7 @@ test.group('Core [products.update]', (group) => {
         sku: 'SKU563',
         description: 'asdlkfj',
         isCustomizable: false,
+        isPopular: false,
       })
 
     response.assertStatus(422)
@@ -82,6 +83,7 @@ test.group('Core [products.update]', (group) => {
         sku: 'SKU563',
         description: '',
         isCustomizable: false,
+        isPopular: false,
       })
 
     response.assertStatus(422)
@@ -103,6 +105,7 @@ test.group('Core [products.update]', (group) => {
         price: 50,
         sku: '',
         isCustomizable: false,
+        isPopular: false,
       })
 
     response.assertStatus(422)
@@ -119,7 +122,7 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        name, description, sku, publishedAt, price, isCustomizable: false,
+        name, description, sku, publishedAt, price, isCustomizable: false, isPopular: false,
       })
 
     response.assertStatus(422)
@@ -140,7 +143,7 @@ test.group('Core [products.update]', (group) => {
         sku: 'SKU563',
         publishedAt: null,
         price: '',
-        isCustomizable: false,
+        isCustomizable: false, isPopular: false,
       })
 
     response.assertStatus(422)
@@ -158,7 +161,16 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user)
-      .json({categoryId: category.id, name, price, description, sku, publishedAt: null, isCustomizable: false})
+      .json({
+        categoryId: category.id,
+        name,
+        price,
+        description,
+        sku,
+        publishedAt: null,
+        isCustomizable: false,
+        isPopular: false,
+      })
 
     response.assertStatus(200)
     response.assertBodyContains({published_at: null})
@@ -174,9 +186,12 @@ test.group('Core [products.update]', (group) => {
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user)
       .json({
-        categoryId: category.id, name, price, description, sku, publishedAt: DateTime.now(), isCustomizable: false,
+        categoryId: category.id,
+        name, price, description, sku, publishedAt: DateTime.now(),
+        isCustomizable: false,
+        isPopular: false,
       })
-    // response.dumpBody()
+
     response.assertStatus(200)
 
     assert.isNotNull(response.body().published_at)
@@ -198,6 +213,7 @@ test.group('Core [products.update]', (group) => {
         sku: 'SKU563',
         publishedAt: DateTime.now(),
         isCustomizable: false,
+        isPopular: false,
       })
 
     response.assertStatus(200)
