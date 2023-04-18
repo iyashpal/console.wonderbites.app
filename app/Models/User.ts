@@ -5,6 +5,7 @@ import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
 import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import {Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback, Role} from './index'
+import VerificationCode from 'App/Models/VerificationCode'
 
 export default class User extends Notifiable {
   @column({isPrimary: true})
@@ -90,6 +91,9 @@ export default class User extends Notifiable {
    */
   @hasOne(() => Cart, {onQuery: query => query.where('status', 1)})
   public cart: HasOne<typeof Cart>
+
+  @hasMany(() => VerificationCode)
+  public verificationCodes: HasMany<typeof VerificationCode>
 
   /**
    * Relation to user reviews.
