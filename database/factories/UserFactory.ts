@@ -37,4 +37,5 @@ export default Factory.define(User, async ({faker}) => {
   .relation('orders', () => OrderFactory)
   .relation('wishlist', () => WishlistFactory)
   .relation('addresses', () => AddressFactory)
+  .relation('verificationCodes', () => RoleFactory)
   .build()
