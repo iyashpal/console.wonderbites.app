@@ -11,7 +11,7 @@ test.group('API [otp.generate]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('it reads 401 status code when authenticated user try to re-login.')
+  test('it reads 401 status code when authenticated user try to generate otp.')
     .run(async ({client, route}) => {
       const user = await UserFactory.create()
 
