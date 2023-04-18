@@ -5,7 +5,14 @@ Route.group(() => {
    * Routes that allowed only for guest users.
    */
   Route.group(() => {
-    Route.post('/mobile/login', 'Auth/MobileLoginsController').as('mobile.login')
+    /**
+     * OTP authentication routes.
+     */
+    Route.group(() => {
+      Route.post('login', 'Auth/OTP/LoginController').as('login')
+      Route.post('generate', 'Auth/OTP/GenerateCodesController').as('generate')
+    }).as('otp').prefix('otp')
+
     Route.post('/login', 'LoginController').as('login')
 
     Route.post('/register', 'RegisterController').as('register')

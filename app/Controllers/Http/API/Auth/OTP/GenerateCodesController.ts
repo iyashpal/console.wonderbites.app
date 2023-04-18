@@ -2,10 +2,10 @@ import {DateTime} from 'luxon'
 import {User} from 'App/Models'
 import {string} from '@ioc:Adonis/Core/Helpers'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import MobileLoginValidator from 'App/Validators/API/Auth/MobileLoginValidator'
 
-export default class MobileLoginsController {
+export default class GenerateCodesController {
   public async handle ({request, response}: HttpContextContract) {
     try {
       const {mobile} = await request.validate(MobileLoginValidator)
@@ -15,7 +15,7 @@ export default class MobileLoginsController {
       const code = await user.related('verificationCodes')
         .create({code: this.generateCode(5), expiresAt: DateTime.now().plus({minute: 10})})
 
-      response.ok({success: !!code.id})
+      response.ok({success: !!code.id, user: user.id})
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
