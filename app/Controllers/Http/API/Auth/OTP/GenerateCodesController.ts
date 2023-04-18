@@ -3,12 +3,12 @@ import {User} from 'App/Models'
 import {string} from '@ioc:Adonis/Core/Helpers'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MobileLoginValidator from 'App/Validators/API/Auth/MobileLoginValidator'
+import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 
 export default class GenerateCodesController {
   public async handle ({request, response}: HttpContextContract) {
     try {
-      const {mobile} = await request.validate(MobileLoginValidator)
+      const {mobile} = await request.validate(GenerateValidator)
 
       const user = await User.query().where('mobile', mobile).firstOrFail()
 
