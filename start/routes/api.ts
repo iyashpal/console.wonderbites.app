@@ -5,6 +5,7 @@ Route.group(() => {
    * Routes that allowed only for guest users.
    */
   Route.group(() => {
+    Route.post('/mobile/login', 'Auth/MobileLoginsController').as('mobile.login')
     Route.post('/login', 'LoginController').as('login')
 
     Route.post('/register', 'RegisterController').as('register')
