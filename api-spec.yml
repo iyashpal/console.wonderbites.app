@@ -49,6 +49,131 @@ tags:
   - name: Static > Pages
     description: Application authentication endpoints.
 paths:
+  /otp/generate:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: Generate OTP
+      description: Request OTP to login.
+      operationId: generateOtpToLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mobile
+              properties:
+                mobile:
+                  type: string
+                  example: +910000000000
+                  description: The registered mobile number.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  user:
+                    type: number
+                    example: 1
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      mobile:
+                        type: string
+                        example: required validation failed.
+
+  /otp/login:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: OTP Login
+      description: Login with mobile otp.
+      operationId: loginToAppViaOTP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - userId
+              properties:
+                code:
+                  type: string
+                  example: 00000
+                  description: OTP entered by user.
+                userId:
+                  type: string
+                  example: 1
+                  description: User ID received from code generate request.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  type:
+                    type: string
+                    example: 'bearer'
+                  token:
+                    type: string
+                    example: 'Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT'
+
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: required validation failed.
+                      user_id:
+                        type: string
+                        example: required validation failed.
+
   /login:
     post:
       tags:
