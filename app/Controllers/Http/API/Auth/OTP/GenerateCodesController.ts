@@ -1,29 +1,29 @@
-import {DateTime} from 'luxon'
-import {User} from 'App/Models'
-import {string} from '@ioc:Adonis/Core/Helpers'
+import { DateTime } from 'luxon'
+import { string } from '@ioc:Adonis/Core/Helpers'
+import { User, VerificationCode } from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 
 export default class GenerateCodesController {
-  public async handle ({request, response}: HttpContextContract) {
+  public async handle ({ request, response }: HttpContextContract) {
     try {
-      const {mobile} = await request.validate(GenerateValidator)
+      const { mobile } = await request.validate(GenerateValidator)
 
-      const user = await User.query().where('mobile', mobile).firstOrFail()
+      const user = await User.query().where('mobile', mobile).first()
 
-      const code = await user.related('verificationCodes')
-        .create({code: this.generateCode(5), expiresAt: DateTime.now().plus({minute: 10})})
+      const code = await VerificationCode.updateOrCreate(
+        { source: mobile, userId: user?.id ?? null, verifiedAt: null },
+        {
+          token: string.generateRandom(32),
+          expiresAt: DateTime.now().plus({ minute: 10 }),
+          code: Math.floor((Math.random() * 9999) + 50).toString(),
+        }
+      )
 
-      response.ok({success: !!code.id, user: user.id})
+      response.ok({ success: !!code.id, token: code.token, source: mobile, ...(user ? {user: user.id} : {}) })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
-  }
-
-  protected generateCode (num = 5) {
-    let code = string.generateRandom(num)
-
-    return code.replace(/[^\w\s]/gi, Math.floor(Math.random() * 9 + 1).toString())
   }
 }

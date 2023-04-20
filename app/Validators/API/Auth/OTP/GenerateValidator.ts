@@ -26,7 +26,6 @@ export default class GenerateValidator {
   public schema = schema.create({
     mobile: schema.string({trim: true}, [
       rules.required(),
-      rules.exists({table: 'users', column: 'mobile'}),
     ]),
   })
 

@@ -6,8 +6,10 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
-      table.bigint('user_id').unsigned().references('users.id').onDelete('CASCADE')
+      table.bigint('user_id').nullable().unsigned().references('users.id').onDelete('CASCADE')
+      table.string('source')
       table.string('code')
+      table.string('token')
       table.timestamp('expires_at')
       table.timestamp('verified_at').nullable()
       /**

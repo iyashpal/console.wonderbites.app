@@ -7,10 +7,16 @@ export default class VerificationCode extends BaseModel {
   public id: number
 
   @column()
-  public userId: number
+  public userId: number | null
+
+  @column()
+  public source: string
 
   @column()
   public code: string
+
+  @column()
+  public token: string
 
   @column.dateTime()
   public expiresAt: DateTime
