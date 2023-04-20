@@ -10,6 +10,7 @@ Route.group(() => {
      */
     Route.group(() => {
       Route.post('login', 'Auth/OTP/LoginController').as('login')
+      Route.post('register', 'Auth/OTP/RegisterController').as('register')
       Route.post('generate', 'Auth/OTP/GenerateCodesController').as('generate')
       Route.post('verify/:token', 'Auth/OTP/VerifyCodesController').as('verify')
     }).as('otp').prefix('otp')
