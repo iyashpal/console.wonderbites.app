@@ -32,7 +32,7 @@ test.group('API [otp.generate]', (group) => {
       await UserFactory.merge({ mobile: '9882426384' }).create()
 
       const response = await client.post(route('api.otp.generate'))
-        .json({ mobile: '9882426385' })
+        .json({ source: '9882426385' })
 
       response.assertStatus(200)
       assert.notAllProperties(response.body(), ['user'])
@@ -45,7 +45,7 @@ test.group('API [otp.generate]', (group) => {
       const user = await UserFactory.merge({ mobile: '9882426384' }).create()
 
       const response = await client.post(route('api.otp.generate'))
-        .json({ mobile: user.mobile })
+        .json({ source: user.mobile })
 
       response.assertStatus(200)
       assert.properties(response.body(), ['user', 'success', 'source', 'token'])

@@ -24,7 +24,7 @@ export default class GenerateValidator {
    *    ```
    */
   public schema = schema.create({
-    mobile: schema.string({trim: true}, [
+    source: schema.string({trim: true}, [
       rules.required(),
     ]),
   })

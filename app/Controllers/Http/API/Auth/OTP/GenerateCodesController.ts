@@ -8,12 +8,12 @@ import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 export default class GenerateCodesController {
   public async handle ({ request, response }: HttpContextContract) {
     try {
-      const { mobile } = await request.validate(GenerateValidator)
+      const { source } = await request.validate(GenerateValidator)
 
-      const user = await User.query().where('mobile', mobile).first()
+      const user = await User.query().where('mobile', source).orWhere('email', source).first()
 
       const code = await VerificationCode.updateOrCreate(
-        { source: mobile, userId: user?.id ?? null, verifiedAt: null },
+        { source, userId: user?.id ?? null, verifiedAt: null },
         {
           token: string.generateRandom(32),
           expiresAt: DateTime.now().plus({ minute: 10 }),
@@ -21,7 +21,7 @@ export default class GenerateCodesController {
         }
       )
 
-      response.ok({ success: !!code.id, token: code.token, source: mobile, ...(user ? {user: user.id} : {}) })
+      response.ok({ success: !!code.id, token: code.token, source, ...(user ? {user: user.id} : {}) })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
