@@ -50,10 +50,10 @@ test.group('API [otp.login]', (group) => {
       const response = await client.post(route('api.otp.login')).json({token: code.token})
 
       response.assertStatus(422)
-      response.assertBodyContains({errors: {token: 'Invalid token or state'}})
+      response.assertBodyContains({errors: {token: 'Invalid token state'}})
     }).tags(['@api', '@auth', '@api.otp.login'])
 
-  test('it reads 200 status code when code is invalid.')
+  test('it reads 200 status code when token and token state is Login.')
     .run(async ({client, route, assert}) => {
       const user = await UserFactory.create()
       const code = await VerificationCodeFactory.merge({ userId: user.id, action: 'Login' }).create()

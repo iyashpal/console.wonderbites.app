@@ -11,7 +11,7 @@ export default class LoginController {
         .preload('user').where('token', token).where('action', 'Login').whereNotNull('verified_at').first()
 
       if (verificationCode === null) {
-        return response.unprocessableEntity({ errors: {token: 'Invalid token or state'} })
+        return response.unprocessableEntity({ errors: {token: 'Invalid token state'} })
       }
 
       const authToken = await auth.use('api').generate(verificationCode.user)
