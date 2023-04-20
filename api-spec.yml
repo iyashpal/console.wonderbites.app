@@ -63,12 +63,12 @@ paths:
             schema:
               type: object
               required:
-                - mobile
+                - source
               properties:
-                mobile:
+                source:
                   type: string
                   example: +910000000000
-                  description: The registered mobile number.
+                  description: Code source can be a mobile or email.
       responses:
         200:
           description: OK
@@ -76,12 +76,18 @@ paths:
             application/json:
               schema:
                 properties:
-                  status:
+                  success:
                     type: boolean
                     example: true
+                  token:
+                    type: string
+                    example: scTD5VBztzjPAaiuXqbpPnonoLcsIZUE
                   user:
                     type: number
                     example: 1
+                  source:
+                    type: string
+                    example: +910000000000
         422:
           description: Validation Error
           content:
@@ -103,10 +109,72 @@ paths:
                   errors:
                     type: object
                     properties:
-                      mobile:
+                      source:
                         type: string
                         example: required validation failed.
-
+  /otp/verify/{token}:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: Verify OTP
+      description: Verify the received code.
+      operationId: verifyVerificationCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  example: 4568
+                  description: code received on mobile or email.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    example: scTD5VBztzjPAaiuXqbpPnonoLcsIZUE
+                  state:
+                    type: string
+                    example: Login
+                  source:
+                    type: string
+                    example: +910000000000
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                        example: required validation failed.
   /otp/login:
     post:
       tags:
@@ -121,17 +189,12 @@ paths:
             schema:
               type: object
               required:
-                - code
-                - userId
+                - token
               properties:
-                code:
+                token:
                   type: string
-                  example: 00000
-                  description: OTP entered by user.
-                userId:
-                  type: string
-                  example: 1
-                  description: User ID received from code generate request.
+                  example: scTD5VBztzjPAaiuXqbpPnonoLcsIZUE
+                  description: Login token received from verification endpoint.
       responses:
         200:
           description: OK
@@ -171,6 +234,110 @@ paths:
                         type: string
                         example: required validation failed.
                       user_id:
+                        type: string
+                        example: required validation failed.
+  
+  /otp/register:
+    post:
+      tags:
+        - Auth
+      security: []
+      summary: OTP Login
+      description: Login with mobile otp.
+      operationId: loginToAppViaOTP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - firstName
+                - lastName
+                - mobile
+                - email
+                - password
+                - password_confirmation
+              properties:
+                token:
+                  type: string
+                  example: scTD5VBztzjPAaiuXqbpPnonoLcsIZUE
+                  description: Register token received from code verification endpoint.
+                firstName:
+                  type: string
+                  example: John
+                  description: First name of the user.
+                lastName:
+                  type: string
+                  example: Doe
+                  description: Last name of the user.
+                mobile:
+                  type: string
+                  example: +910000000000
+                  description: Login mobile number.
+                email:
+                  type: string
+                  example: info@example.com
+                  description: Login email address.
+                password:
+                  type: string
+                  example: password
+                  description: Account login password.
+                password_confirmation:
+                  type: string
+                  example: password
+                  description: Confirm the entered password.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  type:
+                    type: string
+                    example: 'bearer'
+                  token:
+                    type: string
+                    example: 'Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT'
+
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                        example: required validation failed.
+                      lastName:
+                        type: string
+                        example: required validation failed.
+                      mobile:
+                        type: string
+                        example: required validation failed.
+                      email:
+                        type: string
+                        example: required validation failed.
+                      password:
+                        type: string
+                        example: required validation failed.
+                      password_confirmation:
                         type: string
                         example: required validation failed.
 
