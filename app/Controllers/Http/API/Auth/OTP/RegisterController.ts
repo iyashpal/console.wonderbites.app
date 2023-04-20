@@ -8,7 +8,7 @@ export default class RegisterController {
     try {
       const payload = await request.validate(RegisterValidator)
       const verificationCode = await VerificationCode.query()
-        .where('action', 'Register')
+        .where('state', 'Register')
         .where('token', payload.token)
         .whereNotNull('verified_at').first()
 

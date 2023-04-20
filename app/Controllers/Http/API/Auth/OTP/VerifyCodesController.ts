@@ -23,13 +23,13 @@ export default class VerifyCodesController {
         expiresAt: DateTime.now(),
         verifiedAt: DateTime.now(),
         token: string.generateRandom(32),
-        action: verificationCode.userId ? 'Login' : 'Register',
+        state: verificationCode.userId ? 'Login' : 'Register',
       }).save()
 
       response.ok({
         token: verificationCode.token,
         source: verificationCode.source,
-        action: verificationCode.action,
+        state: verificationCode.state,
         success: !!verificationCode.verifiedAt,
       })
     } catch (error) {

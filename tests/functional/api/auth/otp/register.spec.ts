@@ -18,14 +18,14 @@ test.group('API > Auth [otp.register]', (group) => {
       const response = await client.post(route('api.otp.register')).guard('api').loginAs(user)
 
       response.assertStatus(401)
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 
   test('it reads 422 status code when request payload is empty.')
     .run(async ({ client, route }) => {
       const response = await client.post(route('api.otp.register')).json({})
 
       response.assertStatus(422)
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 
   test('it reads 422 status code when the token is invalid.')
     .run(async ({ client, route }) => {
@@ -34,7 +34,7 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { token: 'exists validation failure' } })
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 
   test('it reads {code} status code when {situation}')
     .with([
@@ -126,7 +126,7 @@ test.group('API > Auth [otp.register]', (group) => {
     .run(async ({ client, route }, field) => {
       const user = await UserFactory.create()
       const password = field.field === 'password' ? field.value : 'Welcome123'
-      const code = await VerificationCodeFactory.merge({ userId: user.id, action: 'Register' }).create()
+      const code = await VerificationCodeFactory.merge({ userId: user.id, state: 'Register' }).create()
       const response = await client.post(route('api.otp.register')).json({
         token: code.token,
         firstName: 'Yash',
@@ -142,9 +142,9 @@ test.group('API > Auth [otp.register]', (group) => {
       if (field.assert) {
         response.assertBodyContains(field.assert)
       }
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 
-  test('it reads 422 status code when action is not set to Register.')
+  test('it reads 422 status code when state is not set to Register.')
     .run(async ({ client, route }) => {
       const user = await UserFactory.create()
       const code = await VerificationCodeFactory.merge({ userId: user.id }).create()
@@ -161,12 +161,12 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { token: 'Invalid token state' } })
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 
   test('it reads 200 status code when token and form data is valid with correct token state.')
     .run(async ({ client, route, assert }) => {
       const user = await UserFactory.create()
-      const code = await VerificationCodeFactory.merge({ userId: user.id, action: 'Register' }).create()
+      const code = await VerificationCodeFactory.merge({ userId: user.id, state: 'Register' }).create()
 
       const response = await client.post(route('api.otp.register'))
         .json({
@@ -181,5 +181,5 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(200)
       assert.properties(response.body(), ['type', 'token'])
-    }).tags(['@api', '@auth', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
 })

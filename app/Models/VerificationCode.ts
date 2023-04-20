@@ -10,7 +10,7 @@ export default class VerificationCode extends BaseModel {
   public userId: number | null
 
   @column()
-  public action: string
+  public state: string
 
   @column()
   public source: string

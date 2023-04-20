@@ -19,7 +19,7 @@ test.group('API [otp.login]', (group) => {
       const response = await client.post(route('api.otp.login')).guard('api').loginAs(user)
 
       response.assertStatus(401)
-    }).tags(['@api', '@auth', '@api.otp.login'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.login'])
 
   test('it reads 422 status code when request payload is empty.')
     .run(async ({client, route}) => {
@@ -31,7 +31,7 @@ test.group('API [otp.login]', (group) => {
           token: 'required validation failed',
         },
       })
-    }).tags(['@api', '@auth', '@api.otp.login'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.login'])
 
   test('it reads 422 status code when the token is invalid.')
     .run(async ({client, route}) => {
@@ -40,9 +40,9 @@ test.group('API [otp.login]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({errors: {token: 'exists validation failure'}})
-    }).tags(['@api', '@auth', '@api.otp.login'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.login'])
 
-  test('it reads 422 status code when action is not set to Login.')
+  test('it reads 422 status code when state is not set to Login.')
     .run(async ({ client, route }) => {
       const user = await UserFactory.create()
       const code = await VerificationCodeFactory.merge({ userId: user.id }).create()
@@ -51,17 +51,17 @@ test.group('API [otp.login]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({errors: {token: 'Invalid token state'}})
-    }).tags(['@api', '@auth', '@api.otp.login'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.login'])
 
   test('it reads 200 status code when token and token state is Login.')
     .run(async ({client, route, assert}) => {
       const user = await UserFactory.create()
-      const code = await VerificationCodeFactory.merge({ userId: user.id, action: 'Login' }).create()
+      const code = await VerificationCodeFactory.merge({ userId: user.id, state: 'Login' }).create()
 
       const response = await client.post(route('api.otp.login'))
         .json({ token: code.token})
 
       response.assertStatus(200)
       assert.properties(response.body(), ['type', 'token'])
-    }).tags(['@api', '@auth', '@api.otp.login'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.login'])
 })

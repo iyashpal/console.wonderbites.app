@@ -19,7 +19,7 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(401)
       response.assertBodyContains({ message: 'Unauthorized access' })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 
   test('it reads 422 status code when the code is missing from request payload.')
     .run(async ({ client, route}) => {
@@ -29,7 +29,7 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { code: 'required validation failed'} })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 
   test('it reads 422 status code when the code is not exists in the database.')
     .run(async ({ client, route}) => {
@@ -39,7 +39,7 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { code: 'exists validation failure'} })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 
   test('it reads 422 status code when the verification token is wrong.')
     .run(async ({ client, route}) => {
@@ -50,7 +50,7 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: {code: 'OTP is invalid'} })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 
   test('it reads 422 status code when the verification token is already verified.')
     .run(async ({ client, route}) => {
@@ -61,7 +61,7 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: {code: 'OTP is invalid'} })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 
   test('it reads 422 status code when the code is expired.')
     .run(async ({ client, route}) => {
@@ -74,5 +74,5 @@ test.group('API > Auth [otp.verify]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: {code: 'OTP has been expired'} })
-    }).tags(['@api', '@auth', '@api.otp.verify'])
+    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.verify'])
 })

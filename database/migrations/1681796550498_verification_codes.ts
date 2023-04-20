@@ -7,12 +7,12 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
       table.bigint('user_id').nullable().unsigned().references('users.id').onDelete('CASCADE')
-      table.string('action').nullable(),
       table.string('source')
       table.string('code')
       table.string('token')
       table.timestamp('expires_at')
       table.timestamp('verified_at').nullable()
+      table.string('state').nullable().defaultTo('Generate'),
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

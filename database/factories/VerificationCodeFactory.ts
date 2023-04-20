@@ -6,7 +6,7 @@ import { string } from '@ioc:Adonis/Core/Helpers'
 
 export default Factory.define(VerificationCode, async ({faker}) => {
   return {
-    action: 'Generate',
+    state: 'Generate',
     token: string.generateRandom(32),
     code: faker.datatype.number({min: 10000, max: 99999}).toString(),
     expiresAt: DateTime.now().plus({hour: 1}),

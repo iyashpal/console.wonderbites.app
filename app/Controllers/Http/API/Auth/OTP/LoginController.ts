@@ -8,7 +8,7 @@ export default class LoginController {
     try {
       const { token } = await request.validate(LoginValidator)
       const verificationCode = await VerificationCode.query()
-        .preload('user').where('token', token).where('action', 'Login').whereNotNull('verified_at').first()
+        .preload('user').where('token', token).where('state', 'Login').whereNotNull('verified_at').first()
 
       if (verificationCode === null) {
         return response.unprocessableEntity({ errors: {token: 'Invalid token state'} })
