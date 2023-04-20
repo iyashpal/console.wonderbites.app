@@ -11,13 +11,14 @@ Route.group(() => {
     Route.group(() => {
       Route.post('login', 'Auth/OTP/LoginController').as('login')
       Route.post('generate', 'Auth/OTP/GenerateCodesController').as('generate')
+      Route.post('verify/:token', 'Auth/OTP/VerifyCodesController').as('verify')
     }).as('otp').prefix('otp')
 
-    Route.post('/login', 'LoginController').as('login')
+    Route.post('/login', 'Auth/LoginController').as('login')
 
-    Route.post('/register', 'RegisterController').as('register')
+    Route.post('/register', 'Auth/RegisterController').as('register')
 
-    Route.post('/forgot-password', 'PasswordResetLinkController').as('password.email')
+    Route.post('/forgot-password', 'Auth/PasswordResetLinkController').as('password.email')
 
     Route.get('/reset-password/:token', 'Auth/NewPasswordController.create').as('password.reset')
   }).middleware('api.guest')
@@ -26,7 +27,7 @@ Route.group(() => {
    * Routes that allowed only for a logged-in user.
    */
   Route.group(() => {
-    Route.post('/logout', 'LogoutController').as('logout')
+    Route.post('/logout', 'Auth/LogoutController').as('logout')
 
     // Get the authenticated user.
     Route.get('users/auth', 'UsersController.auth').as('users.auth')

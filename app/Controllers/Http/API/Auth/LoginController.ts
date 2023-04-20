@@ -1,6 +1,6 @@
-import ExceptionResponse from "App/Helpers/ExceptionResponse";
-import {HttpContextContract} from "@ioc:Adonis/Core/HttpContext";
-import LoginValidator from "App/Validators/API/Auth/LoginValidator";
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
 
 export default class LoginController {
   /**
