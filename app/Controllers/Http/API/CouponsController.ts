@@ -1,9 +1,9 @@
 import { Cart, Coupon } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ApplyCouponValidator from 'App/Validators/Coupon/ApplyValidator'
-import CreateCouponValidator from 'App/Validators/Coupon/CreateValidator'
-import UpdateCouponValidator from 'App/Validators/Coupon/UpdateValidator'
-import RemoveCouponValidator from 'App/Validators/Coupon/RemoveValidator'
+import ApplyCouponValidator from 'App/Validators/API/Coupon/ApplyValidator'
+import CreateCouponValidator from 'App/Validators/API/Coupon/CreateValidator'
+import UpdateCouponValidator from 'App/Validators/API/Coupon/UpdateValidator'
+import RemoveCouponValidator from 'App/Validators/API/Coupon/RemoveValidator'
 
 export default class CouponsController {
   /**

@@ -1,8 +1,8 @@
 import Address from 'App/Models/Address'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CreateAddressValidator from 'App/Validators/Address/CreateValidator'
-import UpdateAddressValidator from 'App/Validators/Address/UpdateValidator'
+import CreateAddressValidator from 'App/Validators/API/Addresses/CreateValidator'
+import UpdateAddressValidator from 'App/Validators/API/Addresses/UpdateValidator'
 
 export default class AddressesController {
   /**

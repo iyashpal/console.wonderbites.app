@@ -2,7 +2,7 @@ import {User} from 'App/Models'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import UserCreateValidator from 'App/Validators/User/CreateValidator'
+import UserCreateValidator from 'App/Validators/API/User/CreateValidator'
 
 export default class RegisterController {
   /**

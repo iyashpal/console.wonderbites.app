@@ -1,6 +1,6 @@
 import { Review } from 'App/Models'
-import CreateValidator from 'App/Validators/Review/CreateValidator'
-import UpdateValidator from 'App/Validators/Review/UpdateValidator'
+import CreateValidator from 'App/Validators/API/Review/CreateValidator'
+import UpdateValidator from 'App/Validators/API/Review/UpdateValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ReviewsController {

@@ -1,6 +1,6 @@
 import {User} from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import LoginValidator from 'App/Validators/Core/LoginValidator'
+import LoginValidator from 'App/Validators/Core/Auth/LoginValidator'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class LoginController {

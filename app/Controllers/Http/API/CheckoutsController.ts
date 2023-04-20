@@ -2,7 +2,7 @@ import { Cart, Order } from 'App/Models'
 import OrderQuery from 'App/Helpers/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ProcessValidator from 'App/Validators/Checkouts/ProcessValidator'
+import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
 
 export default class CheckoutsController {
   public async process ({ auth, response, request }: HttpContextContract) {

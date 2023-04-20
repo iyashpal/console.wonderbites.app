@@ -1,5 +1,5 @@
-import CreateValidator from 'App/Validators/Feedback/CreateValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import CreateValidator from 'App/Validators/API/Feedback/CreateValidator'
 
 export default class FeedbacksController {
   public async index ({ }: HttpContextContract) { }

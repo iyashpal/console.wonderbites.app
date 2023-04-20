@@ -1,5 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UpdateValidator {
   constructor (protected ctx: HttpContextContract) { }
@@ -24,13 +24,29 @@ export default class UpdateValidator {
    *    ```
    */
   public schema = schema.create({
-    first_name: schema.string({ trim: true }, [
-      rules.maxLength(255),
+
+    first_name: schema.string({ trim: true }),
+
+    last_name: schema.string({ trim: true }),
+
+    mobile: schema.string({ trim: true }, [
+      rules.mobile(),
+      // rules.unique({ table: 'users', column: "mobile" })
     ]),
-    last_name: schema.string({ trim: true }, [
+
+    email: schema.string({ trim: true }, [
+      rules.email(),
       rules.maxLength(255),
+      // rules.unique({ table: 'users', column: "email" })
     ]),
-    avatar: schema.file.optional({ size: '1mb' }),
+    avatar: schema.file.optional({
+      size: '1mb',
+      extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
+    }),
+    password: schema.string({ trim: true }),
+    address_id: schema.number(),
+    remember_me_token: schema.string({ trim: true }),
+    status: schema.number(),
   })
 
   /**
@@ -44,8 +60,17 @@ export default class UpdateValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
+  public messages = {
     'first_name.required': 'First name is required.',
     'last_name.required': 'Last name is required.',
+    'mobile.required': 'Mobile no. is required.',
+    'mobile.mobile': 'Enter a correct mobile no.',
+    'mobile.unique': 'The mobile no. already registered.',
+    'email.required': 'Email address is required.',
+    'email.email': 'Enter a valid email.',
+    'email.max_length': 'Email field length shouldn\'t exceed 255 characters.',
+    'email.unique': 'The email address already taken.',
+    'password.required': 'Choose a password.',
+    'password.confirmed': 'Password didn\'t match.',
   }
 }
