@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import {BaseModel, BelongsTo, belongsTo, column} from '@ioc:Adonis/Lucid/Orm'
-import {User} from 'App/Models/index'
+import { User } from 'App/Models/index'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class VerificationCode extends BaseModel {
   @column({ isPrimary: true })
@@ -8,6 +8,9 @@ export default class VerificationCode extends BaseModel {
 
   @column()
   public userId: number | null
+
+  @column()
+  public action: string
 
   @column()
   public source: string
