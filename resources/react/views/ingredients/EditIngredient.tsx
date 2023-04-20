@@ -88,11 +88,11 @@ export default function EditIngredient() {
                   </label>
                   <select id="unit" defaultValue={ingredient.unit} onChange={form.input.onChange.unit} name="unit" autoComplete="unit" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                     <option value={''}>Select a measure</option>
-                    <option value={'gr'}>Gr</option>
-                    <option value={'kg'}>KG</option>
-                    <option value={'ml'}>Ml</option>
-                    <option value={'l'}>L</option>
-                    <option value={'units'}>Units</option>
+                    <option value={'gr'}>gr</option>
+                    <option value={'kg'}>kg</option>
+                    <option value={'ml'}>ml</option>
+                    <option value={'l'}>l</option>
+                    <option value={'units'}>units</option>
                   </select>
                   <InputError error={form.errors?.unit}>{form.errors.unit}</InputError>
                 </div>
