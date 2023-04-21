@@ -12,6 +12,8 @@ servers:
 tags:
   - name: Auth
     description: Application authentication endpoints.
+  - name: Auth > OTP
+    description: Password less authentication endpoints.
   - name: Categories
     description: Categories endpoints for Android/iOS/Web App.
   - name: Products
@@ -52,7 +54,7 @@ paths:
   /otp/generate:
     post:
       tags:
-        - Auth
+        - Auth > OTP
       security: []
       summary: Generate OTP
       description: Request OTP to login.
@@ -115,11 +117,20 @@ paths:
   /otp/verify/{token}:
     post:
       tags:
-        - Auth
+        - Auth > OTP
       security: []
       summary: Verify OTP
       description: Verify the received code.
       operationId: verifyVerificationCode
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Verification token.
+          schema:
+            type: integer
+            default: null
+            example: 1
       requestBody:
         content:
           application/json:
@@ -178,7 +189,7 @@ paths:
   /otp/login:
     post:
       tags:
-        - Auth
+        - Auth > OTP
       security: []
       summary: OTP Login
       description: Login with mobile otp.
@@ -236,15 +247,14 @@ paths:
                       user_id:
                         type: string
                         example: required validation failed.
-  
   /otp/register:
     post:
       tags:
-        - Auth
+        - Auth > OTP
       security: []
-      summary: OTP Login
-      description: Login with mobile otp.
-      operationId: loginToAppViaOTP
+      summary: OTP Register
+      description: Register with mobile otp.
+      operationId: registerToAppViaOTP
       requestBody:
         content:
           application/json:
