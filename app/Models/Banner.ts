@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import {User} from 'App/Models/index'
 import Storage from 'App/Helpers/Storage'
-import { AdvertisementStatus} from 'App/Models/Enums/Advertisement'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import {BaseModel, BelongsTo, belongsTo, column, computed, scope} from '@ioc:Adonis/Lucid/Orm'
 
@@ -45,5 +44,5 @@ export default class Banner extends BaseModel {
     return Storage.public('/images/placeholder/square.svg')
   }
 
-  public static withActive = scope(query => query.where('status', AdvertisementStatus.ACTIVE))
+  public static withActive = scope(query => query.where('status', 'active'))
 }
