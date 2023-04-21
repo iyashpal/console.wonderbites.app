@@ -36,6 +36,9 @@ export default Env.rules({
   MYSQL_USER: Env.schema.string(),
   MYSQL_PASSWORD: Env.schema.string.optional(),
   MYSQL_DB_NAME: Env.schema.string(),
+  //SMS service for OTP
+  SMS_USERNAME: Env.schema.string(),
+  SMS_PASSWORD: Env.schema.string(),
   // Redis
   REDIS_CONNECTION: Env.schema.enum(['local'] as const),
   REDIS_HOST: Env.schema.string({format: 'host'}),

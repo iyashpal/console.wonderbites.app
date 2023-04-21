@@ -42,7 +42,7 @@ test.group('API [otp.generate]', (group) => {
 
   test('it reads 200 status code with extra properties in response when mobile number is registered.')
     .run(async ({ client, route, assert }) => {
-      const user = await UserFactory.merge({ mobile: '9882426384' }).create()
+      const user = await UserFactory.merge({ mobile: '+355697294054' }).create()
 
       const response = await client.post(route('api.otp.generate'))
         .json({ source: user.mobile })
