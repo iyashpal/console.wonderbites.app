@@ -58,9 +58,9 @@ Route.group(() => {
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
 
-    // Endpoints to Wonderpoints
-    Route.resource('wonderpoints', 'WonderpointsController').apiOnly().only(['index'])
-    Route.get('wonderpoints/avail', 'WonderpointsController.availWonderpoints').as('wonderpoints.avail')
+    // Endpoints to WonderPoints
+    Route.resource('wonder-points', 'WonderPointsController').apiOnly().only(['index', 'store'])
+    Route.get('wonder-points/avail', 'WonderPointsController.availWonderPoints').as('wonder-points.avail')
 
     Route.resource('feedbacks', 'FeedbacksController').apiOnly()
   }).middleware('api.auth')

@@ -4,7 +4,7 @@ import Notifiable from 'App/Services/Notification/Notifiable'
 import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
 import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'
-import {Cart, Address, Product, Wishlist, Wonderpoint, Order, Review, Feedback, Role} from './index'
+import {Cart, Address, Product, Wishlist, WonderPoint, Order, Review, Feedback, Role} from './index'
 import VerificationCode from 'App/Models/VerificationCode'
 
 export default class User extends Notifiable {
@@ -116,8 +116,8 @@ export default class User extends Notifiable {
   /**
    * Relation to user wonder points.
    */
-  @hasMany(() => Wonderpoint)
-  public wonderpoints: HasMany<typeof Wonderpoint>
+  @hasMany(() => WonderPoint)
+  public wonderPoints: HasMany<typeof WonderPoint>
 
   /**
    * Relation to user feedbacks.

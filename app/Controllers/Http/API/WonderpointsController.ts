@@ -1,9 +1,10 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import StoreValidator from 'App/Validators/API/WonderPoints/StoreValidator'
 
-export default class WonderpointsController {
+export default class WonderPointsController {
   /**
-   * Show the list of all wonderpoints.
+   * Show the list of all wonderPoints.
    * 
    * @param param0 {HttpContextContract}
    */
@@ -11,8 +12,8 @@ export default class WonderpointsController {
     // Authenticate user
     const user = await auth.use('api').authenticate()
 
-    // Query user wonderpoints.
-    const wonderpoints = await user.related('wonderpoints').query()
+    // Query user wonderPoints.
+    const wonderPoints = await user.related('wonderPoints').query()
       .match(
         [request.input('type', 'all') === 'all', query => query],
         [request.input('type') === 'earned', query => query.where('action', 'earn')],
@@ -21,33 +22,41 @@ export default class WonderpointsController {
       .paginate(request.input('page', 1), request.input('limit', 10))
 
     // Send the json response
-    response.json(wonderpoints)
+    response.json(wonderPoints)
   }
 
-  public async show ({ }: HttpContextContract) { }
+  public async store ({ auth, request, response }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
+
+    const attributes = await request.validate(StoreValidator)
+
+    const wonderPoint = await user.related('wonderPoints').create(attributes)
+
+    response.json(wonderPoint)
+  }
 
   /**
-   * Avail user's available wonderpoints.
+   * Avail user's available wonderPoints.
    * 
    * @param param0 
    */
-  public async availWonderpoints ({ auth, response }: HttpContextContract) {
+  public async availWonderPoints ({ auth, response }: HttpContextContract) {
     // Get authenticated user
     const user = await auth.use('api').authenticate()
 
-    // Get total user wonderpoints
-    const [wonderpoints] = await Database.from('wonderpoints').sum('points as total')
+    // Get total user wonderPoints
+    const [wonderPoints] = await Database.from('wonder_points').sum('points as total')
       .where('user_id', user.id).where('action', 'earn')
 
-    const total = (wonderpoints.total ? wonderpoints.total : 0)
+    const total = (wonderPoints.total ? wonderPoints.total : 0)
 
-    // Get total redeemed wonderpoints
-    const [redeemedWonderpoints] = await Database.from('wonderpoints').sum('points as total')
+    // Get total redeemed wonderPoints
+    const [redeemedWonderPoints] = await Database.from('wonder_points').sum('points as total')
       .where('user_id', user.id).where('action', 'redeem')
 
-    const redeemed = (redeemedWonderpoints.total ? redeemedWonderpoints.total : 0)
+    const redeemed = (redeemedWonderPoints.total ? redeemedWonderPoints.total : 0)
 
-    // Return total available wonderpoints.
-    response.json({ wonderpoints: total - redeemed })
+    // Return total available wonderPoints.
+    response.json({ wonder_points: total - redeemed })
   }
 }

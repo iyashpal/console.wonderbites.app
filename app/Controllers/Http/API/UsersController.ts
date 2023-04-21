@@ -5,9 +5,6 @@ import AvatarValidator from 'App/Validators/API/User/AvatarValidator'
 import UpdateValidator from 'App/Validators/API/User/UpdateValidator'
 
 export default class UsersController {
-  public async index ({ }: HttpContextContract) {
-  }
-
   /**
    * Display the specified resource.
    *
@@ -50,9 +47,6 @@ export default class UsersController {
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
-  }
-
-  public async destroy ({ }: HttpContextContract) {
   }
 
   /**

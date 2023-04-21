@@ -1,8 +1,8 @@
-import Wonderpoint from 'App/Models/Wonderpoint'
+import WonderPoint from 'App/Models/WonderPoint'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { UserFactory } from '.'
 
-export default Factory.define(Wonderpoint, ({ faker }) => {
+export default Factory.define(WonderPoint, ({ faker }) => {
   return {
     action: 'earn',
     event: faker.lorem.sentence(),

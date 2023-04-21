@@ -39,7 +39,7 @@ tags:
     description: Application authentication endpoints.
   - name: User > Cart
     description: Application authentication endpoints.
-  - name: User > Wonderpoints
+  - name: User > Wonder Points
     description: Application authentication endpoints.
   - name: User > Orders
     description: Application authentication endpoints.
@@ -1256,10 +1256,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cart"
-  /wonderpoints:
+  /wonder-points:
     get:
       tags:
-        - User > Wonderpoints
+        - User > Wonder Points
       summary: Detail
       operationId: listEarnedPoints
       parameters:
@@ -1295,11 +1295,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Wonderpoints'
-  /wonderpoints/avail:
+                  $ref: '#/components/schemas/WonderPoints'
+  /wonder-points/avail:
     get:
       tags:
-        - User > Wonderpoints
+        - User > Wonder Points
       summary: Balance
       operationId: checkBalancePoints
       responses:
@@ -1310,7 +1310,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  wonderpoints:
+                  wonder_points:
                     type: number
                     example: 100
                     default: 0
@@ -2621,7 +2621,7 @@ components:
         updated_at:
           type: string
           description: Date when cart last updated.
-    Wonderpoints:
+    WonderPoints:
       properties:
         id:
           type: string
@@ -2636,7 +2636,7 @@ components:
         action:
           type: string
           example: "earned"
-          description: Wonderpoints nature earned OR redeemed.
+          description: WonderPoints nature earned OR redeemed.
 
         event:
           type: string
@@ -2650,15 +2650,15 @@ components:
 
         extras:
           type: object
-          description: extra options of wonderpoints.
+          description: extra options of wonderPoints.
           example: {}
 
         created_at:
           type: string
-          description: Date when wonderpoints created.
+          description: Date when wonderPoints created.
         updated_at:
           type: string
-          description: Date when wonderpoints last updated.
+          description: Date when wonderPoints last updated.
     Orders:
       properties:
         id:

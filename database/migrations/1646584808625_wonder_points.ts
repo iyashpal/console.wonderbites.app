@@ -1,7 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Wonderpoints extends BaseSchema {
-  protected tableName = 'wonderpoints'
+export default class WonderPoints extends BaseSchema {
+  protected tableName = 'wonder_points'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {

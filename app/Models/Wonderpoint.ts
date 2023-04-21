@@ -2,7 +2,7 @@ import {User} from '.'
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class Wonderpoint extends BaseModel {
+export default class WonderPoint extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 

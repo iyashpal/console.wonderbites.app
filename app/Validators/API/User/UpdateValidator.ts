@@ -24,29 +24,13 @@ export default class UpdateValidator {
    *    ```
    */
   public schema = schema.create({
-
-    first_name: schema.string({ trim: true }),
-
-    last_name: schema.string({ trim: true }),
-
-    mobile: schema.string({ trim: true }, [
-      rules.mobile(),
-      // rules.unique({ table: 'users', column: "mobile" })
-    ]),
-
-    email: schema.string({ trim: true }, [
-      rules.email(),
+    first_name: schema.string({ trim: true }, [
       rules.maxLength(255),
-      // rules.unique({ table: 'users', column: "email" })
     ]),
-    avatar: schema.file.optional({
-      size: '1mb',
-      extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
-    }),
-    password: schema.string({ trim: true }),
-    address_id: schema.number(),
-    remember_me_token: schema.string({ trim: true }),
-    status: schema.number(),
+    last_name: schema.string({ trim: true }, [
+      rules.maxLength(255),
+    ]),
+    avatar: schema.file.optional({ size: '1mb' }),
   })
 
   /**
