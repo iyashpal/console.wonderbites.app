@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import Env from '@ioc:Adonis/Core/Env'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { User, VerificationCode } from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
@@ -20,6 +21,21 @@ export default class GenerateCodesController {
           code: Math.floor((Math.random() * 9999) + 50).toString(),
         }
       )
+
+      if (code && (/(\+355)[0-9]+$/g).test(source) && Env.get('NODE_ENV') === 'production') {
+        try {
+          await fetch('https://www.mybsms.vodafone.al/ws/send.json', {
+            body: JSON.stringify({
+              username: Env.get('SMS_USERNAME'),
+              password: Env.get('SMS_PASSWORD'),
+              recipients: [source],
+              message: 'Dear User,\n Your OTP is '+ code.code +' for Wonderbites.\n Thanks, Wonderbites Team',
+            }),
+          })
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
       response.ok({ success: !!code.id, token: code.token, source, ...(user ? {user: user.id} : {}) })
     } catch (error) {
