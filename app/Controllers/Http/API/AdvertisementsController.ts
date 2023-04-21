@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import AdvertisementQuery from 'App/Helpers/Database/AdvertisementQuery'
+import AdvertisementQuery from 'App/Services/Database/AdvertisementQuery'
 
 export default class AdvertisementsController {
   public async index ({ request, response }: HttpContextContract) {

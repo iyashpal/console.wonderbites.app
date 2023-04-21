@@ -1152,6 +1152,7 @@ paths:
       tags:
         - User > Cart
       summary: Update
+      operationId: addToCartEndpoint
       parameters:
         - name: with[]
           in: query
@@ -1188,6 +1189,7 @@ paths:
       tags:
         - User > Cart
       summary: Update
+      operationId: updateCartEndpoint
       parameters:
         - name: with[]
           in: query
@@ -1234,6 +1236,7 @@ paths:
       tags:
         - User > Cart
       summary: Detail
+      operationId: getCartDetails
       parameters:
         - name: with[]
           in: query
@@ -1254,6 +1257,7 @@ paths:
       tags:
         - User > Wonderpoints
       summary: Detail
+      operationId: listEarnedPoints
       parameters:
         - name: type
           in: query
@@ -1293,6 +1297,7 @@ paths:
       tags:
         - User > Wonderpoints
       summary: Balance
+      operationId: checkBalancePoints
       responses:
         "200":
           description: Successful response
@@ -1310,6 +1315,7 @@ paths:
       tags:
         - User > Wishlist
       summary: Detail
+      operationId: getWishlist
       parameters:
         - name: with[]
           in: query

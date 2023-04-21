@@ -1,6 +1,6 @@
 import {DateTime} from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import Notifiable from 'App/Features/Notification/Notifiable'
+import Notifiable from 'App/Services/Notification/Notifiable'
 import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
 import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'

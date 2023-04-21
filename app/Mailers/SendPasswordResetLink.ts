@@ -2,7 +2,7 @@ import renderHTML from 'mjml'
 import { User } from 'App/Models'
 import View from '@ioc:Adonis/Core/View'
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
-import DatabaseTokenRepository from 'App/Auth/Passwords/DatabaseTokenRepository'
+import DatabaseTokenRepository from 'App/Services/Auth/Passwords/DatabaseTokenRepository'
 
 export default class SendPasswordResetLink extends BaseMailer {
   /**

@@ -1,5 +1,5 @@
 import { Cart, Order } from 'App/Models'
-import OrderQuery from 'App/Helpers/Database/OrderQuery'
+import OrderQuery from 'App/Services/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
