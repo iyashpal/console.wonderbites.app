@@ -3,6 +3,9 @@ info:
   title: Wonderbites App
   description: ""
   version: v1.0
+  license: 
+    name: UNLICENSED
+    url: README.md
 security:
   - BearerAuth: []
 servers:
@@ -814,6 +817,7 @@ paths:
         - Categories
       security: []
       summary: List
+      operationId: getTheListOfCategories
       description: By passing in the appropriate options, you can search for available categories in the system.
       parameters:
         - name: type
