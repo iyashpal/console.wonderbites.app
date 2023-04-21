@@ -18,7 +18,7 @@ export default class GenerateCodesController {
         {
           token: string.generateRandom(32),
           expiresAt: DateTime.now().plus({ minute: 10 }),
-          code: Math.floor((Math.random() * 9999) + 50).toString(),
+          code: Math.floor(1000 + Math.random() * 9000).toString(),
         }
       )
 
