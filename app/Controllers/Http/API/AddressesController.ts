@@ -1,8 +1,8 @@
 import Address from 'App/Models/Address'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CreateAddressValidator from 'App/Validators/API/Addresses/CreateValidator'
-import UpdateAddressValidator from 'App/Validators/API/Addresses/UpdateValidator'
+import CreateValidator from 'App/Validators/API/Addresses/CreateValidator'
+import UpdateValidator from 'App/Validators/API/Addresses/UpdateValidator'
 
 export default class AddressesController {
   /**
@@ -34,7 +34,7 @@ export default class AddressesController {
     try {
       const user = auth.use('api').user!
 
-      const attributes = await request.validate(CreateAddressValidator)
+      const attributes = await request.validate(CreateValidator)
 
       const address = await user.related('addresses').create({...attributes, email: user.email})
 
@@ -84,7 +84,7 @@ export default class AddressesController {
 
       await bouncer.forUser(user).with('AddressPolicy').authorize('update', address)
 
-      const validated = await request.validate(UpdateAddressValidator)
+      const validated = await request.validate(UpdateValidator)
 
       await address.merge(validated).save()
 
