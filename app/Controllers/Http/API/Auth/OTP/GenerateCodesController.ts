@@ -56,8 +56,9 @@ export default class GenerateCodesController {
     if ((/^\S+@\S+\.\S+$/).test(source)) {
       try {
         await Mail.send((message) => {
-          message.subject('This is demo testing.')
-          message.to('iyashpal.dev@gmail.com', 'Yash Pal')
+          message.to(source)
+          message.subject('OTP verification for Wonderbites')
+          message.from(Env.get('SMTP_FROM_ADDRESS', null), Env.get('SMTP_FROM_NAME', 'Wonderbites'))
           message.html(code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010.')
         })
       } catch (error) {
