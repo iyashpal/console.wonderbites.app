@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import Env from '@ioc:Adonis/Core/Env'
+import Mail from '@ioc:Adonis/Addons/Mail'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { User, VerificationCode } from 'App/Models'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
@@ -22,26 +23,46 @@ export default class GenerateCodesController {
         }
       )
 
-      if (code && (/(\+355)[0-9]+$/g).test(source) && ['production'].includes(Env.get('NODE_ENV'))) {
-        try {
-          await fetch('https://mybsms.vodafone.al/ws/send.json', {
-            method: 'POST',
-            body: JSON.stringify({
-              username: Env.get('SMS_USERNAME'),
-              password: Env.get('SMS_PASSWORD'),
-              recipients: [source],
-              message: code.code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010.',
-              'dlr-url': Env.get('APP_URL'),
-            }),
-          })
-        } catch (error) {
-          console.log(error)
-        }
+      if (code && ['production'].includes(Env.get('NODE_ENV'))) {
+        await this.sendMobileOTP(source, code.code)
+        await this.sendEmailOTP(source, code.code)
       }
 
-      response.ok({ success: !!code.id, token: code.token, source, ...(user ? {user: user.id} : {}) })
+      response.ok({ success: !!code.id, token: code.token, source, ...(user ? { user: user.id } : {}) })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
+    }
+  }
+
+  private async sendMobileOTP (source: string, code: string) {
+    try {
+      const body = JSON.stringify({
+        username: Env.get('SMS_USERNAME'),
+        password: Env.get('SMS_PASSWORD'),
+        recipients: [source],
+        message: code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010.',
+        'dlr-url': Env.get('APP_URL'),
+      })
+
+      if ((/(\+355)[0-9]+$/g).test(source)) {
+        await fetch('https://mybsms.vodafone.al/ws/send.json', { method: 'POST', body })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private async sendEmailOTP (source: string, code: string) {
+    if ((/^\S+@\S+\.\S+$/).test(source)) {
+      try {
+        await Mail.send((message) => {
+          message.subject('This is demo testing.')
+          message.to('iyashpal.dev@gmail.com', 'Yash Pal')
+          message.html(code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010.')
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
