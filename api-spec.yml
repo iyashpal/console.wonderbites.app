@@ -1625,6 +1625,7 @@ paths:
       tags:
         - User > Orders
       summary: List
+      operationId: getTheOrdersList
       parameters:
         - name: with[]
           in: query
@@ -1658,6 +1659,7 @@ paths:
       tags:
         - User > Orders
       summary: Detail
+      operationId: getTheOrderDetailsByItsID
       parameters:
         - name: id
           in: path
@@ -1682,6 +1684,7 @@ paths:
       tags:
         - User > Orders
       summary: Cancel
+      operationId: orderCancellationRequest
       parameters:
         - name: id
           in: path
@@ -1962,9 +1965,14 @@ paths:
       tags:
         - Checkouts
       summary: Process
+      operationId: processTheCheckout
       requestBody:
         $ref: '#/components/requestBodies/Checkout'
       responses:
+        422:
+          description: Validation Error
+          $ref: "#/components/responses/CheckoutValidationErrors"
+                  
         "200":
           description: OK
           content:
@@ -2134,55 +2142,76 @@ components:
             type: object
             required:
               - cart
-              - address
-              - options
+              - orderType
+              - firstName
+              - lastName
+              - email
+              - phone
+              - paymentMode
             properties:
               cart:
                 type: number
                 example: 1
                 description: Cart ID to process the order.
-              address:
+              orderType:
+                type: string
+                example: dine-in | take-away | delivery
+                default: delivery
+                description: The order type selected by the user.
+              firstName:
+                type: string
+                example: John
+                description: User's first name.
+              lastName:
+                type: string
+                example: Doe
+                description: User's last name.
+              street:
+                type: string
+                example: XYZ
+                description: Street address is required when the orderType is delivery.
+              city:
+                type: string
+                example: ABC
+                description: City is optional but it is required with the orderType is delivery.
+              phone:
+                type: string
+                example: +1 (123) 456 789
+                description: User's phone number for the delivery communication
+              email:
+                type: string
+                example: johndoe@example.com
+                description: User's email address for order related notifications.
+              location:
                 type: object
+                description: User's current location for the delivery.
                 properties:
-                  first_name:
+                  lat:
                     type: string
-                    example: John
-                  last_name:
+                    example: 85.4568
+                  lng:
                     type: string
-                    example: Doe
-                  street:
-                    type: string
-                    example: XYZ
-                  city:
-                    type: string
-                    example: ABC
-                  phone:
-                    type: string
-                    example: (123) 456 789
-                  email:
-                    type: string
-                    example: johndoe@example.com
-                  location:
-                    type: object
-                    properties:
-                      lat:
-                        type: string
-                        example: 85.4568
-                      lng:
-                        type: string
-                        example: -03.6546
+                    example: -03.6546
+              paymentMode:
+                type: string
+                example: COD
+                default: COD
+                description: The payment mode selected by the user.
+              reservedSeats:
+                type: number
+                example: 5
+                description: This field is required when user select the orderType dine-in.
+              eatOrPickupTime:
+                type: string
+                example: 05:00 PM
+                description: This field is required when user select the orderType dine-in OR take-away. 
               options:
                 type: object
-                properties:
-                  payment:
-                    type: object
-                    properties:
-                      mode:
-                        type: string
-                        example: COD
               note:
                 type: string
-                example:
+                example: Extra note from the customer side.
+                description: Users can use this field to give some extra instruction/information.
+    
     CreateReview:
       content:
         application/json:
@@ -2241,6 +2270,43 @@ components:
           schema:
             type: object
             example: ""
+    CheckoutValidationErrors:
+      description: Validation Errors
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties: 
+              errors:
+                type: object
+                properties: 
+                  firstName:
+                    type: string
+                    example: required validation failed
+                  lastName:
+                    type: string
+                    example: required validation failed
+                  street:
+                    type: string
+                    example: required validation failed
+                  city:
+                    type: string
+                    example: required validation failed
+                  phone:
+                    type: string
+                    example: required validation failed
+                  email:
+                    type: string
+                    example: required validation failed
+                  paymentMode:
+                    type: string
+                    example: required validation failed
+                  reservedSeats:
+                    type: string
+                    example: requiredWhen validation failed
+                  eatOrPickupTime:
+                    type: string
+                    example: requiredWhen validation failed
   schemas:
     Banners:
       required:
@@ -2670,7 +2736,11 @@ components:
           type: number
           default: 1
           description: User id belongs to wonderpoint.
-
+        order_type:
+          type: string
+          example: dine-in | take-away | delivery
+          default: delivery
+          description: Determine if the user will dine-in or take the order away or our staff will deliver to the person. 
         coupon_id:
           type: number
           example: 1
@@ -2680,20 +2750,40 @@ components:
           type: string
           example: "127.0.0.1"
           description: User IP address.
-
-        deliver_to:
+        first_name:
+          type: string
+          example: "John"
+          description: User's first name.
+        last_name:
+          type: string
+          example: "Doe"
+          description: User's last name.
+        street:
+          type: string
+          example: "1801 S Loop 288"
+          description: Street address.
+        city:
+          type: string
+          example: "Denton"
+          description: City name.
+        phone:
+          type: string
+          example: "+1 (123) 4568 456"
+          description: Phone number.
+        email:
+          type: string
+          example: "johndoe@example.com"
+          description: Email address.
+        location:
           type: object
-          example:
-            first_name: 'John'
-            last_name: 'Doe'
-            street: 'XYZ'
-            city: 'ABC'
-            phone: '(123) 4568 456'
-            email: 'johndoe@example.com'
-            location:
-              lat: 56.5647
-              lng: -75.655
-          description: customer delivery address.
+          properties: 
+            lat:
+              type: string
+              example: "56.5647"
+            lng:
+              type: string
+              example: "-75.655"
+          description: User address location.
 
         options:
           type: object
@@ -2704,7 +2794,14 @@ components:
           type: object
           description: record notes...
           example: This is extra note.
-
+        reservedSeats:
+          type: number
+          example: 5
+          description: Number of seats reserved OR number of people for dine-in option. 
+        eatOrPickupTime:
+          type: string
+          example: 50:00 PM
+          description: Time when the order will be pickup (in case of take-away) or eat (in case of dine-in).
         status:
           type: number
           description: record's status.
