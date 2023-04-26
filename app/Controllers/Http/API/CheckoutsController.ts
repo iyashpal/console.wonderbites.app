@@ -1,5 +1,4 @@
 import { Cart, Order } from 'App/Models'
-import { string } from '@ioc:Adonis/Core/Helpers'
 import OrderQuery from 'App/Services/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'

@@ -1,7 +1,6 @@
 import { Cart } from 'App/Models'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { string } from '@ioc:Adonis/Core/Helpers'
 import { AddressFactory, CartFactory, CouponFactory, ProductFactory, UserFactory } from 'Database/factories'
 
 test.group('API [checkout.process]', (group) => {
