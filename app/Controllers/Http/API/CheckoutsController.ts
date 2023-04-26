@@ -1,4 +1,5 @@
 import { Cart, Order } from 'App/Models'
+import { string } from '@ioc:Adonis/Core/Helpers'
 import OrderQuery from 'App/Services/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -20,11 +21,20 @@ export default class CheckoutsController {
       // Create order from cart details.
       let order = await Order.create({
         note: attrs.note,
-        userId: user?.id ?? null,
-        deliverTo: attrs.address,
+        firstName: attrs.firstName,
+        lastName: attrs.lastName,
+        email: attrs.email,
+        phone: attrs.phone,
+        street: attrs.street,
+        city: attrs.city,
+        reservedSeats: attrs.reservedSeats,
+        eatOrPickupTime: attrs.eatOrPickupTime,
         couponId: cart.couponId,
+        userId: user?.id ?? null,
+        location: attrs.location,
         ipAddress: cart.ipAddress,
-        options: attrs.options,
+        orderType: attrs.orderType,
+        paymentMode: attrs.paymentMode,
       })
 
       await order.related('products').attach(this.cartProducts(cart.products))

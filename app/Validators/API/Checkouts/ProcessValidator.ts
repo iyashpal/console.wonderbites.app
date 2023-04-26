@@ -1,5 +1,5 @@
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 
 export default class ProcessValidator {
   constructor (protected ctx: HttpContextContract) { }
@@ -28,28 +28,48 @@ export default class ProcessValidator {
       rules.required(),
       rules.exists({ table: 'carts', column: 'id' }),
     ]),
-    address: schema.object([rules.required()])
-      .members({
-        first_name: schema.string({trim: true}, [rules.required()]),
-        last_name: schema.string.optional({trim: true}),
-        street: schema.string({trim: true}, [rules.required()]),
-        city: schema.string({trim: true}, [rules.required()]),
-        phone: schema.string({ trim: true }, [rules.required()]),
-        email: schema.string.optional({trim: true}),
-        location: schema.object()
-          .members({
-            lat: schema.string.optional({trim: true}),
-            lng: schema.string.optional({trim: true}),
-          }),
-      }),
-    options: schema.object([rules.required()])
-      .members({
-        payment: schema.object([rules.required()])
-          .members({
-            mode: schema.string({trim: true}),
-          }),
-      }),
-    note: schema.string.optional({trim: true}),
+    orderType: schema.enum(['dine-in', 'take-away', 'delivery'] as const),
+
+    firstName: schema.string({ trim: true, escape: true }, [
+      rules.required(),
+      rules.maxLength(255),
+    ]),
+    lastName: schema.string({ trim: true, escape: true }, [
+      rules.required(),
+      rules.maxLength(100),
+    ]),
+    street: schema.string({ trim: true, escape: true }, [
+      rules.requiredWhen('orderType', '=', 'delivery'),
+      rules.maxLength(150),
+    ]),
+    city: schema.string({ trim: true, escape: true }, [
+      rules.requiredWhen('orderType', '=', 'delivery'),
+      rules.maxLength(100),
+    ]),
+    phone: schema.string({ trim: true, escape: true }, [
+      rules.required(),
+      rules.maxLength(15),
+    ]),
+    email: schema.string({ trim: true, escape: true }, [
+      rules.required(),
+      rules.email(),
+      rules.maxLength(200),
+    ]),
+    location: schema.object.optional().members({
+      lat: schema.string.optional({ trim: true, escape: true }),
+      lng: schema.string.optional({ trim: true, escape: true }),
+    }),
+    paymentMode: schema.string({ trim: true, escape: true }, [
+      rules.required(),
+    ]),
+    reservedSeats: schema.number.optional([
+      rules.requiredWhen('orderType', '=', 'dine-in'),
+    ]),
+    eatOrPickupTime: schema.string.optional({ trim: true, escape: true }, [
+      rules.requiredWhen('orderType', 'in', ['take-away', 'dine-in']),
+    ]),
+    options: schema.object.optional().anyMembers(),
+    note: schema.string.optional({ trim: true, escape: true }),
   })
 
   /**
