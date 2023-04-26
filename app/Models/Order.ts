@@ -17,36 +17,55 @@ export default class Order extends BaseModel {
   public ipAddress: string
 
   @column()
-  public options: object
+  public orderType: string
 
   @column()
-  public deliverTo: {
-    first_name: string,
-    last_name?: string,
-    street: string,
-    city: string,
-    phone: string,
-    email?: string,
-    location?: {
-      lat?: string,
-      lng?: string,
-    }
+  public firstName: string
+
+  @column()
+  public lastName: string
+
+  @column()
+  public street: string
+
+  @column()
+  public city: string
+
+  @column()
+  public phone: string
+
+  @column()
+  public email: string
+
+  @column()
+  public reservedSeats: number
+
+  @column()
+  public eatOrPickupTime: string
+
+  @column()
+  public location: {
+    lat?: string,
+    lng?: string,
   }
 
   @column()
   public note: string
 
   @column()
+  public options: any
+
+  @column()
   public status: number
+
+  @column()
+  public paymentMode: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @column.dateTime()
-  public deletedAt: DateTime
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
