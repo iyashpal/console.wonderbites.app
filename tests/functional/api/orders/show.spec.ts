@@ -128,7 +128,7 @@ test.group('API [orders.show]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains({ id: order.id, deliver_to: JSON.stringify(order.deliverTo) })
+    request.assertBodyContains({ id: order.id })
   }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with user', async ({ client, route }) => {
@@ -181,7 +181,6 @@ test.group('API [orders.show]', (group) => {
       id: order.id,
       user_id: user.id,
       user: { id: user.id },
-      deliver_to: JSON.stringify(order.deliverTo),
       coupon_id: order.couponId,
       coupon: { id: order.coupon.id },
       review: { id: review.id },

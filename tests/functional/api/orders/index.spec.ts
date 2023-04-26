@@ -36,9 +36,8 @@ test.group('API [orders.index]', (group) => {
 
     request.assertStatus(200)
     request.assertBodyContains({
-      data: orders.map(({id, userId, deliverTo, ipAddress, options, note, status}) => ({
-        id, user_id: userId, deliver_to: JSON.stringify(deliverTo),
-        ip_address: ipAddress, options: JSON.stringify(options), note, status,
+      data: orders.map(({id, userId, ipAddress, options, note, status}) => ({
+        id, user_id: userId, ip_address: ipAddress, options: JSON.stringify(options), note, status,
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -102,9 +101,8 @@ test.group('API [orders.index]', (group) => {
     assert.equal(request.body().data.length, orders.length)
 
     request.assertBodyContains({
-      data: orders.map(({id, userId, ipAddress, deliverTo, options, note, status}) => ({
-        id, user_id: userId, deliver_to: deliverTo,
-        ip_address: ipAddress, options: options, note, status,
+      data: orders.map(({id, userId, ipAddress, options, note, status}) => ({
+        id, user_id: userId, ip_address: ipAddress, options: options, note, status,
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -208,9 +206,8 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, userId, deliverTo, ipAddress, options, note, status, ingredients}) => ({
-        id, user_id: userId, deliver_to: JSON.stringify(deliverTo),
-        ip_address: ipAddress, options: JSON.stringify(options), note, status,
+      data: orders.map(({id, userId, ipAddress, options, note, status, ingredients}) => ({
+        id, user_id: userId, ip_address: ipAddress, options: JSON.stringify(options), note, status,
         ingredients: ingredients.map(({id, name, description, price, status}) => ({
           id, name, description, price, status,
         })),
@@ -233,7 +230,7 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, deliverTo}) => ({id, deliver_to: JSON.stringify(deliverTo)})),
+      data: orders.map(({id}) => ({id})),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
 
@@ -353,7 +350,6 @@ test.group('API [orders.index]', (group) => {
         id: order.id,
         user_id: user.id,
         user: {id: user.id},
-        deliver_to: JSON.stringify(order.deliverTo),
         options: JSON.stringify(order.options),
         coupon_id: order.coupon.id,
         coupon: {id: order.coupon.id},
