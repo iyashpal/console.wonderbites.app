@@ -38,11 +38,11 @@ export default class ProcessValidator {
       rules.required(),
       rules.maxLength(100),
     ]),
-    street: schema.string({ trim: true, escape: true }, [
+    street: schema.string.optional({ trim: true, escape: true }, [
       rules.requiredWhen('orderType', '=', 'delivery'),
       rules.maxLength(150),
     ]),
-    city: schema.string({ trim: true, escape: true }, [
+    city: schema.string.optional({ trim: true, escape: true }, [
       rules.requiredWhen('orderType', '=', 'delivery'),
       rules.maxLength(100),
     ]),
