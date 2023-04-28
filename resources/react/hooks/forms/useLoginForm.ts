@@ -17,7 +17,7 @@ export default function useLoginForm() {
         setRedirectURL(url)
     }
 
-    function redirectTo() {
+    function goToRedirectURL() {
         navigateTo(redirectURL)
     }
 
@@ -39,7 +39,7 @@ export default function useLoginForm() {
         auth,
         errors,
         errorCode,
-        redirectTo,
+        goToRedirectURL,
         isProcessing,
         useRedirectURL,
         input: {
