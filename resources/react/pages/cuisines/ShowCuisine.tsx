@@ -3,12 +3,12 @@ import { useFlash } from '@/hooks'
 import { useEffect, useState } from 'react'
 import * as Alert from '@/components/alerts'
 import TrashModal from '@/components/TrashModal'
+import { ShowCuisineSkeleton } from './skeleton'
 import { Category, Cuisine } from '@/types/models'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import { ShowCuisineSkeleton } from '@/views/cuisines/skeleton'
+import CuisineCategories from './Partials/CuisineCategories'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import CuisineCategories from '@/views/cuisines/Partials/CuisineCategories'
 
 export default function ShowCuisine() {
   const { cuisine, categories } = useLoaderData() as {cuisine: Cuisine, categories: Category[]}
