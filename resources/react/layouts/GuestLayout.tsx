@@ -1,6 +1,8 @@
 export default function GuestLayout(props) {
 
   return <>
-    {props.children}
+    <div className="min-h-screen bg-gray-100">
+      {props.children}
+    </div>
   </>
 }
