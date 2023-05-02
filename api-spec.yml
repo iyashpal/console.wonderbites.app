@@ -2368,6 +2368,26 @@ components:
           type: string
           description: Description of the category.
           example: lorem impsum....
+        options:
+          type: object
+          properties: 
+            extras:
+              type: array
+              items: 
+                type: object
+                properties: 
+                  id:
+                    type: string
+                    example: 'bread'
+                  title:
+                    type: string
+                    example: 'Bread'
+                  type:
+                    type: string
+                    example: Freebies | Utensils
+                  checked:
+                    type: boolean
+                    example: true
         status:
           type: number
           description: Status of the category.
