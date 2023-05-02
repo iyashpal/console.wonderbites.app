@@ -1,12 +1,12 @@
-import {DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 import Storage from 'App/Helpers/Storage'
-import {Cuisine, Product, Ingredient} from '.'
-import {BaseModel, BelongsTo, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
-import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
-import {belongsTo, column, computed, manyToMany, scope} from '@ioc:Adonis/Lucid/Orm'
+import { Cuisine, Product, Ingredient } from '.'
+import { BaseModel, BelongsTo, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
+import { belongsTo, column, computed, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
-  @column({isPrimary: true})
+  @column({ isPrimary: true })
   public id: number
 
   @column()
@@ -25,12 +25,15 @@ export default class Category extends BaseModel {
   public thumbnail: AttachmentContract
 
   @column()
+  public options: any
+
+  @column()
   public status: number
 
-  @column.dateTime({autoCreate: true})
+  @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({autoCreate: true, autoUpdate: true})
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -70,16 +73,16 @@ export default class Category extends BaseModel {
     return this.type === 'Ingredient'
   }
 
-  @belongsTo(() => Category, {foreignKey: 'parent'})
+  @belongsTo(() => Category, { foreignKey: 'parent' })
   public category: BelongsTo<typeof Category>
 
-  @manyToMany(() => Product, {pivotTable: 'category_product'})
+  @manyToMany(() => Product, { pivotTable: 'category_product' })
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Cuisine, {pivotTable: 'category_cuisine'})
+  @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
   public cuisines: ManyToMany<typeof Cuisine>
 
-  @manyToMany(() => Ingredient, {pivotTable: 'category_ingredient'})
+  @manyToMany(() => Ingredient, { pivotTable: 'category_ingredient' })
   public ingredients: ManyToMany<typeof Ingredient>
 
   public static root = scope((query) => query.whereNull('parent').whereNull('deleted_at'))

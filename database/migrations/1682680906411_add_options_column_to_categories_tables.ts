@@ -1,17 +1,17 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'products'
+  protected tableName = 'categories'
 
   public async up () {
     this.schema.table(this.tableName, (table) => {
-      table.boolean('is_customizable').after('published_at').defaultTo(true)
+      table.jsonb('options').after('thumbnail').nullable()
     })
   }
 
   public async down () {
     this.schema.table(this.tableName, (table) => {
-      table.dropColumn('is_customizable')
+      table.dropColumn('options')
     })
   }
 }

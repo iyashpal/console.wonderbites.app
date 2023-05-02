@@ -33,6 +33,7 @@ Route.group(() => {
 
     // Actions Routes
     Route.group(() => {
+      Route.post('categories/:id/extras', 'CategoryExtrasController').as('categories.extras')
       Route.post('products/:id/ingredient', 'IngredientProductController').as('ingredient.product')
       Route.post('cuisines/:id/categories', 'CategoryCuisineController').as('category.cuisine')
     }).as('actions').namespace('App/Controllers/Http/Core/Actions')

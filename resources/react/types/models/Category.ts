@@ -12,4 +12,7 @@ export default interface Category {
   thumbnail_url: string,
   cuisines?: Cuisine[],
   category?: Category,
+  options: {
+    extras?: {id: string, title: string, type: string, checked: boolean}[]
+  }
 }
