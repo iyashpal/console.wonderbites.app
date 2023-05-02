@@ -34,6 +34,7 @@ export default class CheckoutsController {
         ipAddress: cart.ipAddress,
         orderType: attrs.orderType,
         paymentMode: attrs.paymentMode,
+        options: JSON.stringify(attrs.options)
       })
 
       await order.related('products').attach(this.cartProducts(cart.products))
