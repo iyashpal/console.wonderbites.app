@@ -71,7 +71,7 @@ export default function ShowCategory() {
 
 
 function CheckoutItems({ category }: { category: Category }) {
-  const [items, setItems] = useState(category.options.extras ?? [
+  const [items, setItems] = useState(category.options?.extras ?? [
     { id: 'bread', type: 'freebies', title: 'Bread', checked: false },
     { id: 'setOfSpoonKnifeAndFork', type: 'freebies', title: 'Set of Spoon, Knife and Fork', checked: false },
     { id: 'chopsticks', type: 'freebies', title: 'Chopsticks', checked: false },
