@@ -1,12 +1,12 @@
-import {PaginatorMeta} from '~/types/paginators';
-import {Product} from '@/types/models';
+import {MetaData} from '~/contracts/pagination';
+import {Product} from '~/contracts/schema';
 import {Link, useLocation} from "react-router-dom";
 import {Fragment, useEffect, useState} from "react";
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/24/outline';
 
 type Slider = { first: number[], active: number[], last: number[] }
 
-type ComponentProps = { className?: string, meta: PaginatorMeta, url?: string, data?: Product[] }
+type ComponentProps = { className?: string, meta: MetaData, url?: string, data?: Product[] }
 
 export default function Pagination({className, meta, url}: ComponentProps) {
 

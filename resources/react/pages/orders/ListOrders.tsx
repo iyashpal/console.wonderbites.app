@@ -1,11 +1,11 @@
 import {DateTime} from "luxon";
 import {useEffect} from "react";
 import Icons from '~/helpers/icons'
-import {Order} from "@/types/models";
+import {Order} from "~/contracts/schema";
 import {useDataLoader} from "@/hooks";
 import * as Alert from "@/components/alerts";
 import Pagination from "@/components/Pagination";
-import {PaginatorMeta} from "@/types/paginators";
+import {MetaData} from "@/contracts/pagination";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {ListFilters, ListTable} from "@/components/page";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
@@ -29,7 +29,7 @@ const sortByFilters = [
 export default function ListOrders() {
   const location = useLocation()
   const [searchParams] = useSearchParams()
-  const loader = useDataLoader<{ data: Order[], meta: PaginatorMeta }>(`/orders`)
+  const loader = useDataLoader<{ data: Order[], meta: MetaData }>(`/orders`)
 
   useEffect(() => {
     loader.sync({params: {page: searchParams.get('page') ?? 1}})

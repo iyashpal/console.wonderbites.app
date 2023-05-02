@@ -26,11 +26,11 @@ declare module '@ioc:Adonis/Addons/Auth' {
     | User Provider
     |--------------------------------------------------------------------------
     |
-    | The following provider uses Lucid models as a driver for fetching user
+    | The following provider uses Lucid schema as a driver for fetching user
     | details from the database for authentication.
     |
     | You can create multiple providers using the same underlying driver with
-    | different Lucid models.
+    | different Lucid schema.
     |
     */
     user: {

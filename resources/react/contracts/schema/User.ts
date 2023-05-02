@@ -1,4 +1,4 @@
-import {Role} from '~/types/models'
+import {Role} from '~/contracts/schema'
 export default interface User {
   id: number,
   first_name: string,

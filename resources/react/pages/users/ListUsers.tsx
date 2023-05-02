@@ -1,9 +1,9 @@
 import {DateTime} from 'luxon'
 import Icons from '~/helpers/icons'
-import {User} from '@/types/models'
+import {User} from '~/contracts/schema'
 import {useEffect, useState} from 'react'
 import * as Alert from '@/components/alerts'
-import {PaginatorMeta} from '@/types/paginators'
+import {MetaData} from '@/contracts/pagination'
 import Pagination from '@/components/Pagination'
 import TrashModal from '@/components/TrashModal'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
@@ -32,7 +32,7 @@ export default function ListUsers() {
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-  const loader = useDataLoader<{ data: User[], meta: PaginatorMeta }>(`/users`)
+  const loader = useDataLoader<{ data: User[], meta: MetaData }>(`/users`)
   const {user: authUser} = useSelector(state => state.authSlice)
 
   const [user, setUser] = useState<User>({} as User)

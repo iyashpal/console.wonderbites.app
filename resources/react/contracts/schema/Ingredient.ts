@@ -1,4 +1,4 @@
-import {Category, User} from "@/types/models/index";
+import {Category, User} from "@/contracts/schema/index";
 
 export default interface Ingredient {
   id: number,

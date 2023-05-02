@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {useDataLoader} from "@/hooks";
-import {Banner} from "@/types/models";
+import {Banner} from "~/contracts/schema";
 import {useBannerForm} from "@/hooks/forms";
 import * as Loaders from "@/components/loaders";
 import InputError from "@/components/Form/InputError";

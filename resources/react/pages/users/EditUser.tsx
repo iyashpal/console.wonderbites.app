@@ -1,4 +1,4 @@
-import {User} from "@/types/models";
+import {User} from "~/contracts/schema";
 import {useUserForm} from "@/hooks/forms";
 import * as Loaders from "@/components/loaders";
 import {Link, useLoaderData} from "react-router-dom";

@@ -1,12 +1,12 @@
 import Skeleton from './skeleton'
 import Icons from '~/helpers/icons'
 import {useEffect, useState} from 'react'
-import {Ingredient} from '@/types/models'
+import {Ingredient} from '~/contracts/schema'
 import * as Alert from '~/components/alerts'
 import {useDataLoader, useFlash} from '@/hooks'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
-import {PaginatorMeta} from '@/types/paginators'
+import {MetaData} from '@/contracts/pagination'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {ListFilters, ListTable} from "@/components/page";
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
@@ -28,7 +28,7 @@ const sortByFilters = [
 ]
 
 export default function ListIngredients() {
-  const loader = useDataLoader<{ data: Ingredient[], meta: PaginatorMeta }>(`/ingredients`)
+  const loader = useDataLoader<{ data: Ingredient[], meta: MetaData }>(`/ingredients`)
   const flash = useFlash()
   const location = useLocation()
   const navigateTo = useNavigate()

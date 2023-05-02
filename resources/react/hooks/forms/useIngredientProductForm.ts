@@ -1,6 +1,6 @@
 import {Axios} from '@/helpers'
-import {Ingredient, Product} from '@/types/models'
-import {IngredientProduct} from '@/types/models/pivot'
+import {Ingredient, Product} from '~/contracts/schema'
+import {IngredientProduct} from '@/contracts/schema/pivot'
 import {useState} from "react";
 
 export default function useIngredientProductForm({product}: { product: Product }) {

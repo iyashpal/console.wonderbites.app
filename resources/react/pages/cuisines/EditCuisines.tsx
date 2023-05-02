@@ -1,4 +1,4 @@
-import {Cuisine} from "@/types/models";
+import {Cuisine} from "~/contracts/schema";
 import {useCuisineForm} from "@/hooks/forms";
 import * as Loaders from "@/components/loaders";
 import InputError from "@/components/Form/InputError";

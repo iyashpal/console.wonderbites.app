@@ -1,7 +1,7 @@
 import {DateTime} from 'luxon';
 import {useState} from 'react';
 import {useProductForm} from '@/hooks/forms';
-import {Category, Product} from '@/types/models';
+import {Category, Product} from '~/contracts/schema';
 import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, Form, useLoaderData} from "react-router-dom";

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import {User} from '~/types/models';
+import {User} from '~/contracts/schema';
 import {createSlice} from '@reduxjs/toolkit';
 
 const initialState: { token: string, user: User } = {

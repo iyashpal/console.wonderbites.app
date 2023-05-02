@@ -1,12 +1,12 @@
 import Skeleton from './skeleton'
 import Icons from '~/helpers/icons'
-import {Product} from '@/types/models'
+import {Product} from '~/contracts/schema'
 import {useEffect, useState} from 'react'
 import * as Alert from '@/components/alerts'
 import {useDataLoader, useFlash} from '~/hooks'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
-import {PaginatorMeta} from '~/types/paginators'
+import {MetaData} from '~/contracts/pagination'
 import {ListFilters, ListTable} from '@/components/page'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
@@ -31,7 +31,7 @@ export default function ListProducts() {
   const location = useLocation()
   const navigateTo = useNavigate()
   const [searchParams] = useSearchParams()
-  const loader = useDataLoader<{ data: Product[], meta: PaginatorMeta }>(`/products`)
+  const loader = useDataLoader<{ data: Product[], meta: MetaData }>(`/products`)
 
   const [product, setProduct] = useState<Product>({} as Product)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)

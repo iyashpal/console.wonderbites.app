@@ -4,7 +4,7 @@ import {Form, Link, useLoaderData} from "react-router-dom";
 import {useIngredientForm} from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
-import {Category} from "@/types/models";
+import {Category} from "~/contracts/schema";
 
 export default function CreateIngredient() {
 

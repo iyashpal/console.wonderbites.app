@@ -1,9 +1,9 @@
 import Icons from '~/helpers/icons'
 import {useDataLoader} from "@/hooks";
-import {Banner} from "@/types/models";
+import {Banner} from "~/contracts/schema";
 import {useEffect, useState} from "react";
 import * as Alert from "@/components/alerts";
-import {PaginatorMeta} from "@/types/paginators";
+import {MetaData} from "@/contracts/pagination";
 import Pagination from "@/components/Pagination";
 import TrashModal from "@/components/TrashModal";
 import {ListFilters, ListTable} from "@/components/page";
@@ -30,7 +30,7 @@ export default function ListBanners() {
   const [searchParams] = useSearchParams()
   const [banner, setBanner] = useState<Banner>({} as Banner)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
-  const loader = useDataLoader<{ data: Banner[], meta: PaginatorMeta }>(`/banners`)
+  const loader = useDataLoader<{ data: Banner[], meta: MetaData }>(`/banners`)
 
 
   useEffect(() => {

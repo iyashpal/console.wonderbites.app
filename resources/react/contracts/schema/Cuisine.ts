@@ -1,4 +1,4 @@
-import {Category, User} from "@/types/models";
+import {Category, User} from "~/contracts/schema";
 
 export default interface Cuisine {
   id: number,

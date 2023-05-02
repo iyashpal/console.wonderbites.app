@@ -1,11 +1,11 @@
 import Icons from '~/helpers/icons'
-import {Category} from '~/types/models'
+import {Category} from '~/contracts/schema'
 import {useEffect, useState} from 'react'
 import * as Alert from '~/components/alerts'
 import {useDataLoader, useFlash} from '@/hooks'
 import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
-import {PaginatorMeta} from '@/types/paginators'
+import {MetaData} from '@/contracts/pagination'
 import {ListPageSkeleton} from '@/components/skeletons'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {ListFilters, ListTable} from "@/components/page";
@@ -32,7 +32,7 @@ export default function ListCategories() {
   const [searchParams] = useSearchParams()
   const [category, setCategory] = useState<Category>({} as Category)
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
-  const loader = useDataLoader<{ data: Category[], meta: PaginatorMeta }>(`/categories`)
+  const loader = useDataLoader<{ data: Category[], meta: MetaData }>(`/categories`)
 
   useEffect(() => {
     loader.sync({params: {page: searchParams.get('page') ?? 1}})

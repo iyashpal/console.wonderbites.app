@@ -1,12 +1,12 @@
 import {DateTime} from "luxon";
 import Icons from '~/helpers/icons'
-import {Cuisine} from "@/types/models";
+import {Cuisine} from "~/contracts/schema";
 import {useEffect, useState} from "react";
 import * as Alert from "@/components/alerts";
 import {useDataLoader, useFlash} from "@/hooks";
 import TrashModal from "@/components/TrashModal";
 import Pagination from "@/components/Pagination";
-import {PaginatorMeta} from "@/types/paginators";
+import {MetaData} from "@/contracts/pagination";
 import {ListFilters, ListTable} from "@/components/page";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import ListCuisineSkeleton from "./skeleton/ListCuisineSkeleton";
@@ -25,7 +25,7 @@ const sortByFilters = [
   {label: 'Name', value: 'name', icon: <Icons.Outline.Bookmark className={'w-5 h-5'}/>}
 ]
 export default function ListCuisines() {
-  const loader = useDataLoader<{ data: Cuisine[], meta: PaginatorMeta }>(`/cuisines`)
+  const loader = useDataLoader<{ data: Cuisine[], meta: MetaData }>(`/cuisines`)
   const flash = useFlash()
   const location = useLocation()
   const navigateTo = useNavigate()

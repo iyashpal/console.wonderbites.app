@@ -1,5 +1,5 @@
 import {useDataLoader} from "@/hooks";
-import {Banner} from "@/types/models";
+import {Banner} from "~/contracts/schema";
 import React, {useState} from "react";
 import {Details} from "@/components/Show";
 import TrashModal from "@/components/TrashModal";

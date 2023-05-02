@@ -1,7 +1,7 @@
 import { Axios } from '@/helpers'
 import { useFlash } from '@/hooks'
 import React, { useState } from 'react'
-import { Category } from '@/types/models'
+import { Category } from '~/contracts/schema'
 import { Details } from '@/components/Show'
 import * as Alert from '@/components/alerts'
 import TrashModal from '@/components/TrashModal'
@@ -77,7 +77,7 @@ function CheckoutItems({ category }: { category: Category }) {
     { id: 'chopsticks', type: 'freebies', title: 'Chopsticks', checked: false },
     { id: 'napkins', type: 'freebies', title: 'Napkins', checked: false },
   ])
-  
+
 
 
   function onChangeState(event: React.ChangeEvent<HTMLInputElement>) {

@@ -1,5 +1,5 @@
 import {IngredientProduct} from "./pivot";
-import {Category, Media, User} from "@/types/models";
+import {Category, Media, User} from "~/contracts/schema";
 
 export default interface Product {
   id: number,

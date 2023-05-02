@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useFlash} from "@/hooks";
 import {Details} from "@/components/Show";
 import TrashModal from "@/components/TrashModal";
-import {Ingredient} from "@/types/models";
+import {Ingredient} from "~/contracts/schema";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
 import {Link, useLoaderData, useNavigate} from "react-router-dom";
 

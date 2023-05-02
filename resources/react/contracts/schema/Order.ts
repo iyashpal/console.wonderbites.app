@@ -1,4 +1,4 @@
-import User from "@/types/models/User";
+import User from "@/contracts/schema/User";
 
 export default interface Order {
   id: number,

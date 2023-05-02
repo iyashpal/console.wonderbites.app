@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Axios } from '@/helpers'
-import { Product } from '@/types/models'
+import { Product } from '~/contracts/schema'
 import {useLocation, useNavigate} from 'react-router-dom'
 
 export default function useMediaProductForm(fields: FormFields) {

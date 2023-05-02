@@ -5,7 +5,7 @@ import { action, BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
 export default class OrderPolicy extends BasePolicy {
   /**
    * Determine whether the user can view the model list.
-   * 
+   *
    * @param user User
    * @returns Boolean
    */
@@ -15,7 +15,7 @@ export default class OrderPolicy extends BasePolicy {
 
   /**
    * Determine whether the user can view the model.
-   * 
+   *
    * @param user User
    * @param order Order
    * @returns Boolean
@@ -34,8 +34,8 @@ export default class OrderPolicy extends BasePolicy {
   }
 
   /**
-   * Determine whether the user can create models.
-   * 
+   * Determine whether the user can create schema.
+   *
    * @param user User
    * @returns Boolean
    */
@@ -46,7 +46,7 @@ export default class OrderPolicy extends BasePolicy {
 
   /**
    * Determine whether the user can update the model.
-   * 
+   *
    * @param user User
    * @param order Order
    * @returns Boolean
@@ -66,7 +66,7 @@ export default class OrderPolicy extends BasePolicy {
 
   /**
    * Determine whether the user can delete the model.
-   * 
+   *
    * @param user User
    * @param order Order
    * @returns Boolean

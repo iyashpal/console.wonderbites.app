@@ -1,4 +1,4 @@
-import {Category} from '@/types/models'
+import {Category} from '~/contracts/schema'
 import {useCategoryForm} from '@/hooks/forms'
 import * as Loaders from '@/components/loaders'
 import InputError from '@/components/Form/InputError'

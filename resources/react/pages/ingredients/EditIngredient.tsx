@@ -1,7 +1,7 @@
 import {DateTime} from "luxon";
 import * as Loaders from "@/components/loaders";
 import {useIngredientForm} from "@/hooks/forms";
-import {Category, Ingredient} from "@/types/models";
+import {Category, Ingredient} from "~/contracts/schema";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
 import {Form, Link, useLoaderData} from "react-router-dom";

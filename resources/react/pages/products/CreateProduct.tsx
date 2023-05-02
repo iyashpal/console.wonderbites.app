@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { useState } from 'react';
-import { Category } from '@/types/models';
+import { Category } from '~/contracts/schema';
 import { useProductForm } from '@/hooks/forms';
 import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";

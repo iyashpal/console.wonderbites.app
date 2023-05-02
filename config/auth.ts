@@ -73,7 +73,7 @@ const authConfig: AuthConfig = {
         |
         | The model to use for fetching or finding users. The model is imported
         | lazily since the config files are read way earlier in the lifecycle
-        | of booting the app and the models may not be in a usable state at
+        | of booting the app and the schema may not be in a usable state at
         | that time.
         |
         */
@@ -157,7 +157,7 @@ const authConfig: AuthConfig = {
         |
         | The model to use for fetching or finding users. The model is imported
         | lazily since the config files are read way earlier in the lifecycle
-        | of booting the app and the models may not be in a usable state at
+        | of booting the app and the schema may not be in a usable state at
         | that time.
         |
         */
@@ -220,7 +220,7 @@ const authConfig: AuthConfig = {
         |
         | The model to use for fetching or finding users. The model is imported
         | lazily since the config files are read way earlier in the lifecycle
-        | of booting the app and the models may not be in a usable state at
+        | of booting the app and the schema may not be in a usable state at
         | that time.
         |
         */
