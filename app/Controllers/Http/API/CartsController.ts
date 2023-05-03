@@ -191,6 +191,10 @@ export default class CartsController {
             query => query.preload('media'),
           ])
           .match([
+            request.input('with', []).includes('cart.products.category'),
+            query => query.preload('categories'),
+          ])
+          .match([
             request.input('with', []).includes('cart.products.ingredients'),
             query => query.preload('ingredients', ingredients => ingredients
               .match([

@@ -1163,8 +1163,15 @@ paths:
           schema:
             type: array
           example:
+            - cart.user
+            - cart.coupon
             - cart.products
+            - cart.products.media
+            - cart.products.category
+            - cart.products.ingredients
+            - cart.products.ingredients.categories
             - cart.ingredients
+            - cart.ingredients.categories
       requestBody:
         content:
           application/json:
@@ -1200,8 +1207,15 @@ paths:
           schema:
             type: array
           example:
+            - cart.user
+            - cart.coupon
             - cart.products
+            - cart.products.media
+            - cart.products.category
+            - cart.products.ingredients
+            - cart.products.ingredients.categories
             - cart.ingredients
+            - cart.ingredients.categories
       requestBody:
         content:
           application/json:
@@ -1239,7 +1253,7 @@ paths:
     get:
       tags:
         - User > Cart
-      summary: Detail
+      summary: Get Detail
       operationId: getCartDetails
       parameters:
         - name: with[]
@@ -1247,8 +1261,15 @@ paths:
           schema:
             type: array
           example:
+            - cart.user
+            - cart.coupon
             - cart.products
+            - cart.products.media
+            - cart.products.category
+            - cart.products.ingredients
+            - cart.products.ingredients.categories
             - cart.ingredients
+            - cart.ingredients.categories
       responses:
         "200":
           description: Successful response
