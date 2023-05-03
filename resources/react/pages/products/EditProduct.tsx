@@ -1,4 +1,3 @@
-import {DateTime} from 'luxon';
 import {useState} from 'react';
 import {useProductForm} from '@/hooks/forms';
 import {Category, Product} from '~/contracts/schema';
@@ -6,6 +5,7 @@ import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import {Link, Form, useLoaderData} from "react-router-dom";
 import {ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon} from "@heroicons/react/24/outline";
+import { DateTime } from 'luxon';
 
 export default function EditProduct() {
 
@@ -21,7 +21,7 @@ export default function EditProduct() {
     isCustomizable: product.is_customizable,
     categoryId: category ? category.id : 0,
     description: product.description,
-    publishedAt: DateTime.now(),
+    publishedAt: product.published_at,
     status: product.status,
   })
 
@@ -128,9 +128,9 @@ export default function EditProduct() {
                   <label htmlFor="publishedAt" className="block text-sm font-bold text-gray-700">
                     Status
                   </label>
-                  <select id="publishedAt" defaultValue={form.input.value('publishedAt')} onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={''}>Draft</option>
-                    <option value={DateTime.now().toString()}>Published</option>
+                  <select id="publishedAt" onChange={form.input.onChange.publishedAt} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={''} >Draft</option>
+                    <option value={DateTime.now().toString()} selected={!!form.input.value('publishedAt')}>Published</option>
                   </select>
                   <InputError error={form.errors?.status}>{form.errors?.status}</InputError>
                 </div>
