@@ -1,27 +1,27 @@
-import {Link} from "react-router-dom";
-import {Menu, Transition} from '@headlessui/react'
-import React, {Fragment, useEffect, useState} from "react";
-import {Bars3BottomLeftIcon, CalendarDaysIcon, ChevronDownIcon, CloudArrowDownIcon, CloudArrowUpIcon, MagnifyingGlassIcon, PlusIcon, ChevronUpIcon} from "@heroicons/react/24/outline";
-import {classNames} from "@/helpers";
+import { Link } from "react-router-dom";
+import { Menu, Transition } from '@headlessui/react'
+import React, { Fragment, useEffect, useState } from "react";
+import { Bars3BottomLeftIcon, CalendarDaysIcon, ChevronDownIcon, CloudArrowDownIcon, CloudArrowUpIcon, MagnifyingGlassIcon, PlusIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import { classNames } from "@/helpers";
 
 type CreateLink = { label: string, url: string, icon?: JSX.Element }
 type SortFilter = { label: string, value: string, icon: JSX.Element }
 type FilterProps = { sortBy: SortFilter[], create: CreateLink, className?: string }
 
-export default function ListFilters({create, sortBy, className}: FilterProps) {
+export default function ListFilters({ create, sortBy, className }: FilterProps) {
   return <>
     <div {...classNames(`p-4 flex flex-col-reverse md:flex-row items-center justify-between border`, className)}>
       <div className={'flex items-center gap-x-2 flex-col md:flex-row'}>
         <div className={'border border-gray-300 rounded-md flex items-center text-sm relative'}>
-          <SortBy filters={sortBy}/>
-          <DateRange/>
+          <SortBy filters={sortBy} />
+          <DateRange />
         </div>
         <div>
           <div className="relative flex items-center">
-            <input type="text" name="search" id="search" placeholder={'Search'} className="block w-full rounded-md border-gray-300 pl-12 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"/>
+            <input type="text" name="search" id="search" placeholder={'Search'} className="block w-full rounded-md border-gray-300 pl-12 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm" />
             <div className="absolute inset-y-0 left-0 flex items-center pl-1.5">
               <kbd className="inline-flex items-center rounded px-2 font-sans text-sm font-medium text-gray-400">
-                <MagnifyingGlassIcon className={'w-5 h-5'}/>
+                <MagnifyingGlassIcon className={'w-5 h-5'} />
               </kbd>
             </div>
           </div>
@@ -29,19 +29,18 @@ export default function ListFilters({create, sortBy, className}: FilterProps) {
       </div>
 
       <div className={'flex items-center gap-x-2'}>
-
         <Link to={create.url} className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-          <PlusIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
+          <PlusIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
           {create.label}
         </Link>
 
         <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-          <CloudArrowUpIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
+          <CloudArrowUpIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
           Import
         </button>
 
         <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-          <CloudArrowDownIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true"/>
+          <CloudArrowDownIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
           Export
         </button>
 
@@ -51,16 +50,16 @@ export default function ListFilters({create, sortBy, className}: FilterProps) {
   </>
 }
 
-function SortBy({filters}: { filters: { label: string, value: string, icon: JSX.Element }[] }) {
+function SortBy({ filters }: { filters: { label: string, value: string, icon: JSX.Element }[] }) {
   const [selected, setSelected] = useState<SortFilter>()
   return <>
     <Menu as={'div'} className={'relative'}>
       <Menu.Button className={''}>
-        {({open}) => <>
+        {({ open }) => <>
           <span className={`inline-flex items-center gap-x-1 p-2 rounded-l-md ${open && 'bg-gray-200'}`}>
-            <Bars3BottomLeftIcon className={'w-4 h-4'}/>
+            <Bars3BottomLeftIcon className={'w-4 h-4'} />
             <span>Sort by {selected?.value}</span>
-            {open ? <ChevronUpIcon className={'w-4 h-4 text-red-primary'}/> : <ChevronDownIcon className={'w-4 h-4 text-red-primary'}/>}
+            {open ? <ChevronUpIcon className={'w-4 h-4 text-red-primary'} /> : <ChevronDownIcon className={'w-4 h-4 text-red-primary'} />}
           </span>
         </>}
       </Menu.Button>
@@ -77,7 +76,7 @@ function SortBy({filters}: { filters: { label: string, value: string, icon: JSX.
           <div className="px-1 py-1">
             {filters.map((filter, key) => (
               <Menu.Item key={key}>
-                {({active}) => (
+                {({ active }) => (
                   <button onClick={() => setSelected(filter)} className={`${active ? 'bg-red-primary text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm gap-x-2`}>
                     {filter.icon} {filter.label}
                   </button>
@@ -123,11 +122,11 @@ function DateRange() {
   return <>
     <Menu as={'div'} className={''}>
       <Menu.Button className={''}>
-        {({open}) => <>
+        {({ open }) => <>
           <span className={`inline-flex items-center gap-x-1 p-2 rounded-r-md ${open && 'bg-gray-200'}`}>
-            <CalendarDaysIcon className={'w-4 h-4'}/>
+            <CalendarDaysIcon className={'w-4 h-4'} />
             <span>{label}</span>
-            {open ? <ChevronUpIcon className={'w-4 h-4 text-red-primary'}/> : <ChevronDownIcon className={'w-4 h-4 text-red-primary'}/>}
+            {open ? <ChevronUpIcon className={'w-4 h-4 text-red-primary'} /> : <ChevronDownIcon className={'w-4 h-4 text-red-primary'} />}
           </span>
         </>}
       </Menu.Button>
@@ -144,11 +143,11 @@ function DateRange() {
           <div className="space-y-3">
             <div className="">
               <label htmlFor="start">From</label>
-              <input type="date" name={'start'} className={'block w-full rounded-md border-gray-300 shadow-sm focus:border-red-primary focus:ring-red-primary sm:text-sm'} onChange={onChangeStart} value={start}/>
+              <input type="date" name={'start'} className={'block w-full rounded-md border-gray-300 shadow-sm focus:border-red-primary focus:ring-red-primary sm:text-sm'} onChange={onChangeStart} value={start} />
             </div>
             <div className="">
               <label htmlFor="to">To</label>
-              <input type="date" name={'to'} className={'block w-full rounded-md border-gray-300 shadow-sm focus:border-red-primary focus:ring-red-primary sm:text-sm'} onChange={onChangeEnd} min={min} value={end}/>
+              <input type="date" name={'to'} className={'block w-full rounded-md border-gray-300 shadow-sm focus:border-red-primary focus:ring-red-primary sm:text-sm'} onChange={onChangeEnd} min={min} value={end} />
             </div>
             <Menu.Item onClick={applyFilter} as={'button'} className={'w-full inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'}>
               Apply
