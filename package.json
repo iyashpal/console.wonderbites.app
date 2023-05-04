@@ -78,6 +78,7 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.1.0",
     "@adonisjs/view": "^6.2.0",
+    "@setten/bull-queue": "^1.0.1",
     "aws-sdk": "^2.1265.0",
     "lodash": "^4.17.21",
     "luxon": "^3.1.1",

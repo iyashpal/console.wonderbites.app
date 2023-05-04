@@ -33,7 +33,6 @@
       "Database/*": [
         "./database/*"
       ],
-
       // SPA Aliases
       "@/*": [
         "./resources/react/*"
@@ -60,7 +59,8 @@
       "@adonisjs/lucid-slugify",
       "@adonisjs/attachment-lite",
       "@japa/preset-adonis/build/adonis-typings",
-      "@adonisjs/route-model-binding/build/adonis-typings"
+      "@adonisjs/route-model-binding/build/adonis-typings",
+      "@setten/bull-queue"
     ]
   }
 }

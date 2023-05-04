@@ -6,7 +6,8 @@
     "@adonisjs/repl/build/commands",
     "@adonisjs/lucid/build/commands",
     "@adonisjs/mail/build/commands",
-    "@adonisjs/bouncer/build/commands"
+    "@adonisjs/bouncer/build/commands",
+    "@setten/bull-queue/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -39,7 +40,8 @@
     "@adonisjs/lucid-slugify",
     "@adonisjs/attachment-lite",
     "@adonisjs/route-model-binding/build/providers/RmbProvider",
-    "@adonisjs/drive-gcs"
+    "@adonisjs/drive-gcs",
+    "@setten/bull-queue"
   ],
   "metaFiles": [
     {
