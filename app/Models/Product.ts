@@ -3,7 +3,7 @@ import Storage from 'App/Helpers/Storage'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { BelongsTo, belongsTo, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import { Cart, Category, ExtraField, Ingredient, Media, Order, Review, User, Wishlist } from 'App/Models'
+import { Cart, Category, ExtraField, Ingredient, Media, Order, Review, User, Wishlist, Variant } from 'App/Models'
 
 export default class Product extends BaseModel {
   /**
@@ -101,6 +101,9 @@ export default class Product extends BaseModel {
     pivotTimestamps: true,
   })
   public orders: ManyToMany<typeof Order>
+
+  @hasMany(() => Variant)
+  public variants: HasMany<typeof Variant>
 
   @hasOne(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})
   public review: HasOne<typeof Review>

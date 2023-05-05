@@ -1,9 +1,9 @@
-import { Query } from './index'
-import { Product } from 'App/Models'
+import {Query} from './index'
+import {Product} from 'App/Models'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { ExtraFieldName } from 'App/Models/Enums/ExtraField'
-import { ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {ExtraFieldName} from 'App/Models/Enums/ExtraField'
+import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
 export default class ProductQuery extends Query {
   public $query: ModelQueryBuilderContract<typeof Product, Product>
@@ -17,7 +17,7 @@ export default class ProductQuery extends Query {
 
     this.$aggregates.push(...['Reviews'])
 
-    this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients'])
+    this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients', 'Variants'])
 
     this.$filters.push(...['InCategories', 'Search', 'TopRated', 'TodaysPick', 'Popular'])
   }
@@ -32,6 +32,27 @@ export default class ProductQuery extends Query {
   }
 
   /**
+   * Preload the product variants.
+   *
+   * @returns ModelQueryBuilderContract<typeof Product, Product>
+   */
+  protected preloadVariants (): ProductQuery {
+    this.$query.match([
+      this.input('with', []).includes(this.qs('variants')),
+      productQuery => productQuery
+        .preload('variants',
+          variantsQuery => variantsQuery
+            .match([
+              this.input('with', []).includes(this.qs('variants.attributes')),
+              attributeQuery => attributeQuery.preload('attributes'),
+            ])
+        ),
+    ])
+
+    return this
+  }
+
+  /**
    * Preload the product state in user wishlist.
    *
    * @returns ModelQueryBuilderContract<typeof Product, Product>
@@ -39,7 +60,8 @@ export default class ProductQuery extends Query {
   protected preloadUserWishlist (): ProductQuery {
     this.$query.match([
       this.user().id && this.input('with', []).includes(this.qs('wishlist')),
-      query => query.preload('wishlists', builder => builder.where('user_id', this.user().id ?? 0)),
+      query => query
+        .preload('wishlists', builder => builder.where('user_id', this.user().id ?? 0)),
     ])
     return this
   }
@@ -80,10 +102,12 @@ export default class ProductQuery extends Query {
   protected preloadIngredients (): ProductQuery {
     this.$query.match([
       this.input('with', []).includes(this.qs('ingredients')),
-      query => query.preload('ingredients', builder => builder.match([
-        this.input('with', []).includes(this.qs('ingredients.categories')),
-        query => query.preload('categories'),
-      ])),
+      query => query
+        .preload('ingredients', builder => builder
+          .match([
+            this.input('with', []).includes(this.qs('ingredients.categories')),
+            query => query.preload('categories'),
+          ])),
     ])
 
     return this
