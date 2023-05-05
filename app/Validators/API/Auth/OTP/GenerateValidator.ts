@@ -27,6 +27,7 @@ export default class GenerateValidator {
     source: schema.string({trim: true}, [
       rules.required(),
     ]),
+    identifier: schema.string.optional({trim: true}),
   })
 
   /**

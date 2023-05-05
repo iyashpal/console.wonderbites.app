@@ -10,7 +10,7 @@ import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 export default class GenerateCodesController {
   public async handle ({ request, response }: HttpContextContract) {
     try {
-      const { source } = await request.validate(GenerateValidator)
+      const { source, identifier } = await request.validate(GenerateValidator)
 
       const user = await User.query().where('mobile', source).orWhere('email', source).first()
 
@@ -24,7 +24,7 @@ export default class GenerateCodesController {
       )
 
       if (code && ['production'].includes(Env.get('NODE_ENV'))) {
-        await this.sendMobileOTP(source, code.code)
+        await this.sendMobileOTP(source, code.code, identifier ?? '')
         await this.sendEmailOTP(source, code.code)
       }
 
@@ -34,13 +34,13 @@ export default class GenerateCodesController {
     }
   }
 
-  private async sendMobileOTP (source: string, code: string) {
+  private async sendMobileOTP (source: string, code: string, identifier: string) {
     try {
       const body = JSON.stringify({
         username: Env.get('SMS_USERNAME'),
         password: Env.get('SMS_PASSWORD'),
         recipients: [source],
-        message: code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010.',
+        message: code + ' is your OTP for Wonderbites. For any questions, contact us at +355696011010. ' + identifier,
         'dlr-url': Env.get('APP_URL'),
       })
 
