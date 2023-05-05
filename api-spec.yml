@@ -3,7 +3,7 @@ info:
   title: Wonderbites App
   description: ""
   version: v1.0
-  license: 
+  license:
     name: UNLICENSED
     url: README.md
 security:
@@ -28,11 +28,11 @@ tags:
   - name: Checkouts
     description: Checkout endpoints for Android/iOS/Web App.
   - name: Auth > User
-    description: Application authentication endpoints.
+    description: Authenticated user.
   - name: User > Profile
-    description: Application authentication endpoints.
+    description: Authenticated User Profile.
   - name: User > Avatar
-    description: Application authentication endpoints.
+    description: Authenticated User Avatar.
   - name: User > Address
     description: Application authentication endpoints.
   - name: User > Coupons
@@ -998,6 +998,8 @@ paths:
             - products.reviews
             - products.wishlist
             - products.ingredients
+            - products.variants
+            - products.variants.attributes
           schema:
             type: array
             default: []
@@ -1088,6 +1090,8 @@ paths:
             - product.reviews
             - product.wishlist
             - product.ingredients
+            - product.variants
+            - product.variants.attributes
           schema:
             type: array
             default: []
@@ -1132,7 +1136,7 @@ paths:
           in: query
           description: Attach the relation's counts.
           example:
-            - products.reviews
+            - product.reviews
           schema:
             type: array
             default: []
@@ -1991,9 +1995,7 @@ paths:
         $ref: '#/components/requestBodies/Checkout'
       responses:
         422:
-          description: Validation Error
           $ref: "#/components/responses/CheckoutValidationErrors"
-                  
         "200":
           description: OK
           content:
@@ -2225,14 +2227,14 @@ components:
               eatOrPickupTime:
                 type: string
                 example: 05:00 PM
-                description: This field is required when user select the orderType dine-in OR take-away. 
+                description: This field is required when user select the orderType dine-in OR take-away.
               options:
                 type: object
               note:
                 type: string
                 example: Extra note from the customer side.
                 description: Users can use this field to give some extra instruction/information.
-    
+
     CreateReview:
       content:
         application/json:
@@ -2295,12 +2297,12 @@ components:
       description: Validation Errors
       content:
         application/json:
-          schema: 
+          schema:
             type: object
-            properties: 
+            properties:
               errors:
                 type: object
-                properties: 
+                properties:
                   firstName:
                     type: string
                     example: required validation failed
@@ -2391,12 +2393,12 @@ components:
           example: lorem impsum....
         options:
           type: object
-          properties: 
+          properties:
             extras:
               type: array
-              items: 
+              items:
                 type: object
-                properties: 
+                properties:
                   id:
                     type: string
                     example: 'bread'
@@ -2556,12 +2558,9 @@ components:
           description: Date when address deleted.
     Products:
       required:
-        - city
-        - first_name
-        - last_name
-        - phone
-        - street
-        - type
+        - name
+        - sku
+        - price
       type: object
       properties:
         id:
@@ -2626,6 +2625,82 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Media"
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Variant"
+    Variant:
+      required:
+        - name
+        - price
+        - status
+      properties:
+        id:
+          type: number
+          description: Auto increment/primary key
+          example: 1
+        name:
+          type: string
+          description: Name of the product variant.
+          example: Opsioni 1 (Supë + Sallatë)
+        description:
+          type: string
+          description: Detailed information of the product.
+          example: BUSINESS LUNCH PRIX FIXE MENU
+        price:
+          type: number
+          description: Product variant price.
+          example: 58
+        status:
+          type: boolean
+          description: Set the variant status.
+          example: false
+        created_at:
+          type: string
+          description: Creation date of the variant.
+          example: 2023-05-05 01:56:55
+        updated_at:
+          type: string
+          description: Last update date of the variant.
+          example: 2023-05-05 01:56:55
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attribute"
+    Attribute:
+      properties:
+        id:
+          type: number
+          description: Auto Increment/Primary Key
+          example: 1
+        name:
+          type: string
+          description: Name of the product variant Attribute.
+          example: Supe me Krem Karrote
+        description:
+          type: string
+          description: Detailed information of the product.
+          example: BUSINESS LUNCH PRIX FIXE MENU
+        price:
+          type: number
+          description: Variant attribute price.
+          example: 58
+        quantity:
+          type: number
+          description: Quantity that are free with variant.
+          example: 3
+        status:
+          type: boolean
+          description: Set the variant status.
+          example: false
+        created_at:
+          type: string
+          description: Creation date of the variant.
+          example: 2023-05-05 01:56:55
+        updated_at:
+          type: string
+          description: Last update date of the variant.
+          example: 2023-05-05 01:56:55
     Media:
       properties:
         id:
@@ -2781,7 +2856,7 @@ components:
           type: string
           example: dine-in | take-away | delivery
           default: delivery
-          description: Determine if the user will dine-in or take the order away or our staff will deliver to the person. 
+          description: Determine if the user will dine-in or take the order away or our staff will deliver to the person.
         coupon_id:
           type: number
           example: 1
@@ -2817,7 +2892,7 @@ components:
           description: Email address.
         location:
           type: object
-          properties: 
+          properties:
             lat:
               type: string
               example: "56.5647"
@@ -2838,7 +2913,7 @@ components:
         reservedSeats:
           type: number
           example: 5
-          description: Number of seats reserved OR number of people for dine-in option. 
+          description: Number of seats reserved OR number of people for dine-in option.
         eatOrPickupTime:
           type: string
           example: 50:00 PM
