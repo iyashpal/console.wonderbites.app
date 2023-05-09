@@ -17,6 +17,7 @@ const columns = [
   {name: 'Product Name', options: {className: 'text-center'}},
   {name: 'Price', options: {className: 'text-center'}},
   {name: 'Image', options: {className: 'text-center'}},
+  {name: 'Type', options: {className: 'text-center'}},
   {name: 'Status', options: {className: 'text-left'}},
 ]
 const sortByFilters = [
@@ -86,8 +87,8 @@ export default function ListProducts() {
                   <span className="hidden group-hover:flex items-center justify-center font-semibold text-xs absolute inset-0 text-white bg-gray-900/30">+{product.meta.media_count}</span>
                 </>}
               </div>,
+              <span className={'uppercase'}>{product.type}</span>,
               product.published_at ? 'Published' : 'Draft',
-
               <div className="flex item-center justify-center gap-x-1">
                 <Link to={`/app/products/${product.id}/edit`} className={'action:button button:blue'}>
                   <Icons.Outline.PencilSquare className={'w-5 h-5'}/>

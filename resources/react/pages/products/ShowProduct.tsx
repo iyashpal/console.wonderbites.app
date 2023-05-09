@@ -5,10 +5,10 @@ import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
-import {Ingredient, Media, Product} from '~/contracts/schema'
 import {Combobox, Transition} from '@headlessui/react'
-import {IngredientProduct} from '@/contracts/schema/pivot'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
+import {IngredientProduct} from '@/contracts/schema/pivot'
+import {Ingredient, Media, Product} from '~/contracts/schema'
 import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
 import {useIngredientProductForm, useMediaProductForm} from '@/hooks/forms'
@@ -52,7 +52,8 @@ export default function ShowProduct() {
               {name: 'Price', value: `${product.price}L`},
               {name: 'Category', value: category?.name ?? '-'},
               {name: 'Description', value: product.description, onModal: true},
-              {name: 'Images', value: <ProductImages/>}
+              {name: 'Images', value: <ProductImages/>},
+              {name: 'Type', value: product.type}
             ]}
           />
           {Boolean(product.is_customizable) && (
