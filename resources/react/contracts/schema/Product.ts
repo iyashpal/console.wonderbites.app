@@ -12,6 +12,7 @@ export default interface Product {
   is_popular: boolean,
   is_customizable: boolean,
   status: number,
+  type: string,
   published_at: string,
   created_at: string,
   user: User,

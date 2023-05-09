@@ -23,6 +23,7 @@ export default function EditProduct() {
     description: product.description,
     publishedAt: product.published_at,
     status: product.status,
+    type: product.type,
   })
 
   function toggleUploadProgress() {
@@ -103,7 +104,7 @@ export default function EditProduct() {
                   <InputError error={form.errors?.description}>{form.errors?.description}</InputError>
                 </div>
 
-                <div className="col-span-6 sm:col-span-2">
+                <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
                     Is Customizable ?<sup className='text-red-primary'>*</sup>
                   </label>
@@ -113,7 +114,7 @@ export default function EditProduct() {
                   </select>
                 </div>
 
-                <div className="col-span-6 sm:col-span-2">
+                <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
                     Is Popular ?<sup className='text-red-primary'>*</sup>
                   </label>
@@ -124,7 +125,18 @@ export default function EditProduct() {
                   <InputError error={form.errors?.isPopular} />
                 </div>
 
-                <div className="col-span-6 sm:col-span-2">
+                <div className="col-span-6 sm:col-span-3">
+                  <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
+                    Product Type ?<sup className='text-red-primary'>*</sup>
+                  </label>
+                  <select id="popular" defaultValue={form.input.value('type')} onChange={form.input.onChange.type} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                    <option value={'general'}>General</option>
+                    <option value={'variable'}>Variable</option>
+                  </select>
+                  <InputError error={form.errors?.type} />
+                </div>
+
+                <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="publishedAt" className="block text-sm font-bold text-gray-700">
                     Status
                   </label>

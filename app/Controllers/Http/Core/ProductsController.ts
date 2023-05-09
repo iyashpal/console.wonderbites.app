@@ -38,6 +38,7 @@ export default class ProductsController {
         userId,
         sku: payload.sku,
         name: payload.name,
+        type: payload.type,
         price: payload.price,
         calories: payload.calories,
         isPopular: payload.isPopular,
@@ -100,9 +101,10 @@ export default class ProductsController {
       const payload = await request.validate(UpdateValidator)
 
       await product.merge({
+        sku: payload.sku,
+        type: payload.type,
         name: payload.name,
         price: payload.price,
-        sku: payload.sku,
         calories: payload.calories,
         isPopular: payload.isPopular,
         description: payload.description,

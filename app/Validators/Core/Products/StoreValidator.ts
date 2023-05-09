@@ -48,6 +48,9 @@ export default class CreateValidator {
     publishedAt: schema.date.nullableAndOptional(),
     isCustomizable: schema.boolean(),
     isPopular: schema.boolean(),
+    type: schema.string({trim: true}, [
+      rules.required(),
+    ]),
   })
 
   /**

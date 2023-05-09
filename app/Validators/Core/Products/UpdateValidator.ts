@@ -47,6 +47,9 @@ export default class UpdateValidator {
     }),
     isCustomizable: schema.boolean(),
     isPopular: schema.boolean(),
+    type: schema.string({trim: true}, [
+      rules.required(),
+    ]),
   })
 
   /**

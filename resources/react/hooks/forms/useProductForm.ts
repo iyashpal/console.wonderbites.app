@@ -85,6 +85,14 @@ export default function useProductForm(fields: FormFields) {
     setCreateForm(payload => ({...payload, calories: event.target.value}))
   }
 
+  /**
+   * Event handler for the product type field.
+   * @param event
+   */
+  function onChangeType(event: ChangeEvent<HTMLSelectElement>) {
+    setCreateForm(payload => ({...payload, type: event.target.value}))
+  }
+
 
   /**
    * Event handler for the thumbnail field.
@@ -165,6 +173,7 @@ export default function useProductForm(fields: FormFields) {
       onChange: {
         sku: onChangeSku,
         name: onChangeName,
+        type: onChangeType,
         price: onChangePrice,
         calories: onChangeCalories,
         thumbnail: onChangeThumbnail,
@@ -192,6 +201,7 @@ type FormFields = {
   price: number | null,
   description: string,
   status?: number,
+  type: string,
   isCustomizable: boolean,
   publishedAt: DateTime | string,
   createdAt?: DateTime | string,
@@ -207,5 +217,6 @@ type FormErrors = {
   thumbnail: string,
   categoryId: string,
   description: string,
+  type: string,
   publishedAt: string,
 }
