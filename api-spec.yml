@@ -2599,6 +2599,10 @@ components:
           type: string
           description: Pre-computed url of product thumbnail.
           example: https://storage.googleapis.com/next-wonderbites-app/products/clc07y9mf00014wp969gabvh6.png
+        type:
+          type: string
+          description: Set the product type.
+          example: `General` | `Variable` etc.
         status:
           type: integer
           description: Product status.

@@ -36,6 +36,9 @@ export default class Product extends BaseModel {
   public thumbnail: AttachmentContract | null
 
   @column()
+  public type: string
+
+  @column()
   public status: number
 
   @column.dateTime()
