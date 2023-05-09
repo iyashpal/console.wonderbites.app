@@ -29,6 +29,7 @@ export default Factory.define(Product, async ({ faker }) => {
     publishedAt: DateTime.now(),
     isPopular: faker.datatype.boolean(),
     isCustomizable:faker.datatype.boolean(),
+    type: faker.random.words(1),
     status: 1,
   }
 })
