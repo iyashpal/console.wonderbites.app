@@ -105,8 +105,8 @@ export default class Product extends BaseModel {
   })
   public orders: ManyToMany<typeof Order>
 
-  @hasMany(() => Variant)
-  public variants: HasMany<typeof Variant>
+  @manyToMany(() => Variant)
+  public variants: ManyToMany<typeof Variant>
 
   @hasOne(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})
   public review: HasOne<typeof Review>

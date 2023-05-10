@@ -1,9 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
+import {User, Variant} from 'App/Models/index'
 
 export default class Attribute extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public userId: number
 
   @column()
   public name: string
@@ -25,4 +29,10 @@ export default class Attribute extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @manyToMany(() => Variant)
+  public variants: ManyToMany<typeof Variant>
 }
