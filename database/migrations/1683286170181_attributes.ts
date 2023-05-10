@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
-      table.bigIncrements('user_id').references('users.id').onDelete('RESTRICT')
+      table.bigInteger('user_id').unsigned().references('users.id').onDelete('RESTRICT')
       table.string('name')
       table.text('description').nullable()
       table.string('price').defaultTo(0)
