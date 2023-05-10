@@ -1,5 +1,5 @@
 import {IngredientProduct} from "./pivot";
-import {Category, Media, User} from "~/contracts/schema";
+import {Category, Media, User, Variant} from "~/contracts/schema";
 
 export default interface Product {
   id: number,
@@ -18,6 +18,7 @@ export default interface Product {
   user: User,
   categories?: Category[],
   ingredients?: IngredientProduct[],
+  variants?: Variant[],
   media?: Media[],
   meta: {
     media_count?: number
