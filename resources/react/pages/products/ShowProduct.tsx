@@ -5,10 +5,10 @@ import {Details} from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
-import {Combobox, Transition} from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import {IngredientProduct} from '@/contracts/schema/pivot'
 import {Ingredient, Media, Product} from '~/contracts/schema'
+import {Combobox, Dialog, Transition} from '@headlessui/react'
 import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {useLoaderData, useLocation, useNavigate} from 'react-router-dom'
 import {useIngredientProductForm, useMediaProductForm} from '@/hooks/forms'
@@ -56,10 +56,14 @@ export default function ShowProduct() {
               {name: 'Type', value: product.type}
             ]}
           />
-          {Boolean(product.is_customizable) && (
+          {(Boolean(product.is_customizable) && product.type === 'general') && (
             <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
               <ProductIngredients product={product}/>
             </div>
+          )}
+
+          {(product.type === 'variable') && (
+            <ProductVariants product={product}/>
           )}
         </div>
       </div>
@@ -526,4 +530,143 @@ function CreateNewIngredient() {
       <div></div>
     </div>
   </>
+}
+
+function ProductVariants({product}: { product: Product}) {
+  const [showCreateForm, setShowCreateForm] = useState<boolean>(false)
+  return <>
+    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md mt-10">
+      <div className="px-4 py-5 sm:px-6">
+        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <div className="ml-4 mt-4">
+            <h3 className="text-base font-semibold leading-6 text-gray-900">Product Variants</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              List of all product variants. You can manage the product variants here.
+            </p>
+          </div>
+          <div className="ml-4 mt-4 flex-shrink-0">
+            <button onClick={() => setShowCreateForm(true)} type="button" className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" >
+              Create new
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="px-4 sm:px-6">
+
+
+        <ul role="list" className="divide-y divide-gray-100">
+          <li className="flex items-center justify-between gap-x-6 py-5">
+            <div className="min-w-0">
+              <div className="flex items-start gap-x-3">
+                <p className="text-sm font-semibold leading-6 text-gray-900">Poke Small (1 protein + 2 vegetables)</p>
+                <p className="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">5</p>
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                <p className="whitespace-nowrap">Created at <time dateTime="2023-03-17T00:00Z">March 17, 2023</time></p>
+                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                  <circle cx="1" cy="1" r="1"/>
+                </svg>
+                <p className="truncate">Created by Leslie Alexander</p>
+              </div>
+            </div>
+            <div className="flex flex-none items-center gap-x-4">
+              <button className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">View<span className="sr-only">, GraphQL API</span></button>
+
+            </div>
+          </li>
+          <li className="flex items-center justify-between gap-x-6 py-5">
+            <div className="min-w-0">
+              <div className="flex items-start gap-x-3">
+                <p className="text-sm font-semibold leading-6 text-gray-900">Poke Medium ( 2 proteins + 4 vegetables)</p>
+                <p className="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">10</p>
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                <p className="whitespace-nowrap">Created at <time dateTime="2023-05-05T00:00Z">May 5, 2023</time></p>
+                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                  <circle cx="1" cy="1" r="1"/>
+                </svg>
+                <p className="truncate">Created by Leslie Alexander</p>
+              </div>
+            </div>
+            <div className="flex flex-none items-center gap-x-4">
+              <button className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">View<span className="sr-only">, New benefits plan</span></button>
+            </div>
+          </li>
+          <li className="flex items-center justify-between gap-x-6 py-5">
+            <div className="min-w-0">
+              <div className="flex items-start gap-x-3">
+                <p className="text-sm font-semibold leading-6 text-gray-900">Poke Large (3 proteins + 5 vegetables)</p>
+                <p className="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">15</p>
+              </div>
+              <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                <p className="whitespace-nowrap">Created at <time dateTime="2023-05-25T00:00Z">May 25, 2023</time></p>
+                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                  <circle cx="1" cy="1" r="1"/>
+                </svg>
+                <p className="truncate">Created by Courtney Henry</p>
+              </div>
+            </div>
+            <div className="flex flex-none items-center gap-x-4">
+              <button className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">View<span className="sr-only">, Onboarding emails</span></button>
+            </div>
+          </li>
+        </ul>
+
+        <CreateProductVariant open={showCreateForm} onClose={() => setShowCreateForm(false)}/>
+      </div>
+    </div>
+  </>
+}
+
+
+
+
+
+function CreateProductVariant({open, onClose}: {open: boolean, onClose: () => void}) {
+  return (
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
+        <div className="fixed inset-0 bg-gray-800/50" />
+
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+              <Transition.Child
+                as={Fragment}
+                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enterFrom="translate-x-full"
+                enterTo="translate-x-0"
+                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leaveFrom="translate-x-0"
+                leaveTo="translate-x-full"
+              >
+                <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                    <div className="px-4 sm:px-6">
+                      <div className="flex items-start justify-between">
+                        <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                          Create Product Variant
+                        </Dialog.Title>
+                        <div className="ml-3 flex h-7 items-center">
+                          <button
+                            type="button"
+                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            onClick={onClose}
+                          >
+                            <span className="sr-only">Close panel</span>
+                            <Icons.Outline.XMark className="h-6 w-6"/>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </Transition.Root>
+  )
 }
