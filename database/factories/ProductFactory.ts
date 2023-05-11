@@ -30,7 +30,7 @@ export default Factory.define(Product, async ({ faker }) => {
     isPopular: faker.datatype.boolean(),
     isCustomizable:faker.datatype.boolean(),
     type: faker.random.words(1),
-    status: 1,
+    status: 'published',
   }
 })
   .relation('user', () => UserFactory)
