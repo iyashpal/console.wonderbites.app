@@ -2602,7 +2602,7 @@ components:
         type:
           type: string
           description: Set the product type.
-          example: `General` | `Variable` etc.
+          example: '`General` | `Variable` etc.'
         status:
           type: integer
           description: Product status.
