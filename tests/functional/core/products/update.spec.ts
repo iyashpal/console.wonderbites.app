@@ -33,7 +33,7 @@ test.group('Core [products.update]', (group) => {
 
   test('it throws 200 status code when user has role assigned.', async ({client, route}) => {
     const {
-      id, name, description, publishedAt, price, sku, categories,
+      id, name, description, status, price, type, sku, categories,
     } = await ProductFactory.with('categories', 1).create()
     const user = await UserFactory.with('role').create()
 
@@ -41,7 +41,7 @@ test.group('Core [products.update]', (group) => {
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        categoryId: category.id, name, description, publishedAt, price, sku, isCustomizable: false, isPopular: false,
+        categoryId: category.id, name, description, type, status, price, sku, isCustomizable: false, isPopular: false,
       })
 
     response.assertStatus(200)
@@ -56,7 +56,8 @@ test.group('Core [products.update]', (group) => {
       .guard('api').loginAs(user).json({
         categoryId: category.id,
         name: '',
-        publishedAt: null,
+        type: 'general',
+        status: 'draft',
         price: 50,
         sku: 'SKU563',
         description: 'asdlkfj',
@@ -78,7 +79,8 @@ test.group('Core [products.update]', (group) => {
       .guard('api').loginAs(user).json({
         categoryId: category.id,
         name: 'Product Name',
-        publishedAt: null,
+        type: 'general',
+        status: 'draft',
         price: 50,
         sku: 'SKU563',
         description: '',
@@ -101,7 +103,8 @@ test.group('Core [products.update]', (group) => {
         categoryId: category.id,
         name: 'Product Name',
         description: 'Product descritpion...',
-        publishedAt: null,
+        type: 'general',
+        status: 'draft',
         price: 50,
         sku: '',
         isCustomizable: false,
@@ -115,14 +118,14 @@ test.group('Core [products.update]', (group) => {
 
   test('it do not allow user to remove product category.', async ({client, route, assert}) => {
     const {
-      id, name, description, publishedAt, price, sku,
+      id, name, description, status, price, sku,
     } = await ProductFactory.with('categories', 1).create()
 
     const user = await UserFactory.with('role').create()
 
     const response = await client.put(route('core.products.update', {id}))
       .guard('api').loginAs(user).json({
-        name, description, sku, publishedAt, price, isCustomizable: false, isPopular: false,
+        name, description, sku, status, price, isCustomizable: false, isPopular: false,
       })
 
     response.assertStatus(422)
@@ -141,7 +144,8 @@ test.group('Core [products.update]', (group) => {
         name: 'Product Name',
         description: 'Product descritpion...',
         sku: 'SKU563',
-        publishedAt: null,
+        type: 'general',
+        status: 'draft',
         price: '',
         isCustomizable: false, isPopular: false,
       })
@@ -167,7 +171,8 @@ test.group('Core [products.update]', (group) => {
         price,
         description,
         sku,
-        publishedAt: null,
+        type: 'general',
+        status: 'draft',
         isCustomizable: false,
         isPopular: false,
       })
@@ -187,7 +192,9 @@ test.group('Core [products.update]', (group) => {
       .guard('api').loginAs(user)
       .json({
         categoryId: category.id,
-        name, price, description, sku, publishedAt: DateTime.now(),
+        name, price, description, sku,
+        type: 'general',
+        status: 'published',
         isCustomizable: false,
         isPopular: false,
       })
@@ -211,7 +218,8 @@ test.group('Core [products.update]', (group) => {
         name: 'Demo Updated',
         description: 'Demo description updated...',
         sku: 'SKU563',
-        publishedAt: DateTime.now(),
+        type: 'general',
+        status: 'published',
         isCustomizable: false,
         isPopular: false,
       })
