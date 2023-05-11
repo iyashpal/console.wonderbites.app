@@ -3,10 +3,10 @@ import React, {Fragment} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 
 type ModalProps = {
-  children: any,
   show: boolean,
   className?: string,
   onClose?: () => void,
+  children: JSX.Element | JSX.Element[] | React.ReactElement | React.ReactElement[],
 }
 
 export default function Modal({show = false, onClose, children, className = ''}: ModalProps) {
