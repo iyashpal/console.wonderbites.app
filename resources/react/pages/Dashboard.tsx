@@ -35,25 +35,25 @@ export default function Dashboard() {
             <h2 className={`text-2xl font-bold text-red-primary`}>
               {greeting()}
             </h2>
-            <p className={`mt-1`}>Welcome Back {user.id ? user.name : 'User'}</p>
+            <p className={`mt-1`}>Welcome Back <span className='font-semibold'>{user.id ? user.name : 'User'}</span></p>
           </div>
           <div className={`grid grid-cols-4 gap-4 sm:gap-6 mt-5`}>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+            <div className="h-40 rounded-md shadow-md relative bg-white text-gray-400 flex items-center justify-center">
               Coming soon...
             </div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+            <div className="h-40 rounded-md shadow-md relative bg-white text-gray-400 flex items-center justify-center">
               Coming soon...
             </div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+            <div className="h-40 rounded-md shadow-md relative bg-white text-gray-400 flex items-center justify-center">
               Coming soon...
             </div>
-            <div className="h-40 rounded-md border border-gray-100 shadow-md relative bg-gray-50 text-gray-300 flex items-center justify-center">
+            <div className="h-40 rounded-md shadow-md relative bg-white text-gray-400 flex items-center justify-center">
               Coming soon...
             </div>
           </div>
           <div className={`grid grid-cols-4 gap-4 sm:gap-6 mt-5`}>
-            <div className="col-span-3 space-y-3">
-              <div className={`rounded-md border border-gray-100 shadow-md relative p-4 sm:p-6`}>
+            <div className="col-span-3 space-y-4 sm:space-y-6">
+              <div className={`rounded-md bg-white shadow-md relative p-4 sm:p-6`}>
                 <div className="">
                   <h2 className={`text-lg font-semibold`}>Quick Features</h2>
                   <p className={`text-sm`}>Get Started</p>
@@ -109,27 +109,27 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className={`rounded-md border border-gray-100 shadow-md relative p-4 sm:p-6`}>
+              <div className={`rounded-md bg-white shadow-md relative p-4 sm:p-6`}>
                 <div className="">
                   <h2 className={`text-lg font-semibold`}>General Info</h2>
                   <p className={`text-sm`}>Statistics</p>
                 </div>
-                <div className="h-40 bg-gray-50 rounded mt-5 text-gray-300 flex items-center justify-center">
+                <div className="h-40 border-2 border-dashed rounded mt-5 text-gray-400 flex items-center justify-center">
                   Coming soon...
                 </div>
               </div>
             </div>
-            <div className="rounded-md border border-gray-100 shadow-md relative p-4 sm:p-6">
+            <div className="rounded-md bg-white shadow-md relative p-4 sm:p-6">
               <div className="">
                 <h2 className={`text-lg font-semibold`}>Add Notification</h2>
                 <p className={`text-sm`}>Quick action to add notification</p>
               </div>
               <div className="pt-5 space-y-5">
                 <div className={`block`}>
-                  <input className={`w-full placeholder:font-medium border-0 shadow border border-gray-50`} type="text" placeholder={`Title`}/>
+                  <input className={`w-full placeholder:font-medium border border-gray-300`} type="text" placeholder={`Title`}/>
                 </div>
                 <div className={`block`}>
-                  <textarea className={`w-full placeholder:font-medium border-0 shadow border border-gray-50`} rows={13} placeholder={`Content`}></textarea>
+                  <textarea className={`w-full placeholder:font-medium border border-gray-300`} rows={13} placeholder={`Content`}></textarea>
                 </div>
                 <div className={`block`}>
                   <button className={`w-full inline-flex items-center justify-center border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2`}>Publish</button>
@@ -138,12 +138,12 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="grid grid-cols-4 pt-5">
-            <div className={`col-span-4 rounded-md border border-gray-100 shadow-md relative p-4 sm:p-6`}>
+            <div className={`col-span-4 rounded-md bg-white shadow-md relative p-4 sm:p-6`}>
               <div className="">
                 <h2 className={`text-lg font-semibold`}>Total Users</h2>
                 <p className={`text-sm`}>All users on this site</p>
               </div>
-              <div className="h-40 bg-gray-50 rounded mt-5 text-gray-300 flex items-center justify-center">
+              <div className="h-40 border-2 border-dashed rounded mt-5 text-gray-400 flex items-center justify-center">
                 Coming soon...
               </div>
             </div>
