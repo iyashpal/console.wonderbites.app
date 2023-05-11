@@ -29,6 +29,7 @@ export default class UpdateValidator {
     ]),
     categoryId: schema.number([
       rules.required(),
+      rules.exists({table: 'categories', column: 'id'}),
     ]),
     price: schema.number([
       rules.required(),
@@ -65,5 +66,7 @@ export default class UpdateValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'categoryId.exists': 'Select a valid category.',
+  }
 }
