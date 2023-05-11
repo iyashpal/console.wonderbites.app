@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.text('description').nullable()
       table.string('price').defaultTo(0)
       table.boolean('status').defaultTo(1)
+      table.timestamp('published_at', { useTz: true })
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
