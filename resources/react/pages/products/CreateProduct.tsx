@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Category } from '~/contracts/schema';
 import { useProductForm } from '@/hooks/forms';
+import Resources from '@/components/resources';
+import { useLoaderData } from "react-router-dom";
 import InputError from '@/components/Form/InputError'
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
-import { Link, Form, useLoaderData } from "react-router-dom";
 import { ChevronDownIcon, ChevronRightIcon, PauseCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 export default function CreateProduct() {
@@ -28,135 +29,116 @@ export default function CreateProduct() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
-        <div className="shadow border bg-white">
-          <div className="p-4 sm:p-6 border-b">
-            <h1 className={'font-semibold'}>Add Product</h1>
-          </div>
-          <Form method='post' onSubmit={form.onSubmit.create} encType='multipart/form-data'>
-            <div className="p-4 sm:p-6 md:p-8">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3 relative">
-                  <label htmlFor="name" className="block text-sm font-bold text-gray-700">
-                    Name <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.name} />
-                </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
-                    SKU <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.sku} />
-                </div>
-
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
-                    Category <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option>Select Category</option>
-                    {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
-                  </select>
-                  <InputError error={form.errors?.categoryId} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="price" className="block text-sm font-bold text-gray-700">
-                    Price <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} min={0} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.price} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="calories" className="block text-sm font-bold text-gray-700">
-                    Calories
-                  </label>
-                  <input type="text" defaultValue={form.input.value('calories')} onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-                  <InputError error={form.errors?.calories} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
-                    Image <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
-                  <InputError error={form.errors?.thumbnail} />
-                </div>
-
-                <div className="col-span-6">
-                  <label htmlFor="description" className="block text-sm font-bold text-gray-700">
-                    Description <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <textarea name="description" defaultValue={form.input.value('description')} onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-                  <InputError error={form.errors?.description} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
-                    Is Customizable ?<sup className='text-red-primary'>*</sup>
-                  </label>
-                  <select defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={1}>Yes</option>
-                    <option value={0}>No</option>
-                  </select>
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
-                    Is Popular ?<sup className='text-red-primary'>*</sup>
-                  </label>
-                  <select id="popular" defaultValue={form.input.value('isPopular')} onChange={form.input.onChange.isPopular} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={0}>No</option>
-                    <option value={1}>Yes</option>
-                  </select>
-                  <InputError error={form.errors?.isPopular} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
-                    Product Type ?<sup className='text-red-primary'>*</sup>
-                  </label>
-                  <select id="popular" defaultValue={form.input.value('type')} onChange={form.input.onChange.type} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={'general'}>General</option>
-                    <option value={'variable'}>Variable</option>
-                  </select>
-                  <InputError error={form.errors?.type} />
-                </div>
-
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="status" className="block text-sm font-bold text-gray-700">
-                    Status <sup className='text-red-primary'>*</sup>
-                  </label>
-                  <select id="status" defaultValue={form.input.value('status')} onChange={form.input.onChange.status} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                    <option value={'draft'}>Draft</option>
-                    <option value={'published'}>Published</option>
-                  </select>
-                  <InputError error={form.errors?.status} />
-                </div>
-
-                <FilesUpload />
-
-              </div>
-
-              <div className="pt-4 sm:pt-6 md:pt-8">
-
-                <div className="flex justify-end">
-
-                  <Link to="/app/products" className="rounded-md border border-gray-300 bg-white py-2 px-8 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Cancel</Link>
-
-                  <button type="submit" className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-8 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Save</button>
-
-                </div>
-
-              </div>
-
+        <Resources.Form title='Add Product' backUrl='/app/products' onSubmit={form.onSubmit.create} processing={form.isProcessing}>
+          <div className="grid grid-cols-6 gap-6">
+            <div className="col-span-6 sm:col-span-3 relative">
+              <label htmlFor="name" className="block text-sm font-bold text-gray-700">
+                Name <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="text" defaultValue={form.input.value('name')} onChange={form.input.onChange.name} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.name} />
             </div>
-          </Form>
-        </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
+                SKU <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="text" defaultValue={form.input.value('sku')} onChange={form.input.onChange.sku} name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.sku} />
+            </div>
+
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="categoryId" className="block text-sm font-bold text-gray-700">
+                Category <sup className='text-red-primary'>*</sup>
+              </label>
+              <select id="categoryId" onChange={form.input.onChange.categoryId} name="categoryId" autoComplete="categoryId" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                <option>Select Category</option>
+                {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
+              </select>
+              <InputError error={form.errors?.categoryId} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="price" className="block text-sm font-bold text-gray-700">
+                Price <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="number" defaultValue={form.input.value('price')} onChange={form.input.onChange.price} min={0} name="price" id="price" autoComplete="email" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.price} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="calories" className="block text-sm font-bold text-gray-700">
+                Calories
+              </label>
+              <input type="text" defaultValue={form.input.value('calories')} onChange={form.input.onChange.calories} name="calories" id="calories" autoComplete="calories" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.calories} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
+                Image <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="file" accept={'image/*'} onChange={form.input.onChange.thumbnail} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
+              <InputError error={form.errors?.thumbnail} />
+            </div>
+
+            <div className="col-span-6">
+              <label htmlFor="description" className="block text-sm font-bold text-gray-700">
+                Description <sup className='text-red-primary'>*</sup>
+              </label>
+              <textarea name="description" defaultValue={form.input.value('description')} onChange={form.input.onChange.description} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+              <InputError error={form.errors?.description} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="customization" className="block text-sm font-bold text-gray-700">
+                Is Customizable ?<sup className='text-red-primary'>*</sup>
+              </label>
+              <select defaultValue={form.input.value('isCustomizable')} onChange={form.input.onChange.isCustomizable} name="customization" id="customization" autoComplete="customization" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                <option value={1}>Yes</option>
+                <option value={0}>No</option>
+              </select>
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
+                Is Popular ?<sup className='text-red-primary'>*</sup>
+              </label>
+              <select id="popular" defaultValue={form.input.value('isPopular')} onChange={form.input.onChange.isPopular} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                <option value={0}>No</option>
+                <option value={1}>Yes</option>
+              </select>
+              <InputError error={form.errors?.isPopular} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="popular" className="block text-sm font-bold text-gray-700">
+                Product Type ?<sup className='text-red-primary'>*</sup>
+              </label>
+              <select id="popular" defaultValue={form.input.value('type')} onChange={form.input.onChange.type} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                <option value={'general'}>General</option>
+                <option value={'variable'}>Variable</option>
+              </select>
+              <InputError error={form.errors?.type} />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label htmlFor="status" className="block text-sm font-bold text-gray-700">
+                Status <sup className='text-red-primary'>*</sup>
+              </label>
+              <select id="status" defaultValue={form.input.value('status')} onChange={form.input.onChange.status} name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+                <option value={'draft'}>Draft</option>
+                <option value={'published'}>Published</option>
+              </select>
+              <InputError error={form.errors?.status} />
+            </div>
+
+            <FilesUpload />
+
+          </div>
+        </Resources.Form>
       </div>
     </div>
   </>

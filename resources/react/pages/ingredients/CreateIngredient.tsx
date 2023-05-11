@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import FormCard from "@/components/FormCard";
 import { Category } from "~/contracts/schema";
+import Resources from "@/components/resources";
 import { useLoaderData } from "react-router-dom";
 import { useIngredientForm } from "@/hooks/forms";
 import InputError from "@/components/Form/InputError";
@@ -22,7 +22,7 @@ export default function CreateIngredient() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
 
-        <FormCard title="Add Ingredient" onSubmit={form.onSubmit.create} backUrl="/app/ingredients" processing={form.isProcessing}>
+        <Resources.Form title="Add Ingredient" onSubmit={form.onSubmit.create} backUrl="/app/ingredients" processing={form.isProcessing}>
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 relative">
               <label htmlFor="name" className="block text-sm font-bold text-gray-700">
@@ -118,7 +118,7 @@ export default function CreateIngredient() {
               <InputError error={form.errors?.publishedAt}>{form.errors.publishedAt}</InputError>
             </div>
           </div>
-        </FormCard>
+        </Resources.Form>
       </div>
     </div>
   </>
