@@ -92,7 +92,7 @@ function CheckoutItems({ category }: { category: Category }) {
   }
 
   return (
-    <div className='shadow-md p-4 sm:p-6 md:p-8 mt-4'>
+    <div className='shadow-md p-4 sm:p-6 md:p-8 mt-4 bg-white'>
       <div>
         <label className="text-base font-semibold text-gray-900">Checkout Items</label>
         <p className="text-sm text-gray-500">Select all applicable checkout items for <b>{category.name}</b>?</p>
