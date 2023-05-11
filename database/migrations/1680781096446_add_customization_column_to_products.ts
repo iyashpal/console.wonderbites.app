@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   public async up () {
     this.schema.table(this.tableName, (table) => {
-      table.boolean('is_customizable').after('published_at').defaultTo(true)
+      table.boolean('is_customizable').after('thumbnail').defaultTo(true)
     })
   }
 
