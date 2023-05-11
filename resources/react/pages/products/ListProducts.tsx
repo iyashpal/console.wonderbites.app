@@ -1,30 +1,29 @@
 import Skeleton from './skeleton'
 import Icons from '~/helpers/icons'
-import {Product} from '~/contracts/schema'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
+import { Product } from '~/contracts/schema'
 import * as Alert from '@/components/alerts'
-import {useDataLoader, useFlash} from '~/hooks'
-import Pagination from '~/components/Pagination'
 import TrashModal from '@/components/TrashModal'
-import {MetaData} from '~/contracts/pagination'
-import {ListFilters, ListTable} from '@/components/page'
+import { useDataLoader, useFlash } from '~/hooks'
+import { MetaData } from '~/contracts/pagination'
+import { ResourceList } from '@/components/resources'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const columns = [
-  {name: 'ID', options: {className: 'text-center'}},
-  {name: 'SKU', options: {className: 'text-left'}},
-  {name: 'Product Name', options: {className: 'text-left'}},
-  {name: 'Price', options: {className: 'text-center'}},
-  {name: 'Image', options: {className: 'text-center'}},
-  {name: 'Type', options: {className: 'text-center'}},
-  {name: 'Status', options: {className: 'text-left'}},
+  { name: 'ID', options: { className: 'text-center' } },
+  { name: 'SKU', options: { className: 'text-left' } },
+  { name: 'Product Name', options: { className: 'text-left' } },
+  { name: 'Price', options: { className: 'text-center' } },
+  { name: 'Image', options: { className: 'text-center' } },
+  { name: 'Type', options: { className: 'text-center' } },
+  { name: 'Status', options: { className: 'text-left' } },
 ]
 const sortByFilters = [
-  {label: 'ID', value: 'id', icon: <Icons.Outline.Hashtag className="h-5 w-5" aria-hidden="true"/>},
-  {label: 'Date', value: 'date', icon: <Icons.Outline.CalendarDays className="h-5 w-5" aria-hidden="true"/>},
-  {label: 'Name', value: 'name', icon: <Icons.Outline.Bookmark className="h-5 w-5" aria-hidden="true"/>},
-  {label: 'Price', value: 'price', icon: <Icons.Outline.CurrencyDollar className="h-5 w-5" aria-hidden="true"/>},
+  { label: 'ID', value: 'id' },
+  { label: 'Date', value: 'date' },
+  { label: 'Name', value: 'name' },
+  { label: 'Price', value: 'price' },
 ]
 
 export default function ListProducts() {
@@ -38,7 +37,7 @@ export default function ListProducts() {
   const [isTrashing, setIsTrashing] = useState<boolean>(false)
 
   useEffect(() => {
-    loader.sync({params: {page: searchParams.get('page') ?? 1}})
+    loader.sync({ params: { page: searchParams.get('page') ?? 1 } })
   }, [searchParams, location])
 
   function onDeleteProduct() {
@@ -62,7 +61,7 @@ export default function ListProducts() {
     {loader.isProcessed() ? (
       <div className="py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-          <Breadcrumb pages={[{name: 'Products'}]}/>
+          <Breadcrumb pages={[{ name: 'Products' }]} />
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
@@ -70,11 +69,14 @@ export default function ListProducts() {
             <Alert.Success className={'mb-6'}>Product deleted successfully</Alert.Success>
           </>}
 
-          <ListFilters create={{url: '/app/products/create', label: 'Add Product'}} sortBy={sortByFilters}/>
-
-          <ListTable
-            thead={columns}
-            tbody={loader.response.data.map((product) => ([
+          <ResourceList
+            columns={columns}
+            sorting={sortByFilters}
+            data={loader.response.data}
+            metadata={loader.response.meta}
+            createLink={{ label: 'Add Product', href: '/app/products/create' }}
+          >
+            {({ data }) => data.map((product) => ([
               product.id,
               product.sku,
               <Link to={`/app/products/${product.id}`}>
@@ -82,7 +84,7 @@ export default function ListProducts() {
               </Link>,
               product.price,
               <div className={'rounded-full overflow-hidden group w-9 h-9 mx-auto relative cursor-pointer z-0'}>
-                <img className={'w-9 h-9 rounded-full object-cover'} src={product.thumbnail_url} alt={product.name}/>
+                <img className={'w-9 h-9 rounded-full object-cover'} src={product.thumbnail_url} alt={product.name} />
                 {((product.meta.media_count ?? 0) > 0) && <>
                   <span className="hidden group-hover:flex items-center justify-center font-semibold text-xs absolute inset-0 text-white bg-gray-900/30">+{product.meta.media_count}</span>
                 </>}
@@ -91,29 +93,19 @@ export default function ListProducts() {
               <span className='capitalize'>{product.status}</span>,
               <div className="flex item-center justify-center gap-x-1">
                 <Link to={`/app/products/${product.id}/edit`} className={'action:button button:blue'}>
-                  <Icons.Outline.PencilSquare className={'w-5 h-5'}/>
+                  <Icons.Outline.PencilSquare className={'w-5 h-5'} />
                 </Link>
 
                 <Link to={`/app/products/${product.id}`} className={'action:button button:green'}>
-                  <Icons.Outline.Eye className={'w-5 h-5'}/>
+                  <Icons.Outline.Eye className={'w-5 h-5'} />
                 </Link>
 
                 <button onClick={() => toggleTrash(product)} className={'action:button button:red'}>
-                  <Icons.Outline.Trash className={'w-5 h-5'}/>
+                  <Icons.Outline.Trash className={'w-5 h-5'} />
                 </button>
               </div>
             ]))}
-            empty={(
-              <Alert.Warning>
-                No products available.{' '}
-                <Link to={'/app/products/create'} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                  Click here to add more products.
-                </Link>
-              </Alert.Warning>
-            )}
-          />
-
-          <Pagination meta={loader.response.meta}/>
+          </ResourceList>
         </div>
         <TrashModal
           show={isTrashing}
@@ -124,6 +116,6 @@ export default function ListProducts() {
           onDelete={onDeleteProduct}
         />
       </div>
-    ) : (<Skeleton.List.Page/>)}
+    ) : (<Skeleton.List.Page />)}
   </>
 }
