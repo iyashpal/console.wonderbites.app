@@ -1,5 +1,5 @@
-import {MetaData} from '~/contracts/pagination';
 import {Product} from '~/contracts/schema';
+import {MetaData} from '~/contracts/pagination';
 import {Link, useLocation} from "react-router-dom";
 import {Fragment, useEffect, useState} from "react";
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/24/outline';
@@ -150,7 +150,7 @@ export default function Pagination({className, meta, url}: ComponentProps) {
 
 
   return <>
-    <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 border flex items-center justify-between'}`}>
+    <div className={`${className ?? 'px-4 sm:px-6 md:px-8 py-4 border flex items-center justify-between bg-white'}`}>
 
       <div>Showing {firstItem()} to {lastItem()} of {total()} results</div>
 
