@@ -62,7 +62,7 @@ export default function CuisineCategories({ categories, cuisine }: { cuisine: Cu
 
   return <>
     <div className={'mx-auto max-w-7xl px-4 sm:px-6 md:px-8'}>
-      <div className="shadow">
+      <div className="shadow bg-white">
         <div className="sm:flex sm:items-center p-4 sm:p-6">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">Categories</h1>

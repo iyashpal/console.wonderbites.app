@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { useFlash } from '@/hooks'
+import { Details } from '@/components/Show'
 import { useEffect, useState } from 'react'
 import * as Alert from '@/components/alerts'
 import TrashModal from '@/components/TrashModal'
@@ -7,11 +7,10 @@ import { ShowCuisineSkeleton } from './skeleton'
 import { Category, Cuisine } from '~/contracts/schema'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import CuisineCategories from './Partials/CuisineCategories'
-import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 
 export default function ShowCuisine() {
-  const { cuisine, categories } = useLoaderData() as {cuisine: Cuisine, categories: Category[]}
+  const { cuisine, categories } = useLoaderData() as { cuisine: Cuisine, categories: Category[] }
   const flash = useFlash()
   const navigateTo = useNavigate()
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
@@ -52,70 +51,21 @@ export default function ShowCuisine() {
             <Alert.Success className={'mt-4'}>Cuisine category deleted successfully.</Alert.Success>
           </>}
           <div className="py-4">
-            <div className="shadow px-4 pt-4 sm:px-6 sm:pt-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="font-bold text-xl">{cuisine.name}</span>
-                </div>
-                <div className="text-sm">
-                  <p>Created on: {DateTime.fromISO(cuisine.created_at).toLocaleString(DateTime.DATE_MED)}</p>
-                  <p>By: {cuisine.user?.name || 'Unknown'}</p>
-                </div>
-              </div>
-              <div>
-                <p className={'font-medium text-sm mb-3'}>Cuisine Details</p>
-                <div className={'-mx-4 sm:-mx-6 overflow-x-auto'}>
-                  <table className={'table-auto w-full'}>
-                    <thead>
-                      <tr>
-                        <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Name</th>
-                        <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>ID</th>
-                        <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Image</th>
-                        <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Description</th>
-                        <th className={'text-left px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Status</th>
-                        <th className={'text-center px-4 sm:px-6 py-2 bg-gray-50 border-y border-gray-300 uppercase text-sm'}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
-                          <span className={'text-red-primary font-bold'}>
-                            {cuisine.name}
-                          </span>
-                        </td>
-                        <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
-                          {cuisine.id}
-                        </td>
-                        <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
-                          <div className={''}>
-                            <img src={cuisine.thumbnail_url} alt={cuisine.name} className={'w-10 h-10 rounded-full object-cover shadow border-2 border-gray-300'}/>
-                          </div>
-                        </td>
-                        <td className={'text-left px-4 sm:px-6 py-2'}>
-                          {cuisine.description}
-                        </td>
-
-                        <td className={'text-left px-4 sm:px-6 py-2 whitespace-nowrap'}>
-                          <span className={'font-bold'}>
-                            {cuisine.status === 1 ? <><span className={'text-red-primary'}>Active</span></> : 'Inactive'}
-                          </span>
-                        </td>
-                        <td className={'text-center px-4 sm:px-6 py-2 whitespace-nowrap'}>
-                          <div className="flex item-center justify-center gap-x-1">
-                            <Link to={`/app/cuisines/${cuisine.id}/edit`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                              <PencilSquareIcon className={'w-5 h-5'} />
-                            </Link>
-                            <button onClick={() => setIsTrashing(true)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                              <TrashIcon className={'w-5 h-5'} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            <Details
+              module="Cuisine"
+              title={cuisine.name}
+              by={cuisine.user?.name ?? ''}
+              date={cuisine.created_at}
+              onTrash={() => setIsTrashing(true)}
+              onEdit={() => navigateTo(`/app/banners/${cuisine.id}/edit`)}
+              fields={[
+                { name: 'ID', value: cuisine.id },
+                { name: 'Name', value: cuisine.name },
+                { name: 'Image', value: <img alt={cuisine.name} src={cuisine.thumbnail_url} className="w-10 h-10 rounded-full object-cover shadow border-2 border-gray-300" /> },
+                { name: 'Description', value: cuisine.description, onModal: true },
+                { name: 'Status', value: cuisine.status === 1 ? <><span className={'text-red-primary'}>Active</span></> : 'Inactive' },
+              ]}
+            />
           </div>
         </div>
       </div>
