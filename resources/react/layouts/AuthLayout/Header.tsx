@@ -16,7 +16,7 @@ export default function Header({onToggleSidebar}: { onToggleSidebar: () => void 
   }
   return <>
     {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
-    <Popover as="header" className={({open}) => [open && 'fixed inset-0 z-40 overflow-y-auto', 'bg-white shadow-md lg:static lg:overflow-y-visible'].join(' ')}>
+    <Popover as="header" className={({open}) => `bg-white shadow-md lg:static lg:overflow-y-visible ${open ? 'fixed inset-0 z-40 overflow-y-auto' : ''}`}>
       {() => (
         <>
           <div className="mx-auto px-3 sm:px-6 py-4">
