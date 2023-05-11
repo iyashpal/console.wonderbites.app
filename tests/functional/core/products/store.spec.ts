@@ -104,6 +104,8 @@ test.group('Core [products.store]', (group) => {
         categoryId: category.id,
         isPopular: true,
         isCustomizable: false,
+        type: 'general',
+        status: 'published',
       })
 
     response.assertStatus(200)
@@ -125,6 +127,8 @@ test.group('Core [products.store]', (group) => {
         categoryId: category.id,
         isPopular: true,
         isCustomizable: false,
+        type: 'general',
+        status: 'draft',
       })
 
     response.assertStatus(200)
@@ -148,7 +152,8 @@ test.group('Core [products.store]', (group) => {
         isCustomizable: true,
         description: 'this is demo description...',
         categoryId: category.id,
-        publishedAt: DateTime.now().toString(),
+        type: 'general',
+        status: 'published',
       })
 
     response.assertStatus(200)

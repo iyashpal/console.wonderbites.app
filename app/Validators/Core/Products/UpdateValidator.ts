@@ -39,15 +39,17 @@ export default class UpdateValidator {
     sku: schema.string({}, [
       rules.required(),
     ]),
-    calories: schema.string.optional({trim: true}),
-    publishedAt: schema.date.nullableAndOptional(),
+    calories: schema.string.optional({ trim: true }),
     thumbnail: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
     }),
     isCustomizable: schema.boolean(),
     isPopular: schema.boolean(),
-    type: schema.string({trim: true}, [
+    type: schema.string({ trim: true }, [
+      rules.required(),
+    ]),
+    status: schema.string({ trim: true }, [
       rules.required(),
     ]),
   })

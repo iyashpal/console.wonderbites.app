@@ -45,10 +45,12 @@ export default class CreateValidator {
       size: '1mb',
       extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
     }, [rules.required()]),
-    publishedAt: schema.date.nullableAndOptional(),
     isCustomizable: schema.boolean(),
     isPopular: schema.boolean(),
     type: schema.string({trim: true}, [
+      rules.required(),
+    ]),
+    status: schema.string({ trim: true }, [
       rules.required(),
     ]),
   })

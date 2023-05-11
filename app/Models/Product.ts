@@ -39,7 +39,7 @@ export default class Product extends BaseModel {
   public type: string
 
   @column()
-  public status: number
+  public status: string
 
   @column.dateTime()
   public publishedAt: DateTime | null

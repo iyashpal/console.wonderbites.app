@@ -14,7 +14,7 @@ import {Link, useLocation, useNavigate, useSearchParams} from 'react-router-dom'
 const columns = [
   {name: 'ID', options: {className: 'text-center'}},
   {name: 'SKU', options: {className: 'text-left'}},
-  {name: 'Product Name', options: {className: 'text-center'}},
+  {name: 'Product Name', options: {className: 'text-left'}},
   {name: 'Price', options: {className: 'text-center'}},
   {name: 'Image', options: {className: 'text-center'}},
   {name: 'Type', options: {className: 'text-center'}},
@@ -88,7 +88,7 @@ export default function ListProducts() {
                 </>}
               </div>,
               <span className={'uppercase'}>{product.type}</span>,
-              product.published_at ? 'Published' : 'Draft',
+              <span className='capitalize'>{product.status}</span>,
               <div className="flex item-center justify-center gap-x-1">
                 <Link to={`/app/products/${product.id}/edit`} className={'action:button button:blue'}>
                   <Icons.Outline.PencilSquare className={'w-5 h-5'}/>

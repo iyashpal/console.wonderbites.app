@@ -5,8 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {ChangeEvent, FormEvent, useState} from "react";
 
 export default function useProductForm(fields: FormFields) {
-  const navigateTo = useNavigate()
   const flash = useFlash()
+  const navigateTo = useNavigate()
   const [createForm, setCreateForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [thumbnail, setThumbnail] = useState<string | Blob>('')
@@ -48,8 +48,8 @@ export default function useProductForm(fields: FormFields) {
    * Event handler for the status field.
    * @param event
    */
-  function onChangePublishedAt(event: ChangeEvent<HTMLSelectElement>) {
-    setCreateForm(payload => ({...payload, publishedAt: event.target.value}))
+  function onChangeStatus(event: ChangeEvent<HTMLSelectElement>) {
+    setCreateForm(payload => ({...payload, status: event.target.value}))
   }
 
   /**
@@ -175,12 +175,12 @@ export default function useProductForm(fields: FormFields) {
         name: onChangeName,
         type: onChangeType,
         price: onChangePrice,
+        status: onChangeStatus,
         calories: onChangeCalories,
         thumbnail: onChangeThumbnail,
         isPopular: onChangeIsPopular,
         categoryId: onChangeCategoryId,
         description: onChangeDescription,
-        publishedAt: onChangePublishedAt,
         isCustomizable: onChangeIsCustomizable,
       },
     },
@@ -200,10 +200,9 @@ type FormFields = {
   calories: string,
   price: number | null,
   description: string,
-  status?: number,
   type: string,
   isCustomizable: boolean,
-  publishedAt: DateTime | string,
+  status: string,
   createdAt?: DateTime | string,
   updatedAt?: DateTime | string,
 }
@@ -212,11 +211,10 @@ type FormErrors = {
   name: string,
   price: string,
   calories: string,
-  status: string,
   isPopular: string,
   thumbnail: string,
   categoryId: string,
   description: string,
   type: string,
-  publishedAt: string,
+  status: string,
 }

@@ -4,6 +4,7 @@ import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Products/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
+import { DateTime } from 'luxon'
 
 export default class ProductsController {
   public async index ({response, request}: HttpContextContract) {
@@ -43,8 +44,9 @@ export default class ProductsController {
         calories: payload.calories,
         isPopular: payload.isPopular,
         description: payload.description,
-        publishedAt: payload.publishedAt,
+        publishedAt: payload.status === 'published' ? DateTime.now() : null,
         isCustomizable: payload.isCustomizable,
+        status: payload.status,
         thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
@@ -109,9 +111,10 @@ export default class ProductsController {
         calories: payload.calories,
         isPopular: payload.isPopular,
         description: payload.description,
-        publishedAt: payload.publishedAt,
         isCustomizable: payload.isCustomizable,
+        publishedAt: payload.status === 'published' ? DateTime.now() : null,
         thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : product.thumbnail,
+        status: payload.status,
       }).save()
 
       // Update the category ID
@@ -126,6 +129,7 @@ export default class ProductsController {
 
       response.ok(product)
     } catch (error) {
+      console.log(error)
       ExceptionResponse.use(error).resolve(response)
     }
   }
