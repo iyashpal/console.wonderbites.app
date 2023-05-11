@@ -121,7 +121,7 @@ export default function Sidebar({show, onToggleSidebar}: { show: boolean, onTogg
     </Transition.Root>
 
     {/* Static sidebar for desktop */}
-    <div className="hidden md:flex md:flex-col md:w-64 shadow-md border-2 border-slate-100 z-10">
+    <div className="hidden md:flex md:flex-col md:w-64 shadow-md z-10">
       {/* Sidebar component, swap this element with another sidebar if you like */}
       <div className="flex min-h-0 flex-1 flex-col bg-white">
         <div className="flex flex-1 flex-col max-h-content overflow-y-auto">

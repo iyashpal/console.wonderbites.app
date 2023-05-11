@@ -23,7 +23,7 @@ export default function Details({title, module, by, date, fields, onTrash, onEdi
   }
 
   return <>
-    <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 shadow">
+    <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 shadow bg-white">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">

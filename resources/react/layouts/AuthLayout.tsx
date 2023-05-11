@@ -27,7 +27,7 @@ export default function AuthLayout() {
 
   return (
     <>
-      <div className={'h-screen overflow-hidden'}>
+      <div className={'h-screen overflow-hidden bg-slate-50'}>
 
         <div className="flex flex-col h-full">
 
