@@ -1,1 +1,7 @@
-export { default as ResourceList } from './ResourceList'
+import ResourceList from './ResourceList'
+
+const Resources = {
+    List: ResourceList
+}
+
+export default Resources

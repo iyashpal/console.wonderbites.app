@@ -6,7 +6,7 @@ import { Ingredient } from '~/contracts/schema'
 import { useDataLoader, useFlash } from '@/hooks'
 import TrashModal from '@/components/TrashModal'
 import { MetaData } from '@/contracts/pagination'
-import { ResourceList } from '@/components/resources'
+import Resources from '@/components/resources'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -77,7 +77,7 @@ export default function ListIngredients() {
               <Alert.Success className={'mb-6'}>Ingredient deleted successfully</Alert.Success>
             </>}
 
-            <ResourceList
+            <Resources.List
               columns={columns}
               sorting={sortByFilters}
               data={loader.response.data}
@@ -107,7 +107,7 @@ export default function ListIngredients() {
                   </button>
                 </div>
               ]))}
-            </ResourceList>
+            </Resources.List>
           </div>
         </div>
 

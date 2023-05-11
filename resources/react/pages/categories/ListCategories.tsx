@@ -5,7 +5,7 @@ import { Category } from '~/contracts/schema'
 import TrashModal from '@/components/TrashModal'
 import { useDataLoader, useFlash } from '@/hooks'
 import { MetaData } from '@/contracts/pagination'
-import { ResourceList } from '@/components/resources'
+import Resources from '@/components/resources'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { ListPageSkeleton } from '@/components/skeletons'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
@@ -64,7 +64,7 @@ export default function ListCategories() {
             <Alert.Success className={'mb-6'}>Category deleted successfully</Alert.Success>
           </>}
 
-          <ResourceList
+          <Resources.List
             columns={columns}
             sorting={sorting}
             data={loader.response.data}
@@ -93,7 +93,7 @@ export default function ListCategories() {
                 </button>
               </div>
             ]))}
-          </ResourceList>
+          </Resources.List>
         </div>
       </div>
       <TrashModal

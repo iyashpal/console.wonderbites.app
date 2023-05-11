@@ -4,7 +4,7 @@ import Icons from '~/helpers/icons'
 import { Order } from "~/contracts/schema";
 import { useDataLoader } from "@/hooks";
 import { MetaData } from "@/contracts/pagination";
-import { ResourceList } from "@/components/resources";
+import Resources from "@/components/resources";
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 
@@ -39,7 +39,7 @@ export default function ListOrders() {
         <Breadcrumb pages={[{ name: 'Orders' }]} />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 mt-5 flex flex-col">
-        <ResourceList
+        <Resources.List
           columns={columns}
           sorting={sortByFilters}
           data={loader.response.data}
@@ -80,7 +80,7 @@ export default function ListOrders() {
               </button>
             </div>
           ]))}
-        </ResourceList>
+        </Resources.List>
       </div>
     </div>}
   </>
