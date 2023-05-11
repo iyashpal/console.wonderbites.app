@@ -1,4 +1,3 @@
-import {DateTime} from 'luxon'
 import {test} from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {CategoryFactory, ProductFactory, UserFactory} from 'Database/factories'
