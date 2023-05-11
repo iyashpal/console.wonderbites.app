@@ -124,7 +124,7 @@ test.group('API [checkout.process]', (group) => {
         fields: { street: null },
         assert: {
           errors: {
-            street: 'required validation failed',
+            street: 'requiredWhen validation failed',
           },
         },
       },
@@ -134,7 +134,7 @@ test.group('API [checkout.process]', (group) => {
         fields: { city: null },
         assert: {
           errors: {
-            city: 'required validation failed',
+            city: 'requiredWhen validation failed',
           },
         },
       },
@@ -144,8 +144,8 @@ test.group('API [checkout.process]', (group) => {
         fields: { city: null, street: null },
         assert: {
           errors: {
-            city: 'required validation failed',
-            street: 'required validation failed',
+            city: 'requiredWhen validation failed',
+            street: 'requiredWhen validation failed',
           },
         },
       },

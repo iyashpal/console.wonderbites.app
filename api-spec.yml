@@ -2192,7 +2192,7 @@ components:
               street:
                 type: string
                 example: XYZ
-                description: Street address is required when the orderType is delivery.
+                description: Street address is requiredwhen the orderType is delivery.
               city:
                 type: string
                 example: ABC
@@ -2223,11 +2223,11 @@ components:
               reservedSeats:
                 type: number
                 example: 5
-                description: This field is required when user select the orderType dine-in.
+                description: This field is requiredwhen user select the orderType dine-in.
               eatOrPickupTime:
                 type: string
                 example: 05:00 PM
-                description: This field is required when user select the orderType dine-in OR take-away.
+                description: This field is requiredwhen user select the orderType dine-in OR take-away.
               options:
                 type: object
               note:
