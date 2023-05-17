@@ -973,20 +973,6 @@ paths:
           schema:
             type: string
             default: null
-        - name: searchable[]
-          in: query
-          description: Specify the searchable areas of the `search` query parameter.
-          style: form
-          required: false
-          example:
-            - categories
-            - products
-          schema:
-            type: array
-            default: []
-            items:
-              type: string
-
         - name: with[]
           in: query
           description: Pass an optional attributes of product
