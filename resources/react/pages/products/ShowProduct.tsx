@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { useFlash } from '@/hooks'
 import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
+import Avatar from "@/components/Avatar";
 import { Details } from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
@@ -11,8 +12,9 @@ import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { useLoaderData, useLocation, useNavigate } from 'react-router-dom'
-import { useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
+import { Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
+import InputError from "@/components/Form/InputError";
 
 
 export default function ShowProduct() {
@@ -133,7 +135,7 @@ function ProductImages() {
 
   return <>
     <div className="relative group">
-      <img className={'w-12 h-12 rounded-full ring-2 ring-white '} src={product.thumbnail_url} alt={product.name} />
+      <Avatar className={'w-12 h-12 rounded-full'} src={product.thumbnail_url} alt={product.name} />
 
       <button onClick={() => setShow(true)} className="hidden group-hover:inline-flex group-hover:items-center group-hover:justify-center absolute top-0 left-0 w-12 h-12 rounded-full ring-2 ring-white bg-gray-900/70 hover:bg-gray-900/70 border-0 focus:outline-none text-white transition-colors ease-in-out duration-300">
         {product.media?.length === 0 ? <Icons.Outline.Plus className={'inline-flex h-5 w-5'} /> : `+${product.media?.length}`}
@@ -245,30 +247,31 @@ function ProductIngredients({ product }: { product: Product }) {
 
   return (
     <>
-      <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
-        <div className="sm:flex sm:items-center">
-          <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 text-gray-900">
-              Ingredients
-            </h1>
-            <p className="mt-2 text-sm text-gray-700 hidden">
-              A list of all the ingredients added to the product.
-            </p>
-          </div>
-          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-              <Icons.Outline.CloudArrowUp className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-              Import
-            </button>
+      <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow">
+        <div className="px-4 py-5 sm:px-6">
+          <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+            <div className="ml-4 mt-4">
+              <h3 className="text-base font-semibold leading-6 text-gray-900">Product Ingredients</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                A list of all the ingredients added to the product.
+              </p>
+            </div>
+            <div className="ml-4 mt-4 flex-shrink-0">
+              <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                <Icons.Outline.CloudArrowUp className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+                Import
+              </button>
+            </div>
           </div>
         </div>
-        <div className="mt-4 sm:mt-6 flow-root">
 
-          <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle">
+
+        <div className="flow-root">
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full align-middle">
               <table className="min-w-full divide-y divide-gray-300">
                 <thead>
-                  <tr className='bg-gray-100 border-gray-300 border-t'>
+                  <tr className='bg-gray-100'>
 
                     <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
                       <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
@@ -322,10 +325,8 @@ function ProductIngredients({ product }: { product: Product }) {
             </div>
           </div>
         </div>
+        <CreateNewIngredient />
       </div>
-
-      <CreateNewIngredient />
-
       <Modal show={ingredient?.id !== undefined} onClose={onClose} className={'max-w-lg'}>
         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
@@ -419,10 +420,10 @@ function IngredientRow({ ingredient, onTrash }: { ingredient: IngredientProduct,
       {ingredient.id}
     </td>
     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      <input onChange={onChangeQuantity} defaultValue={ingredient.meta.pivot_quantity} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none'} />
+      <input onChange={onChangeQuantity} defaultValue={ingredient.meta.pivot_quantity} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
     </td>
     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      <input onChange={onChangePrice} defaultValue={ingredient.meta.pivot_price} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none'} />
+      <input onChange={onChangePrice} defaultValue={ingredient.meta.pivot_price} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
     </td>
     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
       {resolveCategoryName(ingredient)}
@@ -488,7 +489,7 @@ function CreateNewIngredient() {
   }
 
   return <>
-    <div className='grid grid-cols-10 border-t border-gray-300 divide-x divide-gray-300'>
+    <div className='grid grid-cols-10 border-t border-gray-300 divide-x divide-gray-300 bg-white'>
       <div className={'col-span-3 text-sm text-gray-500 flex-auto relative max-w-sm pl-6'}>
         <Combobox value={selected} onChange={onSelectCategory}>
           <div className="relative">
@@ -535,10 +536,10 @@ function CreateNewIngredient() {
 }
 
 function ProductVariants({ product }: { product: Product }) {
-  const [showVariable, setShowVariable] = useState<boolean>(false)
+  const [showVariable, setShowVariable] = useState<Variant>({} as Variant)
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false)
   return <>
-    <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10">
+    <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
       <div className="px-4 py-5 sm:px-6">
         <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
           <div className="ml-4 mt-4">
@@ -554,100 +555,203 @@ function ProductVariants({ product }: { product: Product }) {
           </div>
         </div>
       </div>
-      <div className="px-4 sm:px-6">
-        <ul role="list" className="divide-y divide-gray-100">
-          {product.variants?.map((variant: Variant) => (
-            <li className="flex items-center justify-between gap-x-6 py-5">
-              <div className="min-w-0">
-                <div className="flex items-start gap-x-3">
-                  <p className="text-sm font-semibold leading-6 text-gray-900">{variant.name}</p>
-                  <p className="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">0</p>
-                </div>
-                <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                  <p className="whitespace-nowrap">Created at <time dateTime="2023-03-17T00:00Z">{DateTime.fromISO(variant.created_at).toFormat('LLL dd, yyyy')}</time></p>
-                  <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                    <circle cx="1" cy="1" r="1" />
-                  </svg>
-                  <p className="truncate">Created by {variant.user?.name}</p>
-                </div>
-              </div>
-              <div className="flex flex-none items-center gap-x-4">
-                <button onClick={() => setShowVariable(true)} className="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">View<span className="sr-only">, GraphQL API</span></button>
-              </div>
-            </li>
-          ))}
-        </ul>
+      <div className="">
+        <table className="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr className="divide-x divide-gray-200 bg-gray-100">
+              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 w-20">Image</th>
+              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Price</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">-</th>
+              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {product.variants?.map((variant: Variant) => (
+              <tr className="divide-x divide-gray-200">
+                <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
+                  <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
+                </td>
+                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
+                  <div className="font-medium text-gray-900">{variant.name}</div>
+                  <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                    <p className="whitespace-nowrap">Created at <time dateTime={variant.created_at}>{DateTime.fromISO(variant.created_at).toFormat('LLL dd, yyyy')}</time></p>
+                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
+                      <circle cx="1" cy="1" r="1" />
+                    </svg>
+                    <p className="truncate">Created by {variant.user?.name}</p>
+                  </div>
+                </td>
+                <td className="whitespace-nowrap p-4 text-sm text-gray-500 w-20">
+                  <input type="number" defaultValue={variant.price} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+                </td>
+                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
 
-        <ShowProductVariant open={showVariable} onClose={() => setShowVariable(false)} />
-        <CreateProductVariant open={showCreateForm} onClose={() => setShowCreateForm(false)} />
+                </td>
+                <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0 w-24">
+                  <div className="flex items-center gap-x-2">
+                    <button onClick={() => setShowVariable(variant)} className="action:button button:blue">
+                      <Icons.Outline.PencilSquare className="w-5 h-5" />
+                    </button>
+                    <button className="action:button button:red">
+                      <Icons.Outline.Trash className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+
+            {product.variants?.length === 0 && <>
+              <tr>
+                <td colSpan={5} className="whitespace-nowrap py-4 px-4 text-sm font-medium">
+                  <Alerts.Warning>
+                    No data available.{' '}
+                    <Link to={''} className="font-medium text-yellow-700 underline hover:text-yellow-600">
+                        Click here to add data.
+                      </Link>
+                  </Alerts.Warning>
+                </td>
+              </tr>
+            </>}
+          </tbody>
+        </table>
       </div>
+
+      <ShowProductVariant variant={showVariable} onClose={() => setShowVariable({} as Variant)} />
+      <CreateProductVariant open={showCreateForm} onClose={() => setShowCreateForm(false)} />
     </div>
   </>
 }
 
 
 function CreateProductVariant({ open, onClose }: { open: boolean, onClose: () => void }) {
+  const form = useProductVariantForm<{
+    name: string,
+    description: string,
+    proteins: string,
+    vegetables: string,
+    price: string,
+  }>()
 
+  useEffect(() => {
+    form.sync({
+      name: 'Hello',
+      description: 'This is description.',
+      proteins: '1',
+      vegetables: '3',
+      price: '50'
+    })
+
+    console.log(form.errors)
+  }, [])
   return (
     <Modal show={open} className={'max-w-3xl'} onClose={onClose}>
-      <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-        <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="ml-4 mt-2">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">New Variant</h3>
-          </div>
-          <div className="ml-4 mt-2 flex-shrink-0">
-            {/* <button type="button" className="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create new job</button> */}
-          </div>
-        </div>
-      </div>
-
-      <div className="relative py-6 flex-1 px-4 sm:px-6">
-
-        <div className="grid grid-cols-6 gap-6">
-          <div className="col-span-6 relative">
-            <label htmlFor="name" className="block text-sm font-bold text-gray-700">
-              Name <sup className='text-red-primary'>*</sup>
-            </label>
-            <input type="text" name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-            {/*<InputError error={form.errors?.name} />*/}
-          </div>
-
-          <div className="col-span-6">
-            <label htmlFor="description" className="block text-sm font-bold text-gray-700">
-              Description <sup className='text-red-primary'>*</sup>
-            </label>
-            <textarea name="description" rows={5} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-            {/*<InputError error={form.errors?.description} />*/}
-          </div>
-
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="sku" className="block text-sm font-bold text-gray-700">
-              Price <sup className='text-red-primary'>*</sup>
-            </label>
-            <input type="text" name="sku" id="sku" autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-            {/*<InputError error={form.errors?.sku} />*/}
-          </div>
-          <div className="col-span-6 sm:col-span-3">
-            <label htmlFor="status" className="block text-sm font-bold text-gray-700">
-              Status <sup className='text-red-primary'>*</sup>
-            </label>
-            <select id="status" name="status" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-              <option value={''}>Draft</option>
-              <option value={DateTime.now().toString()}>Published</option>
-            </select>
-            {/*<InputError error={form.errors?.status} />*/}
+      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+        <div className="px-4 py-5 sm:px-6">
+          <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
+            <div className="ml-4 mt-2">
+              <h3 className="text-base font-semibold leading-6 text-gray-900">New Variant</h3>
+            </div>
+            <div className="ml-4 mt-2 flex-shrink-0">
+              <button type="button" className="" onClick={onClose}>
+                <Icons.Outline.XMark className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
+        <div className="px-4 py-5 sm:p-6">
+          <div className="grid grid-cols-6 gap-6">
+            <div className="col-span-6 relative">
+              <label htmlFor="name" className="block text-sm font-bold text-gray-700">
+                Name <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="text" name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.name} />
+            </div>
 
+            <div className="col-span-6">
+              <label htmlFor="description" className="block text-sm font-bold text-gray-700">
+                Description <sup className='text-red-primary'>*</sup>
+              </label>
+              <textarea name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+              <InputError error={form.errors?.description} />
+            </div>
+            <div className="col-span-6">
+              <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
+                Image
+              </label>
+              <input type="file" accept={'image/*'} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
+              {/* <InputError error={form.errors?.thumbnail} /> */}
+            </div>
+            <div className="col-span-6 sm:col-span-2">
+              <label htmlFor="proteins" className="block text-sm font-bold text-gray-700">
+                Proteins <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="number" name="proteins" id="proteins" defaultValue={1} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.proteins} />
+            </div>
+            <div className="col-span-6 sm:col-span-2">
+              <label htmlFor="vegetables" className="block text-sm font-bold text-gray-700">
+                Vegetables <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="number" id="vegetables" name="vegetables" defaultValue={1} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.vegetables} />
+            </div>
+            <div className="col-span-6 sm:col-span-2">
+              <label htmlFor="price" className="block text-sm font-bold text-gray-700">
+                Price <sup className='text-red-primary'>*</sup>
+              </label>
+              <input type="number" name="price" id="price" defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors?.price} />
+            </div>
+          </div>
+        </div>
+        <div className="px-4 py-4 sm:px-6 bg-gray-50 flex items-center justify-end gap-x-4">
+          <button onClick={onClose} className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
+            Close
+          </button>
+          <button className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+            Save
+          </button>
+        </div>
       </div>
     </Modal>
   )
 }
 
 
-function ShowProductVariant({ open, onClose }: { open: boolean, onClose: () => void }) {
+function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
+  if (variant.id === undefined) {
+    return <></>
+  }
+
   return (
-    <div>
+    <div className="absolute bg-white inset-0">
+      <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <div className="ml-4 mt-4">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-base font-semibold leading-6 text-gray-900">{variant.name}</h3>
+                <p className="text-sm text-gray-500">
+                  <a href="#">{variant.description}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="ml-4 mt-4 flex flex-shrink-0 gap-x-2">
+            <button className="action:button button:red">
+              <Icons.Outline.Trash className="w-5 h-5" />
+            </button>
+            <button onClick={onClose} className="action:button button:blue">
+              <Icons.Outline.XMark className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
 
     </div>
   )
