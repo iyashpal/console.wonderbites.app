@@ -1,11 +1,11 @@
 import {DateTime} from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
+import VerificationCode from 'App/Models/VerificationCode'
 import Notifiable from 'App/Services/Notification/Notifiable'
 import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
 import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import {Cart, Address, Product, Wishlist, WonderPoint, Order, Review, Feedback, Role} from './index'
-import VerificationCode from 'App/Models/VerificationCode'
 
 export default class User extends Notifiable {
   @column({isPrimary: true})
