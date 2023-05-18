@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.bigInteger('user_id').unsigned().references('users.id').onDelete('RESTRICT')
       table.string('name')
       table.text('description').nullable()
+      table.jsonb('thumbnail').nullable()
       table.string('price').defaultTo(0)
       table.boolean('status').defaultTo(1)
       table.timestamp('published_at', { useTz: true })
