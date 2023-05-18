@@ -1,7 +1,8 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { Variant } from 'App/Models'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Variants/StoreValidator'
+import UpdateValidator from 'App/Validators/Core/Variants/UpdateValidator'
 
 export default class VariantsController {
   public async index ({}: HttpContextContract) {}
@@ -30,7 +31,16 @@ export default class VariantsController {
 
   public async edit ({}: HttpContextContract) {}
 
-  public async update ({}: HttpContextContract) {}
+  public async update ({ request, response, params }: HttpContextContract) {
+    try {
+      const $variant = await Variant.findOrFail(params.id)
+      const {name, price, description} = await request.validate(UpdateValidator)
+      await $variant.merge({name, price, description}).save()
+      response.ok($variant)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
+  }
 
   public async destroy ({}: HttpContextContract) {}
 }
