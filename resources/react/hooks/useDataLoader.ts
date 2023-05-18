@@ -3,8 +3,9 @@ import {useEffect, useState} from 'react'
 
 export default function useDataLoader<T>(url: string, config = {}) {
   const [data, setData] = useState<T>({} as T)
-  const [isProcessed, setIsProcessed] = useState<boolean>(false)
-  const [isProcessing, setIsProcessing] = useState<boolean>(false)
+  const [isFailed, setIsFailed] = useState(false)
+  const [isProcessed, setIsProcessed] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
     sync()
@@ -25,6 +26,7 @@ export default function useDataLoader<T>(url: string, config = {}) {
   }
 
   function handleError(axiosError) {
+    setIsFailed(true)
     return Promise.reject(axiosError)
   }
 
@@ -36,7 +38,7 @@ export default function useDataLoader<T>(url: string, config = {}) {
   return {
     sync,
     response: data,
-    isProcessed: () => isProcessed,
+    isProcessed: () => isProcessed && isFailed === false,
     isProcessing: () => isProcessing,
   }
 }

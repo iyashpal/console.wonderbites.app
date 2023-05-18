@@ -119,11 +119,6 @@ import ListWaitList from '~/pages/waitlist/ListWaitList';
  */
 import ListWonderPoints from '~/pages/wonderpoints/ListWonderPoints';
 
-/**
- * Error Views
- */
-import NotFound from '~/pages/errors/NotFound';
-
 
 const Views = {
 
@@ -224,10 +219,6 @@ const Views = {
 
   WonderPoints: {
     List: ListWonderPoints
-  },
-
-  Errors: {
-    NotFound: NotFound
   }
 }
 
