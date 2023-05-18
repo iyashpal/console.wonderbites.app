@@ -1,6 +1,6 @@
 import React from "react";
 
-interface AvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface AvatarProps extends React.ComponentProps<'img'> {
 
 }
 

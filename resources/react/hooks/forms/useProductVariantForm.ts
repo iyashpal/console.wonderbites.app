@@ -1,7 +1,6 @@
-import { Axios } from "@/helpers"
 import { useState } from "react"
-
-type ErrorsType<U> = { [key in keyof U]?: string }
+import { Axios } from "@/helpers"
+import { ErrorsType } from "@/contracts"
 
 export default function useProductVariantForm<T>() {
     const [form, setForm] = useState({} as T)
