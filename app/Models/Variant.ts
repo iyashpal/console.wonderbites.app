@@ -17,7 +17,7 @@ export default class Variant extends BaseModel {
   public thumbnail: AttachmentContract | null
 
   @column()
-  public description: string
+  public description?: string | null
 
   @column()
   public price: string | number
