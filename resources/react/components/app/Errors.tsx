@@ -8,12 +8,25 @@ export default function Errors() {
             return <ErrorContent status={error.status} title="Page not found" message="Sorry, we couldn’t find the page you’re looking for." />
         }
     }
+    else if (error instanceof Error) {
+        return (
+            <div id="error-page">
+                <h1>Oops! Unexpected Error</h1>
+                <p>Something went wrong.</p>
+                <p>
+                    <i>{error.message}</i>
+                </p>
+            </div>
+        );
+    } else {
+        return <ErrorContent
+            status="500"
+            title="Oops! Something went wrong."
+            message="An unknown error has occurred. Please try again later."
+        />;
+    }
 
-    return <ErrorContent
-        status={500}
-        title="Something went wrong"
-        message="The server encountered an internal error and was unable to complete your request"
-    />
+    return <ErrorContent status={error.status} title={error.statusText} message={error.data} />
 }
 
 
