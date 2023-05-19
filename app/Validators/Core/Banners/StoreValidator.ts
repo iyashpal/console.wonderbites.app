@@ -27,7 +27,10 @@ export default class StoreValidator {
   public schema = schema.create({
     title: schema.string({trim: true}, [rules.required()]),
     description: schema.string.optional({trim: true}),
-    attachment: schema.file({}, [rules.required()]),
+    attachment: schema.file({
+      size: '1',
+      extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
+    }, [rules.required()]),
     options: schema.object([rules.required()])
       .members({
         page: schema.string({trim: true}),

@@ -26,7 +26,10 @@ export default class UpdateValidator {
   public schema = schema.create({
     title: schema.string({trim: true}, [rules.required()]),
     description: schema.string.optional({trim: true}),
-    attachment: schema.file.optional({}),
+    attachment: schema.file.optional({
+      size: '1',
+      extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
+    }),
     options: schema.object([rules.required()])
       .members({
         page: schema.string({trim: true}),

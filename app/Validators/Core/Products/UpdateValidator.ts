@@ -43,7 +43,7 @@ export default class UpdateValidator {
     calories: schema.string.optional({ trim: true }),
     thumbnail: schema.file.optional({
       size: '1mb',
-      extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
+      extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg', 'webp'],
     }),
     isCustomizable: schema.boolean(),
     isPopular: schema.boolean(),

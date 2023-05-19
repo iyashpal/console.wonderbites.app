@@ -33,7 +33,7 @@ export default class UpdateValidator {
 
     thumbnail: schema.file.optional({
       size: '1mb',
-      extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
+      extnames: ['jpg', 'png', 'jpeg', 'gif', 'svg', 'webp'],
     }),
 
     status: schema.number([

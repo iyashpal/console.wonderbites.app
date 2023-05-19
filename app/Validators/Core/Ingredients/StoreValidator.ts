@@ -54,7 +54,7 @@ export default class StoreValidator {
     ]),
     thumbnail: schema.file.optional({
       size: '1mb',
-      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg'],
+      extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'],
     }, [rules.required()]),
 
     publishedAt: schema.date.optional(),

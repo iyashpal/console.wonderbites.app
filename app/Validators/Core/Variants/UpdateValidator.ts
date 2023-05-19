@@ -33,7 +33,7 @@ export default class UpdateValidator {
     ]),
     description: schema.string.nullableAndOptional({ trim: true }),
     thumbnail: schema.file.optional({
-      extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg'],
+      extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
       size: '1mb',
     }),
     price: schema.string({ trim: true }, [
