@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import {Attribute, User} from 'App/Models/index'
+import { Attribute, Product, User } from 'App/Models/index'
 import { AttachmentContract, attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import {BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Variant extends BaseModel {
   @column({ isPrimary: true })
@@ -13,7 +13,7 @@ export default class Variant extends BaseModel {
   @column()
   public name: string
 
-  @attachment({folder: 'variants', preComputeUrl: true})
+  @attachment({ folder: 'variants', preComputeUrl: true })
   public thumbnail: AttachmentContract | null
 
   @column()
@@ -33,6 +33,9 @@ export default class Variant extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
+
+  @manyToMany(() => Product)
+  public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Attribute)
   public attributes: ManyToMany<typeof Attribute>
