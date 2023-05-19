@@ -9,12 +9,12 @@ import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
 import { Combobox, Transition } from '@headlessui/react'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
-import { IngredientProduct } from '@/contracts/schema/pivot'
-import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
-import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
-import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 import InputError from "@/components/Form/InputError";
+import { IngredientProduct } from '@/contracts/schema/pivot'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
+import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
+import { Form, Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 
 
 export default function ShowProduct() {
@@ -567,7 +567,7 @@ function ProductVariants({ product }: { product: Product }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {product.variants?.map((variant: Variant) => (
+            {(product.variants ?? []).map((variant: Variant) => (
               <tr className="divide-x divide-gray-200">
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
                   <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
@@ -607,8 +607,8 @@ function ProductVariants({ product }: { product: Product }) {
                   <Alerts.Warning>
                     No data available.{' '}
                     <Link to={''} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                        Click here to add data.
-                      </Link>
+                      Click here to add data.
+                    </Link>
                   </Alerts.Warning>
                 </td>
               </tr>
@@ -618,14 +618,16 @@ function ProductVariants({ product }: { product: Product }) {
       </div>
 
       <ShowProductVariant variant={showVariable} onClose={() => setShowVariable({} as Variant)} />
-      <CreateProductVariant open={showCreateForm} onClose={() => setShowCreateForm(false)} />
+      <CreateProductVariant product={product} open={showCreateForm} onClose={() => setShowCreateForm(false)} />
     </div>
   </>
 }
 
 
-function CreateProductVariant({ open, onClose }: { open: boolean, onClose: () => void }) {
+function CreateProductVariant({ product, open, onClose, onSuccess }: { product: Product, open: boolean, onClose: () => void, onSuccess?: () => void }) {
+  const navigateTo = useNavigate()
   const form = useProductVariantForm<{
+    productId: number,
     name: string,
     description: string,
     proteins: string,
@@ -634,26 +636,31 @@ function CreateProductVariant({ open, onClose }: { open: boolean, onClose: () =>
   }>()
 
   useEffect(() => {
-    form.sync({
-      name: 'Hello',
-      description: 'This is description.',
-      proteins: '1',
-      vegetables: '3',
-      price: '50'
-    })
-
-    console.log(form.errors)
+    form.sync({ productId: product.id, name: '', description: '', proteins: '1', vegetables: '1', price: '0' })
   }, [])
+
+  function close() {
+    onClose()
+    setTimeout(form.reset.errors, 500)
+  }
+
+  function create(e: React.FormEvent) {
+    form.onSubmit.create(e).then(() => {
+      navigateTo('')
+      onClose()
+    })
+  }
   return (
-    <Modal show={open} className={'max-w-3xl'} onClose={onClose}>
-      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+    <Modal show={open} className={'max-w-3xl'} onClose={close}>
+      <Form onSubmit={create} className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
         <div className="px-4 py-5 sm:px-6">
           <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
             <div className="ml-4 mt-2">
               <h3 className="text-base font-semibold leading-6 text-gray-900">New Variant</h3>
             </div>
+
             <div className="ml-4 mt-2 flex-shrink-0">
-              <button type="button" className="" onClick={onClose}>
+              <button type="button" className="" onClick={close}>
                 <Icons.Outline.XMark className="w-5 h-5" />
               </button>
             </div>
@@ -665,16 +672,16 @@ function CreateProductVariant({ open, onClose }: { open: boolean, onClose: () =>
               <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                 Name <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="text" name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors?.name} />
+              <input type="text" onChange={(e) => form.input.set('name', e.target.value)} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors('name')} />
             </div>
 
             <div className="col-span-6">
               <label htmlFor="description" className="block text-sm font-bold text-gray-700">
-                Description <sup className='text-red-primary'>*</sup>
+                Description
               </label>
-              <textarea name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-              <InputError error={form.errors?.description} />
+              <textarea onChange={(e) => form.input.set('description', e.target.value)} name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+              <InputError error={form.errors('description')} />
             </div>
             <div className="col-span-6">
               <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
@@ -687,34 +694,34 @@ function CreateProductVariant({ open, onClose }: { open: boolean, onClose: () =>
               <label htmlFor="proteins" className="block text-sm font-bold text-gray-700">
                 Proteins <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" name="proteins" id="proteins" defaultValue={1} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors?.proteins} />
+              <input type="number" name="proteins" id="proteins" onChange={(e) => form.input.set('proteins', e.target.value)} defaultValue={form.data.proteins} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors('proteins')} />
             </div>
             <div className="col-span-6 sm:col-span-2">
               <label htmlFor="vegetables" className="block text-sm font-bold text-gray-700">
                 Vegetables <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" id="vegetables" name="vegetables" defaultValue={1} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors?.vegetables} />
+              <input type="number" id="vegetables" name="vegetables" onChange={(e) => form.input.set('vegetables', e.target.value)} defaultValue={form.data.vegetables} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors('vegetables')} />
             </div>
             <div className="col-span-6 sm:col-span-2">
               <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                 Price <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" name="price" id="price" defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors?.price} />
+              <input type="number" name="price" id="price" onChange={(e) => form.input.set('price', e.target.value)} defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <InputError error={form.errors('price')} />
             </div>
           </div>
         </div>
         <div className="px-4 py-4 sm:px-6 bg-gray-50 flex items-center justify-end gap-x-4">
-          <button onClick={onClose} className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
+          <button type="button" onClick={close} className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
             Close
           </button>
-          <button className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-            Save
+          <button disabled={form.isProcessing} className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+          {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'} /> : 'Save'}
           </button>
         </div>
-      </div>
+      </Form>
     </Modal>
   )
 }
