@@ -23,7 +23,13 @@ export default class VariantsController {
       })
 
       if (payload.productId) {
-        await $variant.related('products').attach([payload.productId])
+        await $variant.related('products').attach({
+          [payload.productId]: {
+            price: payload.price,
+            proteins: payload.proteins,
+            vegetables: payload.vegetables,
+          },
+        })
       }
 
       response.ok($variant)
@@ -47,5 +53,15 @@ export default class VariantsController {
     }
   }
 
-  public async destroy ({ }: HttpContextContract) { }
+  public async destroy ({ response, params }: HttpContextContract) {
+    try {
+      const variant = await Variant.findOrFail(params.id)
+
+      await variant.delete()
+
+      response.ok({ success: true })
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
+  }
 }
