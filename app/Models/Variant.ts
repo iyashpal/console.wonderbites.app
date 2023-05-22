@@ -4,6 +4,11 @@ import { AttachmentContract, attachment } from '@ioc:Adonis/Addons/AttachmentLit
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Variant extends BaseModel {
+  /**
+   * Serialize the `$extras` object as it is
+   */
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
@@ -24,6 +29,9 @@ export default class Variant extends BaseModel {
 
   @column()
   public status: boolean
+
+  @column.dateTime()
+  public publishedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
