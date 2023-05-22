@@ -105,7 +105,10 @@ export default class Product extends BaseModel {
   })
   public orders: ManyToMany<typeof Order>
 
-  @manyToMany(() => Variant)
+  @manyToMany(() => Variant, {
+    pivotColumns: ['id', 'price', 'product_id', 'variant_id', 'proteins', 'vegetables'],
+    pivotTimestamps: true,
+  })
   public variants: ManyToMany<typeof Variant>
 
   @hasOne(() => Review, {foreignKey: 'reviewableId', onQuery: query => query.where('reviewable', 'Product')})
