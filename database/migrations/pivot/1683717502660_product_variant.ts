@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.bigInteger('product_id').unsigned().references('products.id').onDelete('CASCADE')
       table.bigInteger('variant_id').unsigned().references('variants.id').onDelete('CASCADE')
+      table.string('price').defaultTo(0)
       table.integer('proteins').defaultTo(1)
       table.integer('vegetables').defaultTo(1)
       table.timestamp('created_at', { useTz: true })
