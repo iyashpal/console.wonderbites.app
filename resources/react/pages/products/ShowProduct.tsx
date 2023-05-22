@@ -13,7 +13,7 @@ import InputError from "@/components/Form/InputError";
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
-import { Form, Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { Form, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
 import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 
 
@@ -536,8 +536,15 @@ function CreateNewIngredient() {
 }
 
 function ProductVariants({ product }: { product: Product }) {
-  const [showVariable, setShowVariable] = useState<Variant>({} as Variant)
+  const navigateTo = useNavigate()
+  const [isTrashing, setIsTrashing] = useState({} as Variant)
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false)
+  const [showVariable, setShowVariable] = useState<Variant>({} as Variant)
+
+  function onDeleteProductVariant() {
+    navigateTo('')
+    setIsTrashing({} as Variant)
+  }
   return <>
     <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
       <div className="px-4 py-5 sm:px-6">
@@ -561,8 +568,9 @@ function ProductVariants({ product }: { product: Product }) {
             <tr className="divide-x divide-gray-200 bg-gray-100">
               <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 w-20">Image</th>
               <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Proteins</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Vegetables</th>
               <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Price</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">-</th>
               <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
             </tr>
           </thead>
@@ -582,18 +590,23 @@ function ProductVariants({ product }: { product: Product }) {
                     <p className="truncate">Created by {variant.user?.name}</p>
                   </div>
                 </td>
-                <td className="whitespace-nowrap p-4 text-sm text-gray-500 w-20">
-                  <input type="number" defaultValue={variant.price} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
+                  <input type="number" defaultValue={variant.meta.pivot_proteins} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
                 </td>
                 <td className="whitespace-nowrap p-4 text-sm text-gray-500">
 
+                  <input type="number" defaultValue={variant.meta.pivot_vegetables} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
                 </td>
+                <td className="whitespace-nowrap p-4 text-sm text-gray-500 w-20">
+                  <input type="number" defaultValue={variant.meta.pivot_price} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+                </td>
+
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0 w-24">
                   <div className="flex items-center gap-x-2">
                     <button onClick={() => setShowVariable(variant)} className="action:button button:blue">
-                      <Icons.Outline.PencilSquare className="w-5 h-5" />
+                      <Icons.Outline.Eye className="w-5 h-5" />
                     </button>
-                    <button className="action:button button:red">
+                    <button onClick={() => setIsTrashing(variant)} className="action:button button:red">
                       <Icons.Outline.Trash className="w-5 h-5" />
                     </button>
                   </div>
@@ -603,20 +616,22 @@ function ProductVariants({ product }: { product: Product }) {
 
             {product.variants?.length === 0 && <>
               <tr>
-                <td colSpan={5} className="whitespace-nowrap py-4 px-4 text-sm font-medium">
-                  <Alerts.Warning>
-                    No data available.{' '}
-                    <Link to={''} className="font-medium text-yellow-700 underline hover:text-yellow-600">
-                      Click here to add data.
-                    </Link>
-                  </Alerts.Warning>
+                <td colSpan={6} className="whitespace-nowrap py-4 px-4 text-sm font-medium">
+                  <Alerts.Warning>No data available.</Alerts.Warning>
                 </td>
               </tr>
             </>}
           </tbody>
         </table>
       </div>
-
+      <TrashModal
+        show={!!isTrashing.id}
+        title={'Delete Variant'}
+        url={`/variants/${isTrashing.id}`}
+        onDelete={onDeleteProductVariant}
+        onClose={() => setIsTrashing({} as Variant)}
+        description={<>Are you sure you want to delete "<b>{isTrashing.name}</b>"? This action cannot be undone.</>}
+      />
       <ShowProductVariant variant={showVariable} onClose={() => setShowVariable({} as Variant)} />
       <CreateProductVariant product={product} open={showCreateForm} onClose={() => setShowCreateForm(false)} />
     </div>
@@ -718,7 +733,7 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
             Close
           </button>
           <button disabled={form.isProcessing} className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-          {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'} /> : 'Save'}
+            {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'} /> : 'Save'}
           </button>
         </div>
       </Form>
@@ -728,11 +743,15 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
 
 
 function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
-  if (variant.id === undefined) {
-    return <></>
+  const navigateTo = useNavigate()
+  const [isTrashing, setIsTrashing] = useState(false)
+
+  function onDelete() {
+    navigateTo('')
+    onClose()
   }
 
-  return (
+  return <>{!!variant.id && (
     <div className="absolute bg-white inset-0">
       <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
         <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
@@ -750,7 +769,7 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
             </div>
           </div>
           <div className="ml-4 mt-4 flex flex-shrink-0 gap-x-2">
-            <button className="action:button button:red">
+            <button onClick={() => setIsTrashing(true)} className="action:button button:red">
               <Icons.Outline.Trash className="w-5 h-5" />
             </button>
             <button onClick={onClose} className="action:button button:blue">
@@ -759,7 +778,58 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
           </div>
         </div>
       </div>
-
+      <div>
+        <div className="flow-root">
+          <div className="overflow-x-auto">
+            <div className="inline-block min-w-full align-middle">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
+                      <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
+                    </th>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">ID</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">QTY</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">Price</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Category</th>
+                    <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">Add <span className="sr-only">Required</span></th>
+                    <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">Remove <span className="sr-only">Optional</span></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Image</th>
+                    <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  <tr>
+                    <td colSpan={11} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4">
+                        <div className="flex">
+                          <div className="flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5 text-yellow-400">
+                              <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"></path>
+                            </svg>
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-sm text-yellow-700">No ingredients available.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <TrashModal
+        show={isTrashing}
+        title={'Delete Variant'}
+        url={`/variants/${variant.id}`}
+        onDelete={onDelete}
+        onClose={() => setIsTrashing(false)}
+        description={<>Are you sure you want to delete "<b>{variant.name}</b>"? This action cannot be undone.</>}
+      />
     </div>
-  )
+  )}</>
 }
