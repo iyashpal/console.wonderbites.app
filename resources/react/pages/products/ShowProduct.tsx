@@ -13,7 +13,7 @@ import InputError from "@/components/Form/InputError";
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
-import { Form, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 
 
@@ -537,15 +537,47 @@ function CreateNewIngredient() {
 
 function ProductVariants({ product }: { product: Product }) {
   const navigateTo = useNavigate()
+  const [search, setSearch] = useSearchParams({ variant: '' })
   const [isTrashing, setIsTrashing] = useState({} as Variant)
   const [showCreateForm, setShowCreateForm] = useState<boolean>(false)
   const [showVariable, setShowVariable] = useState<Variant>({} as Variant)
 
-  function onDeleteProductVariant() {
+  useEffect(() => {
+    setShowVariable(
+      product.variants?.find(
+        ({ id }) => Number(search.get('variant')) === id
+      ) ?? {} as Variant
+    )
+  }, [search])
+
+  /**
+   * Handle the close event for the product variant.
+   *
+   * @returns void
+   */
+  function handleCloseVariantDetailEvent(): void {
+    setSearch(queryParams => {
+      queryParams.delete('variant')
+      return queryParams
+    })
+    setShowVariable({} as Variant)
+  }
+
+  /**
+   * Handles the delete variant event.
+   *
+   * @returns void
+   */
+  function handleDeleteVariantEvent(): void {
     navigateTo('')
     setIsTrashing({} as Variant)
   }
-  return <>
+
+  if (!!showVariable.id) {
+    return <ShowProductVariant variant={showVariable} onClose={handleCloseVariantDetailEvent} />
+  }
+
+  return (
     <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
       <div className="px-4 py-5 sm:px-6">
         <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
@@ -575,8 +607,8 @@ function ProductVariants({ product }: { product: Product }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {(product.variants ?? []).map((variant: Variant) => (
-              <tr className="divide-x divide-gray-200">
+            {(product.variants ?? []).map((variant: Variant, index: number) => (
+              <tr key={index} className="divide-x divide-gray-200">
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
                   <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
                 </td>
@@ -603,7 +635,7 @@ function ProductVariants({ product }: { product: Product }) {
 
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0 w-24">
                   <div className="flex items-center gap-x-2">
-                    <button onClick={() => setShowVariable(variant)} className="action:button button:blue">
+                    <button onClick={() => setSearch({ variant: variant.id.toString() })} className="action:button button:blue">
                       <Icons.Outline.Eye className="w-5 h-5" />
                     </button>
                     <button onClick={() => setIsTrashing(variant)} className="action:button button:red">
@@ -628,14 +660,13 @@ function ProductVariants({ product }: { product: Product }) {
         show={!!isTrashing.id}
         title={'Delete Variant'}
         url={`/variants/${isTrashing.id}`}
-        onDelete={onDeleteProductVariant}
+        onDelete={handleDeleteVariantEvent}
         onClose={() => setIsTrashing({} as Variant)}
         description={<>Are you sure you want to delete "<b>{isTrashing.name}</b>"? This action cannot be undone.</>}
       />
-      <ShowProductVariant variant={showVariable} onClose={() => setShowVariable({} as Variant)} />
       <CreateProductVariant product={product} open={showCreateForm} onClose={() => setShowCreateForm(false)} />
     </div>
-  </>
+  )
 }
 
 
@@ -752,8 +783,8 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
   }
 
   return <>{!!variant.id && (
-    <div className="absolute bg-white inset-0">
-      <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+    <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
+      <div className="px-4 py-5 sm:px-6">
         <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
           <div className="ml-4 mt-4">
             <div className="flex items-center">
@@ -788,20 +819,16 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
                     <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
                       <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
                     </th>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">ID</th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">QTY</th>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">Price</th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Category</th>
-                    <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">Add <span className="sr-only">Required</span></th>
-                    <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 uppercase">Remove <span className="sr-only">Optional</span></th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Image</th>
                     <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   <tr>
-                    <td colSpan={11} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td colSpan={6} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4">
                         <div className="flex">
                           <div className="flex-shrink-0">
@@ -810,7 +837,7 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
                             </svg>
                           </div>
                           <div className="ml-3">
-                            <p className="text-sm text-yellow-700">No ingredients available.</p>
+                            <p className="text-sm text-yellow-700">No variants available.</p>
                           </div>
                         </div>
                       </div>
@@ -822,14 +849,49 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
           </div>
         </div>
       </div>
+      <CreateAttributeForm variant={variant} />
       <TrashModal
         show={isTrashing}
+        onDelete={onDelete}
         title={'Delete Variant'}
         url={`/variants/${variant.id}`}
-        onDelete={onDelete}
         onClose={() => setIsTrashing(false)}
         description={<>Are you sure you want to delete "<b>{variant.name}</b>"? This action cannot be undone.</>}
       />
     </div>
   )}</>
+}
+
+type CreateAttributeFormProps = {
+  variant: Variant
+}
+function CreateAttributeForm({ }: CreateAttributeFormProps) {
+  return (
+    <div className="divide-y relative">
+        <span className="absolute -top-3 text-xs border rounded-lg left-4 sm:left-6 bg-white px-2 py-1 font-semibold text-gray-500">Create New Attribute</span>
+      <div className="bg-white px-4 py-5 sm:px-6">
+        <div className="flex gap-x-3">
+          <div className="flex-1">
+            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Name" />
+          </div>
+          <div className="flex-1">
+            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Description" />
+          </div>
+          <div className="flex-1">
+            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="number" placeholder="Price" />
+          </div>
+          <div className="flex-1">
+            <select className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
+              <option disabled selected>Category</option>
+            </select>
+          </div>
+          <div className="shrink-0">
+            <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2.5 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+              Save Attribute
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
