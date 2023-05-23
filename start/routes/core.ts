@@ -21,9 +21,10 @@ Route.group(() => {
     Route.resource('users', 'UsersController')
     Route.resource('orders', 'OrdersController')
     Route.resource('banners', 'BannersController')
-    Route.resource('cuisines', 'CuisinesController')
     Route.resource('products', 'ProductsController')
     Route.resource('variants', 'VariantsController')
+    Route.resource('cuisines', 'CuisinesController')
+    Route.resource('attributes', 'AttributesController')
     Route.resource('categories', 'CategoriesController')
     Route.resource('ingredients', 'IngredientsController')
 

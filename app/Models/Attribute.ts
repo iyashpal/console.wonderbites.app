@@ -19,9 +19,6 @@ export default class Attribute extends BaseModel {
   public price: string | number
 
   @column()
-  public quantity: string | number
-
-  @column()
   public status: boolean
 
   @column.dateTime({ autoCreate: true })
