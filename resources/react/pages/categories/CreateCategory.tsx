@@ -63,6 +63,7 @@ export default function CreateCategory() {
                 <option value={'Cuisine'}>Cuisine</option>
                 <option value={'Ingredient'}>Ingredient</option>
                 <option value={'Product'}>Product</option>
+                <option value={'Variant'}>Variant</option>
               </select>
               <InputError error={form.errors?.type} />
             </div>

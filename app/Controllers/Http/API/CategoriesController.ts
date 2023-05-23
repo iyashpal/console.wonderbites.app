@@ -65,6 +65,10 @@ export default class CategoriesController {
 
       const category = await Category.query().match(
         [
+          request.input('type') === 'variant',
+          query => queryOnRequestInput(query.where('type', 'Variant')),
+        ],
+        [
           request.input('type') === 'product',
           query => queryOnRequestInput(query.where('type', 'Product')),
         ],
