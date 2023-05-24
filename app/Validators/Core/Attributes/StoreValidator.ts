@@ -33,9 +33,7 @@ export default class StoreValidator {
     name: schema.string({ trim: true }, [
       rules.required(),
     ]),
-    description: schema.string.optional({ trim: true }, [
-      rules.nullable(),
-    ]),
+    description: schema.string.optional({ trim: true }),
     price: schema.string({ trim: true }, [
       rules.required(),
     ]),
