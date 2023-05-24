@@ -12,9 +12,9 @@ import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import InputError from "@/components/Form/InputError";
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { Ingredient, Media, Product, Variant } from '~/contracts/schema'
+import { Attribute, Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
+import { useAttributeForm, useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 
 
 export default function ShowProduct() {
@@ -776,10 +776,23 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
 function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
   const navigateTo = useNavigate()
   const [isTrashing, setIsTrashing] = useState(false)
-
+  const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
+  const [attributes, setAttributes] = useState<Attribute[]>([] as Attribute[])
+  useEffect(() => {
+    setAttributes(variant.attributes ?? [])
+  }, [variant])
   function onDelete() {
     navigateTo('')
     onClose()
+  }
+
+  function onDeleteAttribute() {
+    setAttributes(attributes.filter(({ id }) => id !== isTrashingAttribute.id))
+    setIsTrashingAttribute({} as Attribute)
+  }
+
+  function onSuccess(attribute: Attribute) {
+    setAttributes(data => [...data, { ...attribute }])
   }
 
   return <>{!!variant.id && (
@@ -810,7 +823,8 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
         </div>
       </div>
       <div>
-        <div className="flow-root">
+        <CreateAttributeForm variant={variant} onSuccess={onSuccess} />
+        <div className="flow-root border-t">
           <div className="overflow-x-auto">
             <div className="inline-block min-w-full align-middle">
               <table className="min-w-full divide-y divide-gray-300">
@@ -819,37 +833,67 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
                     <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
                       <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">ID</th>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-10">ID</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">Price</th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Category</th>
                     <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  <tr>
-                    <td colSpan={6} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4">
-                        <div className="flex">
-                          <div className="flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5 text-yellow-400">
-                              <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"></path>
-                            </svg>
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-sm text-yellow-700">No variants available.</p>
+                  {attributes.map(attribute => (
+                    <tr key={attribute.id}>
+                      <td className="relative w-12 px-6 sm:w-16 sm:px-8">
+                        <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
+                      </td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.id}</td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.name}</td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.price}</td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">-</td>
+                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">
+                        <div className="flex item-center justify-end gap-x-1">
+                          <button className="action:button button:blue">
+                            <Icons.Outline.PencilSquare className="w-5 h-5" />
+                          </button>
+                          <button onClick={() => setIsTrashingAttribute(attribute)} className="action:button button:red">
+                            <Icons.Outline.Trash className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {(attributes.length === 0) && (
+                    <tr>
+                      <td colSpan={6} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4">
+                          <div className="flex">
+                            <div className="flex-shrink-0">
+                              <Icons.Solid.ExclamationTriangle className="h-5 w-5 text-yellow-400" />
+                            </div>
+                            <div className="ml-3">
+                              <p className="text-sm text-yellow-700">No attributes available.</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <CreateAttributeForm variant={variant} />
+
+      <TrashModal
+        title={'Delete Attribute'}
+        onDelete={onDeleteAttribute}
+        show={isTrashingAttribute.id !== undefined}
+        url={`/attributes/${isTrashingAttribute.id}`}
+        onClose={() => setIsTrashingAttribute({} as Attribute)}
+        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be undone.</>}
+      />
       <TrashModal
         show={isTrashing}
         onDelete={onDelete}
@@ -863,35 +907,52 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
 }
 
 type CreateAttributeFormProps = {
-  variant: Variant
+  variant: Variant,
+  onSuccess: (attribute: Attribute) => void
 }
-function CreateAttributeForm({ }: CreateAttributeFormProps) {
+function CreateAttributeForm({ variant, onSuccess }: CreateAttributeFormProps) {
+  type AttributeFormType = { variant_id: number, name: string, description: string, price: string, category_id: number }
+  const [showForm, setShowForm] = useState(false)
+  const form = useAttributeForm<AttributeFormType>({ variant_id: variant.id } as AttributeFormType)
+
+  function onSubmit(event) {
+    form.onSubmit.store(event).then((data: Attribute) => {
+      onSuccess(data)
+      setShowForm(false)
+    })
+  }
   return (
-    <div className="divide-y relative">
-        <span className="absolute -top-3 text-xs border rounded-lg left-4 sm:left-6 bg-white px-2 py-1 font-semibold text-gray-500">Create New Attribute</span>
-      <div className="bg-white px-4 py-5 sm:px-6">
-        <div className="flex gap-x-3">
-          <div className="flex-1">
-            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Name" />
+    <div className="relative">
+      <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-x-1 text-sm pl-4 my-3 sm:pl-6 bg-white px-2 font-semibold text-red-600">
+        <span>Add New Attribute</span>
+        {showForm ? <Icons.Outline.ChevronDown className="w-4 h-4" /> : <Icons.Outline.ChevronRight className="w-4 h-4" />}
+      </button>
+      {showForm && (
+        <Form onSubmit={onSubmit}>
+          <div className="bg-white px-4 pb-5 sm:px-6">
+            <div className="flex gap-x-3">
+              <div className="flex-1 relative">
+                <input value={form.data.name} onChange={form.onChange('name')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Name *" />
+                <InputError error={form.errors.name} />
+              </div>
+              <div className="flex-1 relative">
+                <input value={form.data.description} onChange={form.onChange('description')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Description" />
+                <InputError error={form.errors.description} />
+              </div>
+              <div className="flex-1 relative">
+                <input value={form.data.price} onChange={form.onChange('price')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="number" placeholder="Price *" />
+                <InputError error={form.errors.price} />
+              </div>
+              <div className="shrink-0">
+                <button type="submit" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2.5 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                  Add Attribute
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex-1">
-            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Description" />
-          </div>
-          <div className="flex-1">
-            <input className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="number" placeholder="Price" />
-          </div>
-          <div className="flex-1">
-            <select className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-              <option disabled selected>Category</option>
-            </select>
-          </div>
-          <div className="shrink-0">
-            <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2.5 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-              Save Attribute
-            </button>
-          </div>
-        </div>
-      </div>
+        </Form>
+      )}
+
     </div>
   )
 }
