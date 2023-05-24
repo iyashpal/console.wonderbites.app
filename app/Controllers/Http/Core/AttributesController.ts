@@ -28,6 +28,8 @@ export default class AttributesController {
           },
         })
       }
+
+      response.ok(attribute)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
@@ -57,6 +59,8 @@ export default class AttributesController {
           },
         })
       }
+
+      response.ok(attribute)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
