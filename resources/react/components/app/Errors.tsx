@@ -9,15 +9,13 @@ export default function Errors() {
         }
     }
     else if (error instanceof Error) {
-        return (
-            <div id="error-page">
-                <h1>Oops! Unexpected Error</h1>
-                <p>Something went wrong.</p>
-                <p>
-                    <i>{error.message}</i>
-                </p>
-            </div>
-        );
+        console.log(error.stack)
+        return <ErrorContent
+            status="500"
+            title={error.name}
+            message={error.message}
+            stack={error.stack}
+        />;
     } else {
         return <ErrorContent
             status="500"
@@ -30,7 +28,7 @@ export default function Errors() {
 }
 
 
-export function ErrorContent({ status, title, message }: { status: React.ReactNode, title: React.ReactNode, message: React.ReactNode }) {
+export function ErrorContent({ status, title, message, stack }: { status: React.ReactNode, title: React.ReactNode, message: React.ReactNode, stack?: string }) {
     const navigateTo = useNavigate();
     return <>
         <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
@@ -44,6 +42,13 @@ export function ErrorContent({ status, title, message }: { status: React.ReactNo
                     </button>
                     <a href="#" onClick={(e) => e.preventDefault()} className="text-sm font-semibold text-gray-900">Contact support <span aria-hidden="true">&rarr;</span></a>
                 </div>
+                {!!stack && <>
+                    <pre className="mt-5">
+                        <code>
+                            {stack}
+                        </code>
+                    </pre>
+                </>}
             </div>
         </main>
     </>
