@@ -588,8 +588,8 @@ function ProductVariants({ product }: { product: Product }) {
             </p>
           </div>
           <div className="ml-4 mt-4 flex-shrink-0">
-            <button onClick={() => setShowCreateForm(true)} type="button" className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-              Create new
+            <button onClick={() => setShowCreateForm(true)} title="Add New Variant" className="action:button button:blue">
+              <Icons.Outline.Plus className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -672,14 +672,8 @@ function ProductVariants({ product }: { product: Product }) {
 
 function CreateProductVariant({ product, open, onClose, onSuccess }: { product: Product, open: boolean, onClose: () => void, onSuccess?: () => void }) {
   const navigateTo = useNavigate()
-  const form = useProductVariantForm<{
-    productId: number,
-    name: string,
-    description: string,
-    proteins: string,
-    vegetables: string,
-    price: string,
-  }>()
+  type ProductVariantType = { productId: number, name: string, description: string, proteins: string, vegetables: string, price: string }
+  const form = useProductVariantForm<ProductVariantType>()
 
   useEffect(() => {
     form.sync({ productId: product.id, name: '', description: '', proteins: '1', vegetables: '1', price: '0' })
@@ -718,7 +712,7 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
               <label htmlFor="name" className="block text-sm font-bold text-gray-700">
                 Name <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="text" onChange={(e) => form.input.set('name', e.target.value)} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <input type="text" onChange={form.onChange('name')} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
               <InputError error={form.errors('name')} />
             </div>
 
@@ -726,7 +720,7 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
               <label htmlFor="description" className="block text-sm font-bold text-gray-700">
                 Description
               </label>
-              <textarea onChange={(e) => form.input.set('description', e.target.value)} name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
+              <textarea onChange={form.onChange('description')} name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
               <InputError error={form.errors('description')} />
             </div>
             <div className="col-span-6">
@@ -740,21 +734,21 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
               <label htmlFor="proteins" className="block text-sm font-bold text-gray-700">
                 Proteins <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" name="proteins" id="proteins" onChange={(e) => form.input.set('proteins', e.target.value)} defaultValue={form.data.proteins} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <input type="number" name="proteins" id="proteins" onChange={form.onChange('proteins')} defaultValue={form.data.proteins} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
               <InputError error={form.errors('proteins')} />
             </div>
             <div className="col-span-6 sm:col-span-2">
               <label htmlFor="vegetables" className="block text-sm font-bold text-gray-700">
                 Vegetables <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" id="vegetables" name="vegetables" onChange={(e) => form.input.set('vegetables', e.target.value)} defaultValue={form.data.vegetables} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <input type="number" id="vegetables" name="vegetables" onChange={form.onChange('vegetables')} defaultValue={form.data.vegetables} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
               <InputError error={form.errors('vegetables')} />
             </div>
             <div className="col-span-6 sm:col-span-2">
               <label htmlFor="price" className="block text-sm font-bold text-gray-700">
                 Price <sup className='text-red-primary'>*</sup>
               </label>
-              <input type="number" name="price" id="price" onChange={(e) => form.input.set('price', e.target.value)} defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
+              <input type="number" name="price" id="price" onChange={form.onChange('price')} defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
               <InputError error={form.errors('price')} />
             </div>
           </div>

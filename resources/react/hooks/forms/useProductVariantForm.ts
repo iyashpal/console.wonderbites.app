@@ -8,6 +8,18 @@ export default function useProductVariantForm<T>() {
     const [errors, setErrors] = useState<ErrorsType<T>>({} as ErrorsType<T>)
 
     /**
+     * Handle the on change event for input fields.
+     *
+     * @param field string
+     * @returns {Function}
+     */
+    function onChange(field: keyof T) {
+        return (event) => {
+            setForm(data => ({ ...data, [field]: event.target.value }))
+        }
+    }
+
+    /**
      * Synchronize the whole form data.
      *
      * @param data {Object}
@@ -55,20 +67,24 @@ export default function useProductVariantForm<T>() {
             })
     }
 
-    const update = (e: React.FormEvent) => {
-        e.preventDefault()
+    const update = (event: React.FormEvent) => {
+        event.preventDefault()
+        setIsProcessing(true)
         return Axios()
             .put(`variants`, form)
-            .then(() => {
-                return Promise.resolve()
+            .then(({ data }) => {
+                setIsProcessing(false)
+                return Promise.resolve(data)
             }).catch(({ response }) => {
+                setIsProcessing(false)
                 setErrors(response?.data?.errors ?? {})
-                return Promise.reject()
+                return Promise.reject(response?.data)
             })
     }
 
     return {
         sync,
+        onChange,
         data: form,
         isProcessing,
         input: { set },
