@@ -11,7 +11,6 @@ import {
   ClockIcon as Clock,
   TicketIcon as Ticket,
   FolderIcon as Folder,
-  Bars3BottomLeftIcon as Bars3BottomLeft,
   BookOpenIcon as BookOpen,
   UserGroupIcon as UserGroup,
   ChevronUpIcon as ChevronUp,
@@ -22,13 +21,15 @@ import {
   CalendarDaysIcon as CalendarDays,
   CloudArrowUpIcon as CloudArrowUp,
   ChevronUpDownIcon as ChevronUpDown,
+  ArrowLongLeftIcon as ArrowLongLeft,
   CloudArrowDownIcon as CloudArrowDown,
   RectangleStackIcon as RectangleStack,
   MagnifyingGlassIcon as MagnifyingGlass,
+  Bars3BottomLeftIcon as Bars3BottomLeft,
   ExclamationTriangleIcon as ExclamationTriangle,
   ArrowTopRightOnSquareIcon as ArrowTopRightOnSquare,
   ChatBubbleOvalLeftEllipsisIcon as ChatBubbleOvalLeftEllipsis,
-
+  EllipsisVerticalIcon as EllipsisVertical,
   BookmarkIcon as Bookmark,
   EnvelopeIcon as Envelope,
   EyeIcon as Eye,
@@ -39,6 +40,8 @@ import {
 } from '@heroicons/react/24/outline'
 
 export {
+  ArrowLongLeft,
+  EllipsisVertical,
   ChevronUp,
   ChevronDown,
   CurrencyDollar,

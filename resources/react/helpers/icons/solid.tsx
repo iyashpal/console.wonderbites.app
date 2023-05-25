@@ -18,10 +18,12 @@ import {
   DocumentTextIcon as DocumentText,
   CalendarDaysIcon as CalendarDays,
   CloudArrowUpIcon as CloudArrowUp,
+  ArrowLongLeftIcon as ArrowLongLeft,
   CloudArrowDownIcon as CloudArrowDown,
   ChevronUpDownIcon as ChevronUpDown,
   RectangleStackIcon as RectangleStack,
   MagnifyingGlassIcon as MagnifyingGlass,
+  EllipsisVerticalIcon as EllipsisVertical,
   ExclamationTriangleIcon as ExclamationTriangle,
   ArrowTopRightOnSquareIcon as ArrowTopRightOnSquare,
   ChatBubbleOvalLeftEllipsisIcon as ChatBubbleOvalLeftEllipsis,
@@ -36,6 +38,8 @@ import {
 } from '@heroicons/react/24/solid'
 
 export {
+  ArrowLongLeft,
+  EllipsisVertical,
   ChevronUp,
   ChevronDown,
   CurrencyDollar,
