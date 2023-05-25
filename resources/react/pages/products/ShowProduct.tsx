@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { useFlash } from '@/hooks'
 import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
@@ -7,10 +6,10 @@ import { Details } from '@/components/Show'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
-import { Combobox, Transition } from '@headlessui/react'
-import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import InputError from "@/components/Form/InputError";
+import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { IngredientProduct } from '@/contracts/schema/pivot'
+import { Combobox, Menu, Transition } from '@headlessui/react'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Attribute, Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
@@ -579,67 +578,69 @@ function ProductVariants({ product }: { product: Product }) {
 
   return (
     <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
-      <div className="px-4 py-5 sm:px-6">
-        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="ml-4 mt-4">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">Product Variants</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              List of all product variants. You can manage the product variants here.
-            </p>
+      <div className="p-4">
+        <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <div className="">
+            <h3 className="text-base font-semibold leading-6 text-gray-900">Variants</h3>
           </div>
-          <div className="ml-4 mt-4 flex-shrink-0">
-            <button onClick={() => setShowCreateForm(true)} title="Add New Variant" className="action:button button:blue">
-              <Icons.Outline.Plus className="w-5 h-5" />
-            </button>
+          <div className="flex-shrink-0">
+            <Menu as="div" className="relative">
+              <Menu.Button className={'action:button button:blue'}>
+                <Icons.Outline.EllipsisVertical className="h-6" />
+              </Menu.Button>
+              <Menu.Items className={'absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden'}>
+                <Menu.Item as={'button'} onClick={() => setShowCreateForm(true)} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
+                  <Icons.Outline.Plus className="w-5 h-5" /> Add New
+                </Menu.Item>
+              </Menu.Items>
+            </Menu>
           </div>
         </div>
       </div>
       <div className="">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
-            <tr className="divide-x divide-gray-200 bg-gray-100">
-              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 w-20">Image</th>
-              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900">Name</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Proteins</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Vegetables</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-20">Price</th>
-              <th scope="col" className="py-3.5 pl-4 pr-4 text-left text-sm font-semibold text-gray-900 sm:pr-0">Action</th>
+            <tr className="bg-gray-100">
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Proteins</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Vegetables</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Price</th>
+              <th scope="col" className="px-4 py-3.5 text-center text-sm font-semibold text-gray-900 w-28">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {(product.variants ?? []).map((variant: Variant, index: number) => (
-              <tr key={index} className="divide-x divide-gray-200">
+              <tr key={index} className='relative overflow-hidden'>
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
-                  <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
+                  <div className="font-medium text-gray-900">{variant.name}</div>
                 </td>
                 <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                  <div className="font-medium text-gray-900">{variant.name}</div>
-                  <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                    <p className="whitespace-nowrap">Created at <time dateTime={variant.created_at}>{DateTime.fromISO(variant.created_at).toFormat('LLL dd, yyyy')}</time></p>
-                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 fill-current">
-                      <circle cx="1" cy="1" r="1" />
-                    </svg>
-                    <p className="truncate">Created by {variant.user?.name}</p>
+                  <div className="relative">
+                    <input type="number" defaultValue={variant.meta.pivot_proteins} className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+                    <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
                   </div>
                 </td>
                 <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                  <input type="number" defaultValue={variant.meta.pivot_proteins} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+                  <div className="relative">
+                    <input type="number" defaultValue={variant.meta.pivot_vegetables} className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+                    <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+                  </div>
                 </td>
                 <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-
-                  <input type="number" defaultValue={variant.meta.pivot_vegetables} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+                  <div className="relative">
+                    <input type="number" defaultValue={variant.meta.pivot_price} className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+                    <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+                  </div>
                 </td>
-                <td className="whitespace-nowrap p-4 text-sm text-gray-500 w-20">
-                  <input type="number" defaultValue={variant.meta.pivot_price} className={'w-28 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
-                </td>
 
-                <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm text-gray-500 sm:pr-0 w-24">
-                  <div className="flex items-center gap-x-2">
-                    <button onClick={() => setSearch({ variant: variant.id.toString() })} className="action:button button:blue">
-                      <Icons.Outline.Eye className="w-5 h-5" />
+                <td className="p-4">
+                  <div className="flex items-center justify-center">
+                    <button onClick={() => setSearch({ variant: variant.id.toString() })} className='action:button button:blue'>
+                      <Icons.Outline.Eye className={`h-5 w-5`} />
                     </button>
-                    <button onClick={() => setIsTrashing(variant)} className="action:button button:red">
-                      <Icons.Outline.Trash className="w-5 h-5" />
+
+                    <button onClick={() => setIsTrashing(variant)} className='ml-3 action:button button:red'>
+                      <Icons.Outline.Trash className={`h-5 w-5`} />
                     </button>
                   </div>
                 </td>
@@ -723,13 +724,6 @@ function CreateProductVariant({ product, open, onClose, onSuccess }: { product: 
               <textarea onChange={form.onChange('description')} name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
               <InputError error={form.errors('description')} />
             </div>
-            <div className="col-span-6">
-              <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
-                Image
-              </label>
-              <input type="file" accept={'image/*'} name="thumbnail" id="thumbnail" className="mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
-              {/* <InputError error={form.errors?.thumbnail} /> */}
-            </div>
             <div className="col-span-6 sm:col-span-2">
               <label htmlFor="proteins" className="block text-sm font-bold text-gray-700">
                 Proteins <sup className='text-red-primary'>*</sup>
@@ -807,12 +801,26 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
             </div>
           </div>
           <div className="ml-4 mt-4 flex flex-shrink-0 gap-x-2">
-            <button onClick={() => setIsTrashing(true)} className="action:button button:red">
-              <Icons.Outline.Trash className="w-5 h-5" />
+
+            <button onClick={onClose} className="inline-flex items-center action:button button:blue px-4 text-sm uppercase font-medium">
+              <Icons.Outline.ArrowLongLeft className="h-5" /> Back
             </button>
-            <button onClick={onClose} className="action:button button:blue">
-              <Icons.Outline.XMark className="w-5 h-5" />
-            </button>
+            <Menu as="div" className="relative">
+              <Menu.Button className={'action:button button:blue'}>
+                <Icons.Outline.EllipsisVertical className="h-6" />
+              </Menu.Button>
+              <Menu.Items className={'absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'}>
+                <Menu.Item as={'button'} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
+                  <Icons.Outline.Plus className="w-5 h-5" /> Add Group
+                </Menu.Item>
+                <Menu.Item as={'button'} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
+                  <Icons.Outline.PencilSquare className="w-5 h-5" /> Modify
+                </Menu.Item>
+                <Menu.Item as={'button'} onClick={() => setIsTrashing(true)} className="w-full flex items-center gap-x-2 text-red-primary px-3 sm:px-4 py-2 hover:bg-red-100 uppercase text-sm font-semibold">
+                  <Icons.Outline.Trash className="w-5 h-5" /> Delete
+                </Menu.Item>
+              </Menu.Items>
+            </Menu>
           </div>
         </div>
       </div>
