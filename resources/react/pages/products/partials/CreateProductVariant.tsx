@@ -11,7 +11,7 @@ export default function CreateProductVariant({ product, open, onClose, onSuccess
     return (
         <Modal show={open} className={'max-w-3xl'} onClose={close}>
             <div className="overflow-hidden bg-white shadow">
-                <div className="p-4">
+                <div className="p-4 hidden">
                     <div className="grid grid-cols-2">
                         <div>
                             <button className="px-4 py-2 bg-red-50">
