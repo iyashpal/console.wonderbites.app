@@ -10,10 +10,11 @@ import InputError from "@/components/Form/InputError";
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import { Combobox, Menu, Transition } from '@headlessui/react'
+import CreateProductVariant from './partials/CreateProductVariant'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Attribute, Ingredient, Media, Product, Variant } from '~/contracts/schema'
+import { useAttributeForm, useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
 import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { useAttributeForm, useIngredientProductForm, useMediaProductForm, useProductVariantForm } from '@/hooks/forms'
 
 
 export default function ShowProduct() {
@@ -573,7 +574,7 @@ function ProductVariants({ product }: { product: Product }) {
   }
 
   if (!!showVariable.id) {
-    return <ShowProductVariant variant={showVariable} onClose={handleCloseVariantDetailEvent} />
+    return <ShowProductVariant product={product} variant={showVariable} onClose={handleCloseVariantDetailEvent} />
   }
 
   return (
@@ -671,97 +672,7 @@ function ProductVariants({ product }: { product: Product }) {
 }
 
 
-function CreateProductVariant({ product, open, onClose, onSuccess }: { product: Product, open: boolean, onClose: () => void, onSuccess?: () => void }) {
-  const navigateTo = useNavigate()
-  type ProductVariantType = { productId: number, name: string, description: string, proteins: string, vegetables: string, price: string }
-  const form = useProductVariantForm<ProductVariantType>()
-
-  useEffect(() => {
-    form.sync({ productId: product.id, name: '', description: '', proteins: '1', vegetables: '1', price: '0' })
-  }, [])
-
-  function close() {
-    onClose()
-    setTimeout(form.reset.errors, 500)
-  }
-
-  function create(e: React.FormEvent) {
-    form.onSubmit.create(e).then(() => {
-      navigateTo('')
-      onClose()
-    })
-  }
-  return (
-    <Modal show={open} className={'max-w-3xl'} onClose={close}>
-      <Form onSubmit={create} className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
-        <div className="px-4 py-5 sm:px-6">
-          <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
-            <div className="ml-4 mt-2">
-              <h3 className="text-base font-semibold leading-6 text-gray-900">New Variant</h3>
-            </div>
-
-            <div className="ml-4 mt-2 flex-shrink-0">
-              <button type="button" className="" onClick={close}>
-                <Icons.Outline.XMark className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="px-4 py-5 sm:p-6">
-          <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-6 relative">
-              <label htmlFor="name" className="block text-sm font-bold text-gray-700">
-                Name <sup className='text-red-primary'>*</sup>
-              </label>
-              <input type="text" onChange={form.onChange('name')} name="name" id="name" autoComplete="given-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors('name')} />
-            </div>
-
-            <div className="col-span-6">
-              <label htmlFor="description" className="block text-sm font-bold text-gray-700">
-                Description
-              </label>
-              <textarea onChange={form.onChange('description')} name="description" rows={3} id="description" autoComplete="description" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"></textarea>
-              <InputError error={form.errors('description')} />
-            </div>
-            <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="proteins" className="block text-sm font-bold text-gray-700">
-                Proteins <sup className='text-red-primary'>*</sup>
-              </label>
-              <input type="number" name="proteins" id="proteins" onChange={form.onChange('proteins')} defaultValue={form.data.proteins} min={1} autoComplete="proteins" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors('proteins')} />
-            </div>
-            <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="vegetables" className="block text-sm font-bold text-gray-700">
-                Vegetables <sup className='text-red-primary'>*</sup>
-              </label>
-              <input type="number" id="vegetables" name="vegetables" onChange={form.onChange('vegetables')} defaultValue={form.data.vegetables} min={1} className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors('vegetables')} />
-            </div>
-            <div className="col-span-6 sm:col-span-2">
-              <label htmlFor="price" className="block text-sm font-bold text-gray-700">
-                Price <sup className='text-red-primary'>*</sup>
-              </label>
-              <input type="number" name="price" id="price" onChange={form.onChange('price')} defaultValue={0} min={0} autoComplete="family-name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors('price')} />
-            </div>
-          </div>
-        </div>
-        <div className="px-4 py-4 sm:px-6 bg-gray-50 flex items-center justify-end gap-x-4">
-          <button type="button" onClick={close} className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none hover:bg-gray-50 sm:ml-3 sm:mt-0 sm:w-auto">
-            Close
-          </button>
-          <button disabled={form.isProcessing} className="relative inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-            {form.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'} /> : 'Save'}
-          </button>
-        </div>
-      </Form>
-    </Modal>
-  )
-}
-
-
-function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
+function ShowProductVariant({ product, variant, onClose }: {product: Product, variant: Variant, onClose: () => void }) {
   const navigateTo = useNavigate()
   const [isTrashing, setIsTrashing] = useState(false)
   const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
@@ -785,22 +696,16 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
 
   return <>{!!variant.id && (
     <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
-      <div className="px-4 py-5 sm:px-6">
-        <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="ml-4 mt-4">
+      <div className="p-4">
+        <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <div className="">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <img src="/images/placeholder/square.svg" className="w-12 h-12 rounded-lg object-cover aspect-square" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-base font-semibold leading-6 text-gray-900">{variant.name}</h3>
-                <p className="text-sm text-gray-500">
-                  <a href="#">{variant.description}</a>
-                </p>
-              </div>
+              <h3 className="text-base font-semibold leading-6 text-gray-900">
+                <span className='text-gray-400'>{product.name} /</span> {variant.name}
+              </h3>
             </div>
           </div>
-          <div className="ml-4 mt-4 flex flex-shrink-0 gap-x-2">
+          <div className="flex flex-shrink-0 gap-x-2">
 
             <button onClick={onClose} className="inline-flex items-center action:button button:blue px-4 text-sm uppercase font-medium">
               <Icons.Outline.ArrowLongLeft className="h-5" /> Back
