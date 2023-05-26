@@ -74,7 +74,7 @@ export default class ProductQuery extends Query {
   protected preloadMedia (): ProductQuery {
     this.$query.match([
       this.input('with', []).includes(this.qs('media')),
-      query => query.preload('media'),
+      query => query.preload('media', builder => builder.orderBy('pivot_order')),
     ])
 
     return this
