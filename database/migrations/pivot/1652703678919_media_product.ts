@@ -1,6 +1,6 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class MediaProducts extends BaseSchema {
+export default class extends BaseSchema {
   protected tableName = 'media_product'
 
   public async up () {

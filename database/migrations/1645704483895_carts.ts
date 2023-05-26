@@ -1,6 +1,6 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Carts extends BaseSchema {
+export default class extends BaseSchema {
   protected tableName = 'carts'
 
   public async up () {
