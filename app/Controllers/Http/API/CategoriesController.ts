@@ -92,7 +92,7 @@ export default class CategoriesController {
         .match([
           request.input('searchable', []).includes('categories'),
           query => query.whereLike('name', `%${request.input('search')}%`),
-        ])
+        ]).where('status', 'public')
 
       response.status(200).json(category)
     } catch (error) {
@@ -156,7 +156,7 @@ export default class CategoriesController {
           request.input('with', []).includes('cuisines'),
           query => query.preload('cuisines'),
         ])
-        .where('id', id).firstOrFail()
+        .where('status', 'public').where('id', id).firstOrFail()
 
       response.status(200).json(category)
     } catch (error) {
