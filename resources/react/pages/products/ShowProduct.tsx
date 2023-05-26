@@ -1,4 +1,4 @@
-import { useFlash } from '@/hooks'
+import { useFlash, useForm } from '@/hooks'
 import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
 import Avatar from "@/components/Avatar";
@@ -15,6 +15,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Attribute, Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import { useAttributeForm, useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
 import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import Input from '@/components/forms/Input';
 
 
 export default function ShowProduct() {
@@ -408,43 +409,45 @@ function IngredientRow({ ingredient, onTrash }: { ingredient: IngredientProduct,
     setIsTouched(`is_optional:${e.target.checked ? 'checked' : 'unchecked'}`)
   }
 
-  return <tr>
-    <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-      <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
-    </th>
+  return (
+    <tr>
+      <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
+        <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
+      </th>
 
-    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-      {ingredient.name}
-    </td>
-    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      {ingredient.id}
-    </td>
-    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      <input onChange={onChangeQuantity} defaultValue={ingredient.meta.pivot_quantity} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
-    </td>
-    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      <input onChange={onChangePrice} defaultValue={ingredient.meta.pivot_price} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
-    </td>
-    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      {resolveCategoryName(ingredient)}
-    </td>
-    <td className="px-3 py-4 text-sm text-gray-500 text-center">
-      <input onChange={onChangeAddable} type="checkbox" value={1} defaultChecked={ingredient.meta.pivot_is_required} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4" />
-    </td>
-    <td className="px-3 py-4 text-sm text-gray-500 text-center">
-      <input onChange={onChangeRemovable} type="checkbox" value={1} defaultChecked={ingredient.meta.pivot_is_optional} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4" />
-    </td>
-    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-      <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md" />
-    </td>
-    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-      <div className="flex item-center justify-center gap-x-1">
-        <button onClick={() => onTrash(ingredient)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-          <Icons.Outline.Trash className={'w-5 h-5'} />
-        </button>
-      </div>
-    </td>
-  </tr>
+      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+        {ingredient.name}
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        {ingredient.id}
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <input onChange={onChangeQuantity} defaultValue={ingredient.meta.pivot_quantity} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <input onChange={onChangePrice} defaultValue={ingredient.meta.pivot_price} type="number" name="" id="" className={'w-20 border border-gray-300 rounded-md focus:outline-none active:outline-none focus:ring-red-primary focus:border-red-primary'} />
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        {resolveCategoryName(ingredient)}
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-500 text-center">
+        <input onChange={onChangeAddable} type="checkbox" value={1} defaultChecked={ingredient.meta.pivot_is_required} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4" />
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-500 text-center">
+        <input onChange={onChangeRemovable} type="checkbox" value={1} defaultChecked={ingredient.meta.pivot_is_optional} className="border-gray-300 focus:ring-red-primary h-4 rounded text-red-600 w-4" />
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <img alt={ingredient.name} src={ingredient.thumbnailUrl} className="w-10 h-10 rounded-full border-2 shadow-md" />
+      </td>
+      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+        <div className="flex item-center justify-center gap-x-1">
+          <button onClick={() => onTrash(ingredient)} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
+            <Icons.Outline.Trash className={'w-5 h-5'} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  )
 }
 
 function CreateNewIngredient() {
@@ -574,7 +577,7 @@ function ProductVariants({ product }: { product: Product }) {
   }
 
   if (!!showVariable.id) {
-    return <ShowProductVariant product={product} variant={showVariable} onClose={handleCloseVariantDetailEvent} />
+    return <ShowProductVariant variant={showVariable} onClose={handleCloseVariantDetailEvent} />
   }
 
   return (
@@ -613,7 +616,9 @@ function ProductVariants({ product }: { product: Product }) {
             {(product.variants ?? []).map((variant: Variant, index: number) => (
               <tr key={index} className='relative overflow-hidden'>
                 <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
-                  <div className="font-medium text-gray-900">{variant.name}</div>
+                  <div onClick={() => setSearch({ variant: variant.id.toString() })} className="font-medium text-gray-900 hover:text-red-primary cursor-pointer">
+                    {variant.name}
+                  </div>
                 </td>
                 <td className="whitespace-nowrap p-4 text-sm text-gray-500">
                   <div className="relative">
@@ -672,7 +677,7 @@ function ProductVariants({ product }: { product: Product }) {
 }
 
 
-function ShowProductVariant({ product, variant, onClose }: {product: Product, variant: Variant, onClose: () => void }) {
+function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
   const navigateTo = useNavigate()
   const [isTrashing, setIsTrashing] = useState(false)
   const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
@@ -698,21 +703,18 @@ function ShowProductVariant({ product, variant, onClose }: {product: Product, va
     <div className="divide-y divide-gray-200 overflow-hidden bg-white shadow mt-10 relative">
       <div className="p-4">
         <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div className="">
-            <div className="flex items-center">
-              <h3 className="text-base font-semibold leading-6 text-gray-900">
-                <span className='text-gray-400'>{product.name} /</span> {variant.name}
-              </h3>
-            </div>
+          <div className="flex items-center">
+            <h3 className="text-base font-semibold leading-6 text-gray-900">
+              <span className='text-gray-600 hover:text-red-primary cursor-pointer' onClick={onClose}>Variants /</span> {variant.name}
+            </h3>
           </div>
-          <div className="flex flex-shrink-0 gap-x-2">
-
-            <button onClick={onClose} className="inline-flex items-center action:button button:blue px-4 text-sm uppercase font-medium">
-              <Icons.Outline.ArrowLongLeft className="h-5" /> Back
+          <div className="flex items-center flex-shrink-0 gap-x-2">
+            <button onClick={onClose} className="action:button button:blue">
+              <Icons.Outline.XMark className="h-5" />
             </button>
             <Menu as="div" className="relative">
               <Menu.Button className={'action:button button:blue'}>
-                <Icons.Outline.EllipsisVertical className="h-6" />
+                <Icons.Outline.EllipsisVertical className="h-5" />
               </Menu.Button>
               <Menu.Items className={'absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'}>
                 <Menu.Item as={'button'} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
@@ -730,6 +732,7 @@ function ShowProductVariant({ product, variant, onClose }: {product: Product, va
         </div>
       </div>
       <div>
+        {/* <CreateVariantCategory variant={variant} /> */}
         <CreateAttributeForm variant={variant} onSuccess={onSuccess} />
         <div className="flow-root border-t">
           <div className="overflow-x-auto">
@@ -811,6 +814,44 @@ function ShowProductVariant({ product, variant, onClose }: {product: Product, va
       />
     </div>
   )}</>
+}
+
+function CreateVariantCategory({ variant }: { variant: Variant }) {
+  type FormData = { name: string, description: string, order: number, status: string }
+  const form = useForm<FormData>({ name: '', description: '', order: 0, status: 'public' })
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    form.handle.post(`variants/${variant.id}/categories`)
+      .then(() => { })
+      .catch(() => { })
+  }
+  return (
+    <Form onSubmit={onSubmit} className='p-4 flex items-center gap-x-3'>
+      <div className="flex-auto flex items-center gap-x-3">
+        <div className="flex-auto">
+          <Input type='text' defaultValue={form.get('name')} error={form.errors('name')} onChange={form.onChange('name')} placeholder='Name *'/>
+        </div>
+        <div className="flex-auto">
+          <Input type="text" defaultValue={form.get('description')} onChange={form.onChange('description')} placeholder='Description'/>
+        </div>
+        <div className="flex-auto">
+          <Input type="number" min={0} defaultValue={form.get('order')} onChange={form.onChange('order')} placeholder='Order'/>
+        </div>
+        <div className="flex-auto">
+          <select placeholder='Status' defaultValue={form.get('status')} onChange={form.onChange('status')} className='w-full border-gray-200 focus:border-gray-500 focus:ring-4 focus:ring-gray-200'>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>
+        </div>
+      </div>
+      <div className="flex-shrink-0">
+        <button className='inline-flex items-center rounded-md border border-transparent bg-red-600 px-5 py-3 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'>
+          {form.isProcessing ? 'Saving...' : 'Add Category'}
+        </button>
+      </div>
+    </Form>
+  )
 }
 
 type CreateAttributeFormProps = {
