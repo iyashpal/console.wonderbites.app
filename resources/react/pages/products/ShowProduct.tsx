@@ -716,7 +716,7 @@ function ShowProductVariant({ product, variant, onClose }: {product: Product, va
               </Menu.Button>
               <Menu.Items className={'absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'}>
                 <Menu.Item as={'button'} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
-                  <Icons.Outline.Plus className="w-5 h-5" /> Add Group
+                  <Icons.Outline.Plus className="w-5 h-5" /> Add Category
                 </Menu.Item>
                 <Menu.Item as={'button'} className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
                   <Icons.Outline.PencilSquare className="w-5 h-5" /> Modify
