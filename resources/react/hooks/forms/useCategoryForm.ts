@@ -48,7 +48,7 @@ export default function useCategoryForm(fields: FormFields) {
    * @param event
    */
   function onChangeStatus(event: ChangeEvent<HTMLSelectElement>) {
-    setForm(payload => ({...payload, status: Number(event.target.value)}))
+    setForm(payload => ({...payload, status: event.target.value}))
   }
 
   /**
@@ -152,7 +152,7 @@ type FormFields = {
   type: string,
   parent: string | null,
   description: string,
-  status: number,
+  status: string,
   created_at?: string,
   updated_at?: string,
 }

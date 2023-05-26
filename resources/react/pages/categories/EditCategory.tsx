@@ -81,8 +81,8 @@ export default function EditCategory() {
                 Status <sup className='text-red-primary'>*</sup>
               </label>
               <select id="status" defaultValue={form.input.value('status')} onChange={form.input.onChange.status} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                <option value={1}>Public</option>
-                <option value={0}>Private</option>
+                <option value={'public'}>Public</option>
+                <option value={'private'}>Private</option>
               </select>
               <InputError error={form.errors?.status} />
             </div>

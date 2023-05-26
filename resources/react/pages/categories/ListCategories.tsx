@@ -79,7 +79,7 @@ export default function ListCategories() {
               category.parent ?? '-',
               category.type,
               <img className={'w-9 h-9 rounded-full mx-auto'} src={category.thumbnail_url} alt={category.name} />,
-              category.status ? <><span className={'text-red-primary'}>Active</span></> : 'In-active',
+              <span className={'text-red-primary'}>{category.status}</span>,
               <div className="flex item-center justify-center gap-x-1">
                 <Link to={`/app/categories/${category.id}/edit`} className={'action:button button:blue'}>
                   <Icons.Outline.PencilSquare className={'w-5 h-5'} />

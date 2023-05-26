@@ -9,7 +9,7 @@ export default function CreateCategory() {
 
   const { categories } = useLoaderData() as { categories: Category[] }
 
-  const form = useCategoryForm({ name: '', description: '', parent: null, type: 'All', status: 1 })
+  const form = useCategoryForm({ name: '', description: '', parent: null, type: 'All', status: 'private' })
   return <>
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
@@ -29,7 +29,7 @@ export default function CreateCategory() {
 
             <div className="col-span-6 sm:col-span-3">
               <label htmlFor="thumbnail" className="block text-sm font-bold text-gray-700">
-                Image <sup className='text-red-primary'>*</sup>
+                Image
               </label>
               <input type="file" accept={'image/*'} name={'thumbnail'} id={'thumbnail'} onChange={form.input.onChange.thumbnail} className={'mt-1 p-0.5 block w-full border border-gray-300 text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none'} />
               <InputError error={form.errors?.thumbnail} />
@@ -73,8 +73,8 @@ export default function CreateCategory() {
                 Status <sup className='text-red-primary'>*</sup>
               </label>
               <select id="status" onChange={form.input.onChange.status} name="status" className="mt-1 block w-full border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
-                <option value={1}>Public</option>
-                <option value={0}>Private</option>
+                <option value={'public'}>Public</option>
+                <option value={'private'}>Private</option>
               </select>
               <InputError error={form.errors?.status} />
             </div>

@@ -6,7 +6,7 @@ export default interface Category {
   parent: number,
   description: string,
   type: string,
-  status: number,
+  status: string,
   created_at: string,
   updated_at: string,
   thumbnail_url: string,
