@@ -17,9 +17,9 @@ export default class ProductQuery extends Query {
 
     this.$aggregates.push(...['Reviews'])
 
-    this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients', 'Variants'])
-
     this.$filters.push(...['InCategories', 'Search', 'TopRated', 'TodaysPick', 'Popular'])
+
+    this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients', 'Variants', 'Categories'])
   }
 
   /**
@@ -49,6 +49,19 @@ export default class ProductQuery extends Query {
         ),
     ])
 
+    return this
+  }
+
+  /**
+   * Preload the Product categories.
+   *
+   * @returns ModelQueryBuilderContract<typeof Product, Product>
+   */
+  protected preloadCategories (): ProductQuery {
+    this.$query.match([
+      this.input('with', []).includes(this.qs('categories')),
+      productQuery => productQuery.preload('categories'),
+    ])
     return this
   }
 
