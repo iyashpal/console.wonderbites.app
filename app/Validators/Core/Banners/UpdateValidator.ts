@@ -27,7 +27,7 @@ export default class UpdateValidator {
     title: schema.string({trim: true}, [rules.required()]),
     description: schema.string.optional({trim: true}),
     attachment: schema.file.optional({
-      size: '1',
+      size: '1024kb',
       extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
     }),
     options: schema.object([rules.required()])

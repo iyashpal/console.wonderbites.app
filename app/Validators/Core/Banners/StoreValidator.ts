@@ -28,7 +28,7 @@ export default class StoreValidator {
     title: schema.string({trim: true}, [rules.required()]),
     description: schema.string.optional({trim: true}),
     attachment: schema.file({
-      size: '1',
+      size: '1024kb',
       extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
     }, [rules.required()]),
     options: schema.object([rules.required()])
