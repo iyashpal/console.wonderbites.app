@@ -126,10 +126,10 @@ export default function Dashboard() {
               </div>
               <div className="pt-5 space-y-5">
                 <div className={`block`}>
-                  <input className={`w-full placeholder:font-medium border border-gray-300`} type="text" placeholder={`Title`}/>
+                  <input className={`w-full placeholder:font-medium border border-gray-300 focus:border-red-primary focus:ring-red-primary`} type="text" placeholder={`Title`}/>
                 </div>
                 <div className={`block`}>
-                  <textarea className={`w-full placeholder:font-medium border border-gray-300`} rows={13} placeholder={`Content`}></textarea>
+                  <textarea className={`w-full placeholder:font-medium border border-gray-300 focus:border-red-primary focus:ring-red-primary`} rows={13} placeholder={`Content`}></textarea>
                 </div>
                 <div className={`block`}>
                   <button className={`w-full inline-flex items-center justify-center border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2`}>Publish</button>
