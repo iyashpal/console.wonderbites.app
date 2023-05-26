@@ -50,7 +50,7 @@ export default function ShowCategory() {
               { name: 'Parent', value: category?.category?.name ?? '-' },
               { name: 'Description', value: category.description, onModal: true },
               { name: 'Image', value: <img alt={category.name} src={category.thumbnail_url} className="w-10 h-10 rounded-full object-cover ring-2 ring-gray-200 ring-offset-1" /> },
-              { name: 'Status', value: <span className='text-red-primary'>{category.status}</span> },
+              { name: 'Status', value: <span className='text-red-primary capitalize'>{category.status}</span> },
             ]}
           />
 

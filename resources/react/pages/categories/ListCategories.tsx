@@ -79,7 +79,7 @@ export default function ListCategories() {
               category.parent ?? '-',
               category.type,
               <img className={'w-9 h-9 rounded-full mx-auto'} src={category.thumbnail_url} alt={category.name} />,
-              <span className={'text-red-primary'}>{category.status}</span>,
+              <span className={'text-red-primary capitalize'}>{category.status}</span>,
               <div className="flex item-center justify-center gap-x-1">
                 <Link to={`/app/categories/${category.id}/edit`} className={'action:button button:blue'}>
                   <Icons.Outline.PencilSquare className={'w-5 h-5'} />
