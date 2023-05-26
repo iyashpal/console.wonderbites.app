@@ -64,13 +64,13 @@ export function Table(props: { className?: string, children?: any }) {
 }
 
 export function TableHead(props: { className?: string, children?: any }) {
-  return <thead {...classNames(`bg-gray-50`, props.className)}>
+  return <thead className={classNames(`bg-gray-50`, props.className)}>
   {props.children}
   </thead>
 }
 
 export function TableBody(props: { className?: string, children?: any }) {
-  return <tbody {...classNames(`divide-y divide-gray-200 bg-white`, props.className)}>{props.children}</tbody>
+  return <tbody className={classNames(`divide-y divide-gray-200 bg-white`, props.className)}>{props.children}</tbody>
 }
 
 export function TableRow(props: { className?: string, children?: any }) {
@@ -80,19 +80,19 @@ export function TableRow(props: { className?: string, children?: any }) {
 }
 
 export function TableHeadCell(props: { className?: string, colSpan?: number, children?: any }) {
-  return <th colSpan={props.colSpan} {...classNames('py-3.5 px-3 text-sm font-semibold text-gray-900 uppercase', props.className)}>
+  return <th colSpan={props.colSpan} className={classNames('py-3.5 px-3 text-sm font-semibold text-gray-900 uppercase', props.className)}>
     {props.children}
   </th>
 }
 
 export function TableDataCell(props: { className?: string, colSpan?: number, children?: any }) {
-  return <td colSpan={props.colSpan} {...classNames('whitespace-nowrap py-3 px-3 text-sm font-medium', props.className)}>
+  return <td colSpan={props.colSpan} className={classNames('whitespace-nowrap py-3 px-3 text-sm font-medium', props.className)}>
     {props.children}
   </td>
 }
 
 export const TableHeadCheckboxCell = forwardRef((props: CheckPropsType, forwardedRef: ForwardedRef<HTMLInputElement>) => (
-  <th scope="col" {...classNames("relative w-12 px-6 sm:w-16 sm:px-8", props.className)}>
+  <th scope="col" className={classNames("relative w-12 px-6 sm:w-16 sm:px-8", props.className)}>
     <input type="checkbox" ref={forwardedRef} defaultChecked={props.checked} onChange={props.onChange} value={props.value} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
   </th>
 ))
@@ -100,7 +100,7 @@ export const TableHeadCheckboxCell = forwardRef((props: CheckPropsType, forwarde
 export const TableDataCheckboxCell = forwardRef((props: CheckPropsType, forwardedRef: ForwardedRef<HTMLInputElement>) => {
 
   return (
-    <td {...classNames('relative w-12 px-6 sm:w-16 sm:px-8', props.className)}>
+    <td className={classNames('relative w-12 px-6 sm:w-16 sm:px-8', props.className)}>
       {props.checked && (<div className="absolute inset-y-0 left-0 w-0.5 bg-red-600"/>)}
       <input ref={forwardedRef} defaultChecked={props.checked} type="checkbox" onChange={props.onChange} value={props.value} className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6"/>
     </td>

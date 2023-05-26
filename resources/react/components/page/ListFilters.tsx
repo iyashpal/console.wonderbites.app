@@ -10,7 +10,7 @@ type FilterProps = { sortBy: SortFilter[], create: CreateLink, className?: strin
 
 export default function ListFilters({ create, sortBy, className }: FilterProps) {
   return <>
-    <div {...classNames(`p-4 flex flex-col-reverse md:flex-row items-center justify-between border`, className)}>
+    <div className={classNames(`p-4 flex flex-col-reverse md:flex-row items-center justify-between border`, className)}>
       <div className={'flex items-center gap-x-2 flex-col md:flex-row'}>
         <div className={'border border-gray-300 rounded-md flex items-center text-sm relative'}>
           <SortBy filters={sortBy} />

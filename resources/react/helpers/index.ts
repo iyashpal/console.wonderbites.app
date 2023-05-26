@@ -1,8 +1,10 @@
 import Cookies from 'js-cookie'
 import axios from '@/config/axios'
+import { flatten } from 'lodash'
 
 export function classNames(...classes) {
-  return {className: classes.filter(Boolean).join(' ')}
+
+  return flatten(classes).filter(Boolean).join(' ')
 }
 
 
