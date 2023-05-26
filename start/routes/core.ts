@@ -27,6 +27,7 @@ Route.group(() => {
     Route.resource('attributes', 'AttributesController')
     Route.resource('categories', 'CategoriesController')
     Route.resource('ingredients', 'IngredientsController')
+    Route.resource('variants.categories', 'Variants/CategoriesController')
 
     // Pivot Routes
     Route.group(() => {
