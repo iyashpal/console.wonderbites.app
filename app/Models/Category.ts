@@ -22,13 +22,13 @@ export default class Category extends BaseModel {
   public description: string
 
   @attachment({ folder: 'categories', preComputeUrl: true })
-  public thumbnail: AttachmentContract
+  public thumbnail: AttachmentContract | null
 
   @column()
   public options: any
 
   @column()
-  public status: number
+  public status: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

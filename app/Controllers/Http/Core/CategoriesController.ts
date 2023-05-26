@@ -27,11 +27,11 @@ export default class CategoriesController {
 
   public async store ({request, response}: HttpContextContract) {
     try {
-      const {name, description, type, parent, status} = await request.validate(StoreValidator)
+      const {name, description, type, parent, thumbnail, status} = await request.validate(StoreValidator)
 
       const category = await Category.create({
         name, description, type, parent, status,
-        thumbnail: Attachment.fromFile(request.file('thumbnail')!),
+        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
       response.json(category)
