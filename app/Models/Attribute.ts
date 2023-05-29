@@ -3,6 +3,8 @@ import {BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany} from '@
 import {User, Variant} from 'App/Models/index'
 
 export default class Attribute extends BaseModel {
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
@@ -30,6 +32,9 @@ export default class Attribute extends BaseModel {
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 
-  @manyToMany(() => Variant)
+  @manyToMany(() => Variant, {
+    pivotColumns: ['id', 'attribute_id', 'variant_id', 'category_id'],
+    pivotTimestamps: true,
+  })
   public variants: ManyToMany<typeof Variant>
 }
