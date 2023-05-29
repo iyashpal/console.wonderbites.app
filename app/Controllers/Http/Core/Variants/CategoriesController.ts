@@ -1,6 +1,6 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import { Category } from 'App/Models'
+import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Variants/Categories/StoreValidator'
 
 export default class CategoriesController {
@@ -14,6 +14,10 @@ export default class CategoriesController {
       const category = await Category.create({
         name, description, status, type: 'Variant',
       })
+
+      await category.related('variants').attach({ [params.variant_id]: { order } })
+
+      response.ok(category)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
