@@ -8,10 +8,7 @@ export default class extends BaseSchema {
       table.bigIncrements('id')
       table.bigInteger('attribute_id').unsigned().references('attributes.id').onDelete('CASCADE')
       table.bigInteger('variant_id').unsigned().references('variants.id').onDelete('CASCADE')
-      table.string('quantity').nullable().defaultTo(1)
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
+      table.string('price').nullable().defaultTo(0)
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
