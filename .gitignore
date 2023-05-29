@@ -13,3 +13,8 @@ package-lock.json
 .backup
 google-cloud-key.json
 thunder-tests
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
