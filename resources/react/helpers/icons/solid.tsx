@@ -30,14 +30,17 @@ import {
   BookmarkIcon as Bookmark,
   EnvelopeIcon as Envelope,
   EyeIcon as Eye,
+  TagIcon as Tag,
   HashtagIcon as Hashtag,
   Bars3BottomLeftIcon as Bars3BottomLeft,
   LinkIcon as Link,
+  CheckCircleIcon as CheckCircle,
   CurrencyDollarIcon as CurrencyDollar,
   PencilSquareIcon as PencilSquare,
 } from '@heroicons/react/24/solid'
 
 export {
+  CheckCircle,
   ArrowLongLeft,
   EllipsisVertical,
   ChevronUp,
@@ -47,6 +50,7 @@ export {
   Home,
   Star,
   Cog,
+  Tag,
   Plus,
   Photo,
   Ticket,
