@@ -27,7 +27,7 @@ export default function Input({ error, override, className, ...props }: InputPro
 
     return (
         <div className="relative">
-            <input {...props} className={classNames(override ? className : `w-full focus:border-gray-500 focus:ring-4`, classList)} />
+            <input {...props} className={classNames(override ? className : `focus:border-gray-500 focus:ring-4`, classList)} />
             {hasError && <p className="absolute capitalize text-red-500 text-xs pt-1">{error}</p>}
         </div>
     )
