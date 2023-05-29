@@ -1,4 +1,4 @@
-import { Attribute, User } from "@/contracts/schema/index";
+import { Attribute, Category, User } from "@/contracts/schema/index";
 
 export default interface Variant {
   id: number;
@@ -10,7 +10,8 @@ export default interface Variant {
   created_at: string;
   updated_at: string;
   user?: User;
-  attributes?: Attribute[]
+  attributes?: Attribute[];
+  categories?: Category[];
   meta: {
     pivot_price: string;
     pivot_proteins: string;

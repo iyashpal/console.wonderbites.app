@@ -11,5 +11,8 @@ export default interface Attribute {
   created_at: string;
   updated_at: string;
   user?: User;
-  variants?: Variant[]
+  variants?: Variant[];
+  meta: {
+    pivot_category_id: number
+  }
 }

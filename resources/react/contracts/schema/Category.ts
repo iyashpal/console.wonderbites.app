@@ -1,4 +1,4 @@
-import Cuisine from "./Cuisine";
+import { Attribute, Cuisine } from ".";
 
 export default interface Category {
   id: number,
@@ -12,6 +12,7 @@ export default interface Category {
   thumbnail_url: string,
   cuisines?: Cuisine[],
   category?: Category,
+  attributes?: Attribute[];
   options: {
     extras?: {id: string, title: string, type: string, checked: boolean}[]
   }
