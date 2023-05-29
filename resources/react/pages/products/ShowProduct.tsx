@@ -12,7 +12,7 @@ import { IngredientProduct } from '@/contracts/schema/pivot'
 import { Combobox, Menu, Transition } from '@headlessui/react'
 import CreateProductVariant from './partials/CreateProductVariant'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { Attribute, Ingredient, Media, Product, Variant } from '~/contracts/schema'
+import { Attribute, Category, Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import { useAttributeForm, useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
 import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import Input from '@/components/forms/Input';
@@ -680,23 +680,10 @@ function ProductVariants({ product }: { product: Product }) {
 function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: () => void }) {
   const navigateTo = useNavigate()
   const [isTrashing, setIsTrashing] = useState(false)
-  const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
-  const [attributes, setAttributes] = useState<Attribute[]>([] as Attribute[])
-  useEffect(() => {
-    setAttributes(variant.attributes ?? [])
-  }, [variant])
+
   function onDelete() {
     navigateTo('')
     onClose()
-  }
-
-  function onDeleteAttribute() {
-    setAttributes(attributes.filter(({ id }) => id !== isTrashingAttribute.id))
-    setIsTrashingAttribute({} as Attribute)
-  }
-
-  function onSuccess(attribute: Attribute) {
-    setAttributes(data => [...data, { ...attribute }])
   }
 
   return <>{!!variant.id && (
@@ -732,78 +719,30 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
         </div>
       </div>
       <div>
-        {/* <CreateVariantCategory variant={variant} /> */}
-        <CreateAttributeForm variant={variant} onSuccess={onSuccess} />
-        <div className="flow-root border-t">
-          <div className="overflow-x-auto">
-            <div className="inline-block min-w-full align-middle">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-                      <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-10">ID</th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Name</th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase w-24">Price</th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">Category</th>
-                    <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {attributes.map(attribute => (
-                    <tr key={attribute.id}>
-                      <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                        <input type="checkbox" className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
-                      </td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.id}</td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.name}</td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">{attribute.price}</td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">-</td>
-                      <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                        <div className="flex item-center justify-end gap-x-1">
-                          <button className="action:button button:blue">
-                            <Icons.Outline.PencilSquare className="w-5 h-5" />
-                          </button>
-                          <button onClick={() => setIsTrashingAttribute(attribute)} className="action:button button:red">
-                            <Icons.Outline.Trash className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+        <CreateVariantCategory variant={variant} />
+        <div className="p-4">
+          <ul role="list" className="divide-y">
+            {variant.categories?.map(category => (
+              <li key={category.id} className="relative">
+                <VariantCategory category={category} variant={variant} />
+              </li>
+            ))}
+          </ul>
+        </div>
 
-                  {(attributes.length === 0) && (
-                    <tr>
-                      <td colSpan={6} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <div className="border-l-4 border-yellow-400 bg-yellow-50 p-4">
-                          <div className="flex">
-                            <div className="flex-shrink-0">
-                              <Icons.Solid.ExclamationTriangle className="h-5 w-5 text-yellow-400" />
-                            </div>
-                            <div className="ml-3">
-                              <p className="text-sm text-yellow-700">No attributes available.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+        {false && <li>
+          <div className=''>
+            <div className="flex items-center px-3 py-2 gap-3">
+              <Input type='search' className='w-20' placeholder='Search' />
+              <button type='button' className='inline-flex items-center gap-x-1 rounded-md shadow-md py-2 px-3 bg-red-primary hover:bg-red-700 text-white text-sm transition-colors ease-in-out duration-200'>
+                <Icons.Outline.Plus className='w-4 h-4' />
+                <span>Create New Category</span>
+              </button>
             </div>
           </div>
-        </div>
+        </li>}
       </div>
 
-      <TrashModal
-        title={'Delete Attribute'}
-        onDelete={onDeleteAttribute}
-        show={isTrashingAttribute.id !== undefined}
-        url={`/attributes/${isTrashingAttribute.id}`}
-        onClose={() => setIsTrashingAttribute({} as Attribute)}
-        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be undone.</>}
-      />
       <TrashModal
         show={isTrashing}
         onDelete={onDelete}
@@ -816,13 +755,87 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
   )}</>
 }
 
+function VariantCategory({ category, variant }: { category: Category, variant: Variant }) {
+  const [expand, setExpand] = useState<boolean>(false)
+  const [attributes, setAttributes] = useState<Attribute[]>([] as Attribute[])
+  const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
+
+  useEffect(() => {
+    setAttributes(variant.attributes?.filter(attribute => attribute.meta.pivot_category_id === category.id) ?? [])
+  }, [variant])
+
+  function onSuccess(attribute: Attribute) {
+    setAttributes(data => [...data, { ...attribute, meta: { pivot_category_id: category.id } }])
+  }
+
+  function onDeleteAttribute() {
+    setAttributes(attributes.filter(({ id }) => id !== isTrashingAttribute.id))
+    setIsTrashingAttribute({} as Attribute)
+  }
+  return <>
+    <div onClick={() => setExpand(!expand)} className={`w-full flex items-center justify-between space-x-4 hover:bg-gray-50 py-4 px-4 select-none cursor-pointer ${expand ? 'bg-gray-100' : ''}`}>
+      <div className="flex items-center gap-x-3">
+        <div className="flex-none rounded-full p-1 text-gray-500 bg-gray-100/10">
+          <Icons.Outline.Tag className='w-4 h-4' />
+        </div>
+        <h2 className="min-w-0 text-sm font-semibold leading-6">
+          <span className="truncate">{category.name}</span>
+        </h2>
+        <div className="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset text-gray-400 bg-gray-400/10 ring-gray-400/20">
+          {`${attributes.length} Attribute${attributes.length > 1 ? 's' : ''}`}
+        </div>
+      </div>
+
+      {expand ? (
+        <Icons.Solid.ChevronDown className="h-5 w-5 flex-none text-gray-400" />
+      ) : (
+        <Icons.Solid.ChevronRight className="h-5 w-5 flex-none text-gray-400" />
+      )}
+
+    </div>
+    {expand && <>
+      <div className="border-t p-4">
+        <div className="flow-root">
+          <div className="inline-block min-w-full align-middle">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead>
+                <tr>
+                  <th scope="col" className="whitespace-nowrap pb-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">ID</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
+                  <th scope="col" className="relative whitespace-nowrap pb-3.5 pl-3 pr-4 sm:pr-0">
+                    <span className="sr-only">Edit</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className=" bg-white">
+                {attributes.map(attribute => (<AttributeRow attribute={attribute} onTrash={(t) => setIsTrashingAttribute(t)} />))}
+                <CreateAttributeForm category={category} variant={variant} onSuccess={onSuccess} />
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <TrashModal
+        title={'Delete Attribute'}
+        onDelete={onDeleteAttribute}
+        show={isTrashingAttribute.id !== undefined}
+        url={`/attributes/${isTrashingAttribute.id}`}
+        onClose={() => setIsTrashingAttribute({} as Attribute)}
+        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be undone.</>}
+      />
+    </>}
+  </>
+}
+
 function CreateVariantCategory({ variant }: { variant: Variant }) {
   type FormData = { name: string, description: string, order: number, status: string }
   const form = useForm<FormData>({ name: '', description: '', order: 0, status: 'public' })
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
-    form.handle.post(`variants/${variant.id}/categories`)
+    form.post(`variants/${variant.id}/categories`)
       .then(() => { })
       .catch(() => { })
   }
@@ -830,16 +843,16 @@ function CreateVariantCategory({ variant }: { variant: Variant }) {
     <Form onSubmit={onSubmit} className='p-4 flex items-center gap-x-3'>
       <div className="flex-auto flex items-center gap-x-3">
         <div className="flex-auto">
-          <Input type='text' defaultValue={form.get('name')} error={form.errors('name')} onChange={form.onChange('name')} placeholder='Name *'/>
+          <Input type='text' defaultValue={form.value('name')} error={form.errors('name')} onChange={form.onChange('name')} placeholder='Name *' />
         </div>
         <div className="flex-auto">
-          <Input type="text" defaultValue={form.get('description')} onChange={form.onChange('description')} placeholder='Description'/>
+          <Input type="text" defaultValue={form.value('description')} onChange={form.onChange('description')} placeholder='Description' />
         </div>
         <div className="flex-auto">
-          <Input type="number" min={0} defaultValue={form.get('order')} onChange={form.onChange('order')} placeholder='Order'/>
+          <Input type="number" min={0} defaultValue={form.value('order')} onChange={form.onChange('order')} placeholder='Order' />
         </div>
         <div className="flex-auto">
-          <select placeholder='Status' defaultValue={form.get('status')} onChange={form.onChange('status')} className='w-full border-gray-200 focus:border-gray-500 focus:ring-4 focus:ring-gray-200'>
+          <select placeholder='Status' defaultValue={form.value('status')} onChange={form.onChange('status')} className='w-full border-gray-200 focus:border-gray-500 focus:ring-4 focus:ring-gray-200'>
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
@@ -856,12 +869,13 @@ function CreateVariantCategory({ variant }: { variant: Variant }) {
 
 type CreateAttributeFormProps = {
   variant: Variant,
+  category: Category,
   onSuccess: (attribute: Attribute) => void
 }
-function CreateAttributeForm({ variant, onSuccess }: CreateAttributeFormProps) {
+function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFormProps) {
   type AttributeFormType = { variant_id: number, name: string, description: string, price: string, category_id: number }
   const [showForm, setShowForm] = useState(false)
-  const form = useAttributeForm<AttributeFormType>({ variant_id: variant.id } as AttributeFormType)
+  const form = useAttributeForm<AttributeFormType>({ variant_id: variant.id, category_id: category.id } as AttributeFormType)
 
   function onSubmit(event) {
     form.onSubmit.store(event).then((data: Attribute) => {
@@ -869,6 +883,37 @@ function CreateAttributeForm({ variant, onSuccess }: CreateAttributeFormProps) {
       setShowForm(false)
     })
   }
+
+  return (
+    <tr>
+      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
+        <Icons.Outline.Plus className='w-5 h-5' />
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900 sm:pl-0">
+        <div className="relative">
+          <input type="text" placeholder='Enter Name *' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+        <div className="relative">
+          <input type="text" placeholder='Enter description' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+        <div className="relative">
+          <input type="number" placeholder='Enter price *' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="whitespace-nowrap py-2 pl-3 pr-4 text-right sm:pr-0">
+        <button type="button" className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 inline-flex gap-x-1 items-center">
+          <Icons.Outline.CheckCircle className='w-4 h-4' /> <span>Save</span>
+        </button>
+      </td>
+    </tr>
+  )
   return (
     <div className="relative">
       <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-x-1 text-sm pl-4 my-3 sm:pl-6 bg-white px-2 font-semibold text-red-600">
@@ -880,15 +925,15 @@ function CreateAttributeForm({ variant, onSuccess }: CreateAttributeFormProps) {
           <div className="bg-white px-4 pb-5 sm:px-6">
             <div className="flex gap-x-3">
               <div className="flex-1 relative">
-                <input value={form.data.name} onChange={form.onChange('name')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Name *" />
+                <input defaultValue={form.data.name} onChange={form.onChange('name')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Name *" />
                 <InputError error={form.errors.name} />
               </div>
               <div className="flex-1 relative">
-                <input value={form.data.description} onChange={form.onChange('description')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Description" />
+                <input defaultValue={form.data.description} onChange={form.onChange('description')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="text" placeholder="Description" />
                 <InputError error={form.errors.description} />
               </div>
               <div className="flex-1 relative">
-                <input value={form.data.price} onChange={form.onChange('price')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="number" placeholder="Price *" />
+                <input defaultValue={form.data.price} onChange={form.onChange('price')} className="block w-full border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" type="number" placeholder="Price *" />
                 <InputError error={form.errors.price} />
               </div>
               <div className="shrink-0">
@@ -902,5 +947,38 @@ function CreateAttributeForm({ variant, onSuccess }: CreateAttributeFormProps) {
       )}
 
     </div>
+  )
+}
+
+function AttributeRow({ attribute, onTrash }: { attribute: Attribute, onTrash: (attribute: Attribute) => void }) {
+  return (
+    <tr>
+      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
+        {attribute.id}
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
+        <div className="relative">
+          <input type="text" defaultValue={attribute.name} placeholder='Enter description' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+        <div className="relative">
+          <input type="text" defaultValue={attribute.description} placeholder='Enter description' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+        <div className="relative">
+          <input type="number" defaultValue={attribute.price} placeholder='Enter description' className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
+          <div className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600" aria-hidden="true" />
+        </div>
+      </td>
+      <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+        <button onClick={() => onTrash(attribute)} type="button" className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 inline-flex gap-x-1 items-center">
+          <Icons.Outline.Trash className='w-4 h-4' /> Trash
+        </button>
+      </td>
+    </tr>
   )
 }
