@@ -61,7 +61,7 @@ export default function useForm<T>(initialState: T = {} as T) {
    * @param defaults any
    * @returns any
    */
-  function get<V>(key: keyof T, defaults: V = null as V) {
+  function value<V>(key: keyof T, defaults: V = null as V) {
     return form[key] ?? defaults
   }
 
@@ -140,16 +140,14 @@ export default function useForm<T>(initialState: T = {} as T) {
   }
 
   return {
-    sync, set, get, onChange, data: form,
+    sync, set, value, onChange, data: form,
     isProcessing,
     errors: error,
-    handle: {
-      get: handleGet,
-      put: handlePut,
-      post: handlePost,
-      patch: handlePatch,
-      delete: handleDelete
-    },
+    get: handleGet,
+    put: handlePut,
+    post: handlePost,
+    patch: handlePatch,
+    delete: handleDelete,
     reset: { errors: resetErrors },
   }
 }
