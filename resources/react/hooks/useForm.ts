@@ -29,6 +29,8 @@ export default function useForm<T>(initialState: T = {} as T) {
   */
   const sync = (data: T): void => setForm(data)
 
+  const resetForm = (): void => setForm(initialState)
+
   /**
   * Reset the form errors.
   *
@@ -148,6 +150,6 @@ export default function useForm<T>(initialState: T = {} as T) {
     post: handlePost,
     patch: handlePatch,
     delete: handleDelete,
-    reset: { errors: resetErrors },
+    reset: { form: resetForm, errors: resetErrors },
   }
 }
