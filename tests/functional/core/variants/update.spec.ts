@@ -84,6 +84,7 @@ test.group('Core [variants.update]', (group) => {
       $response.assertStatus(422)
       $response.assertBodyContains({ errors: { [field]: expect } })
     }).tags(['@core', '@core.variants.update'])
+
   test('it can store the variant without the field "{field}"')
     .with([
       { field: 'description', value: '' },
