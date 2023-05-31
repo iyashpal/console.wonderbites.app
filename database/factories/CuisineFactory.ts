@@ -10,7 +10,7 @@ export default Factory.define(Cuisine, async ({ faker }) => {
     size: 10,
     extname: 'png',
     mimeType: 'image/png',
-    name: `${faker.random.alphaNumeric(10)}.png`,
+    name: `${faker.string.alphanumeric(10)}.png`,
   })
 
   thumbnail.isPersisted = true

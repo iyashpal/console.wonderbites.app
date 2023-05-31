@@ -10,9 +10,9 @@ export default Factory.define(Variant, async ({ faker }) => {
       extname: 'png',
       size: 1024,
       mimeType: 'image/png',
-      name: `${faker.random.alpha(10)}.png`,
+      name: `${faker.string.alpha(10)}.png`,
     }),
     price: faker.commerce.price(),
-    status: !!faker.random.numeric(1),
+    status: !!faker.string.numeric(1),
   }
 }).build()

@@ -6,8 +6,8 @@ export default Factory.define(WonderPoint, ({ faker }) => {
   return {
     action: 'earn',
     event: faker.lorem.sentence(),
-    points: faker.datatype.number({ max: 100 }),
-    extras: faker.datatype.array(),
+    points: faker.number.int({ max: 100 }),
+    extras: [],
   }
 })
   .relation('user', () => UserFactory)

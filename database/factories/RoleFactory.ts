@@ -4,7 +4,7 @@ import {UserFactory} from 'Database/factories/index'
 
 export default Factory.define(Role, ({faker}) => {
   return {
-    title: faker.name.jobTitle(),
+    title: faker.person.jobTitle(),
     description: faker.lorem.paragraph(20),
     scope: {},
   }

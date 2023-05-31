@@ -6,7 +6,7 @@ export default Factory.define(Attribute, ({ faker }) => {
     name: faker.commerce.productName(),
     description: faker.lorem.paragraph(5),
     price: faker.commerce.price(),
-    quantity: faker.random.numeric(8),
-    status: !!faker.random.numeric(),
+    quantity: faker.string.numeric(8),
+    status: !!faker.string.numeric(),
   }
 }).build()

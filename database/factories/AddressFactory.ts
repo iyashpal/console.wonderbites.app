@@ -4,14 +4,14 @@ import { UserFactory } from '.'
 
 export default Factory.define(Address, ({ faker }) => {
   return {
-    title: faker.name.jobTitle(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    street: faker.address.street(),
-    city: faker.address.city(),
+    title: faker.person.jobTitle(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    street: faker.location.street(),
+    city: faker.location.city(),
     phone: faker.phone.number('+## ##### #####'),
     email: faker.internet.email(),
-    location: { lat: faker.address.latitude(), lng: faker.address.longitude() },
+    location: { lat: faker.location.latitude().toString(), lng: faker.location.longitude().toString() },
     type: 'home',
   }
 })

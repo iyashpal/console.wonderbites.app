@@ -10,7 +10,7 @@ export default Factory.define(Media, async ({ faker }) => {
     extname: 'png',
     size: 10 * 1000,
     mimeType: 'image/png',
-    name: `${faker.random.alphaNumeric(10)}.png`,
+    name: `${faker.string.alphanumeric(10)}.png`,
   })
 
   await Drive.put(attachment.name, (await file.generatePng('1mb')).contents)

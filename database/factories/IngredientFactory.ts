@@ -11,7 +11,7 @@ export default Factory.define(Ingredient, async ({ faker }) => {
     extname: 'png',
     mimeType: 'image/png',
     size: 10 * 1000,
-    name: `${faker.random.alphaNumeric(10)}.png`,
+    name: `${faker.string.alphanumeric(10)}.png`,
   })
 
   thumbnail.isPersisted = true

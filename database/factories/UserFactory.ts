@@ -12,7 +12,7 @@ export default Factory.define(User, async ({faker}) => {
     extname: 'png',
     mimeType: 'image/png',
     size: 10 * 1000,
-    name: `${faker.random.alphaNumeric(10)}.png`,
+    name: `${faker.string.alphanumeric(10)}.png`,
   })
 
   attachment.isPersisted = true
@@ -21,8 +21,8 @@ export default Factory.define(User, async ({faker}) => {
 
   return {
     roleId: null,
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
     dateOfBirth: DateTime.fromJSDate(
       faker.date.birthdate({min: 20, max: 40})
     ),

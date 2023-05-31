@@ -8,7 +8,7 @@ export default Factory.define(VerificationCode, async ({faker}) => {
   return {
     state: 'Generate',
     token: string.generateRandom(32),
-    code: faker.datatype.number({min: 10000, max: 99999}).toString(),
+    code: faker.number.int({min: 10000, max: 99999}).toString(),
     expiresAt: DateTime.now().plus({hour: 1}),
     verifiedAt: DateTime.now().plus({hour: 1}),
   }

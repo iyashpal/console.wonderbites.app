@@ -6,7 +6,7 @@ export default Factory.define(Feedback, ({ faker }) => {
   return {
     experience: faker.word.verb(1),
     body: faker.lorem.paragraph(10),
-    source: faker.random.word(),
+    source: faker.string.numeric(10),
   }
 })
   .relation('user', () => UserFactory)

@@ -10,7 +10,7 @@ export default Factory.define(Banner, async ({ faker }) => {
     extname: 'png',
     size: 10 * 1000,
     mimeType: 'image/png',
-    name: `${faker.random.alphaNumeric(10)}.png`,
+    name: `${faker.string.alphanumeric(10)}.png`,
   })
 
   attachment.isPersisted = true
