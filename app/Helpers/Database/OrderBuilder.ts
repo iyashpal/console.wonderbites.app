@@ -1,35 +1,14 @@
-import Query from './Query'
-import {RequestContract} from '@ioc:Adonis/Core/Request'
-import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
+import {Builder} from './index'
 import {Order} from 'App/Models'
 import {OrderStatus} from 'App/Models/Enums/Order'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
-export default class OrderQuery extends Query {
-  public $query: ModelQueryBuilderContract<typeof Order, Order>
-
+export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof Order, Order>> {
   constructor (protected $request: RequestContract) {
     super($request)
 
-    this.$query = Order.query()
-
-    this.$counts.push(...[])
-
-    this.$filters.push(...[])
-
-    this.$aggregates.push(...[])
-
-    this.$preloads.push(...['Products', 'Ingredients', 'User', 'Coupon', 'Review'])
-
-    this.$filters.push(...['Status'])
-  }
-
-  /**
-   * Get the query instance.
-   *
-   * @returns ModelQueryBuilderContract<typeof Order, Order>
-   */
-  public query (): ModelQueryBuilderContract<typeof Order, Order> {
-    return this.$query
+    this.mapQueries(this, Order.query())
   }
 
   /**

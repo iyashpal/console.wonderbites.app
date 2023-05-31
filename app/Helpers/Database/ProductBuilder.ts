@@ -1,34 +1,15 @@
-import {Query} from './index'
+import {Builder} from './index'
 import {Product} from 'App/Models'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {ExtraFieldName} from 'App/Models/Enums/ExtraField'
 import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
-export default class ProductQuery extends Query {
-  public $query: ModelQueryBuilderContract<typeof Product, Product>
-
+export default class ProductQuery extends Builder<ModelQueryBuilderContract<typeof Product, Product>> {
   constructor (protected $request: RequestContract) {
     super($request)
 
-    this.$query = Product.query()
-
-    this.$counts.push(...['Reviews'])
-
-    this.$aggregates.push(...['Reviews'])
-
-    this.$filters.push(...['InCategories', 'Search', 'TopRated', 'TodaysPick', 'Popular'])
-
-    this.$preloads.push(...['UserWishlist', 'Media', 'Reviews', 'Ingredients', 'Variants', 'Categories'])
-  }
-
-  /**
-   * Get the query instance.
-   *
-   * @returns ModelQueryBuilderContract<typeof Product, Product>
-   */
-  public query (): ModelQueryBuilderContract<typeof Product, Product> {
-    return this.$query
+    this.mapQueries(this, Product.query())
   }
 
   /**
