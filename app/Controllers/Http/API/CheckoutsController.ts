@@ -1,5 +1,5 @@
 import { Cart, Order } from 'App/Models'
-import OrderQuery from 'App/Helpers/Database/OrderQuery'
+import {OrderBuilder} from 'App/Helpers/Database'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
@@ -46,7 +46,7 @@ export default class CheckoutsController {
         await Cart.query().where('id', attrs.cart).delete()
       }
 
-      const data = await (new OrderQuery(request)).resolveQueryWithPrefix('checkout')
+      const data = await (new OrderBuilder(request)).resolve('checkout')
         .query().where('id', order.id).firstOrFail()
 
       // Send order in response with all associated data.

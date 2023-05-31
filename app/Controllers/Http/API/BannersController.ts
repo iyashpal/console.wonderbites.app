@@ -1,15 +1,13 @@
-import BannerQuery from 'App/Helpers/Database/BannerQuery'
+import {BannerBuilder} from 'App/Helpers/Database'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class BannersController {
   public async index ({request, response}: HttpContextContract) {
     try {
-      const banners = await (new BannerQuery(request))
+      const banners = await (new BannerBuilder(request))
 
-        .resolveQueryWithPrefix('banners')
-
-        .query()
+        .resolve('banners').query()
 
       response.json(banners)
     } catch (error) {
@@ -23,11 +21,9 @@ export default class BannersController {
 
   public async show ({request, params, response}: HttpContextContract) {
     try {
-      const banner = await (new BannerQuery(request))
+      const banner = await (new BannerBuilder(request))
 
-        .resolveQueryWithPrefix('banner')
-
-        .query().where('id', params.id).firstOrFail()
+        .resolve('banner').query().where('id', params.id).firstOrFail()
 
       response.json(banner)
     } catch (error) {

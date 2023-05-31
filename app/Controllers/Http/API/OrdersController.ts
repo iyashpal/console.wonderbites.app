@@ -1,6 +1,6 @@
 import { Order } from 'App/Models'
 import { OrderStatus } from 'App/Models/Enums/Order'
-import OrderQuery from 'App/Helpers/Database/OrderQuery'
+import {OrderBuilder} from 'App/Helpers/Database'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -11,9 +11,7 @@ export default class OrdersController {
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('viewList')
 
-      const orders = await (new OrderQuery(request))
-        .resolveQueryWithPrefix('orders')
-        .query()
+      const orders = await (new OrderBuilder(request)).resolve('orders').query()
 
         .where('user_id', user.id)
         .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
@@ -29,11 +27,9 @@ export default class OrdersController {
     try {
       const user = auth.use('api').user
 
-      const order = await (new OrderQuery(request))
+      const order = await (new OrderBuilder(request))
 
-        .resolveQueryWithPrefix('order')
-
-        .query().where('id', params.id).firstOrFail()
+        .resolve('order').query().where('id', params.id).firstOrFail()
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('view', order)
 

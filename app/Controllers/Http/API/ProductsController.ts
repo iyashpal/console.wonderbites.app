@@ -1,5 +1,5 @@
 import {Product} from 'App/Models'
-import {ProductQuery} from 'App/Helpers/Database'
+import {ProductBuilder} from 'App/Helpers/Database'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProductsController {
@@ -13,9 +13,9 @@ export default class ProductsController {
       const user = auth.use('api').user!
       const {page = 1, limit = 10} = request.all() as { page: number, limit: number }
 
-      const products = await (new ProductQuery(request))
+      const products = await (new ProductBuilder(request))
         .asUser(user)
-        .resolveQueryWithPrefix('products')
+        .resolve('products')
         .query().whereNotNull('published_at').orderBy('id', 'desc').paginate(page, limit)
 
       response.status(200).json(products)
@@ -33,9 +33,9 @@ export default class ProductsController {
     try {
       const user = auth.use('api').user!
 
-      const product = await (new ProductQuery(request))
+      const product = await (new ProductBuilder(request))
         .asUser(user)
-        .resolveQueryWithPrefix('product')
+        .resolve('product')
         .query().where('id', id).whereNotNull('published_at').firstOrFail()
 
       response.status(200).json(product)
