@@ -1,18 +1,29 @@
 import { User } from 'App/Models'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 
+type QueriesType =
+  | 'where'
+  | 'count'
+  | 'filter'
+  | 'preload'
+  | 'aggregate'
+
 export default abstract class Query<T> {
   public $builder: T
 
   protected $user?: User
 
-  protected $prefix: string
-
   protected $queries: string[][]
 
   constructor (
-    protected $request: RequestContract
+    protected $request: RequestContract,
+    protected $prefix?: string
   ) { }
+
+  public static make ($request: RequestContract, $prefix?: string) {
+    console.log(this)
+    return this
+  }
 
   /**
    * Set the authenticated user.
@@ -24,6 +35,10 @@ export default abstract class Query<T> {
     this.$user = user
 
     return this
+  }
+
+  public auth (user: User) {
+    return this.asUser(user)
   }
 
   /**
@@ -41,10 +56,14 @@ export default abstract class Query<T> {
    * @returns ModelQueryBuilderContract<T, T>
    */
   public query (): T {
-    return this.$builder
+    return this.resolve().$builder
   }
 
-  protected getQueries<InstanceType>(instance: InstanceType, queryName: 'count' | 'filter' | 'preload' | 'aggregate') {
+  public run (): T {
+    return this.query()
+  }
+
+  protected getQueries<InstanceType>(instance: InstanceType, queryName: QueriesType) {
     return Object
       .getOwnPropertyNames(
         Object.getPrototypeOf(instance)
@@ -57,6 +76,7 @@ export default abstract class Query<T> {
 
     this.$queries = [
       this.getQueries(instance, 'count'),
+      this.getQueries(instance, 'where'),
       this.getQueries(instance, 'filter'),
       this.getQueries(instance, 'preload'),
       this.getQueries(instance, 'aggregate'),
@@ -68,9 +88,9 @@ export default abstract class Query<T> {
    *
    * @param prefix string | null
    */
-  public resolve (prefix: string | null) {
+  public resolve (prefix?: string) {
     // Set the query string prefix.
-    this.qsPrefix(prefix ?? '')
+    this.qsPrefix(prefix)
 
     // Resolve the query
     this.$queries.forEach(queries => {
@@ -90,7 +110,7 @@ export default abstract class Query<T> {
    * @param value
    * @returns Query
    */
-  public qsPrefix (value: string) {
+  public qsPrefix (value?: string) {
     this.$prefix = value
 
     return this
