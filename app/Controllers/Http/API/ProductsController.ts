@@ -1,5 +1,5 @@
 import {Product} from 'App/Models'
-import {ProductQuery} from 'App/Services/Database'
+import {ProductQuery} from 'App/Helpers/Database'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProductsController {

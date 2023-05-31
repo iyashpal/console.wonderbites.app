@@ -1,4 +1,4 @@
-import BannerQuery from 'App/Services/Database/BannerQuery'
+import BannerQuery from 'App/Helpers/Database/BannerQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 

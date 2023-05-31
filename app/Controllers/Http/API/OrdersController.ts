@@ -1,6 +1,6 @@
 import { Order } from 'App/Models'
 import { OrderStatus } from 'App/Models/Enums/Order'
-import OrderQuery from 'App/Services/Database/OrderQuery'
+import OrderQuery from 'App/Helpers/Database/OrderQuery'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -45,7 +45,7 @@ export default class OrdersController {
 
   /**
    * Cancel user orders.
-   * 
+   *
    * @param param0 {HttpContextContract}
    */
   public async cancel ({ auth, bouncer, params: { id }, response }: HttpContextContract) {
