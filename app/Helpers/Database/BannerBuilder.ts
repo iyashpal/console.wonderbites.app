@@ -3,7 +3,7 @@ import {Banner} from 'App/Models'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
-export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeof Banner, Banner>> {
+export default class BannerBuilder extends Builder<ModelQueryBuilderContract<typeof Banner, Banner>> {
   constructor (protected $request: RequestContract) {
     super($request)
 

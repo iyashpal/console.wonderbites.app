@@ -4,7 +4,7 @@ import {OrderStatus} from 'App/Models/Enums/Order'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
-export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof Order, Order>> {
+export default class OrderBuilder extends Builder<ModelQueryBuilderContract<typeof Order, Order>> {
   constructor (protected $request: RequestContract) {
     super($request)
 

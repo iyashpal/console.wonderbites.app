@@ -6,7 +6,7 @@ import { ManyToManyQueryBuilderContract, ModelQueryBuilderContract } from '@ioc:
 
 type ProductQueryBuilder = ManyToManyQueryBuilderContract<typeof Product, any>
 
-export default class CategoryQuery extends Builder<ModelQueryBuilderContract<typeof Category, Category>> {
+export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<typeof Category, Category>> {
   constructor (protected $request: RequestContract, protected $prefix?: string) {
     super($request, $prefix)
     this.mapQueries(this, Category.query())
