@@ -1,6 +1,5 @@
-import Category from 'App/Models/Category'
+import { builder } from 'App/Helpers/Database'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { CategoryBuilder } from 'App/Helpers/Database'
 
 export default class CategoriesController {
   /**
@@ -12,8 +11,7 @@ export default class CategoriesController {
     try {
       const user = auth.use('api').user!
 
-      CategoryBuilder.make(request, 'category')
-      const category = await (new CategoryBuilder(request, 'category')).auth(user).run()
+      const category = await builder('Category', request, 'category').auth(user).run()
 
       response.status(200).json(category)
     } catch (error) {
@@ -30,8 +28,8 @@ export default class CategoriesController {
     const user = auth.use('api').user!
 
     try {
-      const category = await (new CategoryBuilder(request))
-        .asUser(user).query().where('status', 'public').where('id', id).firstOrFail()
+      const category = await builder('Category', request)
+        .auth(user).query().where('status', 'public').where('id', id).firstOrFail()
 
       response.status(200).json(category)
     } catch (error) {
