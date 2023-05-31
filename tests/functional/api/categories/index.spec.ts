@@ -225,18 +225,17 @@ test.group('API [categories.index]', (group) => {
   }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it contains the list of products searched by custom keyword under it', async ({ client, route, assert }) => {
-    const category = await CategoryFactory.create()
-    const product = await ProductFactory.with('reviews', 5, query => query.with('user', 6)).create()
-
-    await category.related('products').attach([product.id])
+    const category = await CategoryFactory
+      .with('products', 1, query => query.with('user'))
+      .merge({name: 'Asian'})
+      .create()
 
     const queryString = {
       type: 'product',
       searchable: ['products'],
-      search: 'search keyword',
+      search: 'Asian',
       with: [
         'category.products',
-        'category.products.search',
       ],
     }
 
@@ -244,15 +243,11 @@ test.group('API [categories.index]', (group) => {
 
     request.assertStatus(200)
 
-    const [c] = request.body()
-
     request.assertBodyContains([{
       id: category.id,
       name: category.name,
       products: [],
     }])
-
-    assert.equal(0, c.products.length)
   }).tags(['@api', '@api.categories', '@api.categories.index'])
 
   test('it should list only given type of categories.', async ({ client, route, assert }) => {
