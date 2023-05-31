@@ -17,7 +17,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected preloadProducts (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('products')),
       query => query.preload('products', products => products
 
@@ -52,7 +52,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected preloadIngredients (): this {
-    this.$query.match([
+    this.$builder.match([
 
       this.input('with', []).includes(this.qs('ingredients')),
       orders => orders.preload('ingredients', ingredients => ingredients
@@ -74,7 +74,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected preloadUser (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('user')),
       orders => orders.preload('user'),
     ])
@@ -88,7 +88,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected preloadCoupon (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('coupon')),
       orders => orders.preload('coupon'),
     ])
@@ -101,7 +101,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected preloadReview (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('review')),
       orders => orders.preload('review'),
     ])
@@ -115,7 +115,7 @@ export default class OrderQuery extends Builder<ModelQueryBuilderContract<typeof
    * @returns OrderQuery
    */
   protected filterStatus (): this {
-    this.$query.match(
+    this.$builder.match(
       // Filter all past orders.
       [this.input('status') === 'past', query => query.whereIn('status', [
         OrderStatus.DELIVERED, OrderStatus.CANCELED,

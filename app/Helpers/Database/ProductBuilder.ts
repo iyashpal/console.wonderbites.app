@@ -18,7 +18,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   protected preloadVariants (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('variants')),
       productQuery => productQuery
         .preload('variants',
@@ -39,7 +39,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   protected preloadCategories (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('categories')),
       productQuery => productQuery.preload('categories'),
     ])
@@ -52,7 +52,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ModelQueryBuilderContract<typeof Product, Product>
    */
   protected preloadUserWishlist (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.user().id && this.input('with', []).includes(this.qs('wishlist')),
       query => query
         .preload('wishlists', builder => builder.where('user_id', this.user().id ?? 0)),
@@ -66,7 +66,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected preloadMedia (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('media')),
       query => query.preload('media', builder => builder.orderBy('pivot_order')),
     ])
@@ -80,7 +80,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected preloadReviews (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('reviews')),
       query => query.preload('reviews'),
     ])
@@ -94,7 +94,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected preloadIngredients (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('ingredients')),
       query => query
         .preload('ingredients', builder => builder
@@ -113,7 +113,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected filterInCategories (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('inCategories', []).length,
       query => query.whereHas('categories', (builder) => builder
         .whereInPivot('category_id', this.input('inCategories', []))),
@@ -128,7 +128,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected filterSearch (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('search', null),
       query => query.whereLike('name', `%${this.input('search')}%`)
         .orWhereLike('description', `%${this.input('search')}%`),
@@ -143,7 +143,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected filterTopRated () {
-    this.$query.match([
+    this.$builder.match([
       this.input('filters', []).includes('top-rated'),
       query => {
         let AvgReviews = Database.from('reviews')
@@ -165,7 +165,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected filterTodaysPick () {
-    this.$query.match([
+    this.$builder.match([
       this.input('filters', []).includes(ExtraFieldName.TODAYS_PICK),
       query => query.whereHas('extraFields', builder => builder
         .where('field', ExtraFieldName.TODAYS_PICK).where('data', 'true')),
@@ -180,7 +180,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected filterPopular () {
-    this.$query.match([
+    this.$builder.match([
       this.input('filters', []).includes(ExtraFieldName.POPULAR),
       query => query.where('is_popular', true),
     ])
@@ -194,7 +194,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected countReviews (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('withCount', []).includes(this.qs('reviews')),
       query => query.withCount('reviews'),
     ])
@@ -208,7 +208,7 @@ export default class ProductQuery extends Builder<ModelQueryBuilderContract<type
    * @returns ProductQuery
    */
   protected aggregateReviews (): ProductQuery {
-    this.$query.match([
+    this.$builder.match([
       this.input('withAvg', []).includes(this.qs('reviews')),
       query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
     ])

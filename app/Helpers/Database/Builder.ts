@@ -2,7 +2,7 @@ import { User } from 'App/Models'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 export default abstract class Query<T> {
-  public $query: T
+  public $builder: T
 
   protected $user?: User
 
@@ -41,7 +41,7 @@ export default abstract class Query<T> {
    * @returns ModelQueryBuilderContract<T, T>
    */
   public query (): T {
-    return this.$query
+    return this.$builder
   }
 
   protected getQueries<InstanceType>(instance: InstanceType, queryName: 'count' | 'filter' | 'preload' | 'aggregate') {
@@ -53,7 +53,7 @@ export default abstract class Query<T> {
   }
 
   protected mapQueries<InstanceType>(instance: InstanceType, query: T) {
-    this.$query = query
+    this.$builder = query
 
     this.$queries = [
       this.getQueries(instance, 'count'),

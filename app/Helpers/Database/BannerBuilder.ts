@@ -16,7 +16,7 @@ export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeo
    * @returns AdvertisementQuery
    */
   protected preloadUser () {
-    this.$query.match([
+    this.$builder.match([
       this.input('with', []).includes(this.qs('user')),
       query => query.preload('user'),
     ])
@@ -30,7 +30,7 @@ export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeo
    * @returns AdvertisementQuery
    */
   protected filterStatus (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('filters', []).includes('active'),
       query => query.apply(scopes => scopes.withActive()),
     ])
@@ -44,7 +44,7 @@ export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeo
    * @returns AdvertisementQuery
    */
   protected filterPage (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('page'),
       query => query.whereJson('options', {page: this.input('page')}),
     ])
@@ -58,7 +58,7 @@ export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeo
    * @returns AdvertisementQuery
    */
   protected filterSection (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('section'),
       query => query.whereJson('options', {section: this.input('section')}),
     ])
@@ -72,7 +72,7 @@ export default class BannerQuery extends Builder<ModelQueryBuilderContract<typeo
    * @returns AdvertisementQuery
    */
   protected filterType (): this {
-    this.$query.match([
+    this.$builder.match([
       this.input('type'),
       query => query.whereJson('options', {type: this.input('type')}),
     ])
