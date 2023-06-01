@@ -40,7 +40,9 @@ test.group('API [categories.index]', (group) => {
 
     await category.related('products').attach([product.id])
 
-    const request = await client.get(route('api.categories.index', {}, { qs: { with: ['category.products'] } }))
+    const qs = { with: ['category.products'], select: ['category.products:id,name'] }
+
+    const request = await client.get(route('api.categories.index', {}, { qs }))
 
     request.assertStatus(200)
 
