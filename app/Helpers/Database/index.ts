@@ -7,10 +7,10 @@ import { string } from '@ioc:Adonis/Core/Helpers'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 type BuildersNameType =
-    | 'Order'
-    | 'Banner'
-    | 'Product'
-    | 'Category'
+| 'Order'
+| 'Banner'
+| 'Product'
+| 'Category'
 
 export function builder (name: BuildersNameType, request: RequestContract, prefix?: string) {
   return new {

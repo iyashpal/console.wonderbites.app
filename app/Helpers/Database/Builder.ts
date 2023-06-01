@@ -1,4 +1,5 @@
 import { User } from 'App/Models'
+import { types } from '@ioc:Adonis/Core/Helpers'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 type QueriesType =
@@ -8,7 +9,7 @@ type QueriesType =
   | 'preload'
   | 'aggregate'
 
-export default abstract class Query<T> {
+export default abstract class Builder<T> {
   public $builder: T
 
   protected $user?: User
@@ -168,7 +169,25 @@ export default abstract class Query<T> {
    * @param defaultValue Any
    * @returns Any
    */
-  public input (key: string, defaultValue: any = null) {
+  public input<T> (key: string, defaultValue?: T): T {
     return this.$request.input(key, defaultValue)
+  }
+
+  /**
+   * Get the selection columns for a param.
+   *
+   * @param param string
+   * @returns string[]
+   */
+  public selectColumns (param: string): Array<string> {
+    let fragment = this.input<string[]>('select', []).find(item => item.startsWith(`${param}:`))
+
+    if (fragment) {
+      let [columns] = fragment.split(':').reverse()
+
+      return columns.split(',')
+    }
+
+    return ['*']
   }
 }

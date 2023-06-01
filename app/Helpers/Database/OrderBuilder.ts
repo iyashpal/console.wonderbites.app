@@ -18,24 +18,24 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadProducts (): this {
     this.$builder.match([
-      this.input('with', []).includes(this.qs('products')),
+      this.input('with', [] as string[]).includes(this.qs('products')),
       query => query.preload('products', products => products
 
         .match([
-          this.input('with', []).includes(this.qs('products.media')),
+          this.input('with', [] as string[]).includes(this.qs('products.media')),
           query => query.preload('media'),
         ])
 
         .match([
-          this.input('with', []).includes(this.qs('products.review')),
+          this.input('with', [] as string[]).includes(this.qs('products.review')),
           review => review.where('user_id', this.user().id),
         ])
 
         .match([
-          this.input('with', []).includes(this.qs('products.ingredients')),
+          this.input('with', [] as string[]).includes(this.qs('products.ingredients')),
           products => products.preload('ingredients', ingredients => ingredients.match([
 
-            this.input('with', []).includes(this.qs('products.ingredients.categories')),
+            this.input('with', [] as string[]).includes(this.qs('products.ingredients.categories')),
             ingredient => ingredient.preload('categories'),
 
           ])),
@@ -54,11 +54,11 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
   protected preloadIngredients (): this {
     this.$builder.match([
 
-      this.input('with', []).includes(this.qs('ingredients')),
+      this.input('with', [] as string[]).includes(this.qs('ingredients')),
       orders => orders.preload('ingredients', ingredients => ingredients
 
         .match([
-          this.input('with', []).includes(this.qs('ingredients.categories')),
+          this.input('with', [] as string[]).includes(this.qs('ingredients.categories')),
           ingredient => ingredient.preload('categories'),
         ])
       ),
@@ -75,7 +75,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadUser (): this {
     this.$builder.match([
-      this.input('with', []).includes(this.qs('user')),
+      this.input('with', [] as string[]).includes(this.qs('user')),
       orders => orders.preload('user'),
     ])
 
@@ -89,7 +89,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadCoupon (): this {
     this.$builder.match([
-      this.input('with', []).includes(this.qs('coupon')),
+      this.input('with', [] as string[]).includes(this.qs('coupon')),
       orders => orders.preload('coupon'),
     ])
     return this
@@ -102,7 +102,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadReview (): this {
     this.$builder.match([
-      this.input('with', []).includes(this.qs('review')),
+      this.input('with', [] as string[]).includes(this.qs('review')),
       orders => orders.preload('review'),
     ])
 
