@@ -20,11 +20,6 @@ export default abstract class Query<T> {
     protected $prefix?: string
   ) { }
 
-  public static make ($request: RequestContract, $prefix?: string) {
-    console.log(this)
-    return this
-  }
-
   /**
    * Set the authenticated user.
    *
@@ -37,6 +32,12 @@ export default abstract class Query<T> {
     return this
   }
 
+  /**
+   * Specify the auth user.
+   *
+   * @param user User
+   * @returns Builder
+   */
   public auth (user: User) {
     return this.asUser(user)
   }
@@ -59,10 +60,22 @@ export default abstract class Query<T> {
     return this.resolve().$builder
   }
 
+  /**
+   * Run the or get the query.
+   *
+   * @returns ModelQueryBuilderContract<T, T>
+   */
   public run (): T {
     return this.query()
   }
 
+  /**
+   * Get the list of queries available for the specified name.
+   *
+   * @param instance Builder
+   * @param queryName query name
+   * @returns array
+   */
   protected getQueries<InstanceType>(instance: InstanceType, queryName: QueriesType) {
     return Object
       .getOwnPropertyNames(
@@ -71,6 +84,12 @@ export default abstract class Query<T> {
       .filter(name => name.startsWith(queryName))
   }
 
+  /**
+   * Map the defined queries to main query builder.
+   *
+   * @param instance Builder
+   * @param query ModelQuery
+   */
   protected mapQueries<InstanceType>(instance: InstanceType, query: T) {
     this.$builder = query
 
@@ -111,7 +130,7 @@ export default abstract class Query<T> {
    * @returns Query
    */
   public qsPrefix (value?: string) {
-    this.$prefix = value
+    this.$prefix = value ?? this.$prefix
 
     return this
   }
