@@ -1038,6 +1038,23 @@ paths:
             items:
               type: string
 
+        - name: select[]
+          in: query
+          description: Define the selection to reduce the response size. `select[]` is highly dependent on `with[]` query parameter.
+          example:
+            - products.wishlist:id
+            - products.media:id,title,attachment
+            - products.reviews:id,rating,title,body
+            - products.wishlist
+            - products.ingredients:id,name,description
+            - products.variants:id,name,price,status,published_at
+            - products.variants.attributes:id,name
+          schema:
+            type: array
+            default: []
+            items:
+              type: string
+
       responses:
         "200":
           description: Search results matching criteria
@@ -1123,6 +1140,23 @@ paths:
           description: Attach the relation's counts.
           example:
             - product.reviews
+          schema:
+            type: array
+            default: []
+            items:
+              type: string
+
+        - name: select[]
+          in: query
+          description: Define the selection to reduce the response size. `select[]` is highly dependent on `with[]` query parameter.
+          example:
+            - product.wishlist:id
+            - product.media:id,title,attachment
+            - product.reviews:id,rating,title,body
+            - product.wishlist
+            - product.ingredients:id,name,description
+            - product.variants:id,name,price,status,published_at
+            - product.variants.attributes:id,name
           schema:
             type: array
             default: []
