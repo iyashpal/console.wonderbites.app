@@ -6,10 +6,8 @@ import {ExtraFieldName} from 'App/Models/Enums/ExtraField'
 import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
 export default class ProductBuilder extends Builder<ModelQueryBuilderContract<typeof Product, Product>> {
-  constructor (protected $request: RequestContract) {
-    super($request)
-
-    this.mapQueries(this, Product.query())
+  constructor (protected $request: RequestContract, $prefix?: string) {
+    super($request, Product.query(), $prefix)
   }
 
   /**
@@ -19,18 +17,25 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadVariants (): ProductBuilder {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('variants')),
-      productQuery => productQuery
-        .preload('variants',
-          variantsQuery => variantsQuery
-            .match([
-              this.input('with', [] as string[]).includes(this.qs('variants.attributes')),
-              attributeQuery => attributeQuery.preload('attributes'),
-            ])
-        ),
+      this.input('with', [] as string[]).includes(this.__('variants')),
+      productQuery => productQuery.preload('variants', this._preloadVariantAttributes),
     ])
 
     return this
+  }
+
+  /**
+   * Preload variant attributes.
+   *
+   * @param builder ModelQueryBuilderContract<typeof Product, Product>
+   */
+  protected _preloadVariantAttributes (builder) {
+    builder.match([
+      this.input('with', [] as string[]).includes(this.__('variants.attributes')),
+      query => query.preload('attributes', queryAttributes => {
+        queryAttributes.select(this.selectColumnsOf('variants.attributes'))
+      }),
+    ])
   }
 
   /**
@@ -40,8 +45,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadCategories (): ProductBuilder {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('categories')),
-      productQuery => productQuery.preload('categories'),
+      this.input('with', [] as string[]).includes(this.__('categories')),
+      productQuery => productQuery.preload('categories', queryCategories => {
+        queryCategories.select(this.selectColumnsOf('categories'))
+      }),
     ])
     return this
   }
@@ -53,9 +60,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadUserWishlist (): ProductBuilder {
     this.$builder.match([
-      this.user().id && this.input('with', [] as string[]).includes(this.qs('wishlist')),
-      query => query
-        .preload('wishlists', builder => builder.where('user_id', this.user().id ?? 0)),
+      this.user().id && this.input('with', [] as string[]).includes(this.__('wishlist')),
+      query => query.preload('wishlists', builder => {
+        builder.select(this.selectColumnsOf('wishlist')).where('user_id', this.user().id ?? 0)
+      }),
     ])
     return this
   }
@@ -67,8 +75,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadMedia (): ProductBuilder {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('media')),
-      query => query.preload('media', builder => builder.orderBy('pivot_order')),
+      this.input('with', [] as string[]).includes(this.__('media')),
+      query => query.preload('media', builder => {
+        builder.select(this.selectColumnsOf('media')).orderBy('pivot_order')
+      }),
     ])
 
     return this
@@ -81,8 +91,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadReviews (): ProductBuilder {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('reviews')),
-      query => query.preload('reviews'),
+      this.input('with', [] as string[]).includes(this.__('reviews')),
+      query => query.preload('reviews', queryReviews => {
+        queryReviews.select(this.selectColumnsOf('reviews'))
+      }),
     ])
 
     return this
@@ -95,16 +107,25 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected preloadIngredients (): ProductBuilder {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('ingredients')),
-      query => query
-        .preload('ingredients', builder => builder
-          .match([
-            this.input('with', [] as string[]).includes(this.qs('ingredients.categories')),
-            query => query.preload('categories'),
-          ])),
+      this.input('with', [] as string[]).includes(this.__('ingredients')),
+      query => query.preload('ingredients', this._preloadIngredientCategories),
     ])
 
     return this
+  }
+
+  /**
+   * Preload the ingredient categories.
+   *
+   * @param builder ModelQueryBuilderContract<typeof Product, Product>
+   */
+  protected _preloadIngredientCategories (builder) {
+    builder.match([
+      this.input('with', [] as string[]).includes(this.__('ingredients.categories')),
+      query => query.preload('categories', queryCategory => {
+        queryCategory.select(this.selectColumnsOf('ingredients.categories'))
+      }),
+    ])
   }
 
   /**
@@ -115,8 +136,9 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected filterInCategories (): ProductBuilder {
     this.$builder.match([
       this.input('inCategories', []).length,
-      query => query.whereHas('categories', (builder) => builder
-        .whereInPivot('category_id', this.input('inCategories', []))),
+      query => query.whereHas('categories', (builder) => {
+        builder.whereInPivot('category_id', this.input('inCategories', []))
+      }),
     ])
 
     return this
@@ -130,8 +152,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected filterSearch (): ProductBuilder {
     this.$builder.match([
       this.input('search', null),
-      query => query.whereLike('name', `%${this.input('search')}%`)
-        .orWhereLike('description', `%${this.input('search')}%`),
+      query => {
+        query.whereLike('name', `%${this.input('search')}%`)
+          .orWhereLike('description', `%${this.input('search')}%`)
+      },
     ])
 
     return this
@@ -150,7 +174,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
           .avg('rating').where('reviewable', 'Product')
           .whereRaw('reviewable_id=products.id').as('avg_reviews')
 
-        return query.from(Database.from('products')
+        query.from(Database.from('products')
           .select('*', AvgReviews).as('products'))
           .where('products.avg_reviews', '>=', 5)
       },
@@ -195,7 +219,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected countReviews (): ProductBuilder {
     this.$builder.match([
-      this.input('withCount', [] as string[]).includes(this.qs('reviews')),
+      this.input('withCount', [] as string[]).includes(this.__('reviews')),
       query => query.withCount('reviews'),
     ])
 
@@ -209,7 +233,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    */
   protected aggregateReviews (): ProductBuilder {
     this.$builder.match([
-      this.input('withAvg', [] as string[]).includes(this.qs('reviews')),
+      this.input('withAvg', [] as string[]).includes(this.__('reviews')),
       query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
     ])
 

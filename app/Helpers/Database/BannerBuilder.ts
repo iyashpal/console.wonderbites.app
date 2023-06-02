@@ -4,10 +4,8 @@ import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {ModelQueryBuilderContract} from '@ioc:Adonis/Lucid/Orm'
 
 export default class BannerBuilder extends Builder<ModelQueryBuilderContract<typeof Banner, Banner>> {
-  constructor (protected $request: RequestContract) {
-    super($request)
-
-    this.mapQueries(this, Banner.query())
+  constructor (protected $request: RequestContract, protected $prefix?: string) {
+    super($request, Banner.query(), $prefix)
   }
 
   /**
@@ -17,8 +15,10 @@ export default class BannerBuilder extends Builder<ModelQueryBuilderContract<typ
    */
   protected preloadUser () {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.qs('user')),
-      query => query.preload('user'),
+      this.input('with', [] as string[]).includes(this.__('user')),
+      query => query.preload('user', queryUser => {
+        queryUser.select(this.selectColumnsOf('user'))
+      }),
     ])
 
     return this

@@ -1,5 +1,4 @@
 import { User } from 'App/Models'
-import { types } from '@ioc:Adonis/Core/Helpers'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 type QueriesType =
@@ -10,16 +9,17 @@ type QueriesType =
   | 'aggregate'
 
 export default abstract class Builder<T> {
-  public $builder: T
-
   protected $user?: User
 
   protected $queries: string[][]
 
   constructor (
     protected $request: RequestContract,
+    public $builder: T,
     protected $prefix?: string
-  ) { }
+  ) {
+    this.mapQueries(this, $builder)
+  }
 
   /**
    * Set the authenticated user.
@@ -141,7 +141,7 @@ export default abstract class Builder<T> {
    *
    * @param queries string[]
    */
-  public callQueriesFor (queries: string[]) {
+  protected callQueriesFor (queries: string[]) {
     queries.forEach(query => {
       try {
         this[query]()
@@ -154,11 +154,11 @@ export default abstract class Builder<T> {
   }
 
   /**
-   * Get the query params prefix.
+   * Get the query params prefixed.
    *
    * @returns string
    */
-  public qs (value: string = ''): string {
+  public __ (value: string = ''): string {
     return this.$prefix ? `${this.$prefix}.${value}` : value
   }
 
@@ -177,10 +177,12 @@ export default abstract class Builder<T> {
    * Get the selection columns for a param.
    *
    * @param param string
+   * @param renderWithPrefix boolean
    * @returns string[]
    */
-  public selectColumns (param: string): Array<string> {
-    let fragment = this.input<string[]>('select', []).find(item => item.startsWith(`${param}:`))
+  public selectColumnsOf (param: string, renderWithPrefix: boolean = true): Array<string> {
+    let fragment = this.input<string[]>('select', [])
+      .find(item => item.startsWith(`${renderWithPrefix ? this.__(param) : param}:`))
 
     if (fragment) {
       let [columns] = fragment.split(':').reverse()
