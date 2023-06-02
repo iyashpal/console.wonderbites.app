@@ -15,7 +15,7 @@ export default class BannerBuilder extends Builder<ModelQueryBuilderContract<typ
    */
   protected preloadUser () {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('user')),
+      this._includes('with', 'user'),
       query => query.preload('user', queryUser => {
         queryUser.select(this.selectColumnsOf('user'))
       }),
@@ -31,7 +31,7 @@ export default class BannerBuilder extends Builder<ModelQueryBuilderContract<typ
    */
   protected filterStatus (): this {
     this.$builder.match([
-      this.input('filters', [] as string[]).includes('active'),
+      this._includes('filters', 'active', false),
       query => query.apply(scopes => scopes.withActive()),
     ])
 

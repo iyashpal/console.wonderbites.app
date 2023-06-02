@@ -16,29 +16,29 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadProducts (): this {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('products')),
+      this._includes('with', 'products'),
       query => query.preload('products', products => {
         products
 
           .match([
-            this.input('with', [] as string[]).includes(this.__('products.media')),
+            this._includes('with', 'products.media'),
             query => query.preload('media', queryMedia => {
               queryMedia.select(this.selectColumnsOf('products.media'))
             }),
           ])
 
           .match([
-            this.input('with', [] as string[]).includes(this.__('products.review')),
+            this._includes('with', 'products.review'),
             query => query.preload('review', queryReview => {
               queryReview.select(this.selectColumnsOf('products.review')).where('user_id', this.user().id)
             }),
           ])
 
           .match([
-            this.input('with', [] as string[]).includes(this.__('products.ingredients')),
+            this._includes('with', 'products.ingredients'),
             products => products.preload('ingredients', ingredients => {
               ingredients.match([
-                this.input('with', [] as string[]).includes(this.__('products.ingredients.categories')),
+                this._includes('with', 'products.ingredients.categories'),
                 ingredient => ingredient.preload('categories', queryCategories => {
                   queryCategories.select(this.selectColumnsOf('products.ingredients.categories'))
                 }),
@@ -58,10 +58,10 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadIngredients (): this {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('ingredients')),
+      this._includes('with', 'ingredients'),
       orders => orders.preload('ingredients', ingredients => ingredients
         .match([
-          this.input('with', [] as string[]).includes(this.__('ingredients.categories')),
+          this._includes('with', 'ingredients.categories'),
           ingredient => ingredient.preload('categories', queryCategories => {
             queryCategories.select(this.selectColumnsOf('ingredients.categories'))
           }),
@@ -80,7 +80,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadUser (): this {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('user')),
+      this._includes('with', 'user'),
       orders => orders.preload('user', queryUser => queryUser.select(this.selectColumnsOf('user'))),
     ])
 
@@ -94,7 +94,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadCoupon (): this {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('coupon')),
+      this._includes('with', 'coupon'),
       orders => orders.preload('coupon', queryCoupon => queryCoupon.select(this.selectColumnsOf('coupon'))),
     ])
     return this
@@ -107,7 +107,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
    */
   protected preloadReview (): this {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('review')),
+      this._includes('with', 'review'),
       orders => orders.preload('review', queryReview => queryReview.select(this.selectColumnsOf('review'))),
     ])
 

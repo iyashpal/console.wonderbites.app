@@ -173,6 +173,10 @@ export default abstract class Builder<T> {
     return this.$request.input(key, defaultValue)
   }
 
+  public _includes (key: string, value: string, prefixedValue: boolean = true) {
+    return this.input(key, [] as string[]).includes((prefixedValue ? this.__(value) : value))
+  }
+
   /**
    * Get the selection columns for a param.
    *

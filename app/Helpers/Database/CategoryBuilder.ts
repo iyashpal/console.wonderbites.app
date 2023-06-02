@@ -20,7 +20,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected preloadProducts () {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('products')),
+      this._includes('with', 'products'),
       query => query.preload('products', productQuery => {
         productQuery.select(this.selectColumnsOf('products'))
         this._whereProductsLike(productQuery)
@@ -35,7 +35,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected preloadIngredients () {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('ingredients')),
+      this._includes('with', 'ingredients'),
       query => query.preload('ingredients', queryIngredients => {
         queryIngredients.select(this.selectColumnsOf('ingredients'))
       }),
@@ -44,7 +44,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected preloadCuisines () {
     this.$builder.match([
-      this.input('with', [] as string[]).includes(this.__('cuisines')),
+      this._includes('with', 'cuisines'),
       query => query.preload('cuisines', queryCuisines => {
         queryCuisines.select(this.selectColumnsOf('cuisines'))
       }),
@@ -60,7 +60,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected _preloadProductMedia<T extends ProductQueryBuilder>(builder: T) {
     return builder.match([
-      this.input('with', [] as string[]).includes(this.__('products.media')),
+      this._includes('with', 'products.media'),
       query => query.preload('media', mediaQuery => {
         mediaQuery.select(this.selectColumnsOf('products.media'))
       }),
@@ -69,7 +69,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected _preloadProductIngredients<T extends ProductQueryBuilder> (builder: T) {
     return builder.match([
-      this.input('with', [] as string[]).includes(this.__('products.ingredients')),
+      this._includes('with', 'products.ingredients'),
       query => query.preload('ingredients', queryIngredients => {
         queryIngredients.select(this.selectColumnsOf('products.ingredients'))
       }),
@@ -78,7 +78,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected _preloadProductReviews<T extends ProductQueryBuilder> (builder: T) {
     return builder.match([
-      this.input('with', [] as string[]).includes(this.__('products.reviews')),
+      this._includes('with', 'products.reviews'),
       query => query.preload('reviews', queryReviews => {
         queryReviews.select(this.selectColumnsOf('products.reviews'))
       }),
@@ -87,7 +87,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
 
   protected _preloadProductWishlists<T extends ProductQueryBuilder>(builder: T) {
     return builder.match([
-      this.$user?.id && this.input('with', [] as string[]).includes(this.__('products.wishlist')),
+      this.$user?.id && this._includes('with', 'products.wishlist'),
       query => query.preload('wishlists', wishlists => wishlists.where('user_id', this.$user?.id ?? 0)),
     ])
   }
