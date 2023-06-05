@@ -11,7 +11,7 @@ export default class CategoriesController {
     try {
       const user = auth.use('api').user!
 
-      const category = await builder('Category', request, 'category').auth(user).run()
+      const category = await builder('Category', request, 'category').auth(user).run().where('status', 'public')
 
       response.status(200).json(category)
     } catch (error) {
