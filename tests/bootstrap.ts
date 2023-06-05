@@ -5,8 +5,9 @@
  * file.
  */
 
-import {expect} from '@japa/expect'
+import { expect } from '@japa/expect'
 import type {Config} from '@japa/runner'
+import { snapshot } from '@japa/snapshot'
 import Drive from '@ioc:Adonis/Core/Drive'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import {assert, runFailedTests, specReporter, apiClient} from '@japa/preset-adonis'
@@ -22,7 +23,7 @@ import {assert, runFailedTests, specReporter, apiClient} from '@japa/preset-adon
 | Feel free to remove existing plugins or add more.
 |
 */
-export const plugins: Config['plugins'] = [assert(), runFailedTests(), apiClient(), expect()]
+export const plugins: Config['plugins'] = [assert(), runFailedTests(), apiClient(), expect(), snapshot()]
 
 /*
 |--------------------------------------------------------------------------
