@@ -18,7 +18,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected preloadVariants (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'variants'),
-      productQuery => productQuery.preload('variants', this._preloadVariantAttributes),
+      productQuery => productQuery.preload('variants', builder => this._preloadVariantAttributes(builder)),
     ])
 
     return this
