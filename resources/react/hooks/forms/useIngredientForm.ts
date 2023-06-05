@@ -5,9 +5,9 @@ import {useNavigate} from 'react-router-dom'
 export default function useIngredientForm(fields: FormFields) {
   const fetcher = useFetch()
   const navigateTo = useNavigate()
+  const [thumbnail, setThumbnail] = useState<File>()
   const [form, setForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
-  const [thumbnail, setThumbnail] = useState<string | Blob>('')
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
 
@@ -58,13 +58,10 @@ export default function useIngredientForm(fields: FormFields) {
     let formData = new FormData()
 
     for (let key in form) {
-      switch (key) {
-        case 'thumbnail':
-          formData.append('thumbnail', thumbnail, form[key])
-          break
-        default:
-          formData.append(key, form[key])
-          break
+      if (key === 'thumbnail' && thumbnail) {
+        formData.append('thumbnail', thumbnail, form[key])
+      } else {
+        formData.append(key, form[key])
       }
     }
 

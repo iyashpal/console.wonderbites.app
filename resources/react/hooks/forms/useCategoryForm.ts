@@ -7,7 +7,7 @@ export default function useCategoryForm(fields: FormFields) {
   const flash = useFlash()
   const navigateTo = useNavigate()
   const [form, setForm] = useState<FormFields>(fields)
-  const [thumbnail, setThumbnail] = useState<string | Blob>('')
+  const [thumbnail, setThumbnail] = useState<File>()
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
@@ -73,17 +73,12 @@ export default function useCategoryForm(fields: FormFields) {
     let formData = new FormData()
 
     for (let key in form) {
-      switch (key) {
-        case 'thumbnail':
-            formData.append('thumbnail', thumbnail, form[key])
-          break
-        case 'parent':
-          if (form[key])
-            formData.append(key, form[key] ?? '')
-          break
-        default:
-          formData.append(key, form[key])
-          break
+      if (key === 'thumbnail' && thumbnail) {
+        formData.append('thumbnail', thumbnail, thumbnail.name)
+      } else if (key === 'parent' && form[key]) {
+        formData.append(key, form[key] ?? '')
+      } else {
+        formData.append(key, form[key])
       }
     }
 

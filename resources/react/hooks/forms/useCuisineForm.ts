@@ -8,7 +8,7 @@ export default function useCuisineForm(fields: FormFields) {
   const navigateTo = useNavigate()
   const [form, setForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
-  const [thumbnail, setThumbnail] = useState<string | Blob>('')
+  const [thumbnail, setThumbnail] = useState<File>()
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
 
@@ -58,13 +58,10 @@ export default function useCuisineForm(fields: FormFields) {
     let formData = new FormData()
 
     for (let key in form) {
-      switch (key) {
-        case 'thumbnail':
-          formData.append('thumbnail', thumbnail, form[key])
-          break
-        default:
-          formData.append(key, form[key])
-          break
+      if (key === 'thumbnail' && thumbnail) {
+        formData.append('thumbnail', thumbnail, thumbnail.name)
+      } else {
+        formData.append(key, form[key])
       }
     }
 

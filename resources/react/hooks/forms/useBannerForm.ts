@@ -5,7 +5,7 @@ import {ChangeEvent, FormEvent, useState} from "react";
 export default function useCategoryForm(fields: FormFields) {
   const navigateTo = useNavigate()
   const [form, setForm] = useState<FormFields>(fields)
-  const [attachment, setAttachment] = useState<string | Blob>('')
+  const [attachment, setAttachment] = useState<File>()
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
@@ -66,19 +66,15 @@ export default function useCategoryForm(fields: FormFields) {
     let formData = new FormData()
 
     for (let key in form) {
-      switch (key) {
-        case 'attachment':
-          formData.append('attachment', attachment, form[key])
-          break
-        case 'options':
-          formData.append('options[page]', form.options.page)
-          formData.append('options[type]', form.options.type)
-          formData.append('options[link]', form.options.link)
-          formData.append('options[section]', form.options.section)
-          break;
-        default:
-          formData.append(key, form[key])
-          break
+      if (key === 'attachment' && attachment) {
+        formData.append('attachment', attachment, attachment.name)
+      } else if (key === 'options') {
+        formData.append('options[page]', form.options.page)
+        formData.append('options[type]', form.options.type)
+        formData.append('options[link]', form.options.link)
+        formData.append('options[section]', form.options.section)
+      } else {
+        formData.append(key, form[key])
       }
     }
 

@@ -9,7 +9,7 @@ export default function useProductForm(fields: FormFields) {
   const navigateTo = useNavigate()
   const [createForm, setCreateForm] = useState<FormFields>(fields)
   const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
-  const [thumbnail, setThumbnail] = useState<string | Blob>('')
+  const [thumbnail, setThumbnail] = useState<File>()
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   /**
@@ -115,13 +115,10 @@ export default function useProductForm(fields: FormFields) {
     let formData = new FormData()
 
     for (let key in createForm) {
-      switch (key) {
-        case 'thumbnail':
-          formData.append('thumbnail', thumbnail, createForm[key])
-          break
-        default:
-          formData.append(key, createForm[key])
-          break
+      if (key === 'thumbnail' && thumbnail) {
+        formData.append('thumbnail', thumbnail, thumbnail.name)
+      } else {
+        formData.append(key, createForm[key])
       }
     }
 
