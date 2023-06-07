@@ -1,5 +1,5 @@
 import {Builder} from './index'
-import {Product} from 'App/Models'
+import {Product, Variant} from 'App/Models'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {ExtraFieldName} from 'App/Models/Enums/ExtraField'
@@ -18,7 +18,27 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected preloadVariants (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'variants'),
-      productQuery => productQuery.preload('variants', builder => this._preloadVariantAttributes(builder)),
+      productQuery => productQuery.preload('variants', (builder: ModelQueryBuilderContract<typeof Variant>) => {
+        this._preloadVariantAttributes(builder)
+        this._preloadVariantCategories(builder)
+      }),
+    ])
+
+    return this
+  }
+
+  /**
+   * Preload the nested variant categories.
+   *
+   * @param builder ModelQueryBuilderContract<typeof Variant>
+   * @returns ProductBuilder
+   */
+  public _preloadVariantCategories (builder: ModelQueryBuilderContract<typeof Variant>) {
+    builder.match([
+      this._includes('with', 'variants.categories'),
+      query => query.preload('categories', categoriesQuery => {
+        categoriesQuery.select(this.selectColumnsOf('variants.categories'))
+      }),
     ])
 
     return this
@@ -29,13 +49,15 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
    *
    * @param builder ModelQueryBuilderContract<typeof Product, Product>
    */
-  public _preloadVariantAttributes (builder) {
+  public _preloadVariantAttributes (builder: ModelQueryBuilderContract<typeof Variant>) {
     builder.match([
       this._includes('with', 'variants.attributes'),
       query => query.preload('attributes', queryAttributes => {
         queryAttributes.select(this.selectColumnsOf('variants.attributes'))
       }),
     ])
+
+    return this
   }
 
   /**
