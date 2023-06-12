@@ -5,7 +5,7 @@ import { IngredientFactory, ProductFactory, UserFactory } from '.'
 export default Factory.define(Cart, ({ faker }) => {
   return {
     user_id: null,
-    ipAddress: faker.internet.ip(),
+    session_id: faker.string.uuid(),
     status: 1,
   }
 })
