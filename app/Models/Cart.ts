@@ -7,16 +7,35 @@ export default class Cart extends BaseModel {
   public id: number
 
   @column()
-  public userId: number | null | undefined
+  public session_id: string
 
   @column()
-  public ipAddress: string
+  public userId: number | null | undefined
 
   @column()
   public couponId: number | null
 
   @column()
   public status: number
+
+  @column()
+  public data: {
+    id: number;
+    quantity: number;
+    variant?: {
+      id: number;
+      attributes: {
+        id: number;
+        category: number;
+        quantity: number;
+      }[]
+    };
+    ingredients?: {
+      id: number;
+      quantity: number;
+      category: number;
+    }[];
+  }[]
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -27,13 +46,13 @@ export default class Cart extends BaseModel {
   @manyToMany(() => Product, {
     pivotColumns: ['id', 'qty'],
     pivotTimestamps: true,
-    })
+  })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient, {
     pivotColumns: ['id', 'qty', 'price', 'product_id'],
     pivotTimestamps: true,
-    })
+  })
   public ingredients: ManyToMany<typeof Ingredient>
 
   @belongsTo(() => User)
