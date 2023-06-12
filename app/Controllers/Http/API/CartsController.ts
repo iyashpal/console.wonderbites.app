@@ -1,9 +1,10 @@
-import {mapKeys, mapValues} from 'lodash'
+import { v4 as uuid } from 'uuid'
+import { mapKeys, mapValues } from 'lodash'
 import {types} from '@ioc:Adonis/Core/Helpers'
 import {User, Cart, Product} from 'App/Models'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
-import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class CartsController {
   /**
@@ -93,11 +94,12 @@ export default class CartsController {
    */
   protected async cart (request: RequestContract, user: User | undefined): Promise<Cart> {
     if (types.isNull(user) || types.isUndefined(user)) {
-      const guestCart = await Cart.query().whereNull('user_id')
-        .where('ipAddress', request.ip()).first()
+      const guestCart = await Cart.query()
+        .whereNull('user_id').where('id', request.header('X-Cart-ID', 0))
+        .where('session_id', request.header('X-Cart-Session', 0)).first()
 
       if (types.isNull(guestCart)) {
-        return await Cart.create({ipAddress: request.ip()})
+        return await Cart.create({ session_id: request.header('X-Cart-Session', uuid()) })
       }
 
       return guestCart
@@ -106,7 +108,7 @@ export default class CartsController {
     await user.load('cart')
 
     if (types.isNull(user.cart)) {
-      return await user.related('cart').create({ipAddress: request.ip()})
+      return await user.related('cart').create({session_id: request.header('X-Cart-Session', uuid())})
     }
 
     return user.cart
