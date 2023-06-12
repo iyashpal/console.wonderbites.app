@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
+import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { CartFactory, UserFactory } from 'Database/factories'
 
 test.group('API [carts.show]', (group) => {
   /**
@@ -11,25 +11,34 @@ test.group('API [carts.show]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('Guest users can access the cart', async ({ client, route, assert }) => {
+  test('It allows guest users to access the cart', async ({ client, route, assert }) => {
     const response = await client.get(route('api.carts.show'))
 
     response.assertStatus(200)
   }).tags(['@api', '@api.carts', '@api.carts.show'])
 
-  test('Authenticated user can access the cart', async ({ client, route }) => {
-    const response = await client.get(route('api.carts.show'))
-
-    response.assertStatus(200)
-  }).tags(['@api', '@api.carts', '@api.carts.show'])
-
-  test('Only active carts are accessible.', async ({ client, route, assert }) => {
+  test('It allows authenticated user to access the cart also.', async ({ client, route }) => {
     const user = await UserFactory.create()
-    const cart = await CartFactory.merge({ userId: user.id, status: 0 }).create()
+    const response = await client.get(route('api.carts.show')).guard('api').loginAs(user)
+
+    response.assertStatus(200)
+  }).tags(['@api', '@api.carts', '@api.carts.show'])
+
+  test('it allows users to access the cart by it\'s id', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('cart').create()
+
+    const response = await client.get(route('api.carts.show')).guard('api').loginAs(user)
+    response.assertStatus(200)
+    assert.equal(user.cart.id, response.body().id)
+  }).tags(['@api', '@api.carts', '@api.carts.show'])
+
+  test('It generates a new cart if the header cart uid is in-active.', async ({ client, route, assert }) => {
+    const user = await UserFactory.with('cart', 1, query => query.merge({status: 0})).create()
 
     const response = await client.get(route('api.carts.show'))
+      .header('X-Cart-ID', user.cart.id.toString())
       .guard('api').loginAs(user)
-
-    assert.notEqual(response.body()?.id, cart.id)
+    console.log(response.body())
+    assert.notEqual(response.body()?.id, user.cart.id)
   }).tags(['@api', '@api.carts', '@api.carts.show'])
 })
