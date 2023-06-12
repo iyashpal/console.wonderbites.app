@@ -53,26 +53,6 @@ export default class Category extends BaseModel {
     return Storage.public('/images/placeholder/square.svg')
   }
 
-  @computed()
-  public get isForProduct () {
-    return this.type === 'Product'
-  }
-
-  @computed()
-  public get isForCuisine () {
-    return this.type === 'Cuisine'
-  }
-
-  @computed()
-  public get isForBlog () {
-    return this.type === 'Blog'
-  }
-
-  @computed()
-  public get isForIngredient () {
-    return this.type === 'Ingredient'
-  }
-
   @belongsTo(() => Category, { foreignKey: 'parent' })
   public category: BelongsTo<typeof Category>
 
