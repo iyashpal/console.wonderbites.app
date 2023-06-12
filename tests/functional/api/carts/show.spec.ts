@@ -38,7 +38,6 @@ test.group('API [carts.show]', (group) => {
     const response = await client.get(route('api.carts.show'))
       .header('X-Cart-ID', user.cart.id.toString())
       .guard('api').loginAs(user)
-    console.log(response.body())
     assert.notEqual(response.body()?.id, user.cart.id)
   }).tags(['@api', '@api.carts', '@api.carts.show'])
 })
