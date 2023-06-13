@@ -4,7 +4,7 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { file } from '@ioc:Adonis/Core/Helpers'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { CategoryFactory, IngredientFactory, MediaFactory, ReviewFactory, UserFactory } from '.'
+import { CategoryFactory, IngredientFactory, MediaFactory, ReviewFactory, UserFactory, VariantFactory } from '.'
 
 export default Factory.define(Product, async ({ faker }) => {
   // User profile attachment
@@ -36,6 +36,7 @@ export default Factory.define(Product, async ({ faker }) => {
   .relation('user', () => UserFactory)
   .relation('media', () => MediaFactory)
   .relation('reviews', () => ReviewFactory)
+  .relation('variants', () => VariantFactory)
   .relation('categories', () => CategoryFactory)
   .relation('ingredients', () => IngredientFactory)
   .build()

@@ -73,7 +73,6 @@ Route.group(() => {
     // Endpoints for cart.
     Route.get('cart', 'CartsController.show').as('carts.show')
     Route.route('cart', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
-    Route.route('cart/quick', ['PUT', 'PATCH'], 'CartsController.quick').as('carts.quick')
 
     // Cart coupons endpoints.
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')

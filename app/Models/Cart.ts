@@ -24,7 +24,7 @@ export default class Cart extends BaseModel {
     quantity: number;
     variant?: {
       id: number;
-      attributes: {
+      attributes?: {
         id: number;
         category: number;
         quantity: number;

@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid'
-import { mapKeys, mapValues } from 'lodash'
+import {User, Cart} from 'App/Models'
 import {types} from '@ioc:Adonis/Core/Helpers'
-import {User, Cart, Product} from 'App/Models'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
 
 export default class CartsController {
   /**
@@ -12,12 +12,16 @@ export default class CartsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({request, auth, response}: HttpContextContract) {
-    const user = auth.use('api').user!
+  public async show ({ request, auth, response }: HttpContextContract) {
+    try {
+      const user = auth.use('api').user!
 
-    const cart = await this.cartWithRequestedData(request, await this.cart(request, user))
+      const cart = await this.cartWithRequestedData(request, await this.cart(request, user))
 
-    response.json(cart)
+      response.ok(cart)
+    } catch (error) {
+      ExceptionResponse.use(error).resolve(response)
+    }
   }
 
   /**
@@ -25,61 +29,17 @@ export default class CartsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({auth, request, response}: HttpContextContract) {
-    const user = auth.use('api').user!
-
-    let cart = await this.cart(request, user)
-
-    // Add products to cart.
-    if (request.input('action') === 'ADD') {
-      await this.cleanCartBeforeUpdate(request, cart)
-
-      await this.addToCart(request, cart)
-    }
-
-    // Remove products from cart.
-    if (request.input('action') === 'REMOVE') {
-      await this.removeFromCart(request, cart)
-    }
-
-    response.json(await this.cartWithRequestedData(request, cart))
-  }
-
-  /**
-   * Add products to cart without customization.
-   *
-   * @param param0 {HttpContextContract} Request payload.
-   */
-  public async quick ({auth, request, response}: HttpContextContract) {
+  public async update ({ auth, request, response }: HttpContextContract) {
     try {
-      const products = request.input('products', [])
       const user = auth.use('api').user!
+
+      const { data } = await request.validate(UpdateValidator)
+
       let cart = await this.cart(request, user)
 
-      for (let index in products) {
-        await Product.findOrFail(products[index])
-          .then(async product => {
-            await product?.load('ingredients')
+      await cart.merge({ data }).save()
 
-            let mappedIngredients = mapValues(
-              mapKeys(
-                product?.ingredients.map(ingredient => ({
-                  id: ingredient.id,
-                  product_id: product.id,
-                  qty: ingredient.$extras.pivot_min_quantity,
-                  price: ingredient.$extras.pivot_price,
-                })), (data) => data.id
-              ),
-              data => ({product_id: data.product_id, qty: data.qty, price: data.price})
-            )
-
-            await cart.related('products').attach([product.id])
-
-            await cart.related('ingredients').attach(mappedIngredients)
-          })
-      }
-
-      response.json(await this.cartWithRequestedData(request, cart))
+      response.ok(cart)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
@@ -94,15 +54,15 @@ export default class CartsController {
    */
   protected async cart (request: RequestContract, user: User | undefined): Promise<Cart> {
     if (types.isNull(user) || types.isUndefined(user)) {
-      const guestCart = await Cart.query()
+      const cart = await Cart.query()
         .whereNull('user_id').where('id', request.header('X-Cart-ID', 0))
         .where('session_id', request.header('X-Cart-Session', 0)).first()
 
-      if (types.isNull(guestCart)) {
+      if (types.isNull(cart)) {
         return await Cart.create({ session_id: request.header('X-Cart-Session', uuid()) })
       }
 
-      return guestCart
+      return cart
     }
 
     await user.load('cart')

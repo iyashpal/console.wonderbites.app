@@ -1,4 +1,5 @@
 import Variant from 'App/Models/Variant'
+import {AttributeFactory, CategoryFactory} from './index'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
@@ -15,4 +16,7 @@ export default Factory.define(Variant, async ({ faker }) => {
     price: faker.commerce.price(),
     status: !!faker.string.numeric(1),
   }
-}).build()
+})
+  .relation('categories', () => CategoryFactory)
+  .relation('attributes', () => AttributeFactory)
+  .build()
