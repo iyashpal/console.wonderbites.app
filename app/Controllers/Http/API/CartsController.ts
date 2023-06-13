@@ -33,11 +33,15 @@ export default class CartsController {
     try {
       const user = auth.use('api').user!
 
-      const { data } = await request.validate(UpdateValidator)
-
       let cart = await this.cart(request, user)
 
-      await cart.merge({ data }).save()
+      const payload = await request.validate(UpdateValidator)
+
+      await cart.merge({
+        data: payload.data,
+        userId: payload.user_id,
+        couponId: payload.coupon_id,
+      }).save()
 
       response.ok(cart)
     } catch (error) {

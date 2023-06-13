@@ -1,10 +1,6 @@
-import { v4 as uuid } from 'uuid'
-import crypto from 'crypto'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {CartFactory, IngredientFactory, ProductFactory, UserFactory} from 'Database/factories'
-import { DateTime } from 'luxon'
-import { uniqueHash } from 'App/Helpers/Core'
 
 test.group('API [carts.update]', (group) => {
   /**
@@ -34,7 +30,12 @@ test.group('API [carts.update]', (group) => {
       .guard('api').loginAs(user).json({data: [{id: product.id, quantity: 3}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({ id: user.cart.id, user_id: user.id, data: [{id: product.id, quantity: 3}]})
+
+    request.assertBodyContains({
+      id: user.cart.id,
+      token: user.cart.token,
+      data: [{ id: product.id, quantity: 3 }],
+    })
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 
@@ -103,34 +104,77 @@ test.group('API [carts.update]', (group) => {
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 
-  test('Cart product should contain the quantity added by the user.', async ({ client, route, assert }, qs) => {
-    console.log(uniqueHash())
-    console.log(uniqueHash())
+  test('It throw error when cart product do not have the quantity.')
+    .run(async ({ client, route, assert }, qs) => {
+      const user = await UserFactory.with('cart').create()
+
+      const product = await ProductFactory.create()
+      const request = await client.put(route('api.carts.update'))
+        .guard('api').loginAs(user).json({ data: [{ id: product.id }] })
+
+      request.assertStatus(422)
+      request.assertBodyContains({ errors: { 'data.0.quantity': 'required validation failed'}})
+    }).tags(['@api', '@api.carts', '@api.carts.update'])
+    .with([{ with: ['cart.products'] }])
+
+  test('It allows product quantity to be decreased.', async ({client, route, assert}, qs) => {
+    const product = await ProductFactory.create()
+    const user = await UserFactory.with('cart').create()
+
+    await user.cart.merge({data: [{ id: product.id, quantity: 5 }]}).save()
+
+    const request = await client.put(route('api.carts.update'))
+      .guard('api').loginAs(user).json({ data: [{ id: product.id, quantity: 2 }] })
+
+    request.assertStatus(200)
+    request.assertBodyContains({data: [{ id: product.id, quantity: 2 }]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 
-  test('Cart product quantity can be decreased.', async ({client, route, assert}, qs) => {
+  test('It allows users to add add ingredients to the cart.', async ({client, route, assert}, qs) => {
+    const product = await ProductFactory.with('ingredients', 5, query => query.with('categories')).create()
+    const user = await UserFactory.with('cart').create()
 
-  }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    await user.cart.merge({ data: [{ id: product.id, quantity: 5 }] }).save()
 
-  test('It can add ingredients to cart.', async ({client, route, assert}, qs) => {
+    const ingredients = product.ingredients.map(ingredient => {
+      const [category] = ingredient.categories
+      return {id: ingredient.id, quantity: 1, category: category.id}
+    })
 
+    const request = await client.put(route('api.carts.update'))
+      .guard('api').loginAs(user).json({ data: [{ id: product.id, quantity: 2, ingredients }] })
+
+    request.assertStatus(200)
+    request.assertBodyContains({data: [{ id: product.id, quantity: 2, ingredients }]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products', 'cart.ingredients'] }])
 
-  test('It can add products and ingredients to cart.', async ({client, route, assert}, qs) => {
+  test('It do not allow users to add add ingredients without quantity to the cart.')
+    .run(async ({ client, route, assert }, qs) => {
+      const product = await ProductFactory.with('ingredients', 5, query => query.with('categories')).create()
+      const user = await UserFactory.with('cart').create()
 
-  }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products', 'cart.ingredients'] }])
+      await user.cart.merge({ data: [{ id: product.id, quantity: 5 }] }).save()
 
-  test('It can update product\'s ingredients in cart.', async ({client, route, assert}, qs) => {
+      const ingredients = product.ingredients.map(ingredient => {
+        return {id: ingredient.id, quantity: 1}
+      })
 
-  }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{with: ['cart.products', 'cart.ingredients']}])
+      const request = await client.put(route('api.carts.update'))
+        .guard('api').loginAs(user)
+        .json({ data: [{ id: product.id, quantity: 2, ingredients }] })
 
-  test('It can remove products ingredients on removal of product from cart.', async ({client, route, assert}, qs) => {
-
-  }).tags(['@api', '@api.carts', '@api.carts.update'])
+      request.assertStatus(422)
+      request.assertBodyContains({
+        errors: {
+          'data.0.ingredients.0.category': 'required validation failed',
+          'data.0.ingredients.1.category': 'required validation failed',
+          'data.0.ingredients.2.category': 'required validation failed',
+          'data.0.ingredients.3.category': 'required validation failed',
+          'data.0.ingredients.4.category': 'required validation failed',
+        },
+      })
+    }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products', 'cart.ingredients'] }])
 })

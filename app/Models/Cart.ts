@@ -10,7 +10,7 @@ export default class Cart extends BaseModel {
   public token: string
 
   @column()
-  public userId: number | null | undefined
+  public userId: number | null
 
   @column()
   public couponId: number | null

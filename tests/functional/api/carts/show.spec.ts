@@ -1,6 +1,6 @@
 import { test } from '@japa/runner'
-import { UserFactory } from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { CartFactory, UserFactory } from 'Database/factories'
 
 test.group('API [carts.show]', (group) => {
   /**
@@ -32,7 +32,7 @@ test.group('API [carts.show]', (group) => {
     assert.equal(user.cart.id, response.body().id)
   }).tags(['@api', '@api.carts', '@api.carts.show'])
 
-  test('It generates a new cart if the header cart uid is in-active.', async ({ client, route, assert }) => {
+  test('It generates a new cart if the cart id in header is unavailable.', async ({ client, route, assert }) => {
     const user = await UserFactory.with('cart', 1, query => query.merge({status: 0})).create()
 
     const response = await client.get(route('api.carts.show'))
@@ -40,4 +40,34 @@ test.group('API [carts.show]', (group) => {
       .guard('api').loginAs(user)
     assert.notEqual(response.body()?.id, user.cart.id)
   }).tags(['@api', '@api.carts', '@api.carts.show'])
+
+  test('It generates a new cart if the cart token in header is missing and user is guest.')
+    .run(async ({ client, route, assert }) => {
+      const cart = await CartFactory.create()
+
+      const response = await client.get(route('api.carts.show'))
+        .header('X-Cart-ID', cart.id.toString())
+      assert.notEqual(response.body().id, cart.id)
+    }).tags(['@api', '@api.carts', '@api.carts.show'])
+
+  test('It generates a new cart if the cart id in header is missing and user is guest.')
+    .run(async ({ client, route, assert }) => {
+      const cart = await CartFactory.create()
+
+      const response = await client.get(route('api.carts.show'))
+        .header('X-Cart-Token', cart.token)
+      assert.notEqual(response.body().id, cart.id)
+    }).tags(['@api', '@api.carts', '@api.carts.show'])
+
+  test('It do not generate a new cart if the cart token and id in header is not missing and user is guest.')
+    .run(async ({ client, route, assert }) => {
+      const cart = await CartFactory.create()
+
+      const response = await client.get(route('api.carts.show'))
+        .headers({
+          'X-Cart-ID': cart.id.toString(),
+          'X-Cart-Token': cart.token,
+        })
+      assert.equal(response.body().id, cart.id)
+    }).tags(['@api', '@api.carts', '@api.carts.show'])
 })
