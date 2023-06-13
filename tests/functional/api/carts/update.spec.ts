@@ -1,7 +1,10 @@
 import { v4 as uuid } from 'uuid'
+import crypto from 'crypto'
 import { test } from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {CartFactory, IngredientFactory, ProductFactory, UserFactory} from 'Database/factories'
+import { DateTime } from 'luxon'
+import { uniqueHash } from 'App/Helpers/Core'
 
 test.group('API [carts.update]', (group) => {
   /**
@@ -74,13 +77,35 @@ test.group('API [carts.update]', (group) => {
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 
-  test('Authenticated User can remove products from cart', async ({client, route, assert}, qs) => {
+  test('It allows users to remove the products from cart', async ({client, route, assert}, qs) => {
+    const product = await ProductFactory
+      .with('variants', 2, query => query.with('attributes', 5).with('categories'))
+      .create()
 
+    const [variant] = product.variants.map(variant => {
+      return {
+        id: variant.id,
+        attributes: variant.attributes.map((attribute) => {
+          const [category] = variant.categories
+          return { id: attribute.id, quantity: 5, category: category.id }
+        }),
+      }
+    })
+
+    const cart = await CartFactory.merge({data: [{id: product.id, quantity: 3,variant}]}).create()
+
+    const request = await client.put(route('api.carts.update')).json({ data: [] })
+      .headers({ 'X-Cart-ID': cart.id.toString(), 'X-Cart-Token': cart.token })
+
+    request.assertStatus(200)
+    assert.equal(0, request.body().data.length)
+    request.assertBodyContains({id: cart.id, token: cart.token, data: [], status: cart.status })
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 
-  test('Cart product should contain the quantity added by the user.', async ({client, route, assert}, qs) => {
-
+  test('Cart product should contain the quantity added by the user.', async ({ client, route, assert }, qs) => {
+    console.log(uniqueHash())
+    console.log(uniqueHash())
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products'] }])
 

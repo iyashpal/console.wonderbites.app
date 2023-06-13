@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid'
 import {User, Cart} from 'App/Models'
+import { uniqueHash } from 'App/Helpers/Core'
 import {types} from '@ioc:Adonis/Core/Helpers'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
@@ -56,10 +56,10 @@ export default class CartsController {
     if (types.isNull(user) || types.isUndefined(user)) {
       const cart = await Cart.query()
         .whereNull('user_id').where('id', request.header('X-Cart-ID', 0))
-        .where('session_id', request.header('X-Cart-Session', 0)).first()
+        .where('token', request.header('X-Cart-Token', 0)).first()
 
       if (types.isNull(cart)) {
-        return await Cart.create({ session_id: request.header('X-Cart-Session', uuid()) })
+        return await Cart.create({ token: request.header('X-Cart-Session', uniqueHash()) })
       }
 
       return cart
@@ -68,7 +68,7 @@ export default class CartsController {
     await user.load('cart')
 
     if (types.isNull(user.cart)) {
-      return await user.related('cart').create({session_id: request.header('X-Cart-Session', uuid())})
+      return await user.related('cart').create({token: request.header('X-Cart-Token', uniqueHash())})
     }
 
     return user.cart

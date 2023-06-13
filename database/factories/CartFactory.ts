@@ -1,11 +1,12 @@
 import Cart from 'App/Models/Cart'
+import { uniqueHash } from 'App/Helpers/Core'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { IngredientFactory, ProductFactory, UserFactory } from '.'
 
 export default Factory.define(Cart, ({ faker }) => {
   return {
     user_id: null,
-    session_id: faker.string.uuid(),
+    token: uniqueHash(),
     status: 1,
   }
 })

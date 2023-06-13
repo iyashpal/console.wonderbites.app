@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.bigIncrements('id')
-      table.string('session_id')
+      table.string('token')
       table.bigInteger('user_id').unsigned().nullable().references('users.id').onDelete('RESTRICT')
       table.bigInteger('coupon_id').unsigned().nullable().references('coupons.id').onDelete('RESTRICT')
       table.jsonb('data').nullable()
