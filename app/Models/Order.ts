@@ -14,7 +14,7 @@ export default class Order extends BaseModel {
   public couponId: number | null
 
   @column()
-  public ipAddress: string
+  public token: string | null
 
   @column()
   public orderType: string
@@ -60,6 +60,9 @@ export default class Order extends BaseModel {
 
   @column()
   public paymentMode: string
+
+  @column()
+  public data: any
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

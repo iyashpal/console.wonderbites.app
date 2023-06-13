@@ -2,10 +2,12 @@ import { DateTime } from 'luxon'
 import Order from 'App/Models/Order'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { CouponFactory, IngredientFactory, ProductFactory, ReviewFactory, UserFactory } from '.'
+import { uniqueHash } from 'App/Helpers/Core'
 
 export default Factory.define(Order, ({ faker }) => ({
   userId: 0,
   orderType: 'delivery',
+  token: uniqueHash(),
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
   street: faker.location.streetAddress(),
