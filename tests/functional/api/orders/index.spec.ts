@@ -36,8 +36,8 @@ test.group('API [orders.index]', (group) => {
 
     request.assertStatus(200)
     request.assertBodyContains({
-      data: orders.map(({id, userId, ipAddress, options, note, status}) => ({
-        id, user_id: userId, ip_address: ipAddress, options: JSON.stringify(options), note, status,
+      data: orders.map(({id, userId, token, options, note, status}) => ({
+        id, user_id: userId, token: token, options: JSON.stringify(options), note, status,
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -101,8 +101,8 @@ test.group('API [orders.index]', (group) => {
     assert.equal(request.body().data.length, orders.length)
 
     request.assertBodyContains({
-      data: orders.map(({id, userId, ipAddress, options, note, status}) => ({
-        id, user_id: userId, ip_address: ipAddress, options: options, note, status,
+      data: orders.map(({id, userId, token, options, note, status}) => ({
+        id, user_id: userId, token: token, options: options, note, status,
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -206,8 +206,8 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, userId, ipAddress, options, note, status, ingredients}) => ({
-        id, user_id: userId, ip_address: ipAddress, options: JSON.stringify(options), note, status,
+      data: orders.map(({id, userId, token, options, note, status, ingredients}) => ({
+        id, user_id: userId, token: token, options: JSON.stringify(options), note, status,
         ingredients: ingredients.map(({id, name, description, price, status}) => ({
           id, name, description, price, status,
         })),
