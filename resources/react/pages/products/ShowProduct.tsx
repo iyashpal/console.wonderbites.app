@@ -1,8 +1,8 @@
-import { useFlash, useForm } from '@/hooks'
 import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
 import Avatar from "@/components/Avatar";
 import { Details } from '@/components/Show'
+import { useFlash, useForm } from '@/hooks'
 import Input from '@/components/forms/Input'
 import * as Alerts from '@/components/alerts'
 import * as Loaders from '~/components/loaders'
@@ -357,9 +357,7 @@ function ProductIngredients({ product }: { product: Product }) {
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Delete Ingredient</h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">Are you sure you want to remove <b>{ingredient.name}</b> from the
-                  product? All of the ingredient configuration data will be permanently removed. This action cannot be
-                  undone.</p>
+                <p className="text-sm text-gray-500">Are you sure you want to remove <b>{ingredient.name}</b> from the product? All of the ingredient configuration data will be permanently removed. This action cannot be undone.</p>
               </div>
             </div>
           </div>
@@ -917,7 +915,7 @@ function CreateVariantCategory({ show, categories = [], variant, onClose, onSucc
     e.preventDefault()
     form.post(`variants/${variant.id}/categories`)
       .then(({ data }: { data: Category }) => {
-        form.reset.form()
+        form.reset()
         onSuccess(data)
       })
       .catch(() => {
@@ -987,7 +985,7 @@ function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFo
   function onSubmit() {
     form.post('/attributes').then(({ data }: { data: Attribute }) => {
       onSuccess(data)
-      form.reset.form()
+      form.reset()
     })
   }
 
