@@ -4,7 +4,6 @@ import { ErrorsType } from "@/contracts";
 import { AxiosRequestConfig } from "axios";
 
 export default function useForm<T>(initialState: T = {} as T) {
-
   const [form, setForm] = useState(initialState)
   const [isProcessing, setIsProcessing] = useState(false)
   const [errors, setErrors] = useState<ErrorsType<T>>({} as ErrorsType<T>)
@@ -17,7 +16,7 @@ export default function useForm<T>(initialState: T = {} as T) {
    */
   function onChange(field: keyof T) {
     return (event) => {
-      setForm(data => ({ ...data, [field]: event.target.value }))
+      setForm(data => ({ ...data, [field]: event.target.files instanceof FileList ? event.target.files[0] : event.target.value }))
     }
   }
 
@@ -68,58 +67,35 @@ export default function useForm<T>(initialState: T = {} as T) {
   }
 
   /**
-   * Handle the form get request.
+   * Convert the object to form data.
    *
-   * @param url string
-   * @param config AxiosRequestConfig<any>
-   * @returns Promise
+   * @returns {FormData}
    */
-  const handleGet = (url: string, config?: AxiosRequestConfig<any>) => {
-    return request({ url, method: 'get', ...config })
-  }
+  function objectToFormData(data: T) {
+    let formData = new FormData()
 
-  /**
-   * Handle the form post request.
-   *
-   * @param url string
-   * @param config AxiosRequestConfig<any>
-   * @returns Promise
-   */
-  const handlePost = (url: string, config?: AxiosRequestConfig<any>) => {
-    return request({ url, method: 'post', data: form, ...config })
-  }
+    for (let key in data) {
+      let value = data[key]
+      if (Object.prototype.hasOwnProperty.call(form, key)) {
+        if (value instanceof Date) {
+          formData.append(key, value.toISOString())
+        } else if (value instanceof File) {
+          formData.append(key, value, value.name)
+        } else if (value instanceof Blob) {
+          formData.append(key, value)
+        } else if (typeof value === 'boolean') {
+          formData.append(key, value ? '1' : '0')
+        } else if (typeof value === 'string') {
+          formData.append(key, value)
+        } else if (typeof value === 'number') {
+          formData.append(key, `${value}`)
+        } else if (value === null || value === undefined) {
+          formData.append(key, '')
+        }
+      }
+    }
 
-  /**
-   * Handle the form put request.
-   *
-   * @param url string
-   * @param config AxiosRequestConfig<any>
-   * @returns Promise
-   */
-  const handlePut = (url: string, config?: AxiosRequestConfig<any>) => {
-    return request({ url, method: 'put', data: form, ...config })
-  }
-
-  /**
-   * Handle the form patch request.
-   *
-   * @param url string
-   * @param config AxiosRequestConfig<any>
-   * @returns Promise
-   */
-  const handlePatch = (url: string, config?: AxiosRequestConfig<any>) => {
-    return request({ url, method: 'patch', data: form, ...config })
-  }
-
-  /**
-   * Handle the form delete request.
-   *
-   * @param url string
-   * @param config AxiosRequestConfig<any>
-   * @returns Promise
-   */
-  const handleDelete = (url: string, config?: AxiosRequestConfig<any>) => {
-    return request({ url, method: 'delete', ...config })
+    return formData
   }
 
   /**
@@ -142,14 +118,79 @@ export default function useForm<T>(initialState: T = {} as T) {
   }
 
   return {
-    sync, set, value, onChange, data: form,
+
+    sync,
+
+    set,
+
+    value,
+
+    onChange,
+
+    input: form,
+
     isProcessing,
+
     errors: error,
-    get: handleGet,
-    put: handlePut,
-    post: handlePost,
-    patch: handlePatch,
-    delete: handleDelete,
-    reset: { form: resetForm, errors: resetErrors },
+
+    /**
+     * Handle the form get request.
+     *
+     * @param url string
+     * @param config AxiosRequestConfig<any>
+     * @returns Promise
+     */
+    get: (url: string, config?: AxiosRequestConfig<any>) => {
+      return request({ url, method: 'get', ...config })
+    },
+
+    /**
+     * Handle the form put request.
+     *
+     * @param url string
+     * @param config AxiosRequestConfig<any>
+     * @returns Promise
+     */
+    put: (url: string, config?: AxiosRequestConfig<any>) => {
+      return request({ url, method: 'put', data: objectToFormData(form), ...config })
+    },
+
+    /**
+     * Handle the form post request.
+     *
+     * @param url string
+     * @param config AxiosRequestConfig<any>
+     * @returns Promise
+     */
+    post: (url: string, config?: AxiosRequestConfig<any>) => {
+      return request({ url, method: 'post', data: objectToFormData(form), ...config })
+    },
+
+    /**
+     * Handle the form patch request.
+     *
+     * @param url string
+     * @param config AxiosRequestConfig<any>
+     * @returns Promise
+     */
+    patch: (url: string, config?: AxiosRequestConfig<any>) => {
+      return request({ url, method: 'patch', data: objectToFormData(form), ...config })
+    },
+
+    /**
+     * Handle the form delete request.
+     *
+     * @param url string
+     * @param config AxiosRequestConfig<any>
+     * @returns Promise
+     */
+    delete: (url: string, config?: AxiosRequestConfig<any>) => {
+      return request({ url, method: 'delete', ...config })
+    },
+
+    reset: () => {
+      resetForm()
+      resetErrors()
+    },
   }
 }
