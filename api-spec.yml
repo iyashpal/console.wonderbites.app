@@ -1201,18 +1201,73 @@ paths:
           application/json:
             schema:
               type: object
-              example:
-                action: ADD
-                products:
-                  "1":
-                    qty: 1
-                ingredients:
-                  "1":
-                    product_id: 1
-                    qty: 5
-                  "2":
-                    product_id: 1
-                    qty: 2
+              properties:
+                user_id:
+                  type: number
+                  example: 1
+                coupon_id:
+                  type: number
+                  example: 3
+                data:
+                  type: array
+                  required:
+                    -  id
+                    - quantity
+                  properties:
+                    id:
+                      type: number
+                    quantity:
+                      type: number
+                    variant:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          attributes:
+                            type: array
+                            properties:
+                              id:
+                                type: number
+                              quantity:
+                                type: number
+                              category:
+                                type: number
+                    ingredients:
+                      type: array
+                      properties:
+                        id:
+                          type: number
+                        quantity:
+                          type: number
+                        category:
+                          type: number
+                  example:
+                    - id: 13
+                      quantity: 1
+                    - id: 2
+                      quantity: 1
+                      ingredients:
+                        - id: 39
+                          quantity: 3
+                          category: 3
+                        - id: 40
+                          quantity: 2
+                          category: 3
+                    - id: 1
+                      quantity: 1
+                      variant:
+                        - id: 1
+                          attributes:
+                            - id: 57
+                              category: 5
+                              quantity: 2
+                            - id: 58
+                              category: 6
+                              quantity: 1
+                            - id: 59
+                              category: 7
+                              quantity: 1
+
       responses:
         "200":
           description: Successful response
@@ -1246,27 +1301,72 @@ paths:
             schema:
               type: object
               properties:
-                action:
-                  type: string
-                  default: null
-                  description: Specify the cart action for the request.
+                user_id:
+                  type: number
+                  example: 1
+                coupon_id:
+                  type: number
+                  example: 3
+                data:
+                  type: array
+                  required:
+                    -  id
+                    - quantity
+                  properties:
+                    id:
+                      type: number
+                    quantity:
+                      type: number
+                    variant:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          attributes:
+                            type: array
+                            properties:
+                              id:
+                                type: number
+                              quantity:
+                                type: number
+                              category:
+                                type: number
+                    ingredients:
+                      type: array
+                      properties:
+                        id:
+                          type: number
+                        quantity:
+                          type: number
+                        category:
+                          type: number
                   example:
-                    - ADD
-                    - REMOVE
-                products:
-                  type: object
-              example:
-                action: ADD
-                products:
-                  "1":
-                    qty: 1
-                ingredients:
-                  "1":
-                    product_id: 1
-                    qty: 5
-                  "2":
-                    product_id: 1
-                    qty: 2
+                    - id: 13
+                      quantity: 1
+                    - id: 2
+                      quantity: 1
+                      ingredients:
+                        - id: 39
+                          quantity: 3
+                          category: 3
+                        - id: 40
+                          quantity: 2
+                          category: 3
+                    - id: 1
+                      quantity: 1
+                      variant:
+                        - id: 1
+                          attributes:
+                            - id: 57
+                              category: 5
+                              quantity: 2
+                            - id: 58
+                              category: 6
+                              quantity: 1
+                            - id: 59
+                              category: 7
+                              quantity: 1
+
       responses:
         "200":
           description: Successful response
@@ -2769,6 +2869,10 @@ components:
           type: string
           default: 1
           description: Unique ID of cart.
+        token:
+          type: string
+          default: 127.0.0.1
+          description: User's device OR cart token.
         user_id:
           type: number
           default: 1
@@ -2777,10 +2881,9 @@ components:
           type: number
           default: 1
           description: Coupon id belongs to cart.
-        ip_address:
-          type: string
-          default: 127.0.0.1
-          description: User's device IP address.
+        data:
+          type: object
+          default: null
         status:
           type: number
           default: 1
