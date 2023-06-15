@@ -1,21 +1,31 @@
 import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
-import Avatar from "@/components/Avatar";
-import { Details } from '@/components/Show'
+import Avatar from "@/components/Avatar"
 import { useFlash, useForm } from '@/hooks'
 import Input from '@/components/forms/Input'
 import * as Alerts from '@/components/alerts'
+import Resources from '@/components/resources'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import { Combobox, Menu, Transition } from '@headlessui/react'
-import CreateProductVariant from './partials/CreateProductVariant'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
 import { Attribute, Category, Ingredient, Media, Product, Variant } from '~/contracts/schema'
-import { Form, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Form, Link, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
+const columns = [
+  { name: 'Name', options: { className: 'text-left' } },
+  { name: 'ID', options: { className: 'text-left' } },
+  { name: 'Cuisine', options: { className: 'text-left' } },
+  { name: 'Price', options: { className: 'text-center' } },
+  { name: 'Category', options: { className: 'text-left' } },
+  { name: 'Description', options: { className: 'text-center', onModal: true } },
+  { name: 'Images', options: { className: 'text-left' } },
+  { name: 'Type', options: { className: 'text-left' } },
+  { name: 'Status', options: { className: 'text-left' } },
+]
 
 export default function ShowProduct() {
   const flash = useFlash()
@@ -41,25 +51,31 @@ export default function ShowProduct() {
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <div className="py-4">
-          <Details
-            module="Product"
-            title={product.name}
-            by={product?.user.name}
-            date={product.created_at}
-            onTrash={() => setIsTrashing(true)}
-            onEdit={() => navigateTo(`/app/products/${product.id}/edit`)}
-            fields={[
-              { name: 'Name', value: product.name },
-              { name: 'ID', value: product.id },
-              { name: 'Cuisine', value: cuisine?.name ?? '-' },
-              { name: 'Price', value: `${product.price}L` },
-              { name: 'Category', value: category?.name ?? '-' },
-              { name: 'Description', value: product.description, onModal: true },
-              { name: 'Images', value: <ProductImages /> },
-              { name: 'Type', value: product.type },
-              { name: 'Status', value: <span className='capitalize'>{product.status}</span> }
-            ]}
-          />
+          <Resources.Detail module='Product' title={product.name} by={product?.user.name} date={product.created_at} columns={columns}>
+            {() => ([
+              product.name,
+              product.id,
+              cuisine?.name ?? '-',
+              `${product.price}L`,
+              category?.name ?? '-',
+              product.description,
+              <Avatar className={'w-12 h-12 rounded-full ring-2'} src={product.thumbnail_url} alt={product.name} />,
+              <span className="uppercase">{product.type}</span>,
+              <span className='capitalize'>{product.status}</span>,
+              <div className="flex items-center justify-center gap-x-3">
+                <Link to={`/app/products/${product.id}/edit`} className={'action:button button:green'}>
+                  <Icons.Outline.PencilSquare className={'w-5 h-5'} />
+                </Link>
+
+                <button onClick={() => setIsTrashing(true)} className={'action:button button:red'}>
+                  <Icons.Outline.Trash className={'w-5 h-5'} />
+                </button>
+              </div>
+            ])}
+          </Resources.Detail>
+
+          <ProductImages />
+
           {(Boolean(product.is_customizable) && product.type === 'general') && (
             <div className='shadow mt-4 sm:mt-6 lg:mt-8'>
               <ProductIngredients product={product} />
@@ -85,12 +101,10 @@ export default function ShowProduct() {
 }
 
 function ProductImages() {
-
-  const [show, setShow] = useState(false)
-  const form = useMediaProductForm({ attachment: '' })
-  const { product } = useLoaderData() as { product: Product }
   const imageField = useRef<HTMLInputElement>(null)
   const [fileType, setFileType] = useState('image')
+  const form = useMediaProductForm({ attachment: '' })
+  const { product } = useLoaderData() as { product: Product }
 
   useEffect(() => {
     form.sync(product)
@@ -138,25 +152,11 @@ function ProductImages() {
   }
 
   return <>
-    <div className="relative group">
-      <Avatar className={'w-12 h-12 rounded-full'} src={product.thumbnail_url} alt={product.name} />
-
-      <button onClick={() => setShow(true)}
-        className="hidden group-hover:inline-flex group-hover:items-center group-hover:justify-center absolute top-0 left-0 w-12 h-12 rounded-full ring-2 ring-white bg-gray-900/70 hover:bg-gray-900/70 border-0 focus:outline-none text-white transition-colors ease-in-out duration-300">
-        {product.media?.length === 0 ?
-          <Icons.Outline.Plus className={'inline-flex h-5 w-5'} /> : `+${product.media?.length}`}
-      </button>
-    </div>
-
-    <Modal show={show} className={'max-w-3xl divide-y'} onClose={() => setShow(false)}>
+    <div className="bg-white mt-10 shadow-md divide-y">
       <div className={'p-3 sm:p-4 flex items-center justify-between'}>
         <div>
           <h3 className={'font-semibold'}>Images</h3>
         </div>
-
-        <button onClick={() => setShow(false)}>
-          <Icons.Outline.XMark className={'w-5 h-5'} />
-        </button>
       </div>
       <div className="flow-root">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -224,9 +224,7 @@ function ProductImages() {
                         <option value="image">Image</option>
                         <option value="video">Video</option>
                       </select>
-                      <input ref={imageField} onChange={onChangeImage} type="file"
-                        accept={fileType === 'image' ? 'image/*' : 'video/*'} name="attachment" id="attachment"
-                        className="p-0.5 text-sm block w-full file:mr-4 file:py-1.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
+                      <input ref={imageField} onChange={onChangeImage} type="file" accept={fileType === 'image' ? 'image/*' : 'video/*'} name="attachment" id="attachment" className="p-0.5 text-sm block w-full file:mr-4 file:py-1.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 focus:outline-none" />
                     </div>
                   </td>
                 </tr>
@@ -235,7 +233,7 @@ function ProductImages() {
           </div>
         </div>
       </div>
-    </Modal>
+    </div>
   </>
 }
 
@@ -294,8 +292,7 @@ function ProductIngredients({ product }: { product: Product }) {
                         className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-primary sm:left-6" />
                     </th>
 
-                    <th scope="col"
-                      className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">
+                    <th scope="col" className="py-3.5 pl-4 pr-3 sm:pl-6 lg:pl-8 text-left text-sm font-semibold text-gray-900 uppercase">
                       Name
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
@@ -319,16 +316,14 @@ function ProductIngredients({ product }: { product: Product }) {
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase">
                       Image
                     </th>
-                    <th scope="col"
-                      className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">
+                    <th scope="col" className="py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-center text-sm font-semibold text-gray-900 uppercase w-14">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
 
-                  {product?.ingredients?.map((ingredient, index) => (
-                    <IngredientRow key={index} ingredient={ingredient} onTrash={onTrash} />))}
+                  {product?.ingredients?.map((ingredient, index) => (<IngredientRow key={index} ingredient={ingredient} onTrash={onTrash} />))}
 
 
                   {product?.ingredients?.length === 0 && (
@@ -363,12 +358,10 @@ function ProductIngredients({ product }: { product: Product }) {
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-          <button onClick={executeTrash} type="button"
-            className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
+          <button onClick={executeTrash} type="button" className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
             {ingredientProduct.isProcessing ? <Loaders.Circle className={'animate-spin h-5 w-5'} /> : 'Delete'}
           </button>
-          <button onClick={onClose} type="button"
-            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+          <button onClick={onClose} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
             Cancel
           </button>
         </div>
@@ -582,7 +575,6 @@ function ProductVariants({ product }: { product: Product }) {
   const navigateTo = useNavigate()
   const [search, setSearch] = useSearchParams({ variant: '' })
   const [isTrashing, setIsTrashing] = useState({} as Variant)
-  const [showCreateForm, setShowCreateForm] = useState<boolean>(false)
   const [showVariable, setShowVariable] = useState<Variant>({} as Variant)
 
   useEffect(() => {
@@ -616,6 +608,83 @@ function ProductVariants({ product }: { product: Product }) {
     setIsTrashing({} as Variant)
   }
 
+
+  function VariantRow({ variant }: { variant: Variant }) {
+    const form = useForm(variant)
+
+    function onKeyDown(e) {
+      if (e.key === 'Enter') {
+        form.put(`variants/${variant.id}`).then(() => {
+          navigateTo('')
+          form.reset()
+        })
+      }
+    }
+    return (
+      <tr className='relative overflow-hidden'>
+        <td className="whitespace-nowrap py-2 pl-4 pr-4 text-sm font-medium text-gray-900">
+          <Input type="text" onKeyDown={onKeyDown} onChange={form.onChange('name')} error={form.errors('name')} defaultValue={variant.name} variant="underlined" placeholder="Name *" />
+        </td>
+
+        <td className="whitespace-nowrap py-2 pl-4 pr-4 text-sm font-medium text-gray-900">
+          <Input type="text" onKeyDown={onKeyDown} onChange={form.onChange('description')} error={form.errors('description')} defaultValue={variant.description ?? '-'} variant="underlined" placeholder="Description" />
+        </td>
+
+        <td className="whitespace-nowrap px-4 py-2 text-sm text-gray-500">
+          <Input type="number" onKeyDown={onKeyDown} onChange={form.onChange('price')} error={form.errors('price')} min={0} defaultValue={variant.meta.pivot_price} variant="underlined" placeholder="Price *" />
+        </td>
+
+        <td className="p-4">
+          <div className="flex items-center justify-center">
+            <button onClick={() => setSearch({ variant: variant.id.toString() })} className='action:button button:blue'>
+              <Icons.Outline.Eye className={`h-5 w-5`} />
+            </button>
+
+            <button onClick={() => setIsTrashing(variant)} className='ml-3 action:button button:red'>
+              <Icons.Outline.Trash className={`h-5 w-5`} />
+            </button>
+          </div>
+        </td>
+      </tr>
+    )
+  }
+
+  function CreateVariant({ product }: { product: Product }) {
+    const navigateTo = useNavigate()
+    const form = useForm({ product_id: product.id, name: '', description: '', price: '' })
+
+    function onKeyDown(e) {
+      if (e.key === 'Enter') {
+        form.post('variants').then(() => {
+          navigateTo('')
+          form.reset()
+        })
+      }
+    }
+
+    return <>
+      <tr>
+        <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-900">
+          <Input error={form.errors('name')} onKeyDown={onKeyDown} value={form.input.name} onChange={form.onChange('name')} type="text" variant="underlined" placeholder="Name *" />
+        </td>
+        <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-900">
+          <Input error={form.errors('description')} onKeyDown={onKeyDown} value={form.input.description} onChange={form.onChange('description')} type="text" variant="underlined" placeholder="Description" />
+        </td>
+        <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-900">
+          <Input error={form.errors('price')} onKeyDown={onKeyDown} value={form.input.price} onChange={form.onChange('price')} min={0} type="number" variant="underlined" placeholder="Price *" />
+        </td>
+        <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-900 text-center">
+
+        </td>
+      </tr>
+      <tr>
+        <td colSpan={4}>
+
+        </td>
+      </tr>
+    </>
+  }
+
   if (!!showVariable.id) {
     return <ShowProductVariant variant={showVariable} onClose={handleCloseVariantDetailEvent} />
   }
@@ -628,83 +697,22 @@ function ProductVariants({ product }: { product: Product }) {
             <h3 className="text-base font-semibold leading-6 text-gray-900">Variants</h3>
           </div>
           <div className="flex-shrink-0">
-            <Menu as="div" className="relative">
-              <Menu.Button className={'action:button button:blue'}>
-                <Icons.Outline.EllipsisVertical className="h-6" />
-              </Menu.Button>
-              <Menu.Items
-                className={'absolute right-0 z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden'}>
-                <Menu.Item as={'button'} onClick={() => setShowCreateForm(true)}
-                  className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
-                  <Icons.Outline.Plus className="w-5 h-5" /> Add New
-                </Menu.Item>
-              </Menu.Items>
-            </Menu>
+
           </div>
         </div>
       </div>
-      <div className="">
+      <div className="pb-5">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr className="bg-gray-100">
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Proteins</th>
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Vegetables</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-48">Name</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
               <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Price</th>
               <th scope="col" className="px-4 py-3.5 text-center text-sm font-semibold text-gray-900 w-28">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {(product.variants ?? []).map((variant: Variant, index: number) => (
-              <tr key={index} className='relative overflow-hidden'>
-                <td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900">
-                  <div onClick={() => setSearch({ variant: variant.id.toString() })}
-                    className="font-medium text-gray-900 hover:text-red-primary cursor-pointer">
-                    {variant.name}
-                  </div>
-                </td>
-                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                  <div className="relative">
-                    <input type="number" defaultValue={variant.meta.pivot_proteins}
-                      className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-                    <div
-                      className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-                      aria-hidden="true" />
-                  </div>
-                </td>
-                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                  <div className="relative">
-                    <input type="number" defaultValue={variant.meta.pivot_vegetables}
-                      className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-                    <div
-                      className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-                      aria-hidden="true" />
-                  </div>
-                </td>
-                <td className="whitespace-nowrap p-4 text-sm text-gray-500">
-                  <div className="relative">
-                    <input type="number" defaultValue={variant.meta.pivot_price}
-                      className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-                    <div
-                      className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-                      aria-hidden="true" />
-                  </div>
-                </td>
-
-                <td className="p-4">
-                  <div className="flex items-center justify-center">
-                    <button onClick={() => setSearch({ variant: variant.id.toString() })}
-                      className='action:button button:blue'>
-                      <Icons.Outline.Eye className={`h-5 w-5`} />
-                    </button>
-
-                    <button onClick={() => setIsTrashing(variant)} className='ml-3 action:button button:red'>
-                      <Icons.Outline.Trash className={`h-5 w-5`} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+          <tbody className="bg-white">
+            {(product.variants ?? []).map((variant: Variant, index) => (<VariantRow variant={variant} key={index} />))}
 
             {product.variants?.length === 0 && <>
               <tr>
@@ -713,6 +721,8 @@ function ProductVariants({ product }: { product: Product }) {
                 </td>
               </tr>
             </>}
+
+            <CreateVariant product={product} />
           </tbody>
         </table>
       </div>
@@ -724,7 +734,7 @@ function ProductVariants({ product }: { product: Product }) {
         onClose={() => setIsTrashing({} as Variant)}
         description={<>Are you sure you want to delete "<b>{isTrashing.name}</b>"? This action cannot be undone.</>}
       />
-      <CreateProductVariant product={product} open={showCreateForm} onClose={() => setShowCreateForm(false)} />
+
     </div>
   )
 }
