@@ -39,12 +39,6 @@ export default class StoreValidator {
     price: schema.string({ trim: true }, [
       rules.required(),
     ]),
-    proteins: schema.string({ trim: true }, [
-      rules.required(),
-    ]),
-    vegetables: schema.string({ trim: true }, [
-      rules.required(),
-    ]),
   })
 
   /**

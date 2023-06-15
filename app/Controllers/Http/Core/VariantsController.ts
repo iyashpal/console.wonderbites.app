@@ -24,11 +24,7 @@ export default class VariantsController {
 
       if (payload.product_id) {
         await $variant.related('products').attach({
-          [payload.product_id]: {
-            price: payload.price,
-            proteins: payload.proteins,
-            vegetables: payload.vegetables,
-          },
+          [payload.product_id]: { price: payload.price },
         })
       }
 
