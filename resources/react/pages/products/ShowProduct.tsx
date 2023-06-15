@@ -627,7 +627,7 @@ function ProductVariants({ product }: { product: Product }) {
         </td>
 
         <td className="whitespace-nowrap py-2 pl-4 pr-4 text-sm font-medium text-gray-900">
-          <Input type="text" onKeyDown={onKeyDown} onChange={form.onChange('description')} error={form.errors('description')} defaultValue={variant.description ?? '-'} variant="underlined" placeholder="Description" />
+          <Input type="text" onKeyDown={onKeyDown} onChange={form.onChange('description')} error={form.errors('description')} defaultValue={variant.description} variant="underlined" placeholder="Description" />
         </td>
 
         <td className="whitespace-nowrap px-4 py-2 text-sm text-gray-500">
@@ -678,8 +678,10 @@ function ProductVariants({ product }: { product: Product }) {
         </td>
       </tr>
       <tr>
-        <td colSpan={4}>
-
+        <td colSpan={4} className='px-4 pt-5'>
+          <div className="flex items-center text-sm text-blue-500">
+            <Icons.Outline.InformationCircle className='h-6 w-6 mr-2' /> To update or create the variable products simply enter/update the fields and press <b>"Enter"</b>
+          </div>
         </td>
       </tr>
     </>
@@ -713,14 +715,6 @@ function ProductVariants({ product }: { product: Product }) {
           </thead>
           <tbody className="bg-white">
             {(product.variants ?? []).map((variant: Variant, index) => (<VariantRow variant={variant} key={index} />))}
-
-            {product.variants?.length === 0 && <>
-              <tr>
-                <td colSpan={6} className="whitespace-nowrap py-4 px-4 text-sm font-medium">
-                  <Alerts.Warning>No data available.</Alerts.Warning>
-                </td>
-              </tr>
-            </>}
 
             <CreateVariant product={product} />
           </tbody>
