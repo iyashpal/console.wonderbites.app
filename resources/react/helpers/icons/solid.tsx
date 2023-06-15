@@ -38,9 +38,11 @@ import {
   CheckCircleIcon as CheckCircle,
   CurrencyDollarIcon as CurrencyDollar,
   PencilSquareIcon as PencilSquare,
+  InformationCircleIcon as InformationCircle,
 } from '@heroicons/react/24/solid'
 
 export {
+  InformationCircle,
   QueueList,
   CheckCircle,
   ArrowLongLeft,
