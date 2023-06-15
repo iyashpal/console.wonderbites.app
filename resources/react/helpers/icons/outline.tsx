@@ -37,11 +37,13 @@ import {
   PencilSquareIcon as PencilSquare,
   LinkIcon as Link,
   TagIcon as Tag,
+  QueueListIcon as QueueList,
   CheckCircleIcon as CheckCircle,
   CurrencyDollarIcon as CurrencyDollar,
 } from '@heroicons/react/24/outline'
 
 export {
+  QueueList,
   CheckCircle,
   ArrowLongLeft,
   EllipsisVertical,

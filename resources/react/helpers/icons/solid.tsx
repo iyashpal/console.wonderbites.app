@@ -34,12 +34,14 @@ import {
   HashtagIcon as Hashtag,
   Bars3BottomLeftIcon as Bars3BottomLeft,
   LinkIcon as Link,
+  QueueListIcon as QueueList,
   CheckCircleIcon as CheckCircle,
   CurrencyDollarIcon as CurrencyDollar,
   PencilSquareIcon as PencilSquare,
 } from '@heroicons/react/24/solid'
 
 export {
+  QueueList,
   CheckCircle,
   ArrowLongLeft,
   EllipsisVertical,
