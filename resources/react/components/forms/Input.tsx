@@ -2,7 +2,7 @@ import { classNames } from "@/helpers"
 import { useEffect, useState } from "react"
 
 type InputProps = React.ComponentProps<'input'> & {
-    variant?: string
+    variant?: 'underlined'
     override?: boolean
     error?: string
 }
