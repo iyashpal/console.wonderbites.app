@@ -41,8 +41,15 @@ export default class VariantsController {
   public async update ({ request, response, params }: HttpContextContract) {
     try {
       const $variant = await Variant.findOrFail(params.id)
-      const { name, price, description } = await request.validate(UpdateValidator)
+      const { name, price, description, ...payload } = await request.validate(UpdateValidator)
       await $variant.merge({ name, price, description }).save()
+
+      if (payload.product_id) {
+        await $variant.related('products').sync({
+          [payload.product_id]: { price: price },
+        }, false)
+      }
+
       response.ok($variant)
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
