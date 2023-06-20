@@ -33,7 +33,7 @@ export default class Attribute extends BaseModel {
   public user: BelongsTo<typeof User>
 
   @manyToMany(() => Variant, {
-    pivotColumns: ['id', 'attribute_id', 'variant_id', 'category_id'],
+    pivotColumns: ['id', 'attribute_id', 'variant_id', 'category_id', 'price'],
     pivotTimestamps: true,
   })
   public variants: ManyToMany<typeof Variant>
