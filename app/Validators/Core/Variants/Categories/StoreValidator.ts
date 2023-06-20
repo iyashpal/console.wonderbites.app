@@ -32,6 +32,9 @@ export default class StoreValidator {
     order: schema.number([
       rules.required(),
     ]),
+    totalItems: schema.number([
+      rules.required(),
+    ]),
     status: schema.string({ trim: true }, [
       rules.required(),
     ]),
