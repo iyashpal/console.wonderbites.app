@@ -106,7 +106,7 @@ export default class Product extends BaseModel {
   public orders: ManyToMany<typeof Order>
 
   @manyToMany(() => Variant, {
-    pivotColumns: ['id', 'price', 'product_id', 'variant_id', 'proteins', 'vegetables'],
+    pivotColumns: ['id', 'price', 'product_id', 'variant_id'],
     pivotTimestamps: true,
   })
   public variants: ManyToMany<typeof Variant>
