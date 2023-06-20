@@ -51,6 +51,9 @@ export default class Variant extends BaseModel {
   })
   public attributes: ManyToMany<typeof Attribute>
 
-  @manyToMany(() => Category)
+  @manyToMany(() => Category, {
+    pivotColumns: ['id', 'variant_id', 'category_id', 'total_items', 'order'],
+    pivotTimestamps: true,
+  })
   public categories: ManyToMany<typeof Category>
 }
