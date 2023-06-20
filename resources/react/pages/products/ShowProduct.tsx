@@ -610,7 +610,12 @@ function ProductVariants({ product }: { product: Product }) {
 
 
   function VariantRow({ variant }: { variant: Variant }) {
-    const form = useForm(variant)
+    const form = useForm({
+      product_id: variant.meta.pivot_product_id,
+      name: variant.name,
+      description: variant.description,
+      price: variant.meta.pivot_price,
+    })
 
     function onKeyDown(e) {
       if (e.key === 'Enter') {
@@ -635,15 +640,25 @@ function ProductVariants({ product }: { product: Product }) {
         </td>
 
         <td className="p-4">
-          <div className="flex items-center justify-center">
-            <button onClick={() => setSearch({ variant: variant.id.toString() })} className='action:button button:blue'>
-              <Icons.Outline.Eye className={`h-5 w-5`} />
-            </button>
-
-            <button onClick={() => setIsTrashing(variant)} className='ml-3 action:button button:red'>
-              <Icons.Outline.Trash className={`h-5 w-5`} />
-            </button>
-          </div>
+          {form.isProcessing ? (
+            <div className="flex items-center justify-center">
+              <button className='action:button button:blue'>
+                <Loaders.Circle className="h-5 w-5 animate-spin" />
+              </button>
+              <button className='ml-3 action:button button:red'>
+                <Loaders.Circle className="h-5 w-5 animate-spin" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <button onClick={() => setSearch({ variant: variant.id.toString() })} className='action:button button:blue'>
+                <Icons.Outline.Eye className={`h-5 w-5`} />
+              </button>
+              <button onClick={() => setIsTrashing(variant)} className='ml-3 action:button button:red'>
+                <Icons.Outline.Trash className={`h-5 w-5`} />
+              </button>
+            </div>
+          )}
         </td>
       </tr>
     )
@@ -674,7 +689,7 @@ function ProductVariants({ product }: { product: Product }) {
           <Input error={form.errors('price')} onKeyDown={onKeyDown} value={form.input.price} onChange={form.onChange('price')} min={0} type="number" variant="underlined" placeholder="Price *" />
         </td>
         <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-900 text-center">
-
+          {form.isProcessing && (<button className='action:button button:red'><Loaders.Circle className="h-5 w-5 animate-spin" /></button>)}
         </td>
       </tr>
       <tr>
@@ -778,10 +793,7 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
                   className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
                   <Icons.Outline.Plus className="w-5 h-5" /> Add Category
                 </Menu.Item>
-                <Menu.Item as={'button'}
-                  className={`w-full flex items-center gap-x-2 text-gray-600 px-3 sm:px-4 py-2 hover:text-gray-700 hover:bg-gray-100 text-sm font-semibold`}>
-                  <Icons.Outline.PencilSquare className="w-5 h-5" /> Modify
-                </Menu.Item>
+
                 <Menu.Item as={'button'} onClick={() => setIsTrashing(true)} className="w-full flex items-center gap-x-2 text-red-primary px-3 sm:px-4 py-2 hover:bg-red-100 uppercase text-sm font-semibold">
                   <Icons.Outline.Trash className="w-5 h-5" /> Delete
                 </Menu.Item>
@@ -831,7 +843,7 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
   }, [variant])
 
   function onSuccess(attribute: Attribute) {
-    setAttributes(data => [...data, { ...attribute, meta: { pivot_category_id: category.id } }])
+    setAttributes(data => [...data, { ...attribute, meta: { ...attribute.meta, pivot_category_id: category.id } }])
   }
 
   function onDeleteAttribute() {
@@ -869,18 +881,9 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
-                  <th scope="col"
-                    className="whitespace-nowrap pb-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">ID
-                  </th>
-                  <th scope="col"
-                    className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Name
-                  </th>
-                  <th scope="col"
-                    className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Description
-                  </th>
-                  <th scope="col"
-                    className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Price
-                  </th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
                   <th scope="col" className="relative whitespace-nowrap pb-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th>
@@ -888,7 +891,8 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
               </thead>
               <tbody className=" bg-white">
                 {attributes.map(attribute => (
-                  <AttributeRow key={attribute.id} attribute={attribute} onTrash={(t) => setIsTrashingAttribute(t)} />))}
+                  <AttributeRow key={attribute.id} category={category} attribute={attribute} variant={variant} onTrash={(t) => setIsTrashingAttribute(t)} />
+                ))}
                 <CreateAttributeForm category={category} variant={variant} onSuccess={onSuccess} />
               </tbody>
             </table>
@@ -901,15 +905,14 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
         show={isTrashingAttribute.id !== undefined}
         url={`/attributes/${isTrashingAttribute.id}`}
         onClose={() => setIsTrashingAttribute({} as Attribute)}
-        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be
-          undone.</>}
+        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be undone.</>}
       />
     </>}
   </>
 }
 
 function CreateVariantCategory({ show, categories = [], variant, onClose, onSuccess }: { show: boolean, categories: Category[], variant: Variant, onSuccess: (category: Category) => void, onClose: () => void }) {
-  const form = useForm({ name: '', description: '', order: categories.length, status: 'public' })
+  const form = useForm({ name: '', description: '', totalItems: 0, order: categories.length, status: 'public' })
 
   useEffect(() => {
     form.set('order', categories.length)
@@ -944,21 +947,29 @@ function CreateVariantCategory({ show, categories = [], variant, onClose, onSucc
               </label>
               <Input type="text" value={form.value('description')} onChange={form.onChange('description')} className='w-full' />
             </div>
-            <div className="">
-              <label htmlFor="" className={'block text-sm font-medium leading-6 text-gray-900'}>
-                Order <sup className='text-red-primary'>*</sup>
-              </label>
-              <Input type="number" min={0} value={form.value('order')} onChange={form.onChange('order')} className='w-full' />
-            </div>
-            <div className="">
-              <label htmlFor="" className={'block text-sm font-medium leading-6 text-gray-900'}>
-                Status <sup className='text-red-primary'>*</sup>
-              </label>
-              <select value={form.value('status')} onChange={form.onChange('status')}
-                className='w-full border-gray-200 focus:border-gray-500 focus:ring-4 focus:ring-gray-200'>
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-              </select>
+            <div className="grid grid-cols-3 col-span-2 gap-3">
+              <div className="">
+                <label htmlFor="" className={'block text-sm font-medium leading-6 text-gray-900'}>
+                  Items <span className='text-xs text-gray-500'>(included in product price)</span> <sup className='text-red-primary'>*</sup>
+                </label>
+                <Input type="number" min={0} value={form.value('totalItems')} onChange={form.onChange('totalItems')} className='w-full' />
+              </div>
+              <div className="">
+                <label htmlFor="" className={'block text-sm font-medium leading-6 text-gray-900'}>
+                  Order <sup className='text-red-primary'>*</sup>
+                </label>
+                <Input type="number" min={0} value={form.value('order')} onChange={form.onChange('order')} className='w-full' />
+              </div>
+              <div className="">
+                <label htmlFor="" className={'block text-sm font-medium leading-6 text-gray-900'}>
+                  Status <sup className='text-red-primary'>*</sup>
+                </label>
+                <select value={form.value('status')} onChange={form.onChange('status')}
+                  className='w-full border-gray-200 focus:border-gray-500 focus:ring-4 focus:ring-gray-200'>
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="bg-gray-50 px-4 py-4 sm:px-6 flex items-center gap-x-3 justify-end">
@@ -986,99 +997,68 @@ type CreateAttributeFormProps = {
 function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFormProps) {
   const form = useForm({ name: '', description: '', price: '', variant_id: variant.id, category_id: category.id })
 
-  function onSubmit() {
-    form.post('/attributes').then(({ data }: { data: Attribute }) => {
-      onSuccess(data)
-      form.reset()
-    })
+  function onKeyDown(e) {
+    if (e.key === 'Enter') {
+      form.post('/attributes').then(({ data }: { data: Attribute }) => {
+        onSuccess(data)
+        form.reset()
+      })
+    }
   }
 
   return (
     <tr>
-      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
-        <Icons.Outline.Plus className='w-5 h-5' />
+      <td className="whitespace-nowrap p-2 text-sm font-medium text-gray-900 sm:pl-0">
+        <Input type='text' value={form.value('name')} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900 sm:pl-0">
-        <div className="relative">
-          <input type="text" value={form.value('name')} onChange={form.onChange('name')} placeholder='Enter Name *'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-900">
+        <Input type='text' value={form.value('description')} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-        <div className="relative">
-          <input type="text" value={form.value('description')} onChange={form.onChange('description')}
-            placeholder='Enter description'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-500">
+        <Input type='number' min={0} value={form.value('price')} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-        <div className="relative">
-          <input type="number" value={form.value('price')} onChange={form.onChange('price')} placeholder='Enter price *'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
-      </td>
-      <td className="whitespace-nowrap py-2 pl-3 pr-4 text-right sm:pr-0">
-        <button onClick={onSubmit} type="button"
-          className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 inline-flex gap-x-1 items-center">
-          <Icons.Outline.CheckCircle className='w-4 h-4' /> <span>{form.isProcessing ? 'Saving...' : 'Save'}</span>
-        </button>
+      <td className="whitespace-nowrap p-2 text-center sm:pr-0">
+        {form.isProcessing && (<button className='action:button button:green'><Loaders.Circle className="h-5 w-5 animate-spin" /></button>)}
       </td>
     </tr>
   )
 }
 
-function AttributeRow({ attribute, onTrash }: { attribute: Attribute, onTrash: (attribute: Attribute) => void }) {
-  const form = useForm(attribute)
+function AttributeRow({ attribute, variant, category, onTrash }: { attribute: Attribute, variant: Variant, category: Category, onTrash: (attribute: Attribute) => void }) {
+  const form = useForm({
+    category_id: category.id,
+    variant_id: variant.id,
+    name: attribute.name,
+    price: attribute.meta.pivot_price ?? attribute.price,
+    description: attribute.description ?? '',
+  })
 
+  function onKeyDown(e) {
+    if (e.key === 'Enter') {
+      form.put(`attributes/${attribute.id}`)
+    }
+  }
   return (
     <tr>
-      <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
-        {attribute.id}
+      <td className="whitespace-nowrap p-2 text-sm font-medium text-gray-900 sm:pl-0">
+        <Input type='text' value={form.input.name} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
-        <div className="relative">
-          <input type="text" onChange={form.onChange('name')} defaultValue={attribute.name}
-            placeholder='Enter description'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-900">
+        <Input type='text' value={form.input.description} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-        <div className="relative">
-          <input type="text" defaultValue={attribute.description} onChange={form.onChange('description')}
-            placeholder='Enter description'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-500">
+        <Input type='number' min={0} value={form.input.price} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
       </td>
-      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-        <div className="relative">
-          <input type="number" defaultValue={attribute.price} onChange={form.onChange('price')}
-            placeholder='Enter description'
-            className={'peer block w-full border-0 focus-within:bg-gray-50 py-1.5 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6'} />
-          <div
-            className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-slate-600"
-            aria-hidden="true" />
-        </div>
-      </td>
-      <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-        <button onClick={() => onTrash(attribute)} type="button"
-          className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 inline-flex gap-x-1 items-center">
-          <Icons.Outline.Trash className='w-4 h-4' /> Trash
-        </button>
+      <td className="whitespace-nowrap p-2 text-center sm:pr-0">
+        {form.isProcessing ? (
+          <button onClick={() => onTrash(attribute)} type="button" className="action:button button:green">
+            <Loaders.Circle className="h-5 w-5 animate-spin" />
+          </button>
+        ) : (
+          <button onClick={() => onTrash(attribute)} type="button" className="action:button button:red">
+            <Icons.Outline.Trash className='w-5 h-5' />
+          </button>
+        )}
       </td>
     </tr>
   )
