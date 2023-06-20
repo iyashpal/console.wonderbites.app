@@ -13,6 +13,7 @@ export default interface Variant {
   attributes?: Attribute[];
   categories?: Category[];
   meta: {
+    pivot_product_id: number;
     pivot_price: string;
     pivot_proteins: string;
     pivot_vegetables: string;

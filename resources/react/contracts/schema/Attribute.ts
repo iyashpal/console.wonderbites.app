@@ -13,6 +13,7 @@ export default interface Attribute {
   user?: User;
   variants?: Variant[];
   meta: {
-    pivot_category_id: number
+    pivot_category_id: number;
+    pivot_price: number;
   }
 }
