@@ -10,12 +10,12 @@ export default class CategoriesController {
 
   public async store ({ request, response, params }: HttpContextContract) {
     try {
-      const { name, description, order, status } = await request.validate(StoreValidator)
+      const { name, description, order, totalItems, status } = await request.validate(StoreValidator)
       const category = await Category.create({
         name, description, status, type: 'Variant',
       })
 
-      await category.related('variants').attach({ [params.variant_id]: { order } })
+      await category.related('variants').attach({ [params.variant_id]: { order, total_items: totalItems } })
 
       response.ok(category)
     } catch (error) {
