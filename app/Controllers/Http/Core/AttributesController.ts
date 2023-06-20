@@ -25,6 +25,7 @@ export default class AttributesController {
         await attribute.related('variants').attach({
           [payload.variant_id]: {
             category_id: payload.category_id,
+            price: payload.price,
           },
         })
       }
@@ -47,15 +48,16 @@ export default class AttributesController {
 
       await attribute.merge({
         name: payload.name,
-        description: payload.description,
+        description: payload.description ?? '',
         price: payload.price,
         status: payload.status,
-      })
+      }).save()
 
       if (payload.variant_id) {
-        await attribute.related('variants').attach({
+        await attribute.related('variants').sync({
           [payload.variant_id]: {
             category_id: payload.category_id,
+            price: payload.price,
           },
         })
       }
