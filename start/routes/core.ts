@@ -32,6 +32,7 @@ Route.group(() => {
     // Pivot Routes
     Route.group(() => {
       Route.resource('products.media', 'MediaProductController').apiOnly()
+      Route.resource('ingredients.variant', 'IngredientVariantController').apiOnly()
     }).as('pivot').namespace('App/Controllers/Http/Core/Pivot')
 
     // Actions Routes
