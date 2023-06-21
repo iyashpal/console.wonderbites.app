@@ -68,9 +68,9 @@ export default class ProductsController {
         .preload('categories', query => query.preload('cuisines'))
         .preload('ingredients', query => query.preload('categories'))
         .preload('variants', query => query
-          .withCount('attributes')
+          .withCount('ingredients')
           .preload('categories')
-          .preload('attributes')
+          .preload('ingredients')
         )
         .where('id', params.id).firstOrFail()
 
