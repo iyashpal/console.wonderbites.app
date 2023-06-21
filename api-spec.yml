@@ -1094,7 +1094,7 @@ paths:
             - product.wishlist
             - product.ingredients
             - product.variants
-            - product.variants.attributes
+            - product.variants.ingredients
           schema:
             type: array
             default: []
@@ -1156,7 +1156,7 @@ paths:
             - product.wishlist
             - product.ingredients:id,name,description
             - product.variants:id,name,price,status,published_at
-            - product.variants.attributes:id,name
+            - product.variants.ingredients:id,name
           schema:
             type: array
             default: []
@@ -2787,11 +2787,11 @@ components:
           type: string
           description: Last update date of the variant.
           example: 2023-05-05 01:56:55
-        attributes:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/Attribute"
-    Attribute:
+            $ref: "#/components/schemas/Ingredient"
+    Ingredient:
       properties:
         id:
           type: number
@@ -2805,10 +2805,29 @@ components:
           type: string
           description: Detailed information of the product.
           example: BUSINESS LUNCH PRIX FIXE MENU
+        thumbnail:
+          type: object
+          properties:
+            name:
+              type: string
+              example: products/cli47vgpe0003cgd3ex056sy6.png
+            size:
+              type: number
+              example: 636770
+            extname:
+              type: string
+              example: png
+            mimeType:
+              type: string
+              example: image/png
         price:
           type: number
           description: Variant attribute price.
           example: 58
+        unit:
+          type: string
+          description: Measurement unit of the ingredient.
+          example: ML
         quantity:
           type: number
           description: Quantity that are free with variant.
