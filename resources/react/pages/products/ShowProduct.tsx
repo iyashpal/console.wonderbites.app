@@ -2,17 +2,17 @@ import Icons from '@/helpers/icons'
 import Modal from '@/components/Modal'
 import Avatar from "@/components/Avatar"
 import { useFlash, useForm } from '@/hooks'
-import Input from '@/components/forms/Input'
 import * as Alerts from '@/components/alerts'
 import Resources from '@/components/resources'
 import * as Loaders from '~/components/loaders'
 import TrashModal from '@/components/TrashModal'
+import { Select, Input } from '@/components/forms'
 import Breadcrumb from '~/layouts/AuthLayout/Breadcrumb'
 import { IngredientProduct } from '@/contracts/schema/pivot'
 import { Combobox, Menu, Transition } from '@headlessui/react'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { useIngredientProductForm, useMediaProductForm } from '@/hooks/forms'
-import { Attribute, Category, Ingredient, Media, Product, Variant } from '~/contracts/schema'
+import { Category, Ingredient, Media, Product, Variant } from '~/contracts/schema'
 import { Form, Link, useLoaderData, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const columns = [
@@ -833,20 +833,20 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
 
 function VariantCategory({ category, variant }: { category: Category, variant: Variant }) {
   const [expand, setExpand] = useState<boolean>(false)
-  const [attributes, setAttributes] = useState<Attribute[]>([] as Attribute[])
-  const [isTrashingAttribute, setIsTrashingAttribute] = useState<Attribute>({} as Attribute)
+  const [ingredients, setIngredients] = useState<Ingredient[]>([] as Ingredient[])
+  const [isTrashingIngredient, setIsTrashingIngredient] = useState<Ingredient>({} as Ingredient)
 
   useEffect(() => {
-    setAttributes(variant.attributes?.filter(attribute => attribute.meta.pivot_category_id === category.id) ?? [])
+    setIngredients(variant.ingredients?.filter(ingredient => ingredient.meta.pivot_category_id === category.id) ?? [])
   }, [variant])
 
-  function onSuccess(attribute: Attribute) {
-    setAttributes(data => [...data, { ...attribute, meta: { ...attribute.meta, pivot_category_id: category.id } }])
+  function onSuccess(ingredient: Ingredient) {
+    setIngredients(data => [...data, { ...ingredient, meta: { ...ingredient.meta, pivot_category_id: category.id } }])
   }
 
   function onDeleteAttribute() {
-    setAttributes(attributes.filter(({ id }) => id !== isTrashingAttribute.id))
-    setIsTrashingAttribute({} as Attribute)
+    setIngredients(ingredients.filter(({ id }) => id !== isTrashingIngredient.id))
+    setIsTrashingIngredient({} as Ingredient)
   }
 
   return <>
@@ -861,7 +861,7 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
         </h2>
         <div
           className="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset text-gray-400 bg-gray-400/10 ring-gray-400/20">
-          {`${attributes.length} Attribute${attributes.length > 1 ? 's' : ''}`}
+          {`${ingredients.length} Attribute${ingredients.length > 1 ? 's' : ''}`}
         </div>
       </div>
 
@@ -881,16 +881,17 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
                 <tr>
                   <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
                   <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900 w-28">Unit</th>
+                  <th scope="col" className="whitespace-nowrap px-2 pb-3.5 text-left text-sm font-semibold text-gray-900 w-24">Price</th>
                   <th scope="col" className="relative whitespace-nowrap pb-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
               </thead>
               <tbody className=" bg-white">
-                <CreateAttributeForm category={category} variant={variant} onSuccess={onSuccess} />
-                {attributes.map(attribute => (
-                  <AttributeRow key={attribute.id} category={category} attribute={attribute} variant={variant} onTrash={(t) => setIsTrashingAttribute(t)} />
+                <CreateVariantIngredientForm category={category} variant={variant} onSuccess={onSuccess} />
+                {ingredients.map(ingredient => (
+                  <VariantIngredientRow key={ingredient.id} category={category} ingredient={ingredient} variant={variant} onTrash={(t) => setIsTrashingIngredient(t)} />
                 ))}
               </tbody>
             </table>
@@ -898,12 +899,12 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
         </div>
       </div>
       <TrashModal
-        title={'Delete Attribute'}
+        title={'Delete Ingredient'}
         onDelete={onDeleteAttribute}
-        show={isTrashingAttribute.id !== undefined}
-        url={`/attributes/${isTrashingAttribute.id}`}
-        onClose={() => setIsTrashingAttribute({} as Attribute)}
-        description={<>Are you sure you want to delete "<b>{isTrashingAttribute.name}</b>"? This action cannot be undone.</>}
+        show={isTrashingIngredient.id !== undefined}
+        onClose={() => setIsTrashingIngredient({} as Ingredient)}
+        url={`/ingredients/${isTrashingIngredient.id}/variant/${variant.id}`}
+        description={<>Are you sure you want to delete "<b>{isTrashingIngredient.name}</b>"? This action cannot be undone.</>}
       />
     </>}
   </>
@@ -986,18 +987,28 @@ function CreateVariantCategory({ show, categories = [], variant, onClose, onSucc
   )
 }
 
-type CreateAttributeFormProps = {
+type CreateVariantIngredientFormProps = {
   variant: Variant,
   category: Category,
-  onSuccess: (attribute: Attribute) => void
+  onSuccess: (ingredient: Ingredient) => void
 }
 
-function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFormProps) {
-  const form = useForm({ name: '', description: '', price: '', variant_id: variant.id, category_id: category.id })
+function CreateVariantIngredientForm({ variant, category, onSuccess }: CreateVariantIngredientFormProps) {
+  const form = useForm({
+    name: '',
+    description: '',
+    price: '',
+    unit: '',
+    quantity: 1,
+    max_quantity: 1,
+    min_quantity: 1,
+    variant_id: variant.id,
+    category_id: category.id,
+  })
 
   function onKeyDown(e) {
     if (e.key === 'Enter') {
-      form.post('/attributes').then(({ data }: { data: Attribute }) => {
+      form.post('/ingredients').then(({ data }: { data: Ingredient }) => {
         onSuccess(data)
         form.reset()
       })
@@ -1005,15 +1016,25 @@ function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFo
   }
 
   return (
-    <tr>
+    <tr className='pb-2'>
       <td className="whitespace-nowrap p-2 text-sm font-medium text-gray-900 sm:pl-0">
-        <Input type='text' value={form.value('name')} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
+        <Input type='text' defaultValue={form.value('name')} error={form.errors('name')} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
       </td>
       <td className="whitespace-nowrap p-2 text-sm text-gray-900">
-        <Input type='text' value={form.value('description')} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
+        <Input type='text' defaultValue={form.value('description')} error={form.errors('description')} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
+      </td>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-900">
+        <Select defaultValue={form.value('unit')} onChange={form.onChange('unit')} error={form.errors('unit')} onKeyDown={onKeyDown} variant='underlined' placeholder='Unit *'>
+          <option value={''} disabled></option>
+          <option>gr</option>
+          <option>kg</option>
+          <option>ml</option>
+          <option>l</option>
+          <option>units</option>
+        </Select>
       </td>
       <td className="whitespace-nowrap p-2 text-sm text-gray-500">
-        <Input type='number' min={0} value={form.value('price')} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
+        <Input type='number' min={0} defaultValue={form.value('price')} error={form.errors('price')} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
       </td>
       <td className="whitespace-nowrap p-2 text-center sm:pr-0">
         {form.isProcessing && (<button className='action:button button:green'><Loaders.Circle className="h-5 w-5 animate-spin" /></button>)}
@@ -1022,38 +1043,52 @@ function CreateAttributeForm({ variant, category, onSuccess }: CreateAttributeFo
   )
 }
 
-function AttributeRow({ attribute, variant, category, onTrash }: { attribute: Attribute, variant: Variant, category: Category, onTrash: (attribute: Attribute) => void }) {
+function VariantIngredientRow({ variant, ingredient, category, onTrash }: { ingredient: Ingredient, variant: Variant, category: Category, onTrash: (ingredient: Ingredient) => void }) {
   const form = useForm({
     category_id: category.id,
     variant_id: variant.id,
-    name: attribute.name,
-    price: attribute.meta.pivot_price ?? attribute.price,
-    description: attribute.description ?? '',
+    name: ingredient.name,
+    price: ingredient.meta.pivot_price ?? ingredient.price,
+    unit: ingredient.unit,
+    description: ingredient.description,
+    quantity: ingredient.quantity,
+    min_quantity: ingredient.minQuantity,
+    max_quantity: ingredient.maxQuantity,
   })
 
   function onKeyDown(e) {
     if (e.key === 'Enter') {
-      form.put(`attributes/${attribute.id}`)
+      form.put(`ingredients/${ingredient.id}`)
     }
   }
   return (
     <tr>
       <td className="whitespace-nowrap p-2 text-sm font-medium text-gray-900 sm:pl-0">
-        <Input type='text' value={form.input.name} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
+        <Input type='text' defaultValue={form.value('name')} onChange={form.onChange('name')} onKeyDown={onKeyDown} variant='underlined' placeholder='Name *' />
       </td>
       <td className="whitespace-nowrap p-2 text-sm text-gray-900">
-        <Input type='text' value={form.input.description} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
+        <Input type='text' defaultValue={form.value('description')} onChange={form.onChange('description')} onKeyDown={onKeyDown} variant='underlined' placeholder='Description' />
       </td>
       <td className="whitespace-nowrap p-2 text-sm text-gray-500">
-        <Input type='number' min={0} value={form.input.price} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
+        <Select defaultValue={form.value('unit')} onChange={form.onChange('unit')} onKeyDown={onKeyDown} variant='underlined' placeholder='Unit *'>
+          <option value={''} disabled></option>
+          <option>gr</option>
+          <option>kg</option>
+          <option>ml</option>
+          <option>l</option>
+          <option>units</option>
+        </Select>
+      </td>
+      <td className="whitespace-nowrap p-2 text-sm text-gray-500">
+        <Input type='number' min={0} defaultValue={form.value('price')} onChange={form.onChange('price')} onKeyDown={onKeyDown} variant='underlined' placeholder='Price *' />
       </td>
       <td className="whitespace-nowrap p-2 text-center sm:pr-0">
         {form.isProcessing ? (
-          <button onClick={() => onTrash(attribute)} type="button" className="action:button button:green">
+          <button onClick={() => onTrash(ingredient)} type="button" className="action:button button:green">
             <Loaders.Circle className="h-5 w-5 animate-spin" />
           </button>
         ) : (
-          <button onClick={() => onTrash(attribute)} type="button" className="action:button button:red">
+          <button onClick={() => onTrash(ingredient)} type="button" className="action:button button:red">
             <Icons.Outline.Trash className='w-5 h-5' />
           </button>
         )}
