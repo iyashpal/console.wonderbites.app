@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import Resources from "@/components/resources";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import InputError from "@/components/Form/InputError";
 import Breadcrumb from "@/layouts/AuthLayout/Breadcrumb";
 import { Category, Ingredient } from "~/contracts/schema";
@@ -13,7 +13,7 @@ type RouteLoaderData = {
 }
 
 export default function EditIngredient() {
-
+  const navigateTo = useNavigate()
   const { categories, category, ingredient } = useLoaderData() as RouteLoaderData
 
   const form = useForm({
@@ -32,8 +32,9 @@ export default function EditIngredient() {
 
 
   function onSubmit(e: React.FormEvent) {
+    e.preventDefault()
     form.put(`ingredients/${ingredient.id}`).then(({ data }) => {
-
+      navigateTo(`/app/ingredients/${ingredient.id}`)
     })
   }
 
@@ -53,7 +54,7 @@ export default function EditIngredient() {
                 Name <sup className='text-red-primary'>*</sup>
               </label>
               <input type="text" defaultValue={ingredient.name} onChange={form.onChange('name')} name="name" id="name" className="mt-1 block w-full  border border-gray-300 py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm" />
-              <InputError error={form.errors?.name}>{form.errors.name}</InputError>
+              <InputError error={form.errors('name')} />
             </div>
 
             <div className="col-span-6">
