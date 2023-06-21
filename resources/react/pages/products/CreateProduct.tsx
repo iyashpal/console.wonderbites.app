@@ -132,6 +132,7 @@ export default function CreateProduct() {
               <select id="popular" defaultValue={form.input.type} onChange={form.onChange('type')} name="popular" className="mt-1 block w-full  border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm">
                 <option value={'general'}>General</option>
                 <option value={'variable'}>Variable</option>
+                <option value={'subscription'}>Subscription</option>
               </select>
               <InputError error={form.errors('type')} />
             </div>
