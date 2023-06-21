@@ -19,7 +19,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
     this.$builder.match([
       this._includes('with', 'variants'),
       productQuery => productQuery.preload('variants', (builder: ModelQueryBuilderContract<typeof Variant>) => {
-        this._preloadVariantAttributes(builder)
+        this._preloadVariantIngredients(builder)
         this._preloadVariantCategories(builder)
       }),
     ])
@@ -45,15 +45,15 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   }
 
   /**
-   * Preload variant attributes.
+   * Preload variant ingredients.
    *
    * @param builder ModelQueryBuilderContract<typeof Product, Product>
    */
-  public _preloadVariantAttributes (builder: ModelQueryBuilderContract<typeof Variant>) {
+  public _preloadVariantIngredients (builder: ModelQueryBuilderContract<typeof Variant>) {
     builder.match([
-      this._includes('with', 'variants.attributes'),
-      query => query.preload('attributes', queryAttributes => {
-        queryAttributes.select(this.selectColumnsOf('variants.attributes'))
+      this._includes('with', 'variants.ingredients'),
+      query => query.preload('ingredients', queryAttributes => {
+        queryAttributes.select(this.selectColumnsOf('variants.ingredients'))
       }),
     ])
 
