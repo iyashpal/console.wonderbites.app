@@ -7,7 +7,6 @@ export default interface Media {
   created_at: string,
   updated_at: string,
   attachment_url: string,
-
   meta: {
     pivot_order: number,
     pivot_is_default: string,
