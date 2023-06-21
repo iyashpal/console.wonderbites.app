@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import Storage from 'App/Helpers/Storage'
-import { Cart, User, Order, Product, Wishlist, Category } from '.'
+import { Cart, User, Order, Product, Wishlist, Category, Variant } from '.'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
@@ -69,6 +69,12 @@ export default class Ingredient extends BaseModel {
 
   @manyToMany(() => Wishlist)
   public wishlists: ManyToMany<typeof Wishlist>
+
+  @manyToMany(() => Variant, {
+    pivotColumns: ['category_id', 'variant_id', 'ingredient_id', 'price'],
+    pivotTimestamps: true,
+  })
+  public variants: ManyToMany<typeof Variant>
 
   @computed({serializeAs: 'thumbnailUrl'})
   public get image () {
