@@ -6,6 +6,7 @@ import { AxiosRequestConfig } from "axios";
 export default function useForm<T>(initialState: T = {} as T) {
   const [form, setForm] = useState(initialState)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [fields, setFields] = useState({} as {[key: string]: HTMLInputElement})
   const [errors, setErrors] = useState<ErrorsType<T>>({} as ErrorsType<T>)
 
   /**
@@ -16,6 +17,7 @@ export default function useForm<T>(initialState: T = {} as T) {
    */
   function onChange(field: keyof T) {
     return (event) => {
+      setFields(data => ({...data, [field]: event.target}))
       setForm(data => ({ ...data, [field]: event.target.files instanceof FileList ? event.target.files[0] : event.target.value }))
     }
   }
@@ -28,7 +30,14 @@ export default function useForm<T>(initialState: T = {} as T) {
   */
   const sync = (data: T): void => setForm(data)
 
-  const resetForm = (): void => setForm(initialState)
+  const resetForm = (): void => {
+    setForm(initialState)
+    for (let key in fields) {
+      if (fields[key]) {
+        fields[key].value = ''
+      }
+    }
+  }
 
   /**
   * Reset the form errors.
