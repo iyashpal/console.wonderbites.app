@@ -692,13 +692,13 @@ function ProductVariants({ product }: { product: Product }) {
           {form.isProcessing && (<button className='action:button button:red'><Loaders.Circle className="h-5 w-5 animate-spin" /></button>)}
         </td>
       </tr>
-      <tr>
+      {/* <tr>
         <td colSpan={4} className='px-4 pt-5'>
           <div className="flex items-center text-sm text-blue-500">
             <Icons.Outline.InformationCircle className='h-6 w-6 mr-2' /> To update or create the variable products simply enter/update the fields and press <b>"Enter"</b>
           </div>
         </td>
-      </tr>
+      </tr> */}
     </>
   }
 
@@ -722,16 +722,15 @@ function ProductVariants({ product }: { product: Product }) {
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr className="bg-gray-100">
-              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-48">Name</th>
+              <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
               <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
               <th scope="col" className="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 w-36">Price</th>
               <th scope="col" className="px-4 py-3.5 text-center text-sm font-semibold text-gray-900 w-28">Action</th>
             </tr>
           </thead>
           <tbody className="bg-white">
-            {(product.variants ?? []).map((variant: Variant, index) => (<VariantRow variant={variant} key={index} />))}
-
             <CreateVariant product={product} />
+            {(product.variants ?? []).map((variant: Variant, index) => (<VariantRow variant={variant} key={index} />))}
           </tbody>
         </table>
       </div>
@@ -775,8 +774,7 @@ function ShowProductVariant({ variant, onClose }: { variant: Variant, onClose: (
         <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
           <div className="flex items-center">
             <h3 className="text-base font-semibold leading-6 text-gray-900">
-              <span className='text-gray-600 hover:text-red-primary cursor-pointer'
-                onClick={onClose}>Variants /</span> {variant.name}
+              <span className='text-gray-600 hover:text-red-primary cursor-pointer' onClick={onClose}>Variants /</span> {variant.name}
             </h3>
           </div>
           <div className="flex items-center flex-shrink-0 gap-x-2">
@@ -890,10 +888,10 @@ function VariantCategory({ category, variant }: { category: Category, variant: V
                 </tr>
               </thead>
               <tbody className=" bg-white">
+                <CreateAttributeForm category={category} variant={variant} onSuccess={onSuccess} />
                 {attributes.map(attribute => (
                   <AttributeRow key={attribute.id} category={category} attribute={attribute} variant={variant} onTrash={(t) => setIsTrashingAttribute(t)} />
                 ))}
-                <CreateAttributeForm category={category} variant={variant} onSuccess={onSuccess} />
               </tbody>
             </table>
           </div>
