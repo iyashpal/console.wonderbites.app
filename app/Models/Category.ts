@@ -6,6 +6,11 @@ import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLit
 import { belongsTo, column, computed, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
+  /**
+   * Serialize the `$extras` object as it is
+   */
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
@@ -65,7 +70,10 @@ export default class Category extends BaseModel {
   @manyToMany(() => Ingredient, { pivotTable: 'category_ingredient' })
   public ingredients: ManyToMany<typeof Ingredient>
 
-  @manyToMany(() => Variant)
+  @manyToMany(() => Variant, {
+    pivotColumns: ['variant_id', 'category_id', 'order', 'total_items'],
+    pivotTimestamps: true,
+  })
   public variants: ManyToMany<typeof Variant>
 
   @manyToMany(() => Attribute)
