@@ -36,17 +36,31 @@ export default class IngredientsController {
     try {
       const user = auth.use('api').user!
 
-      const {
-        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail, categoryId,
-      } = await request.validate(StoreValidator)
+      const payload = await request.validate(StoreValidator)
 
       const ingredient = await Ingredient.create({
-        userId: user.id, name, price, description, quantity, unit, maxQuantity, minQuantity,
-        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
+        userId: user.id,
+        name: payload.name,
+        unit: payload.unit,
+        price: payload.price,
+        quantity: payload.quantity,
+        description: payload.description,
+        maxQuantity: payload.max_quantity,
+        minQuantity: payload.min_quantity,
+        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : null,
       })
 
-      if (categoryId) {
-        await ingredient.related('categories').sync([categoryId])
+      if (payload.category_id) {
+        await ingredient.related('categories').sync([payload.category_id])
+      }
+
+      if (payload.variant_id) {
+        await ingredient.related('variants').attach({
+          [payload.variant_id]: {
+            price: payload.price,
+            category_id: payload.category_id,
+          },
+        })
       }
 
       response.ok(ingredient)
@@ -89,25 +103,32 @@ export default class IngredientsController {
 
   public async update ({request, response, params}: HttpContextContract) {
     try {
-      const {
-        name, price, description, quantity, unit, maxQuantity, minQuantity, thumbnail, categoryId,
-      } = await request.validate(UpdateValidator)
+      const payload = await request.validate(UpdateValidator)
 
       const ingredient = await Ingredient.findByOrFail('id', params.id)
 
       await ingredient.merge({
-        name: name ?? ingredient.name,
-        price: price ?? ingredient.price,
-        description: description ?? ingredient.description,
-        quantity: quantity ?? ingredient.quantity,
-        unit: unit ?? ingredient.unit,
-        maxQuantity: maxQuantity ?? ingredient.maxQuantity,
-        minQuantity: minQuantity ?? ingredient.minQuantity,
-        thumbnail: thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : ingredient.thumbnail,
+        name: payload.name,
+        price: payload.variant_id ? ingredient.price : payload.price,
+        unit: payload.unit,
+        quantity: payload.quantity,
+        description: payload.description ?? '',
+        maxQuantity: payload.max_quantity,
+        minQuantity: payload.min_quantity,
+        thumbnail: payload.thumbnail ? Attachment.fromFile(request.file('thumbnail')!) : ingredient.thumbnail,
       }).save()
 
-      if (categoryId) {
-        await ingredient.related('categories').sync([categoryId])
+      if (payload.category_id) {
+        await ingredient.related('categories').sync([payload.category_id])
+      }
+
+      if (payload.variant_id) {
+        await ingredient.related('variants').sync({
+          [payload.variant_id]: {
+            price: payload.price,
+            category_id: payload.category_id,
+          },
+        })
       }
 
       response.ok(ingredient)

@@ -25,11 +25,14 @@ export default class StoreValidator {
    *    ```
    */
   public schema = schema.create({
+    variant_id: schema.number.optional([
+      rules.exists({table: 'variants', column: 'id'}),
+    ]),
     name: schema.string({trim: true}, [
       rules.required(),
       rules.maxLength(100),
     ]),
-    categoryId: schema.number([
+    category_id: schema.number([
       rules.required(),
     ]),
     description: schema.string.optional({trim: true}, [
@@ -46,18 +49,18 @@ export default class StoreValidator {
     quantity: schema.number([
       rules.required(),
     ]),
-    minQuantity: schema.number([
+    min_quantity: schema.number([
       rules.required(),
     ]),
-    maxQuantity: schema.number([
+    max_quantity: schema.number([
       rules.required(),
     ]),
     thumbnail: schema.file.optional({
       size: '1mb',
       extnames: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'],
-    }, [rules.required()]),
+    }),
 
-    publishedAt: schema.date.optional(),
+    published_at: schema.date.optional(),
   })
 
   /**
