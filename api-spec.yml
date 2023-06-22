@@ -1187,15 +1187,10 @@ paths:
           schema:
             type: array
           example:
-            - cart.user
-            - cart.coupon
-            - cart.products
-            - cart.products.media
-            - cart.products.category
-            - cart.products.ingredients
-            - cart.products.ingredients.categories
-            - cart.ingredients
-            - cart.ingredients.categories
+            - products
+            - categories
+            - ingredients
+            - variants
       requestBody:
         content:
           application/json:
@@ -1257,7 +1252,7 @@ paths:
                       quantity: 1
                       variant:
                         - id: 1
-                          attributes:
+                          ingredients:
                             - id: 57
                               category: 5
                               quantity: 2
@@ -1286,15 +1281,10 @@ paths:
           schema:
             type: array
           example:
-            - cart.user
-            - cart.coupon
-            - cart.products
-            - cart.products.media
-            - cart.products.category
-            - cart.products.ingredients
-            - cart.products.ingredients.categories
-            - cart.ingredients
-            - cart.ingredients.categories
+            - products
+            - categories
+            - ingredients
+            - variants
       requestBody:
         content:
           application/json:
@@ -1385,15 +1375,10 @@ paths:
           schema:
             type: array
           example:
-            - cart.user
-            - cart.coupon
-            - cart.products
-            - cart.products.media
-            - cart.products.category
-            - cart.products.ingredients
-            - cart.products.ingredients.categories
-            - cart.ingredients
-            - cart.ingredients.categories
+            - products
+            - categories
+            - ingredients
+            - variants
       responses:
         "200":
           description: Successful response
