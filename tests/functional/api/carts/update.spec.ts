@@ -150,7 +150,7 @@ test.group('API [carts.update]', (group) => {
   }).tags(['@api', '@api.carts', '@api.carts.update'])
     .with([{ with: ['cart.products', 'cart.ingredients'] }])
 
-  test('It do not allow users to add add ingredients without quantity to the cart.')
+  test('It do not allow users to add ingredients without quantity to the cart.')
     .run(async ({ client, route, assert }, qs) => {
       const product = await ProductFactory.with('ingredients', 5, query => query.with('categories')).create()
       const user = await UserFactory.with('cart').create()
