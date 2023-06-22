@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import Storage from 'App/Helpers/Storage'
-import { Cuisine, Product, Ingredient, Variant, Attribute } from '.'
+import { Cuisine, Product, Ingredient, Variant } from './index'
 import { BaseModel, BelongsTo, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { belongsTo, column, computed, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
@@ -75,9 +75,6 @@ export default class Category extends BaseModel {
     pivotTimestamps: true,
   })
   public variants: ManyToMany<typeof Variant>
-
-  @manyToMany(() => Attribute)
-  public attributes: ManyToMany<typeof Attribute>
 
   public static root = scope((query) => query.whereNull('parent').whereNull('deleted_at'))
 

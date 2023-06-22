@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { Attribute, Category, Ingredient, Product, User } from 'App/Models/index'
+import { Category, Ingredient, Product, User } from 'App/Models/index'
 import { AttachmentContract, attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 
@@ -44,12 +44,6 @@ export default class Variant extends BaseModel {
 
   @manyToMany(() => Product)
   public products: ManyToMany<typeof Product>
-
-  @manyToMany(() => Attribute, {
-    pivotColumns: ['id', 'variant_id', 'attribute_id', 'category_id', 'price'],
-    pivotTimestamps: true,
-  })
-  public attributes: ManyToMany<typeof Attribute>
 
   @manyToMany(() => Ingredient, {
     pivotColumns: ['id', 'variant_id', 'ingredient_id', 'category_id', 'price'],

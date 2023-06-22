@@ -53,13 +53,13 @@ test.group('API [carts.update]', (group) => {
 
   test('It allows users to add variable products with attributes to cart', async ({client, route, assert}, qs) => {
     const product = await ProductFactory
-      .with('variants', 2, query => query.with('attributes', 5).with('categories'))
+      .with('variants', 2, query => query.with('ingredients', 5).with('categories'))
       .create()
 
     const [variant] = product.variants.map(variant => {
       return {
         id: variant.id,
-        attributes: variant.attributes.map((attribute) => {
+        ingredients: variant.ingredients.map((attribute) => {
           const [category] = variant.categories
           return {
             id: attribute.id,
@@ -80,13 +80,13 @@ test.group('API [carts.update]', (group) => {
 
   test('It allows users to remove the products from cart', async ({client, route, assert}, qs) => {
     const product = await ProductFactory
-      .with('variants', 2, query => query.with('attributes', 5).with('categories'))
+      .with('variants', 2, query => query.with('ingredients', 5).with('categories'))
       .create()
 
     const [variant] = product.variants.map(variant => {
       return {
         id: variant.id,
-        attributes: variant.attributes.map((attribute) => {
+        ingredients: variant.ingredients.map((attribute) => {
           const [category] = variant.categories
           return { id: attribute.id, quantity: 5, category: category.id }
         }),

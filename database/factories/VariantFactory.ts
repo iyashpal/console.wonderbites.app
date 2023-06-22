@@ -1,5 +1,5 @@
 import Variant from 'App/Models/Variant'
-import {AttributeFactory, CategoryFactory} from './index'
+import { CategoryFactory, IngredientFactory} from './index'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 
@@ -18,5 +18,5 @@ export default Factory.define(Variant, async ({ faker }) => {
   }
 })
   .relation('categories', () => CategoryFactory)
-  .relation('attributes', () => AttributeFactory)
+  .relation('ingredients', () => IngredientFactory)
   .build()
