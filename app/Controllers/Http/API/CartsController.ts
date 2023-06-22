@@ -1,12 +1,73 @@
-import {User, Cart} from 'App/Models'
 import { uniqueHash } from 'App/Helpers/Core'
 import {types} from '@ioc:Adonis/Core/Helpers'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import {User, Cart, Product, Ingredient, Variant} from 'App/Models'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
 
 export default class CartsController {
+  protected cartHeaders (request: RequestContract) {
+    return {
+      id: request.header('X-Cart-ID', 0) as number,
+      token: request.header('X-Cart-Token', uniqueHash()),
+    }
+  }
+
+  /**
+   * Get cart of current logged-in/guest user.
+   *
+   * @param request RequestContract
+   * @param user User
+   * @returns Cart
+   */
+  protected async cart (user: User | undefined, id: number, token: string): Promise<Cart> {
+    if (types.isNull(user) || types.isUndefined(user)) {
+      try {
+        return await Cart.query().withScopes(scopes => scopes.asGuest(id, token)).firstOrFail()
+      } catch (error) {
+        return await Cart.create({ token })
+      }
+    }
+
+    try {
+      return await user.related('cart').query().firstOrFail()
+    } catch (error) {
+      return await user.related('cart').create({token})
+    }
+  }
+
+  protected async data (request: RequestContract, cart: Cart) {
+    const products = async () => {
+      if (request.input('with', []).includes('products')) {
+        return await Product.query().select(request.input('select', ['*'])).whereIn('id', cart.ProductIDs())
+      }
+
+      return []
+    }
+
+    const variants = async () => {
+      if (request.input('with', []).includes('variants')) {
+        return await Variant.query().whereIn('id', cart.VariantIDs())
+      }
+      return []
+    }
+
+    const ingredients = async () => {
+      if (request.input('with', []).includes('ingredients')) {
+        return await Ingredient.query().whereIn('id', cart.IngredientIDs())
+      }
+
+      return []
+    }
+
+    return {
+      products: await products(),
+      ingredients: await ingredients(),
+      variants: await variants(),
+    }
+  }
+
   /**
    * Show logged-in/guest user cart.
    *
@@ -16,9 +77,18 @@ export default class CartsController {
     try {
       const user = auth.use('api').user!
 
-      const cart = await this.cartWithRequestedData(request, await this.cart(request, user))
+      const {id, token} = this.cartHeaders(request)
 
-      response.ok(cart)
+      const cart = await this.cart(user, id, token)
+
+      const data = await this.data(request, cart)
+
+      response.ok({
+        ...cart.toJSON(),
+        ...(data.products.length ? { products: data.products } : {}),
+        ...(data.variants.length ? { variants: data.variants } : {}),
+        ...(data.ingredients.length ? { ingredients: data.ingredients } : {}),
+      })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
@@ -33,101 +103,24 @@ export default class CartsController {
     try {
       const user = auth.use('api').user!
 
-      let cart = await this.cart(request, user)
+      const {id, token} = this.cartHeaders(request)
+
+      let cart = await this.cart(user, id, token)
 
       const payload = await request.validate(UpdateValidator)
 
-      await cart.merge({ data: payload.data, userId: payload.user_id, couponId: payload.coupon_id}).save()
+      await cart.merge({ data: payload.data, userId: payload.user_id, couponId: payload.coupon_id }).save()
 
-      response.ok(cart)
+      const data = await this.data(request, cart)
+
+      response.ok({
+        ...cart.toJSON(),
+        ...(data.products.length ? { products: data.products } : {}),
+        ...(data.variants.length ? { variants: data.variants } : {}),
+        ...(data.ingredients.length ? { ingredients: data.ingredients } : {}),
+      })
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
-  }
-
-  /**
-   * Get cart of current logged-in/guest user.
-   *
-   * @param request RequestContract
-   * @param user User
-   * @returns Cart
-   */
-  protected async cart (request: RequestContract, user: User | undefined): Promise<Cart> {
-    if (types.isNull(user) || types.isUndefined(user)) {
-      const cart = await Cart.query()
-        .whereNull('user_id').where('id', request.header('X-Cart-ID', 0))
-        .where('token', request.header('X-Cart-Token', 0)).first()
-
-      if (types.isNull(cart)) {
-        return await Cart.create({ token: request.header('X-Cart-Session', uniqueHash()) })
-      }
-
-      return cart
-    }
-
-    await user.load('cart')
-
-    if (types.isNull(user.cart)) {
-      return await user.related('cart').create({token: request.header('X-Cart-Token', uniqueHash())})
-    }
-
-    return user.cart
-  }
-
-  /**
-   * Get the cart with requested data.
-   *
-   * @param request RequestContract
-   * @param cart Cart
-   * @returns Cart
-   */
-  protected async cartWithRequestedData (request: RequestContract, cart: Cart) {
-    return await Cart.query()
-      .match([
-        request.input('with', []).includes('cart.user'),
-        query => query.preload('user'),
-      ])
-      .match([
-        request.input('with', []).includes('cart.coupon'),
-        query => query.preload('coupon'),
-      ])
-      .match([
-        request.input('with', []).includes('cart.products'),
-        query => query.preload('products', products => products.orderBy('id', 'asc')
-          .match([
-            request.input('with', []).includes('cart.products.media'),
-            query => query.preload('media'),
-          ])
-          .match([
-            request.input('with', []).includes('cart.products.category'),
-            query => query.preload('categories'),
-          ])
-          .match([
-            request.input('with', []).includes('cart.products.ingredients'),
-            query => query.preload('ingredients', ingredients => ingredients
-              .match([
-                request.input('with', []).includes('cart.products.ingredients.categories'),
-                builder => builder.preload('categories'),
-              ])
-            ),
-          ])
-        ),
-      ])
-      .match([
-        request.input('with', []).includes('cart.ingredients'),
-        query => query.preload('ingredients', query => query.match([
-          request.input('with', []).includes('cart.ingredients.categories'),
-          query => query.preload('categories'),
-        ])),
-      ])
-      .match([
-        request.input('withCount', []).includes('cart.products'),
-        query => query.withCount('products'),
-      ])
-      .match([
-        request.input('withCount', []).includes('cart.ingredients'),
-        query => query.withCount('ingredients'),
-      ])
-      .where('id', cart.id).first()
   }
 }

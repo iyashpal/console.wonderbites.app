@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { User, Coupon, Product, Ingredient } from '.'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { User, Coupon, Product, Ingredient } from './index'
+import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
@@ -19,23 +19,7 @@ export default class Cart extends BaseModel {
   public status: number
 
   @column()
-  public data: {
-    id: number;
-    quantity: number;
-    variant?: {
-      id: number;
-      attributes?: {
-        id: number;
-        category: number;
-        quantity: number;
-      }[]
-    };
-    ingredients?: {
-      id: number;
-      quantity: number;
-      category: number;
-    }[];
-  }[]
+  public data: CartDataProduct[]
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -60,4 +44,25 @@ export default class Cart extends BaseModel {
 
   @belongsTo(() => Coupon)
   public coupon: BelongsTo<typeof Coupon>
+
+  public static asGuest = scope((query, id: number, token: string) => {
+    query.whereNull('user_id').where('token', token).where('id', id)
+  })
+
+  public ProductIDs () {
+    return this.data.map(({id}) => id)
+  }
+
+  public IngredientIDs () {
+    return this.data.flatMap(product => [
+      ...(product.ingredients?.map(({ id }) => id) ?? []),
+      ...(product.variant?.ingredients?.map(({id}) => id) ?? []),
+    ])
+  }
+
+  public VariantIDs () {
+    return [
+      ...(this.data.filter(({variant}) => variant?.id).map(({variant}) => variant?.id) ?? []),
+    ] as number[]
+  }
 }
