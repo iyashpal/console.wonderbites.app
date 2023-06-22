@@ -3,7 +3,7 @@ import {types} from '@ioc:Adonis/Core/Helpers'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {User, Cart, Product, Ingredient, Variant} from 'App/Models'
+import {User, Cart, Product, Ingredient, Variant, Category} from 'App/Models'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
 
 export default class CartsController {
@@ -40,7 +40,7 @@ export default class CartsController {
   protected async data (request: RequestContract, cart: Cart) {
     const products = async () => {
       if (request.input('with', []).includes('products')) {
-        return await Product.query().select(request.input('select', ['*'])).whereIn('id', cart.ProductIDs())
+        return await Product.query().whereIn('id', cart.ProductIDs())
       }
 
       return []
@@ -61,10 +61,20 @@ export default class CartsController {
       return []
     }
 
+    const categories = async () => {
+      if (request.input('with', []).includes('categories')) {
+        return await Category.query().whereIn('id', cart.CategoryIDs())
+      }
+
+      return []
+    }
+
     return {
+      ...cart.toJSON(),
       products: await products(),
       ingredients: await ingredients(),
       variants: await variants(),
+      categories: await categories(),
     }
   }
 
@@ -81,14 +91,7 @@ export default class CartsController {
 
       const cart = await this.cart(user, id, token)
 
-      const data = await this.data(request, cart)
-
-      response.ok({
-        ...cart.toJSON(),
-        ...(data.products.length ? { products: data.products } : {}),
-        ...(data.variants.length ? { variants: data.variants } : {}),
-        ...(data.ingredients.length ? { ingredients: data.ingredients } : {}),
-      })
+      response.ok(await this.data(request, cart))
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }
@@ -111,14 +114,7 @@ export default class CartsController {
 
       await cart.merge({ data: payload.data, userId: payload.user_id, couponId: payload.coupon_id }).save()
 
-      const data = await this.data(request, cart)
-
-      response.ok({
-        ...cart.toJSON(),
-        ...(data.products.length ? { products: data.products } : {}),
-        ...(data.variants.length ? { variants: data.variants } : {}),
-        ...(data.ingredients.length ? { ingredients: data.ingredients } : {}),
-      })
+      response.ok(await this.data(request, cart))
     } catch (error) {
       ExceptionResponse.use(error).resolve(response)
     }

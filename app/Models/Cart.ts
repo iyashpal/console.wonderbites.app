@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { User, Coupon, Product, Ingredient } from './index'
-import { BaseModel, BelongsTo, belongsTo, column, computed, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
   @column({ isPrimary: true })
@@ -64,5 +64,12 @@ export default class Cart extends BaseModel {
     return [
       ...(this.data.filter(({variant}) => variant?.id).map(({variant}) => variant?.id) ?? []),
     ] as number[]
+  }
+
+  public CategoryIDs () {
+    return this.data.flatMap(product => [
+      ...(product.ingredients?.map(({ category }) => category) ?? []),
+      ...(product.variant?.ingredients?.map(({category}) => category) ?? []),
+    ])
   }
 }
