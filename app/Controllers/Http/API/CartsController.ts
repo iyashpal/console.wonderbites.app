@@ -37,11 +37,7 @@ export default class CartsController {
 
       const payload = await request.validate(UpdateValidator)
 
-      await cart.merge({
-        data: payload.data,
-        userId: payload.user_id,
-        couponId: payload.coupon_id,
-      }).save()
+      await cart.merge({ data: payload.data, userId: payload.user_id, couponId: payload.coupon_id}).save()
 
       response.ok(cart)
     } catch (error) {
@@ -76,60 +72,6 @@ export default class CartsController {
     }
 
     return user.cart
-  }
-
-  /**
-   * Synchronize products with cart.
-   *
-   * @param request RequestContract
-   * @param cart Cart
-   */
-  protected async addToCart (request: RequestContract, cart: Cart) {
-    // Add products to cart
-    if (request.input('products')) {
-      await cart.related('products').sync(request.input('products'), false)
-    }
-
-    // Add ingredients to cart
-    if (request.input('ingredients')) {
-      await cart.related('ingredients').attach(request.input('ingredients'))
-    }
-  }
-
-  /**
-   * Remove products from cart.
-   *
-   * @param request RequestContract
-   * @param cart Cart
-   */
-  protected async removeFromCart (request: RequestContract, cart: Cart) {
-    // Remove products from cart.
-    if (request.input('products')) {
-      await cart.related('products').detach(request.input('products'))
-
-      await cart.related('ingredients').query()
-        .whereInPivot('product_id', request.input('products')).delete()
-    }
-
-    // Remove ingredients from cart.
-    if (request.input('ingredients')) {
-      await cart.related('ingredients').detach(request.input('ingredients'))
-    }
-  }
-
-  /**
-   * Remove all ingredients from cart if the request is to update the cart.
-   *
-   * @param request RequestContract
-   * @param cart Cart
-   */
-  protected async cleanCartBeforeUpdate (request: RequestContract, cart: Cart) {
-    // Clean ingredients only when we have ingredients in the list.
-    if (Object.keys(request.input('ingredients', [])).length > 0) {
-      await cart.related('ingredients').query()
-        .whereInPivot('product_id', Object.keys(request.input('products', [])))
-        .delete()
-    }
   }
 
   /**
