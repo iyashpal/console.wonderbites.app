@@ -7,71 +7,72 @@ type JsonErrorField = { errors: { field: string, message: string, rule: string }
 export default class ExceptionResponse {
   /**
    * Exception name
-   * 
+   *
    * @var string
    */
   public name: string
 
   /**
    * Exception debug help.
-   * 
+   *
    * @var string
    */
   public help?: string
 
   /**
    * Exception code defined in framework.
-   * 
+   *
    * @var string
    */
   public code?: string
 
   /**
    * Exception status code.
-   * 
+   *
    * @var number
    */
   public status: number
 
   /**
    * Exception files stack.
-   * 
+   *
    * @var string
    */
   public stack?: string
 
   /**
    * Exception error message.
-   * 
+   *
    * @var string
    */
   public message: string
 
   /**
    * Exception errors
-   * 
+   *
    * @var object
    */
   public errors: { [key: string]: string } = {}
 
   /**
    * Exception messages (specifically used for validation errors.)
-   * 
+   *
    * @var any[]
    */
   public messages: any
 
   /**
    * Request response instance.
-   * 
+   *
    * @var ResponseContract
    */
   protected response: ResponseContract
 
   constructor (error: any) {
+    console.log(error)
     this.name = error.name
     this.help = error.help
-    this.code = error.code
+    this.code = error?.code ?? 500
     this.stack = error.stack
     this.status = error.status
     this.message = error.message
@@ -80,7 +81,7 @@ export default class ExceptionResponse {
 
   /**
    * Consume the exception response dependencies.
-   * 
+   *
    * @param response Request response contract.
    * @param error Cached error
    * @returns ExceptionResponse
@@ -91,7 +92,7 @@ export default class ExceptionResponse {
 
   /**
    * Resolve the request response.
-   * 
+   *
    * @param resolveType Exception response type.
    * @returns void
    */
@@ -115,7 +116,7 @@ export default class ExceptionResponse {
 
   /**
    * Resolve the exception validation errors.
-   * 
+   *
    * @returns void
    */
   protected resolveErrors (errors: ErrorField): void {
@@ -138,7 +139,7 @@ export default class ExceptionResponse {
 
   /**
    * Return the json response.
-   * 
+   *
    * @param data any
    */
   private json (data: any) {
