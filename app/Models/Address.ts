@@ -30,7 +30,10 @@ export default class Address extends BaseModel {
   @column()
   public email: string | null
 
-  @column()
+  @column({
+    consume: (value) => JSON.parse(value),
+    prepare: (value) => JSON.stringify(value),
+  })
   public location: object
 
   @column()
@@ -54,7 +57,7 @@ export default class Address extends BaseModel {
    * @returns Object
    */
   @computed()
-  public get serializedForCheckout() {
+  public get serializedForCheckout () {
     return {
       first_name: this.firstName,
       last_name: this.lastName,

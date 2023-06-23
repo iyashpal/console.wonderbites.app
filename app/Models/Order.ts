@@ -43,7 +43,10 @@ export default class Order extends BaseModel {
   @column()
   public eatOrPickupTime: string
 
-  @column()
+  @column({
+    consume: (value) => JSON.parse(value),
+    prepare: (value) => JSON.stringify(value),
+  })
   public location: {
     lat?: string,
     lng?: string,
@@ -52,7 +55,10 @@ export default class Order extends BaseModel {
   @column()
   public note: string
 
-  @column()
+  @column({
+    consume: (value) => JSON.parse(value),
+    prepare: (value) => JSON.stringify(value),
+  })
   public options: any
 
   @column()

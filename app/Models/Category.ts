@@ -29,7 +29,10 @@ export default class Category extends BaseModel {
   @attachment({ folder: 'categories', preComputeUrl: true })
   public thumbnail: AttachmentContract | null
 
-  @column()
+  @column({
+    consume: (value) => JSON.parse(value),
+    prepare: (value) => JSON.stringify(value),
+  })
   public options: any
 
   @column()
