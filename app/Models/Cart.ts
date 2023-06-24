@@ -71,8 +71,8 @@ export default class Cart extends BaseModel {
 
   public CategoryIDs () {
     return this.data.flatMap(product => [
-      ...(product.ingredients?.map(({ category }) => category) ?? []),
-      ...(product.variant?.ingredients?.map(({category}) => category) ?? []),
+      ...(product?.ingredients?.map(({ category }) => category) ?? []),
+      ...(product?.variant?.ingredients?.map(({category}) => category) ?? []),
     ])
   }
 }
