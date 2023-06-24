@@ -53,11 +53,11 @@ export default class Cart extends BaseModel {
   })
 
   public ProductIDs () {
-    return this.data.map(({id}) => id)
+    return (this.data ?? []).map(({id}) => id)
   }
 
   public IngredientIDs () {
-    return this.data.flatMap(product => [
+    return (this.data ?? []).flatMap(product => [
       ...(product.ingredients?.map(({ id }) => id) ?? []),
       ...(product.variant?.ingredients?.map(({id}) => id) ?? []),
     ])
@@ -65,12 +65,12 @@ export default class Cart extends BaseModel {
 
   public VariantIDs () {
     return [
-      ...(this.data.filter(({variant}) => variant?.id).map(({variant}) => variant?.id) ?? []),
+      ...((this.data ?? []).filter(({variant}) => variant?.id).map(({variant}) => variant?.id) ?? []),
     ] as number[]
   }
 
   public CategoryIDs () {
-    return this.data.flatMap(product => [
+    return (this.data ?? []).flatMap(product => [
       ...(product?.ingredients?.map(({ category }) => category) ?? []),
       ...(product?.variant?.ingredients?.map(({category}) => category) ?? []),
     ])
