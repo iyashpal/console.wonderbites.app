@@ -1211,6 +1211,8 @@ paths:
                   properties:
                     id:
                       type: number
+                    category:
+                      type: number
                     quantity:
                       type: number
                     variant:
@@ -1218,7 +1220,7 @@ paths:
                         properties:
                           id:
                             type: number
-                          attributes:
+                          ingredients:
                             type: array
                             properties:
                               id:
@@ -1239,6 +1241,7 @@ paths:
                   example:
                     - id: 13
                       quantity: 1
+                      category: 1
                     - id: 2
                       quantity: 1
                       ingredients:
@@ -1307,12 +1310,14 @@ paths:
                       type: number
                     quantity:
                       type: number
+                    category:
+                      type: number
                     variant:
                         type: object
                         properties:
                           id:
                             type: number
-                          attributes:
+                          ingredients:
                             type: array
                             properties:
                               id:
@@ -1333,8 +1338,10 @@ paths:
                   example:
                     - id: 13
                       quantity: 1
+                      category: 1
                     - id: 2
                       quantity: 1
+                      category: 1
                       ingredients:
                         - id: 39
                           quantity: 3
@@ -1344,6 +1351,7 @@ paths:
                           category: 3
                     - id: 1
                       quantity: 1
+                      category: 1
                       variant:
                         - id: 1
                           attributes:
