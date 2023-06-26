@@ -21,7 +21,7 @@ export default class Banner extends BaseModel {
   public attachment: AttachmentContract
 
   @column({
-    consume: (value) => JSON.parse(value),
+    consume: (value) => value,
     prepare: (value) => JSON.stringify(value),
   })
   public options: {page: string, section: string, type: string, link: string | null | undefined}
