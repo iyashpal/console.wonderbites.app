@@ -23,6 +23,7 @@ export default Env.rules({
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
   APP_URL: Env.schema.string(),
+  APP_DEBUG: Env.schema.boolean(),
 
   CACHE_VIEWS: Env.schema.boolean(),
   SESSION_DRIVER: Env.schema.string(),
