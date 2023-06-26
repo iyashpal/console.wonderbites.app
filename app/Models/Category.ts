@@ -1,9 +1,9 @@
-import { DateTime } from 'luxon'
+import {DateTime} from 'luxon'
 import Storage from 'App/Helpers/Storage'
-import { Cuisine, Product, Ingredient, Variant } from './index'
-import { BaseModel, BelongsTo, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
-import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { belongsTo, column, computed, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
+import {Cuisine, Product, Ingredient, Variant} from './index'
+import {BaseModel, BelongsTo, ManyToMany} from '@ioc:Adonis/Lucid/Orm'
+import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
+import {belongsTo, column, computed, manyToMany, scope} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Category extends BaseModel {
   /**
@@ -11,7 +11,7 @@ export default class Category extends BaseModel {
    */
   public serializeExtras = true
 
-  @column({ isPrimary: true })
+  @column({isPrimary: true})
   public id: number
 
   @column()
@@ -26,22 +26,22 @@ export default class Category extends BaseModel {
   @column()
   public description: string
 
-  @attachment({ folder: 'categories', preComputeUrl: true })
+  @attachment({folder: 'categories', preComputeUrl: true})
   public thumbnail: AttachmentContract | null
 
   @column({
-    consume: (value) => JSON.parse(value),
     prepare: (value) => JSON.stringify(value),
+    consume: (value) => value ? JSON.parse(value) : null,
   })
   public options: any
 
   @column()
   public status: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({autoCreate: true})
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
 
   @column.dateTime()
@@ -61,16 +61,16 @@ export default class Category extends BaseModel {
     return Storage.public('/images/placeholder/square.svg')
   }
 
-  @belongsTo(() => Category, { foreignKey: 'parent' })
+  @belongsTo(() => Category, {foreignKey: 'parent'})
   public category: BelongsTo<typeof Category>
 
-  @manyToMany(() => Product, { pivotTable: 'category_product' })
+  @manyToMany(() => Product, {pivotTable: 'category_product'})
   public products: ManyToMany<typeof Product>
 
-  @manyToMany(() => Cuisine, { pivotTable: 'category_cuisine' })
+  @manyToMany(() => Cuisine, {pivotTable: 'category_cuisine'})
   public cuisines: ManyToMany<typeof Cuisine>
 
-  @manyToMany(() => Ingredient, { pivotTable: 'category_ingredient' })
+  @manyToMany(() => Ingredient, {pivotTable: 'category_ingredient'})
   public ingredients: ManyToMany<typeof Ingredient>
 
   @manyToMany(() => Variant, {
