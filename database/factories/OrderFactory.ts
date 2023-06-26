@@ -15,7 +15,6 @@ export default Factory.define(Order, ({ faker }) => ({
   phone: faker.phone.number(),
   email: faker.internet.email(),
   paymentMode: 'COD',
-  ipAddress: faker.internet.ip(),
   note: faker.lorem.paragraph(),
   options: {},
   status: 0,

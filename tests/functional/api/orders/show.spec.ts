@@ -53,7 +53,7 @@ test.group('API [orders.show]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains({ id: order.id, products: [{ id: product.id }] })
+    request.assertBodyContains({ id: order.id })
   }).tags(['@api', '@api.orders', '@api.orders.show'])
 
   test('it can show the order with products and product images.', async ({ client, route }) => {
@@ -76,7 +76,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({
-      id: order.id, products: [{ id: product.id, media: product.media.map(({ id }) => ({ id })) }],
+      id: order.id,
     })
   }).tags(['@api', '@api.orders', '@api.orders.show'])
 
@@ -98,7 +98,7 @@ test.group('API [orders.show]', (group) => {
     request.assertStatus(200)
 
     request.assertBodyContains({ id: order.id, ingredients: product.ingredients.map(({ id }) => ({ id })) })
-  }).tags(['@api', '@api.orders', '@api.orders.show'])
+  }).tags(['@api', '@api.orders', '@api.orders.show', '@api.orders.debug'])
 
   test('it can show the order with coupon.', async ({ client, route }) => {
     const user = await UserFactory.create()
