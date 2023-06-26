@@ -20,10 +20,7 @@ export default class Banner extends BaseModel {
   @attachment({ folder: 'banners', preComputeUrl: true })
   public attachment: AttachmentContract
 
-  @column({
-    consume: (value) => value,
-    prepare: (value) => JSON.stringify(value),
-  })
+  @column({ prepare: (value) => JSON.stringify(value) })
   public options: {page: string, section: string, type: string, link: string | null | undefined}
 
   @column()

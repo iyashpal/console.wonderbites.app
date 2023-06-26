@@ -30,10 +30,7 @@ export default class Address extends BaseModel {
   @column()
   public email: string | null
 
-  @column({
-    consume: (value) => value,
-    prepare: (value) => JSON.stringify(value),
-  })
+  @column({ prepare: (value) => JSON.stringify(value) })
   public location: object
 
   @column()
