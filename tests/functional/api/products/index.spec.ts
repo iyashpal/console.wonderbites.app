@@ -81,7 +81,7 @@ test.group('API [products.index]', (group) => {
 
       $response.assertBodyContains({
         data: products
-          .filter(({name, description}) => name.includes(`${search}`) || description.includes(`${search}`))
+          .filter(({name, description}) => name.includes(`${search}`))
           .map((product) => ({id: product.id})),
       })
     }).tags(['@api', '@api.products', '@api.products.index'])

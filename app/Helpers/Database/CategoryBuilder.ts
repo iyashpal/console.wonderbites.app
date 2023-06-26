@@ -54,7 +54,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
   protected whereCategories () {
     this.$builder.match([
       this.input('search', null) !== null,
-      query => query.whereLike('name', `%${this.input('search')}%`),
+      query => query.where('name', 'like', `%${this.input('search')}%`),
     ])
   }
 
@@ -95,7 +95,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
   protected _whereProductsLike<T extends ProductQueryBuilder>(builder: T) {
     return builder.match([
       this.input('searchable', [] as string[]).includes('products') && this.input('search', null) !== null,
-      query => query.whereLike('name', `%${this.input('search')}%`),
+      query => query.where('name', 'like', `%${this.input('search')}%`),
     ])
   }
 

@@ -168,8 +168,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
     this.$builder.match([
       this.input('search', ''),
       query => {
-        query.whereLike('name', `%${this.input('search')}%`)
-          .orWhereLike('description', `%${this.input('search')}%`)
+        return query.where('name', 'like', `%${this.input('search')}%`)
       },
     ])
 
