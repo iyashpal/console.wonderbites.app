@@ -31,7 +31,7 @@ export default class Category extends BaseModel {
 
   @column({
     prepare: (value) => JSON.stringify(value),
-    consume: (value) => value ? JSON.parse(value) : null,
+    consume: (value) => value,
   })
   public options: any
 
