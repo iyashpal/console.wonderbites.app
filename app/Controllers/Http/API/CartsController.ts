@@ -1,10 +1,10 @@
-import { uniqueHash } from 'App/Helpers/Core'
+import {uniqueHash} from 'App/Helpers/Core'
 import {types} from '@ioc:Adonis/Core/Helpers'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {User, Cart, Product, Ingredient, Variant, Category} from 'App/Models'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
+import {User, Cart, Product, Ingredient, Variant, Category} from 'App/Models'
 
 export default class CartsController {
   protected cartHeaders (request: RequestContract) {
@@ -26,7 +26,7 @@ export default class CartsController {
       try {
         return await Cart.query().withScopes(scopes => scopes.asGuest(id, token)).firstOrFail()
       } catch (error) {
-        return await Cart.create({ token })
+        return await Cart.create({token})
       }
     }
 
@@ -40,30 +40,30 @@ export default class CartsController {
   protected async data (request: RequestContract, cart: Cart) {
     const products = async () => {
       if (request.input('with', []).includes('products')) {
-        return await Product.query().whereIn('id', cart.ProductIDs())
+        return Product.query().whereIn('id', cart.ProductIDs())
       }
 
       return []
     }
 
-    const variants = async () => {
+    const variants = () => {
       if (request.input('with', []).includes('variants')) {
-        return await Variant.query().whereIn('id', cart.VariantIDs())
+        return Variant.query().whereIn('id', cart.VariantIDs())
       }
       return []
     }
 
-    const ingredients = async () => {
+    const ingredients = () => {
       if (request.input('with', []).includes('ingredients')) {
-        return await Ingredient.query().whereIn('id', cart.IngredientIDs())
+        return Ingredient.query().whereIn('id', cart.IngredientIDs())
       }
 
       return []
     }
 
-    const categories = async () => {
+    const categories = () => {
       if (request.input('with', []).includes('categories')) {
-        return await Category.query().whereIn('id', cart.CategoryIDs())
+        return Category.query().whereIn('id', cart.CategoryIDs())
       }
 
       return []
@@ -83,7 +83,7 @@ export default class CartsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({ request, auth, response }: HttpContextContract) {
+  public async show ({request, auth, response}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
 
@@ -102,7 +102,7 @@ export default class CartsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({ auth, request, response }: HttpContextContract) {
+  public async update ({auth, request, response}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
 
@@ -112,7 +112,7 @@ export default class CartsController {
 
       const payload = await request.validate(UpdateValidator)
 
-      await cart.merge({ data: payload.data, userId: payload.user_id, couponId: payload.coupon_id }).save()
+      await cart.merge({data: payload.data, userId: payload.user_id, couponId: payload.coupon_id}).save()
 
       response.ok(await this.data(request, cart))
     } catch (error) {

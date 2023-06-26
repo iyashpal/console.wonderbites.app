@@ -7,6 +7,7 @@ export default Factory.define(Cart, ({ faker }) => {
   return {
     user_id: null,
     token: uniqueHash(),
+    data: [],
     status: 1,
   }
 })
