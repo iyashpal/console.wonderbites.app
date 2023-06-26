@@ -24,10 +24,6 @@ export default class ProcessValidator {
    *    ```
    */
   public schema = schema.create({
-    cart: schema.number([
-      rules.required(),
-      rules.exists({ table: 'carts', column: 'id' }),
-    ]),
     orderType: schema.enum(['dine-in', 'take-away', 'delivery'] as const),
 
     firstName: schema.string({ trim: true, escape: true }, [

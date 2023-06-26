@@ -1,21 +1,30 @@
-import { Cart, Order } from 'App/Models'
-import {OrderBuilder} from 'App/Helpers/Database'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {Cart, Order} from 'App/Models'
+import {uniqueHash} from 'App/Helpers/Core'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
 
 export default class CheckoutsController {
-  public async process ({ auth, response, request }: HttpContextContract) {
+  protected checkoutHeaders (request: RequestContract) {
+    return {
+      id: request.header('X-Cart-ID', 0) as number,
+      token: request.header('X-Cart-Token', uniqueHash()),
+    }
+  }
+
+  public async process ({auth, response, request}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
 
+      const {id, token} = this.checkoutHeaders(request)
+
       const attrs = await request.validate(ProcessValidator)
 
-      // Load and validate cart by the requested cart id
-      const cart = await Cart.query()
-        .where('id', attrs.cart)
-        .match([user, query => query.where('user_id', user.id)])
-        .preload('ingredients').preload('products').firstOrFail()
+      const cart = await Cart.query().where('status', 1)
+        .match([user?.id, query => query.where('user_id', user.id)])
+        .match([id !== 0, query => query.where('id', id).where('token', token)])
+        .firstOrFail()
 
       // Create order from cart details.
       let order = await Order.create({
@@ -38,42 +47,17 @@ export default class CheckoutsController {
         options: attrs.options,
       })
 
-      await order.related('products').attach(this.cartProducts(cart.products))
-
-      await order.related('ingredients').attach(this.cartIngredients(cart.ingredients))
-
-      if (order.id) {
+      if (order?.id) {
         // Delete the cart if the order created.
-        await Cart.query().where('id', attrs.cart).delete()
+        await Cart.query().where('id', id).delete()
       }
 
-      const data = await (new OrderBuilder(request)).resolve('checkout')
-        .query().where('id', order.id).firstOrFail()
+      const data = await Order.query().where('id', order.id).firstOrFail()
 
       // Send order in response with all associated data.
       response.ok(data)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
-  }
-
-  public cartProducts (items: any[]) {
-    const products = {}
-
-    items.forEach(product => (products[product.id] = { qty: product.$extras.pivot_qty, price: product.price }))
-
-    return products
-  }
-
-  public cartIngredients (items: any[]) {
-    const ingredients = {}
-
-    items.map((ingredient) => (ingredients[ingredient.id] = {
-      price: ingredient.price,
-      qty: ingredient.$extras.pivot_qty,
-      product_id: ingredient.$extras.pivot_product_id,
-    }))
-
-    return ingredients
   }
 }
