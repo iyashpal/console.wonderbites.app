@@ -28,7 +28,7 @@ export default class ExtraField extends BaseModel {
   public updatedAt: DateTime
 
   @belongsTo(() => Product, {
-    localKey: 'relationId'
-    })
+    localKey: 'relationId',
+  })
   public product: BelongsTo<typeof Product>
 }

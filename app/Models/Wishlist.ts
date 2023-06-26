@@ -17,7 +17,7 @@ export default class Wishlist extends BaseModel {
   @manyToMany(() => Product, {
     pivotColumns: ['qty'],
     pivotTimestamps: true,
-    })
+  })
   public products: ManyToMany<typeof Product>
 
   @manyToMany(() => Ingredient)

@@ -44,7 +44,7 @@ export default class Order extends BaseModel {
   public eatOrPickupTime: string
 
   @column({
-    consume: (value) => JSON.parse(value),
+    consume: (value) => value,
     prepare: (value) => JSON.stringify(value),
   })
   public location: {

@@ -19,8 +19,8 @@ export default class Cart extends BaseModel {
   public status: number
 
   @column({
+    consume:(value)=> value,
     prepare: (value)=> JSON.stringify(value),
-    consume:(value)=> JSON.parse(value),
   })
   public data: CartDataProduct[]
 

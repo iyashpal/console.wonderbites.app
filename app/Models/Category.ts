@@ -30,8 +30,8 @@ export default class Category extends BaseModel {
   public thumbnail: AttachmentContract | null
 
   @column({
-    prepare: (value) => JSON.stringify(value),
     consume: (value) => value,
+    prepare: (value) => JSON.stringify(value),
   })
   public options: any
 
