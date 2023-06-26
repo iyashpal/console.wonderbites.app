@@ -69,7 +69,6 @@ export default class ExceptionResponse {
   protected response: ResponseContract
 
   constructor (error: any) {
-    console.log(error)
     this.name = error.name
     this.help = error.help
     this.code = error?.code ?? 500

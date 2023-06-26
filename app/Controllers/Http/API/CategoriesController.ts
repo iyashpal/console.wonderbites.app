@@ -1,5 +1,5 @@
-import { builder } from 'App/Helpers/Database'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {builder} from 'App/Helpers/Database'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoriesController {
   /**
@@ -7,15 +7,15 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async index ({ auth, response, request }: HttpContextContract) {
+  public async index ({auth, response, request}: HttpContextContract) {
+    const user = auth.use('api').user!
+
     try {
-      const user = auth.use('api').user!
-
       const category = await builder('Category', request, 'category').auth(user).run().where('status', 'public')
-
       response.status(200).json(category)
     } catch (error) {
-      response.badRequest(error.messages)
+      console.log(error)
+      response.badRequest(error)
     }
   }
 
@@ -24,7 +24,7 @@ export default class CategoriesController {
    *
    * @param param0 HttpContextContract
    */
-  public async show ({ auth, response, params: { id }, request }: HttpContextContract) {
+  public async show ({auth, response, params: {id}, request}: HttpContextContract) {
     const user = auth.use('api').user!
 
     try {
@@ -33,7 +33,8 @@ export default class CategoriesController {
 
       response.status(200).json(category)
     } catch (error) {
-      response.notFound({ message: 'Category Not Found' })
+      console.log(error)
+      response.notFound({message: 'Category Not Found'})
     }
   }
 }
