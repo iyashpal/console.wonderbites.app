@@ -35,9 +35,6 @@ export default class UpdateValidator {
         id: schema.number([
           rules.exists({table: 'products', column: 'id'}),
         ]),
-        category: schema.number([
-          rules.exists({table: 'categories', column: 'id'}),
-        ]),
         quantity: schema.number(),
         variant: schema.object.optional().members({
           id: schema.number([

@@ -1,4 +1,4 @@
-import { test } from '@japa/runner'
+import {test} from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {CartFactory, ProductFactory, UserFactory} from 'Database/factories'
 
@@ -11,18 +11,18 @@ test.group('API [carts.update]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('It allows guest users to access and add products to the cart.', async ({ client, route, assert }, qs) => {
+  test('It allows guest users to access and add products to the cart.', async ({client, route, assert}, qs) => {
     const product = await ProductFactory.create()
 
     const request = await client.put(route('api.carts.update'))
       .json({data: [{id: product.id, quantity: 3}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({ data: [{id: product.id, quantity: 3}]})
+    request.assertBodyContains({data: [{id: product.id, quantity: 3}]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
-  test('It allows authenticated users to access and add products to cart.', async ({ client, route, assert }, qs) => {
+  test('It allows authenticated users to access and add products to cart.', async ({client, route, assert}, qs) => {
     const user = await UserFactory.with('cart').create()
     const product = await ProductFactory.create()
 
@@ -34,10 +34,10 @@ test.group('API [carts.update]', (group) => {
     request.assertBodyContains({
       id: user.cart.id,
       token: user.cart.token,
-      data: [{ id: product.id, quantity: 3 }],
+      data: [{id: product.id, quantity: 3}],
     })
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It allows users to add variable products to cart', async ({client, route, assert}, qs) => {
     const product = await ProductFactory.with('variants', 2).create()
@@ -47,9 +47,9 @@ test.group('API [carts.update]', (group) => {
       .json({data: [{id: product.id, quantity: 3, variant: {id: variant.id}}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({ data: [{ id: product.id, quantity: 3, variant: {id: variant.id} }]})
+    request.assertBodyContains({data: [{id: product.id, quantity: 3, variant: {id: variant.id}}]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It allows users to add variable products with attributes to cart', async ({client, route, assert}, qs) => {
     const product = await ProductFactory
@@ -60,26 +60,26 @@ test.group('API [carts.update]', (group) => {
       return {
         id: variant.id,
         ingredients: variant.ingredients.map((attribute) => {
-          const [category] = variant.categories
           return {
             id: attribute.id,
             quantity: 5,
-            category: category.id,
+            category: variant.categories[0].id,
           }
         }),
       }
     })
 
     const request = await client.put(route('api.carts.update'))
-      .json({data: [{id: product.id, quantity: 3,variant}]})
+      .json({data: [{id: product.id, quantity: 3, variant}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({ data: [{ id: product.id, quantity: 3,variant}]})
+    request.assertBodyContains({data: [{id: product.id, quantity: 3, variant}]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It allows users to remove the products from cart', async ({client, route, assert}, qs) => {
     const product = await ProductFactory
+      .with('categories')
       .with('variants', 2, query => query.with('ingredients', 5).with('categories'))
       .create()
 
@@ -88,54 +88,59 @@ test.group('API [carts.update]', (group) => {
         id: variant.id,
         ingredients: variant.ingredients.map((attribute) => {
           const [category] = variant.categories
-          return { id: attribute.id, quantity: 5, category: category.id }
+          return {id: attribute.id, quantity: 5, category: category.id}
         }),
       }
     })
 
-    const cart = await CartFactory.merge({data: [{id: product.id, quantity: 3,variant}]}).create()
+    const cart = await CartFactory.merge({
+      data: [{
+        id: product.id, quantity: 3, variant,
+      }],
+    }).create()
 
-    const request = await client.put(route('api.carts.update')).json({ data: [] })
-      .headers({ 'X-Cart-ID': cart.id.toString(), 'X-Cart-Token': cart.token })
+    const request = await client.put(route('api.carts.update')).json({data: []})
+      .headers({'X-Cart-ID': cart.id.toString(), 'X-Cart-Token': cart.token})
 
     request.assertStatus(200)
     assert.equal(0, request.body().data.length)
-    request.assertBodyContains({id: cart.id, token: cart.token, data: [], status: cart.status })
+    request.assertBodyContains({id: cart.id, token: cart.token, data: [], status: cart.status})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It throw error when cart product do not have the quantity.')
-    .run(async ({ client, route, assert }, qs) => {
+    .run(async ({client, route, assert}, qs) => {
       const user = await UserFactory.with('cart').create()
 
       const product = await ProductFactory.create()
       const request = await client.put(route('api.carts.update'))
-        .guard('api').loginAs(user).json({ data: [{ id: product.id }] })
+        .guard('api').loginAs(user).json({data: [{id: product.id}]})
 
       request.assertStatus(422)
-      request.assertBodyContains({ errors: { 'data.0.quantity': 'required validation failed'}})
+      request.assertBodyContains({errors: {'data.0.quantity': 'required validation failed'}})
     }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It allows product quantity to be decreased.', async ({client, route, assert}, qs) => {
-    const product = await ProductFactory.create()
+    const product = await ProductFactory.with('categories', 1).create()
     const user = await UserFactory.with('cart').create()
 
-    await user.cart.merge({data: [{ id: product.id, quantity: 5 }]}).save()
+    await user.cart.merge({data: [{id: product.id, quantity: 5}]}).save()
 
     const request = await client.put(route('api.carts.update'))
-      .guard('api').loginAs(user).json({ data: [{ id: product.id, quantity: 2 }] })
+      .guard('api').loginAs(user).json({data: [{id: product.id, quantity: 2}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({data: [{ id: product.id, quantity: 2 }]})
+    request.assertBodyContains({data: [{id: product.id, quantity: 2}]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products'] }])
+    .with([{with: ['cart.products']}])
 
   test('It allows users to add add ingredients to the cart.', async ({client, route, assert}, qs) => {
-    const product = await ProductFactory.with('ingredients', 5, query => query.with('categories')).create()
+    const product = await ProductFactory.with('categories')
+      .with('ingredients', 5, query => query.with('categories')).create()
     const user = await UserFactory.with('cart').create()
 
-    await user.cart.merge({ data: [{ id: product.id, quantity: 5 }] }).save()
+    await user.cart.merge({data: [{id: product.id, quantity: 5}]}).save()
 
     const ingredients = product.ingredients.map(ingredient => {
       const [category] = ingredient.categories
@@ -143,19 +148,19 @@ test.group('API [carts.update]', (group) => {
     })
 
     const request = await client.put(route('api.carts.update'))
-      .guard('api').loginAs(user).json({ data: [{ id: product.id, quantity: 2, ingredients }] })
+      .guard('api').loginAs(user).json({data: [{id: product.id, quantity: 2, ingredients}]})
 
     request.assertStatus(200)
-    request.assertBodyContains({data: [{ id: product.id, quantity: 2, ingredients }]})
+    request.assertBodyContains({data: [{id: product.id, quantity: 2, ingredients}]})
   }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products', 'cart.ingredients'] }])
+    .with([{with: ['cart.products', 'cart.ingredients']}])
 
   test('It do not allow users to add ingredients without quantity to the cart.')
-    .run(async ({ client, route, assert }, qs) => {
+    .run(async ({client, route, assert}, qs) => {
       const product = await ProductFactory.with('ingredients', 5, query => query.with('categories')).create()
       const user = await UserFactory.with('cart').create()
 
-      await user.cart.merge({ data: [{ id: product.id, quantity: 5 }] }).save()
+      await user.cart.merge({data: [{id: product.id, quantity: 5}]}).save()
 
       const ingredients = product.ingredients.map(ingredient => {
         return {id: ingredient.id, quantity: 1}
@@ -163,7 +168,7 @@ test.group('API [carts.update]', (group) => {
 
       const request = await client.put(route('api.carts.update'))
         .guard('api').loginAs(user)
-        .json({ data: [{ id: product.id, quantity: 2, ingredients }] })
+        .json({data: [{id: product.id, quantity: 2, ingredients}]})
 
       request.assertStatus(422)
       request.assertBodyContains({
@@ -176,5 +181,5 @@ test.group('API [carts.update]', (group) => {
         },
       })
     }).tags(['@api', '@api.carts', '@api.carts.update'])
-    .with([{ with: ['cart.products', 'cart.ingredients'] }])
+    .with([{with: ['cart.products', 'cart.ingredients']}])
 })
