@@ -30,6 +30,7 @@ export default class CartsController {
         console.log({id, token})
         return await Cart.query().withScopes(scopes => scopes.asGuest(id, token)).firstOrFail()
       } catch (error) {
+        console.log(error)
         return await Cart.create({token})
       }
     }
@@ -92,6 +93,8 @@ export default class CartsController {
       const user = auth.use('api').user!
 
       const {id, token} = this.cartHeaders(request)
+
+      console.log({id, token})
 
       const cart = await this.cart(user, id, token)
 
