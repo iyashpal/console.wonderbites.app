@@ -16,7 +16,6 @@ export default class Cart extends BaseModel {
   public couponId: number | null
 
   @column({
-    consume: value => JSON.parse(value),
     prepare: value => JSON.stringify(value),
   })
   public data: CartDataProduct[]
