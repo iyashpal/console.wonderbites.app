@@ -39,7 +39,6 @@ export default class Order extends BaseModel {
 
   @column({
     prepare: value => JSON.stringify(value),
-    consume: value => value !== null ? JSON.parse(value) : {},
   })
   public data: CartDataProduct[]
 
@@ -66,7 +65,6 @@ export default class Order extends BaseModel {
 
   @column({
     prepare: value => JSON.stringify(value),
-    consume: value => value !== null ? JSON.parse(value) : {},
   })
   public options: any
 
