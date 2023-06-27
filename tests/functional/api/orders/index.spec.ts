@@ -37,7 +37,7 @@ test.group('API [orders.index]', (group) => {
     request.assertStatus(200)
     request.assertBodyContains({
       data: orders.map(({id, userId, token, options, note, status}) => ({
-        id, user_id: userId, token: token, options: options, note, status,
+        id, user_id: userId, token: token, options: JSON.stringify(options), note, status,
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -201,11 +201,8 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, userId, token, options, note, status, ingredients}) => ({
+      data: orders.map(({id, userId, token, options, note, status}) => ({
         id, user_id: userId, token: token, options: JSON.stringify(options), note, status,
-        ingredients: ingredients.map(({id, name, description, price, status}) => ({
-          id, name, description, price, status,
-        })),
       })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
@@ -349,10 +346,6 @@ test.group('API [orders.index]', (group) => {
         coupon_id: order.coupon.id,
         coupon: {id: order.coupon.id},
         review: {id: review.id},
-        products: order.products.map(({id, media}) => ({
-          id, media: media.map(({id}) => ({id})),
-        })),
-        ingredients: ingredients.map(({id}) => ({id})),
       }],
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])

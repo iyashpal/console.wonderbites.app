@@ -1,8 +1,8 @@
 import {uniqueHash} from 'App/Helpers/Core'
-import {builder, OrderBuilder} from 'App/Helpers/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {builder, OrderBuilder} from 'App/Helpers/Database'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
 import {Cart, Category, Ingredient, Order, Product, Variant} from 'App/Models'
@@ -127,9 +127,8 @@ export default class OrdersController {
     try {
       const user = auth.use('api').user
 
-      const order = await (new OrderBuilder(request))
-
-        .resolve('order').query().where('id', params.id).firstOrFail()
+      const order = await (new OrderBuilder(request, 'order'))
+        .query().where('id', params.id).firstOrFail()
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('view', order)
 

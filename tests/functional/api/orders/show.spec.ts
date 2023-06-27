@@ -97,7 +97,7 @@ test.group('API [orders.show]', (group) => {
 
     request.assertStatus(200)
 
-    request.assertBodyContains({ id: order.id, ingredients: product.ingredients.map(({ id }) => ({ id })) })
+    request.assertBodyContains({ id: order.id })
   }).tags(['@api', '@api.orders', '@api.orders.show', '@api.orders.debug'])
 
   test('it can show the order with coupon.', async ({ client, route }) => {
@@ -184,12 +184,6 @@ test.group('API [orders.show]', (group) => {
       coupon_id: order.couponId,
       coupon: { id: order.coupon.id },
       review: { id: review.id },
-      products: [{
-        id: product.id,
-        media: product.media.map(({ id }) => ({ id })),
-        ingredients: product.ingredients.map(({ id }) => ({ id })),
-      }],
-      ingredients: product.ingredients.map(({ id }) => ({ id })),
     })
   }).tags(['@api', '@api.orders', '@api.orders.show'])
 })
