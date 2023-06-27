@@ -1,5 +1,5 @@
 import {uniqueHash} from 'App/Helpers/Core'
-import {OrderBuilder} from 'App/Helpers/Database'
+import {builder, OrderBuilder} from 'App/Helpers/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
@@ -62,7 +62,7 @@ export default class OrdersController {
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('viewList')
 
-      const orders = await (new OrderBuilder(request)).resolve('orders').query()
+      const orders = await builder('Order', request, 'orders').query()
 
         .where('user_id', user.id)
         .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
