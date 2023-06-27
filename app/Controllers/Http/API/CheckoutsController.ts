@@ -52,10 +52,8 @@ export default class CheckoutsController {
         await Cart.query().where('id', id).delete()
       }
 
-      const data = await Order.query().where('id', order.id).firstOrFail()
-
       // Send order in response with all associated data.
-      response.ok(data)
+      response.ok(order)
     } catch (error) {
       console.log(error)
       response.status(error.status).json(new ExceptionJSON(error))
