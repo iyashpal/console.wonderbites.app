@@ -37,9 +37,7 @@ export default class Order extends BaseModel {
   @column()
   public email: string
 
-  @column({
-    prepare: value => JSON.stringify(value),
-  })
+  @column({prepare: value => JSON.stringify(value)})
   public data: CartDataProduct[]
 
   @column()
@@ -51,10 +49,7 @@ export default class Order extends BaseModel {
   @column()
   public paymentMode: string
 
-  @column({
-    prepare: value => JSON.stringify(value),
-    consume: value => value !== null ? JSON.parse(value) : {},
-  })
+  @column({prepare: value => JSON.stringify(value)})
   public location: {
     lat?: string,
     lng?: string,
@@ -63,9 +58,7 @@ export default class Order extends BaseModel {
   @column()
   public note: string
 
-  @column({
-    prepare: value => JSON.stringify(value),
-  })
+  @column({ prepare: value => JSON.stringify(value) })
   public options: any
 
   @column()

@@ -30,7 +30,7 @@ export default class Notification extends BaseModel {
   @belongsTo(() => User, {
     localKey: 'notifiableId',
     foreignKey: 'id',
-    })
+  })
   public notifiable: BelongsTo<typeof User>
 
   public async markAsRead (this: Notification) {
