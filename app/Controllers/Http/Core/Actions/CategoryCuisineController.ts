@@ -1,5 +1,5 @@
 import {Cuisine} from 'App/Models'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoryCuisineAction {
@@ -23,7 +23,7 @@ export default class CategoryCuisineAction {
 
       return response.json({cuisine})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

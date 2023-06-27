@@ -1,12 +1,11 @@
-import {Cart, Category, Ingredient, Order, Product, Variant} from 'App/Models'
-import {OrderStatus} from 'App/Models/Enums/Order'
-import {OrderBuilder} from 'App/Helpers/Database'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
-import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {uniqueHash} from 'App/Helpers/Core'
-import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
+import {OrderBuilder} from 'App/Helpers/Database'
+import {OrderStatus} from 'App/Models/Enums/Order'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
+import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
+import {Cart, Category, Ingredient, Order, Product, Variant} from 'App/Models'
 
 export default class OrdersController {
   protected checkoutHeaders (request: RequestContract) {
@@ -71,7 +70,7 @@ export default class OrdersController {
 
       response.status(200).json(orders)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { VerificationCode } from 'App/Models'
 import { string } from '@ioc:Adonis/Core/Helpers'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import VerifyValidator from 'App/Validators/API/Auth/OTP/VerifyValidator'
 
@@ -33,7 +33,7 @@ export default class VerifyCodesController {
         success: !!verificationCode.verifiedAt,
       })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

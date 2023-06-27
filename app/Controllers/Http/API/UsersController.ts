@@ -1,4 +1,4 @@
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AvatarValidator from 'App/Validators/API/User/AvatarValidator'
@@ -20,7 +20,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -45,7 +45,7 @@ export default class UsersController {
 
       response.status(200).ok(user)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -64,13 +64,13 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
   /**
    * Update or remove the user avatar.
-   * 
+   *
    * @param param0 HttpContextContract
    */
   public async avatar ({ auth, request, response }: HttpContextContract) {
@@ -85,7 +85,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

@@ -1,6 +1,6 @@
 
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 
 export default class LogoutController {
   /**
@@ -16,7 +16,7 @@ export default class LogoutController {
 
       response.status(200).json({revoked: true})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

@@ -1,5 +1,5 @@
 import Address from 'App/Models/Address'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/API/Addresses/CreateValidator'
 import UpdateValidator from 'App/Validators/API/Addresses/UpdateValidator'
@@ -21,7 +21,7 @@ export default class AddressesController {
 
       response.status(200).json(addresses)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -46,7 +46,7 @@ export default class AddressesController {
       // Send response
       response.status(200).json(address)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -67,7 +67,7 @@ export default class AddressesController {
 
       response.status(200).json(address)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -95,7 +95,7 @@ export default class AddressesController {
 
       response.status(200).json(address)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -116,7 +116,7 @@ export default class AddressesController {
 
       response.status(200).json({ deleted: true })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

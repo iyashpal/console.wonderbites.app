@@ -1,6 +1,6 @@
 import {Category, Ingredient} from 'App/Models'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Ingredients/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Ingredients/UpdateValidator'
@@ -17,7 +17,7 @@ export default class IngredientsController {
 
       response.status(200).json(ingredients)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -28,7 +28,7 @@ export default class IngredientsController {
 
       response.ok({categories})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -65,7 +65,7 @@ export default class IngredientsController {
 
       response.ok(ingredient)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -79,7 +79,7 @@ export default class IngredientsController {
 
       response.ok({ingredient})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -97,7 +97,7 @@ export default class IngredientsController {
 
       response.ok({categories, ingredient, category})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -133,7 +133,7 @@ export default class IngredientsController {
 
       response.ok(ingredient)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -145,7 +145,7 @@ export default class IngredientsController {
 
       response.ok({success: true})
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

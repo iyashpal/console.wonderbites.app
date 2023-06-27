@@ -3,7 +3,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { User, VerificationCode } from 'App/Models'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 
@@ -30,7 +30,7 @@ export default class GenerateCodesController {
 
       response.ok({ success: !!code.id, token: code.token, source, ...(user ? { user: user.id } : {}) })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 

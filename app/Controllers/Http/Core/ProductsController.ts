@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import { Category, Ingredient, Product } from 'App/Models'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Products/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 
 export default class ProductsController {
   public async index ({ response, request }: HttpContextContract) {
@@ -25,7 +25,7 @@ export default class ProductsController {
 
       response.ok({ categories })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -56,7 +56,7 @@ export default class ProductsController {
 
       response.json(product)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -81,7 +81,7 @@ export default class ProductsController {
       response.ok({ product, ingredients })
     } catch (error) {
       console.log(error)
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -99,7 +99,7 @@ export default class ProductsController {
 
       response.ok({ product, categories, category })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -134,7 +134,7 @@ export default class ProductsController {
 
       response.ok(product)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -146,7 +146,7 @@ export default class ProductsController {
 
       response.ok({ success: true })
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

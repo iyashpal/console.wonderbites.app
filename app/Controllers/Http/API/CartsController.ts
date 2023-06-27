@@ -1,7 +1,7 @@
 import {uniqueHash} from 'App/Helpers/Core'
 import {types} from '@ioc:Adonis/Core/Helpers'
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
 import {User, Cart, Product, Ingredient, Variant, Category} from 'App/Models'
@@ -19,11 +19,15 @@ export default class CartsController {
    *
    * @param request RequestContract
    * @param user User
+   * @param id number
+   * @param token string
+   *
    * @returns Cart
    */
   protected async cart (user: User | undefined, id: number, token: string): Promise<Cart> {
     if (types.isNull(user) || types.isUndefined(user)) {
       try {
+        console.log({id, token})
         return await Cart.query().withScopes(scopes => scopes.asGuest(id, token)).firstOrFail()
       } catch (error) {
         return await Cart.create({token})
@@ -38,7 +42,7 @@ export default class CartsController {
   }
 
   protected async data (request: RequestContract, cart: Cart) {
-    const products = async () => {
+    const products = () => {
       if (request.input('with', []).includes('products')) {
         return Product.query().whereIn('id', cart.ProductIDs())
       }
@@ -93,7 +97,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 
@@ -116,7 +120,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }

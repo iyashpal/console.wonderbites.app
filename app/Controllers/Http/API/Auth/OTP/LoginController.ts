@@ -1,5 +1,5 @@
+import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import VerificationCode from 'App/Models/VerificationCode'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import LoginValidator from 'App/Validators/API/Auth/OTP/LoginValidator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -18,7 +18,7 @@ export default class LoginController {
 
       response.status(200).json(authToken)
     } catch (error) {
-      ExceptionResponse.use(error).resolve(response)
+      response.status(error.status).json(new ExceptionJSON(error))
     }
   }
 }
