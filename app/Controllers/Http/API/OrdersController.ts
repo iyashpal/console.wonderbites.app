@@ -126,7 +126,7 @@ export default class OrdersController {
     try {
       const user = auth.use('api').user
 
-      const order = await (new OrderBuilder(request, 'order'))
+      const order = await (new OrderBuilder(request))
         .query().where('id', params.id).firstOrFail()
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('view', order)
