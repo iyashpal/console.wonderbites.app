@@ -69,6 +69,7 @@ export default class CartsController {
     const categories = () => {
       if (request.input('with', []).includes('categories')) {
         return Category.query().whereIn('id', cart.CategoryIDs())
+          .orWhereHas('products', query => query.whereIn('products.id', cart.ProductIDs()))
       }
 
       return []

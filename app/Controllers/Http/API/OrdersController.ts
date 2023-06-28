@@ -70,7 +70,6 @@ export default class OrdersController {
 
       response.status(200).json(orders)
     } catch (error) {
-      console.log(error)
       response.status(error.status).json(new ExceptionJSON(error))
     }
   }
