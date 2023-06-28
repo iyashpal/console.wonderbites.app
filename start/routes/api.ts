@@ -16,11 +16,8 @@ Route.group(() => {
     }).as('otp').prefix('otp')
 
     Route.post('/login', 'Auth/LoginController').as('login')
-
     Route.post('/register', 'Auth/RegisterController').as('register')
-
     Route.post('/forgot-password', 'Auth/PasswordResetLinkController').as('password.email')
-
     Route.get('/reset-password/:token', 'Auth/NewPasswordController.create').as('password.reset')
   }).middleware('api.guest')
 
@@ -30,35 +27,27 @@ Route.group(() => {
   Route.group(() => {
     Route.post('/logout', 'Auth/LogoutController').as('logout')
 
-    // Get the authenticated user.
     Route.get('users/auth', 'UsersController.auth').as('users.auth')
 
-    // Add or remove the user avatar.
     Route.put('users/avatar', 'UsersController.avatar').as('users.avatar')
 
-    // Endpoints to user operations.
     Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])
 
-    // User notifications endpoints
     Route.resource('notifications', 'NotificationsController').apiOnly().only(['index', 'update'])
 
-    // Resources endpoints to user addresses.
     Route.resource('addresses', 'AddressesController').apiOnly()
 
-    // Endpoint to create user orders.
     Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
     Route.put('orders/:id/cancel', 'OrdersController.cancel').as('orders.cancel')
 
     Route.resource('reviews', 'ReviewsController').apiOnly().only(['store', 'update'])
 
-    // Endpoint to create wishlists.
     Route.get('wishlists', 'WishlistsController.show').as('wishlists.show')
     Route.put('wishlists', 'WishlistsController.update').as('wishlists.update')
     Route.post('wishlists/clean', 'WishlistsController.clean').as('wishlists.clean')
 
     Route.post('products/:id/category', 'ProductsController.toggleCategory').as('products.category')
 
-    // Endpoints to WonderPoints
     Route.resource('wonder-points', 'WonderPointsController').apiOnly().only(['index', 'store'])
     Route.get('wonder-points/avail', 'WonderPointsController.availWonderPoints').as('wonder-points.avail')
 
@@ -70,14 +59,8 @@ Route.group(() => {
    */
   Route.group(() => {
     Route.resource('reviews', 'ReviewsController').apiOnly().only(['index', 'show'])
-    // Endpoints for cart.
-    Route.get('cart', 'CartsController.show').as('carts.show')
-    Route.route('cart', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
 
-    // Cart coupons endpoints.
-    Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
-    Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
-    Route.resource('coupons', 'CouponsController').apiOnly().middleware({ '*': ['api.auth'] })
+    Route.resource('coupons', 'CouponsController').apiOnly().middleware({'*': ['api.auth']})
 
     Route.resource('categories', 'CategoriesController').apiOnly()
 
@@ -90,6 +73,12 @@ Route.group(() => {
     Route.resource('banners', 'BannersController').apiOnly().only(['index', 'show'])
 
     Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
+
+    Route.get('cart', 'CartsController.show').as('carts.show')
+    Route.route('cart', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
+
+    Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
+    Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
   })
 
   /**

@@ -1,20 +1,11 @@
-import {uniqueHash} from 'App/Helpers/Core'
 import {OrderStatus} from 'App/Models/Enums/Order'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {builder, OrderBuilder} from 'App/Helpers/Database'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
-import {Cart, Category, Ingredient, Order, Product, Variant} from 'App/Models'
+import { Category, Ingredient, Order, Product, Variant} from 'App/Models'
 
 export default class OrdersController {
-  protected checkoutHeaders (request: RequestContract) {
-    return {
-      id: request.header('X-Cart-ID', 0) as number,
-      token: request.header('X-Cart-Token', uniqueHash()),
-    }
-  }
-
   protected async data (request: RequestContract, order: Order) {
     const products = async () => {
       if (request.input('with', []).includes('products')) {
@@ -69,54 +60,6 @@ export default class OrdersController {
         .paginate(request.input('page', 1), request.input('limit', 50))
 
       response.status(200).json(orders)
-    } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
-    }
-  }
-
-  public async store ({auth, response, request}: HttpContextContract) {
-    try {
-      const user = auth.use('api').user!
-
-      const {id, token} = this.checkoutHeaders(request)
-
-      const attrs = await request.validate(ProcessValidator)
-
-      const cart = await Cart.query().where('status', 1)
-        .match([user?.id, query => query.where('user_id', user.id)])
-        .match([id !== 0, query => query.where('id', id).where('token', token)])
-        .firstOrFail()
-
-      // Create order from cart details.
-      let order = await Order.create({
-        note: attrs.note,
-        firstName: attrs.firstName,
-        lastName: attrs.lastName,
-        token: cart.token,
-        email: attrs.email,
-        phone: attrs.phone,
-        street: attrs.street,
-        city: attrs.city,
-        data: cart.data,
-        reservedSeats: attrs.reservedSeats,
-        eatOrPickupTime: attrs.eatOrPickupTime,
-        couponId: cart.couponId,
-        userId: user?.id ?? null,
-        location: attrs.location,
-        orderType: attrs.orderType,
-        paymentMode: attrs.paymentMode,
-        options: attrs.options,
-      })
-
-      if (order?.id) {
-        // Delete the cart if the order created.
-        await Cart.query().where('id', id).delete()
-      }
-
-      const data = await Order.query().where('id', order.id).firstOrFail()
-
-      // Send order in response with all associated data.
-      response.ok(data)
     } catch (error) {
       response.status(error.status).json(new ExceptionJSON(error))
     }

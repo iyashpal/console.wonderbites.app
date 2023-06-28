@@ -405,5 +405,18 @@ test.group('API [products.index]', (group) => {
       meta: {total: 10},
     })
   })
-})
 
+  test('it filters the products that are added to wishlist.', async ({client, route, assert}) => {
+    const products = await ProductFactory
+      .merge([{ isPopular: true }, { isPopular: false }, { isPopular: false }])
+      .createMany(3)
+    const user = await UserFactory.with('wishlist').create()
+    await user.wishlist.related('products').attach(products.map(({id}) => id))
+    const $response = await client.get(route('api.products.index', {}, {qs: {filters: ['wishlist', 'popular']}}))
+      .guard('api').loginAs(user)
+
+    $response.assertStatus(200)
+    assert.equal($response.body().meta.total, 1)
+    $response.assertBodyContains({ data: [{id: products[0].id}] })
+  }).tags(['@api', '@api.products', '@api.products.index', '@api.products.filters'])
+})

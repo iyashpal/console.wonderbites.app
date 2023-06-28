@@ -1021,6 +1021,7 @@ paths:
             - top-rated
             - todays-pick
             - popular
+            - wishlist
           schema:
             type: array
             default: []

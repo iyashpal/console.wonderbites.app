@@ -18,10 +18,11 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected preloadVariants (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'variants'),
-      productQuery => productQuery.preload('variants', (builder: ModelQueryBuilderContract<typeof Variant>) => {
-        this._preloadVariantIngredients(builder)
-        this._preloadVariantCategories(builder)
-      }),
+      productQuery => productQuery
+        .preload('variants', (builder: ModelQueryBuilderContract<typeof Variant>) => {
+          this._preloadVariantIngredients(builder)
+          this._preloadVariantCategories(builder)
+        }),
     ])
 
     return this
@@ -36,9 +37,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   public _preloadVariantCategories (builder: ModelQueryBuilderContract<typeof Variant>) {
     builder.match([
       this._includes('with', 'variants.categories'),
-      query => query.preload('categories', categoriesQuery => {
-        categoriesQuery.select(this.selectColumnsOf('variants.categories'))
-      }),
+      query => query
+        .preload('categories', categoriesQuery => {
+          categoriesQuery.select(this.selectColumnsOf('variants.categories'))
+        }),
     ])
 
     return this
@@ -68,9 +70,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected preloadCategories (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'categories'),
-      productQuery => productQuery.preload('categories', queryCategories => {
-        queryCategories.select(this.selectColumnsOf('categories'))
-      }),
+      productQuery => productQuery
+        .preload('categories', queryCategories => {
+          queryCategories.select(this.selectColumnsOf('categories'))
+        }),
     ])
     return this
   }
@@ -83,9 +86,10 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   protected preloadUserWishlist (): ProductBuilder {
     this.$builder.match([
       this.user().id && this._includes('with', 'wishlist'),
-      query => query.preload('wishlists', builder => {
-        builder.select(this.selectColumnsOf('wishlist')).where('user_id', this.user().id ?? 0)
-      }),
+      query => query
+        .preload('wishlists', builder => {
+          builder.select(this.selectColumnsOf('wishlist')).where('user_id', this.user().id ?? 0)
+        }),
     ])
     return this
   }
@@ -93,14 +97,15 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Preload the product media.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected preloadMedia (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'media'),
-      query => query.preload('media', builder => {
-        builder.select(this.selectColumnsOf('media')).orderBy('pivot_order')
-      }),
+      query => query
+        .preload('media', builder => {
+          builder.select(this.selectColumnsOf('media')).orderBy('pivot_order')
+        }),
     ])
 
     return this
@@ -109,14 +114,15 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Preload the product reviews.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected preloadReviews (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'reviews'),
-      query => query.preload('reviews', queryReviews => {
-        queryReviews.select(this.selectColumnsOf('reviews'))
-      }),
+      query => query
+        .preload('reviews', queryReviews => {
+          queryReviews.select(this.selectColumnsOf('reviews'))
+        }),
     ])
 
     return this
@@ -125,19 +131,21 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Preload the product ingredients.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected preloadIngredients (): ProductBuilder {
     this.$builder.match([
       this._includes('with', 'ingredients'),
-      query => query.preload('ingredients', queryIngredients => {
-        queryIngredients.match([
-          this._includes('with', 'ingredients.categories'),
-          query => query.preload('categories', queryCategory => {
-            queryCategory.select(this.selectColumnsOf('ingredients.categories'))
-          }),
-        ])
-      }),
+      query => query
+        .preload('ingredients', queryIngredients => {
+          queryIngredients.match([
+            this._includes('with', 'ingredients.categories'),
+            query => query
+              .preload('categories', queryCategory => {
+                queryCategory.select(this.selectColumnsOf('ingredients.categories'))
+              }),
+          ])
+        }),
     ])
 
     return this
@@ -146,14 +154,15 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Filter products by categories.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected filterInCategories (): ProductBuilder {
     this.$builder.match([
       this.input('inCategories', []).length,
-      query => query.whereHas('categories', (builder) => {
-        builder.whereInPivot('category_id', this.input('inCategories', []))
-      }),
+      query => query
+        .whereHas('categories', (builder) => {
+          builder.whereInPivot('category_id', this.input('inCategories', []))
+        }),
     ])
 
     return this
@@ -162,7 +171,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Filter products by search keyword.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected filterSearch (): ProductBuilder {
     this.$builder.match([
@@ -178,7 +187,7 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Filter products based on rating.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected filterTopRated () {
     this.$builder.match([
@@ -200,13 +209,14 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Filter products based on today's pick.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected filterTodaysPick () {
     this.$builder.match([
       this._includes('filters', ExtraFieldName.TODAYS_PICK, false),
-      query => query.whereHas('extraFields', builder => builder
-        .where('field', ExtraFieldName.TODAYS_PICK).where('data', 'true')),
+      query => query
+        .whereHas('extraFields', builder => builder
+          .where('field', ExtraFieldName.TODAYS_PICK).where('data', 'true')),
     ])
 
     return this
@@ -215,9 +225,9 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Filter products based on product popularity state.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
-  protected filterPopular () {
+  protected filterPopular (): ProductBuilder {
     this.$builder.match([
       this._includes('filters', ExtraFieldName.POPULAR, false),
       query => query.where('is_popular', true),
@@ -227,9 +237,27 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   }
 
   /**
+   * Filter products that are added in user's wishlist.
+   *
+   * @returns ProductBuilder
+   */
+  protected filterWishlist (): ProductBuilder {
+    this.$builder.match([
+      (this._includes('filters', 'wishlist', false) && (this.$user?.id !== undefined)),
+      query => {
+        query.whereHas('wishlists', whereHasQuery => {
+          whereHasQuery.where('wishlists.user_id', this.$user?.id ?? 0)
+        })
+      },
+    ])
+
+    return this
+  }
+
+  /**
    * Preload the product counts.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected countReviews (): ProductBuilder {
     this.$builder.match([
@@ -243,12 +271,13 @@ export default class ProductBuilder extends Builder<ModelQueryBuilderContract<ty
   /**
    * Aggregate the product reviews.
    *
-   * @returns ProductQuery
+   * @returns ProductBuilder
    */
   protected aggregateReviews (): ProductBuilder {
     this.$builder.match([
       this._includes('withAvg', 'reviews'),
-      query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
+      query => query
+        .withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
     ])
 
     return this

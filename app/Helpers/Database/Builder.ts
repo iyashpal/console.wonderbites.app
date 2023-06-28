@@ -62,7 +62,7 @@ export default abstract class Builder<T> {
   }
 
   /**
-   * Run the or get the query.
+   * Run or get the query.
    *
    * @returns ModelQueryBuilderContract<T, T>
    */
@@ -86,7 +86,7 @@ export default abstract class Builder<T> {
   }
 
   /**
-   * Map the defined queries to main query builder.
+   * Map the defined queries to the main query builder.
    *
    * @param instance Builder
    * @param query ModelQuery
@@ -104,7 +104,7 @@ export default abstract class Builder<T> {
   }
 
   /**
-   * Resolve the queries etc.
+   * Resolve the queries, etc.
    *
    * @param prefix string | null
    */
