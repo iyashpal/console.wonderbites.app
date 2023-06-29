@@ -55,7 +55,6 @@ export default class CheckoutsController {
       // Send order in response with all associated data.
       response.ok(order)
     } catch (error) {
-      console.log(error)
       response.status(error.status).json(new ExceptionJSON(error))
     }
   }

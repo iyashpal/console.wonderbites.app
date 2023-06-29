@@ -35,13 +35,13 @@ test.group('Core [ingredients.store]', (group) => {
       .guard('api').loginAs(user)
       .fields({
         name: ingredient.name,
-        categoryId: category.id,
+        category_id: category.id,
         description: ingredient.description,
         price: ingredient.price,
         unit: ingredient.unit,
         quantity: ingredient.quantity,
-        minQuantity: ingredient.minQuantity,
-        maxQuantity: ingredient.maxQuantity,
+        min_quantity: ingredient.minQuantity,
+        max_quantity: ingredient.maxQuantity,
       })
       .file('thumbnail', Application.publicPath('/images/logo.svg'))
 

@@ -1,7 +1,7 @@
+import {builder} from 'App/Helpers/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
-import {builder, OrderBuilder} from 'App/Helpers/Database'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import { Category, Ingredient, Order, Product, Variant} from 'App/Models'
 
@@ -69,7 +69,7 @@ export default class OrdersController {
     try {
       const user = auth.use('api').user
 
-      const order = await (new OrderBuilder(request))
+      const order = await builder('Order', request, 'order')
         .query().where('id', params.id).firstOrFail()
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('view', order)

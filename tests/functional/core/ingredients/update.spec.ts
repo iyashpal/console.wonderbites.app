@@ -37,14 +37,14 @@ test.group('Core [ingredients.update]', (group) => {
     const response = await client.put(route('core.ingredients.update', ingredient))
       .guard('api').loginAs(user)
       .fields({
-        categoryId: category.id,
+        category_id: category.id,
         name: 'Demo Name',
         description: ingredient.description,
         price: ingredient.price,
         unit: ingredient.unit,
         quantity: ingredient.quantity,
-        minQuantity: ingredient.minQuantity,
-        maxQuantity: ingredient.maxQuantity,
+        min_quantity: ingredient.minQuantity,
+        max_quantity: ingredient.maxQuantity,
       })
       .file('thumbnail', Application.publicPath('/images/logo.svg'))
 

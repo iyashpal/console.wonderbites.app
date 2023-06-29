@@ -18,7 +18,6 @@ export default class ProductsController {
 
       response.status(200).json(products)
     } catch (error) {
-      console.log(error)
       response.badRequest(error.messages)
     }
   }

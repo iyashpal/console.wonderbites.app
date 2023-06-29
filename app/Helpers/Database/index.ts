@@ -12,13 +12,7 @@ type BuildersNameType =
   | 'Product'
   | 'Category'
 
-type BuilderReturnType =
-  | OrderBuilder
-  | BannerBuilder
-  | ProductBuilder
-  | CategoryBuilder
-
-export function builder (name: BuildersNameType, request: RequestContract, prefix?: string): BuilderReturnType {
+export function builder (name: BuildersNameType, request: RequestContract, prefix?: string) {
   return new {
     OrderBuilder,
     BannerBuilder,

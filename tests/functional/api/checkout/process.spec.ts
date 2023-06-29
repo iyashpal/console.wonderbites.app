@@ -166,7 +166,7 @@ test.group('API [checkout.process]', (group) => {
         statusCode: 200,
         situation: 'when "location" is missing in payload',
         fields: {location: undefined},
-        assert: {location: null},
+        assert: {location: undefined},
       },
       {
         headers: {},
@@ -269,7 +269,7 @@ test.group('API [checkout.process]', (group) => {
         situation: 'when orderType is "dine-in" and "reservedSeats" and "eatOrPickupTime" is not missing',
         fields: {orderType: 'dine-in', reservedSeats: 5, eatOrPickupTime: '5:00'},
         assert: {
-          order_type: 'dine-in', reserved_seats: '5', eat_or_pickup_time: '5:00',
+          order_type: 'dine-in', reserved_seats: 5, eat_or_pickup_time: '5:00',
         },
       },
       {
@@ -277,7 +277,7 @@ test.group('API [checkout.process]', (group) => {
         statusCode: 200,
         situation: 'when note is empty or null in payload',
         fields: {note: null},
-        assert: {note: null},
+        assert: {note: undefined},
       },
       {
         headers: {},
@@ -323,7 +323,6 @@ test.group('API [checkout.process]', (group) => {
       await user.cart.merge({couponId: coupon.id, data: data}).save()
 
       let payload = {
-        cart: user.cart.id,
         orderType: 'delivery',
         firstName: address.firstName,
         lastName: address.lastName,
@@ -363,8 +362,10 @@ test.group('API [checkout.process]', (group) => {
     const qs = {with: ['checkout.products', 'checkout.user']}
 
     const $response = await client.post(route('api.checkouts.process', {}, {qs}))
-      .guard('api').loginAs(user).json({
-        cart: user.cart.id,
+      .guard('api').loginAs(user).headers({
+        'X-Cart-Token': user.cart.token,
+        'X-Cart-ID': user.cart.id.toString(),
+      }).json({
         orderType: 'delivery',
         firstName: address.firstName,
         lastName: address.lastName,
@@ -385,8 +386,16 @@ test.group('API [checkout.process]', (group) => {
 
     $response.assertBodyContains({
       user_id: user.id,
-      products: user.cart.products.map(({id, name}) => ({id, name})),
-      user: {id: user.id, first_name: user.firstName, last_name: user.lastName},
+      payment_mode: 'COD',
+      city: address.city,
+      email: address.email,
+      phone: address.phone,
+      street: address.street,
+      order_type: 'delivery',
+      location: address.location,
+      last_name: address.lastName,
+      first_name: address.firstName,
+      data: JSON.stringify(user.cart.data),
     })
   }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 })

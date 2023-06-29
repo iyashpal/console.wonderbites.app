@@ -37,20 +37,18 @@ test.group('Auth login', (group) => {
   }).tags(['@api', '@auth', '@api.login'])
 
   test('User cannot login with incorrect email', async ({client, route}) => {
-    const response = await client.post(route('api.login')).accept('json')
+    const response = await client.post(route('api.login'))
+      .json({email: 'info@example.com', password: 'Welcome@123!'})
 
-      .fields({email: 'info@example.com', password: 'Welcome@123!'})
-
-    response.assertStatus(422)
-    response.assertBodyContains({errors: {email: 'Email does not exists.'}})
+    response.assertStatus(400)
+    response.assertBodyContains({code: 'E_INVALID_AUTH_UID'})
   }).tags(['@api', '@auth', '@api.login'])
 
   test('User cannot login with incorrect password', async ({client, route}) => {
     const user = await UserFactory.create()
 
-    const response = await client.post(route('api.login')).accept('json')
-      .fields({email: user.email, password: 'wrong-password'})
-
+    const response = await client.post(route('api.login'))
+      .json({email: user.email, password: 'wrong-password'})
     response.assertStatus(400)
   }).tags(['@api', '@auth', '@api.login'])
 

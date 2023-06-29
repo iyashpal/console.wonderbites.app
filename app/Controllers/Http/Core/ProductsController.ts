@@ -80,7 +80,6 @@ export default class ProductsController {
 
       response.ok({ product, ingredients })
     } catch (error) {
-      console.log(error)
       response.status(error.status).json(new ExceptionJSON(error))
     }
   }

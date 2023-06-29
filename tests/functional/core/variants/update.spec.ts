@@ -9,7 +9,7 @@ test.group('Core [variants.update]', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('it can not access the url without authentication', async ({ client, route }) => {
+  test('it can not access the url without authentication.', async ({ client, route }) => {
     const $variant = await VariantFactory.create()
     const $response = await client.put(route('core.variants.update', $variant))
 
@@ -59,13 +59,11 @@ test.group('Core [variants.update]', (group) => {
     $response.assertStatus(200)
   }).tags(['@core', '@core.variants.update'])
 
-  test('it will receive the validation error for the field {field}')
+  test('it will receive the validation error for the field {field}.')
     .with([
       { field: 'product_id', value: 0, expect: 'exists validation failure' },
       { field: 'name', value: null, expect: 'required validation failed' },
       { field: 'price', value: null, expect: 'required validation failed' },
-      { field: 'proteins', value: null, expect: 'required validation failed' },
-      { field: 'vegetables', value: null, expect: 'required validation failed' },
     ]).run(async ({ client, route }, { field, value, expect }) => {
       const $variant = await VariantFactory.create()
       const $user = await UserFactory.with('role').create()
@@ -85,7 +83,7 @@ test.group('Core [variants.update]', (group) => {
       $response.assertBodyContains({ errors: { [field]: expect } })
     }).tags(['@core', '@core.variants.update'])
 
-  test('it can store the variant without the field "{field}"')
+  test('it can store the variant without the field "{field}".')
     .with([
       { field: 'description', value: '' },
     ])

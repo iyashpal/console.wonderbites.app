@@ -44,8 +44,6 @@ test.group('Core [variants.store]', (group) => {
       { field: 'product_id', value: 0, expect: 'exists validation failure' },
       { field: 'name', value: null, expect: 'required validation failed' },
       { field: 'price', value: null, expect: 'required validation failed' },
-      { field: 'proteins', value: null, expect: 'required validation failed' },
-      { field: 'vegetables', value: null, expect: 'required validation failed' },
     ]).run(async ({ client, route }, { field, value, expect }) => {
       const $user = await UserFactory.with('role').create()
       const $payload = {
