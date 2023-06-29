@@ -26,7 +26,8 @@ export default Factory.define(User, async ({faker}) => {
     dateOfBirth: DateTime.fromJSDate(
       faker.date.birthdate({min: 20, max: 40})
     ),
-    mobile: faker.phone.number('+91 ##########'),
+    areaCode: faker.phone.number('+###'),
+    mobile: faker.phone.number('##########'),
     email: faker.internet.email(),
     avatar: attachment,
     password: 'Welcome@123!',

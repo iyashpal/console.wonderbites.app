@@ -31,7 +31,8 @@ export default class UpdateValidator {
       rules.maxLength(255),
     ]),
     date_of_birth: schema.date.optional(),
-    avatar: schema.file.optional({ size: '1mb' }),
+    area_code: schema.string.optional(),
+    avatar: schema.file.optional(),
   })
 
   /**

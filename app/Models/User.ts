@@ -27,6 +27,9 @@ export default class User extends Notifiable {
   public email: string
 
   @column()
+  public areaCode: string
+
+  @column()
   public mobile: string
 
   @attachment({folder: 'avatars', preComputeUrl: true})

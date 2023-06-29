@@ -1,4 +1,4 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import {schema, CustomMessages, rules} from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class RegisterValidator {
@@ -23,7 +23,37 @@ export default class RegisterValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    first_name: schema.string({trim: true}),
+
+    last_name: schema.string({trim: true}),
+    area_code: schema.string({trim: true}, [
+      rules.requiredIfExists('mobile'),
+    ]),
+    mobile: schema.string({trim: true}, [
+      // rules.mobile({ strict: true }),
+      rules.unique({table: 'users', column: 'mobile'}),
+    ]),
+
+    email: schema.string({trim: true}, [
+      rules.email(),
+      rules.maxLength(255),
+      rules.unique({table: 'users', column: 'email'}),
+    ]),
+    avatar: schema.file.optional({
+      extnames: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'],
+    }),
+
+    password: schema.string({trim: true}, [
+      rules.confirmed(),
+    ]),
+
+    address_id: schema.number.optional(),
+
+    remember_me_token: schema.string.optional({trim: true}),
+
+    status: schema.number.optional(),
+  })
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -36,5 +66,17 @@ export default class RegisterValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'first_name.required': 'First name is required.',
+    'last_name.required': 'Last name is required.',
+    'mobile.required': 'Mobile no. is required.',
+    'mobile.mobile': 'Enter a correct mobile no.',
+    'mobile.unique': 'The mobile no. already registered.',
+    'email.required': 'Email address is required.',
+    'email.email': 'Enter a valid email.',
+    'email.max_length': 'Email field length shouldn\'t exceed 255 characters.',
+    'email.unique': 'The email address already taken.',
+    'password.required': 'Choose a password.',
+    'password.confirmed': 'Password didn\'t match.',
+  }
 }

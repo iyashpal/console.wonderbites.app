@@ -2,7 +2,7 @@ import {User} from 'App/Models'
 import ExceptionJSON from 'App/Helpers/ExceptionJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import StoreValidator from 'App/Validators/API/User/StoreValidator'
+import RegisterValidator from 'App/Validators/API/Auth/RegisterValidator'
 
 export default class RegisterController {
   /**
@@ -13,7 +13,7 @@ export default class RegisterController {
    */
   public async handle ({ request, response }: HttpContextContract) {
     try {
-      const payload = await request.validate(StoreValidator)
+      const payload = await request.validate(RegisterValidator)
 
       const avatar = payload.avatar ? Attachment.fromFile(request.file('avatar')!) : null
 

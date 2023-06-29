@@ -284,9 +284,13 @@ paths:
                   type: string
                   example: Doe
                   description: Last name of the user.
+                area_code:
+                  type: string
+                  example: '+355'
+                  description: Country area code.
                 mobile:
                   type: string
-                  example: +910000000000
+                  example: 0000000000
                   description: Login mobile number.
                 email:
                   type: string
@@ -2202,9 +2206,13 @@ components:
                 type: string
                 example: Doe
                 description: Last name of the user.
+              area_code:
+                type: string
+                example: '+355'
+                description: Country area code for the entered mobile no.
               mobile:
                 type: string
-                example: +xx xxxx-xxxx
+                example: xxxx-xxxx
                 description: Mobile number of the user. User can also login with this number.
               email:
                 type: string
