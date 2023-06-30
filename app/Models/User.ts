@@ -72,7 +72,7 @@ export default class User extends Notifiable {
   }
 
   /**
-   * Relation to default address of user.
+   * Relation to the default address of user.
    */
   @belongsTo(() => Address)
   public address: BelongsTo<typeof Address>

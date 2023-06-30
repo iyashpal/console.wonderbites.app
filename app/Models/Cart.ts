@@ -1,6 +1,6 @@
 import {DateTime} from 'luxon'
-import {User, Coupon, Product, Ingredient} from './index'
-import {BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany, scope} from '@ioc:Adonis/Lucid/Orm'
+import {User, Coupon} from './index'
+import {BaseModel, BelongsTo, belongsTo, column, scope} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Cart extends BaseModel {
   @column({isPrimary: true})
@@ -15,7 +15,7 @@ export default class Cart extends BaseModel {
   @column()
   public couponId: number | null
 
-  @column({ prepare: value => JSON.stringify(value) })
+  @column({prepare: value => JSON.stringify(value)})
   public data: CartDataProduct[]
 
   @column()
@@ -26,18 +26,6 @@ export default class Cart extends BaseModel {
 
   @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
-
-  @manyToMany(() => Product, {
-    pivotColumns: ['id', 'qty'],
-    pivotTimestamps: true,
-  })
-  public products: ManyToMany<typeof Product>
-
-  @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'qty', 'price', 'product_id'],
-    pivotTimestamps: true,
-  })
-  public ingredients: ManyToMany<typeof Ingredient>
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>

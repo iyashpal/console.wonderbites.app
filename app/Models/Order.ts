@@ -1,7 +1,7 @@
 import {DateTime} from 'luxon'
-import {User, Product, Ingredient, Coupon, Review} from '.'
-import {BelongsTo, ManyToMany, BaseModel, scope} from '@ioc:Adonis/Lucid/Orm'
-import {column, belongsTo, manyToMany, hasOne, HasOne} from '@ioc:Adonis/Lucid/Orm'
+import {User, Coupon, Review} from '.'
+import {BelongsTo, BaseModel, scope} from '@ioc:Adonis/Lucid/Orm'
+import {column, belongsTo, hasOne, HasOne} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Order extends BaseModel {
   @column({isPrimary: true})
@@ -75,18 +75,6 @@ export default class Order extends BaseModel {
 
   @belongsTo(() => Coupon)
   public coupon: BelongsTo<typeof Coupon>
-
-  @manyToMany(() => Product, {
-    pivotColumns: ['id', 'qty', 'price'],
-    pivotTimestamps: true,
-  })
-  public products: ManyToMany<typeof Product>
-
-  @manyToMany(() => Ingredient, {
-    pivotColumns: ['id', 'qty', 'price', 'product_id'],
-    pivotTimestamps: true,
-  })
-  public ingredients: ManyToMany<typeof Ingredient>
 
   @hasOne(() => Review, {
     foreignKey: 'reviewableId',

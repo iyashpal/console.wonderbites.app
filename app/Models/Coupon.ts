@@ -1,9 +1,9 @@
-import { Cart } from '.'
-import { DateTime } from 'luxon'
-import { BaseModel, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {Cart, Order} from '.'
+import {DateTime} from 'luxon'
+import {BaseModel, column, computed, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
 
 export default class Coupon extends BaseModel {
-  @column({ isPrimary: true })
+  @column({isPrimary: true})
   public id: number
 
   @column()
@@ -21,28 +21,31 @@ export default class Coupon extends BaseModel {
   @column()
   public discountValue: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({autoCreate: true})
   public startedAt: DateTime
 
   @column.dateTime()
   public expiredAt: DateTime
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({autoCreate: true})
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({autoCreate: true, autoUpdate: true})
   public updatedAt: DateTime
 
   @hasMany(() => Cart)
   public carts: HasMany<typeof Cart>
 
+  @hasMany(() => Order)
+  public orders: HasMany<typeof Order>
+
   @computed()
   public get discount () {
     if (this.discountType === 'price') {
-      return `${ this.discountValue }L`
+      return `${this.discountValue}L`
     }
 
-    return `${ this.discountValue }%`
+    return `${this.discountValue}%`
   }
 
   @computed()
