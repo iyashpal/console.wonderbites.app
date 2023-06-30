@@ -384,6 +384,12 @@
           "propertyName": "compactOutput",
           "type": "boolean",
           "description": "A compact single-line output"
+        },
+        {
+          "name": "disable-locks",
+          "propertyName": "disableLocks",
+          "type": "boolean",
+          "description": "Disable locks acquired to run migrations safely"
         }
       ]
     },
@@ -427,6 +433,12 @@
           "propertyName": "compactOutput",
           "type": "boolean",
           "description": "A compact single-line output"
+        },
+        {
+          "name": "disable-locks",
+          "propertyName": "disableLocks",
+          "type": "boolean",
+          "description": "Disable locks acquired to run migrations safely"
         }
       ]
     },
@@ -477,6 +489,12 @@
           "propertyName": "dryRun",
           "type": "boolean",
           "description": "Do not run actual queries. Instead view the SQL output"
+        },
+        {
+          "name": "disable-locks",
+          "propertyName": "disableLocks",
+          "type": "boolean",
+          "description": "Disable locks acquired to run migrations safely"
         }
       ]
     },
@@ -514,6 +532,12 @@
           "propertyName": "seed",
           "type": "boolean",
           "description": "Run seeders"
+        },
+        {
+          "name": "disable-locks",
+          "propertyName": "disableLocks",
+          "type": "boolean",
+          "description": "Disable locks acquired to run migrations safely"
         }
       ]
     },
@@ -557,6 +581,12 @@
           "propertyName": "dropTypes",
           "type": "boolean",
           "description": "Drop all custom types (Postgres only)"
+        },
+        {
+          "name": "disable-locks",
+          "propertyName": "disableLocks",
+          "type": "boolean",
+          "description": "Disable locks acquired to run migrations safely"
         }
       ]
     },
@@ -618,7 +648,7 @@
         "loadApp": true,
         "stayAlive": true
       },
-      "commandPath": "@setten/bull-queue/build/commands/QueueListener",
+      "commandPath": "@rlanz/bull-queue/build/commands/QueueListener",
       "commandName": "queue:listen",
       "description": "Listen to one or multiple queues",
       "args": [],
@@ -638,7 +668,7 @@
         "loadApp": true,
         "stayAlive": false
       },
-      "commandPath": "@setten/bull-queue/build/commands/MakeJob",
+      "commandPath": "@rlanz/bull-queue/build/commands/MakeJob",
       "commandName": "make:job",
       "description": "Make a new dispatch-able job",
       "args": [

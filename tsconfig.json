@@ -60,7 +60,7 @@
       "@adonisjs/attachment-lite",
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/route-model-binding/build/adonis-typings",
-      "@setten/bull-queue"
+      "@rlanz/bull-queue"
     ]
   }
 }
