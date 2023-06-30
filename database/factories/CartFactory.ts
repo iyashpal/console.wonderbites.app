@@ -1,9 +1,9 @@
 import Cart from 'App/Models/Cart'
+import { UserFactory } from './index'
 import { uniqueHash } from 'App/Helpers/Core'
 import Factory from '@ioc:Adonis/Lucid/Factory'
-import { IngredientFactory, ProductFactory, UserFactory } from '.'
 
-export default Factory.define(Cart, ({ faker }) => {
+export default Factory.define(Cart, ({ }) => {
   return {
     user_id: null,
     token: uniqueHash(),
@@ -12,6 +12,4 @@ export default Factory.define(Cart, ({ faker }) => {
   }
 })
   .relation('user', () => UserFactory)
-  .relation('products', () => ProductFactory)
-  .relation('ingredients', () => IngredientFactory)
   .build()
