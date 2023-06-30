@@ -41,15 +41,11 @@ test.group('API [checkout.process]', (group) => {
 
     await user.cart.merge({couponId: coupon.id}).save()
 
-    await user.cart.related('products').attach([product.id])
-
     const cartIngredients = {}
 
     product.ingredients.map(({id}) => {
       cartIngredients[id] = {product_id: product.id}
     })
-
-    await user.cart.related('ingredients').attach(cartIngredients)
 
     const $response = await client.post(route('api.checkouts.process'))
       .guard('api').loginAs(user).json({
@@ -349,9 +345,7 @@ test.group('API [checkout.process]', (group) => {
     }).tags(['@api', '@api.checkout', '@api.checkouts.process', '@api.checkouts.debug'])
 
   test('it can delete the cart on order creation from the referenced cart.', async ({client, route, assert}) => {
-    const user = await UserFactory
-      .with('cart', 1, cart => cart.with('products', 5))
-      .with('addresses').create()
+    const user = await UserFactory.with('cart').with('addresses').create()
 
     const coupon = await CouponFactory.create()
 
