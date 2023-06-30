@@ -62,7 +62,7 @@ export default class Order extends BaseModel {
   public options: any
 
   @column()
-  public status: number
+  public status: string
 
   @column.dateTime({autoCreate: true})
   public createdAt: DateTime

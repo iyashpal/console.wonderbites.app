@@ -5,7 +5,7 @@ import {RequestContract} from '@ioc:Adonis/Core/Request'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
 
-export default class CheckoutsController {
+export default class CheckoutController {
   protected checkoutHeaders (request: RequestContract) {
     return {
       id: request.header('X-Cart-ID', 0) as number,
@@ -13,7 +13,7 @@ export default class CheckoutsController {
     }
   }
 
-  public async process ({auth, response, request}: HttpContextContract) {
+  public async handle ({auth, response, request}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
 

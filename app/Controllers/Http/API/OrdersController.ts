@@ -1,12 +1,13 @@
 import {builder} from 'App/Helpers/Database'
-import {OrderStatus} from 'App/Models/Enums/Order'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
+import {OrderStatus} from 'App/Models/Enums/Order'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
-import { Category, Ingredient, Order, Product, Variant} from 'App/Models'
+import UpdateValidator from 'App/Validators/API/Orders/UpdateValidator'
+import {Category, Ingredient, Order, Product, Variant} from 'App/Models'
 
 export default class OrdersController {
-  protected async data (request: RequestContract, order: Order) {
+  private async data (request: RequestContract, order: Order) {
     const products = async () => {
       if (request.input('with', []).includes('products')) {
         return Product.query().whereIn('id', order.ProductIDs())
@@ -51,13 +52,14 @@ export default class OrdersController {
     try {
       const user = auth.use('api').user!
 
+      const {
+        page = 1, limit = 10, order = 'desc', orderBy = 'created_at',
+      } = request.all() as { page: number, limit: number, order: 'asc' | 'desc', orderBy: string }
+
       await bouncer.forUser(user).with('OrderPolicy').authorize('viewList')
 
-      const orders = await builder('Order', request, 'orders').query()
-
-        .where('user_id', user.id)
-        .orderBy(request.input('orderBy', 'created_at'), request.input('order', 'desc'))
-        .paginate(request.input('page', 1), request.input('limit', 50))
+      const orders = await builder('Order', request, 'orders')
+        .query().where('user_id', user.id).orderBy(orderBy, order).paginate(page, limit)
 
       response.status(200).json(orders)
     } catch (error) {
@@ -85,15 +87,19 @@ export default class OrdersController {
    *
    * @param param0 {HttpContextContract}
    */
-  public async cancel ({auth, bouncer, params: {id}, response}: HttpContextContract) {
+  public async update ({auth, bouncer, params: {id}, request, response}: HttpContextContract) {
     try {
       const user = auth.use('api').user!
+
+      const {action} = await request.validate(UpdateValidator)
 
       const order = await Order.query().where('id', id).firstOrFail()
 
       await bouncer.forUser(user).with('OrderPolicy').authorize('update', order)
 
-      const canceledOrder = await order.merge({status: OrderStatus.CANCELED}).save()
+      const canceledOrder = await order.merge({
+        ...(action === 'cancel' ? {status: OrderStatus.CANCELED} : {}),
+      }).save()
 
       response.ok(canceledOrder)
     } catch (error) {

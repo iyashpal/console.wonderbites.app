@@ -37,8 +37,7 @@ Route.group(() => {
 
     Route.resource('addresses', 'AddressesController').apiOnly()
 
-    Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show'])
-    Route.put('orders/:id/cancel', 'OrdersController.cancel').as('orders.cancel')
+    Route.resource('orders', 'OrdersController').apiOnly().only(['index', 'show', 'update'])
 
     Route.resource('reviews', 'ReviewsController').apiOnly().only(['store', 'update'])
 
@@ -72,7 +71,7 @@ Route.group(() => {
 
     Route.resource('banners', 'BannersController').apiOnly().only(['index', 'show'])
 
-    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutsController.process').as('checkouts.process')
+    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutController').as('checkouts.process')
 
     Route.get('cart', 'CartsController.show').as('carts.show')
     Route.route('cart', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
