@@ -24,11 +24,10 @@ test.group('API [wishlists.clean]', (group) => {
 
     $response.assertStatus(200)
 
-    const { products, ingredients } = $response.body()
+    const { products } = $response.body()
 
     assert.equal(products?.length, 0)
-    assert.equal(ingredients?.length, 0)
 
-    $response.assertBodyContains({ id: user.wishlist.id, products: [], ingredients: [] })
+    $response.assertBodyContains({ id: user.wishlist.id, products: [] })
   }).tags(['@api', '@api.wishlists', '@api.wishlists.clean'])
 })
