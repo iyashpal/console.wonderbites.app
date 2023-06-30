@@ -1,5 +1,5 @@
 import {Product} from 'App/Models'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class IngredientProductAction {
@@ -21,7 +21,7 @@ export default class IngredientProductAction {
 
       response.ok({success: true})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

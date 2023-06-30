@@ -3,7 +3,7 @@ import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import StoreValidator from 'App/Validators/Core/Users/StoreValidator'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import UpdateValidator from 'App/Validators/Core/Users/UpdateValidator'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class UsersController {
   public async index ({response, request}: HttpContextContract) {
@@ -12,7 +12,7 @@ export default class UsersController {
       const users = await User.query().preload('role').paginate(page, limit)
       response.ok(users)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -34,7 +34,7 @@ export default class UsersController {
 
       response.ok(user)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -47,7 +47,7 @@ export default class UsersController {
 
       response.ok({user})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -68,7 +68,7 @@ export default class UsersController {
 
       response.ok(user)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -84,7 +84,7 @@ export default class UsersController {
 
       response.unauthorized({message: 'You can not delete your own account.'})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

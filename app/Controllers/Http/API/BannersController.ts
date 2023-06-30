@@ -1,5 +1,5 @@
 import {BannerBuilder} from 'App/Helpers/Database'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class BannersController {
@@ -11,7 +11,7 @@ export default class BannersController {
 
       response.json(banners)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -27,7 +27,7 @@ export default class BannersController {
 
       response.json(banner)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 

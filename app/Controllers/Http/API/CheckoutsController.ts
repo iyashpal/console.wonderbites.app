@@ -1,6 +1,6 @@
 import {Cart, Order} from 'App/Models'
 import {uniqueHash} from 'App/Helpers/Core'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
@@ -55,7 +55,7 @@ export default class CheckoutsController {
       // Send order in response with all associated data.
       response.ok(order)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

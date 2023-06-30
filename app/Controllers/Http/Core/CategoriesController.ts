@@ -6,7 +6,7 @@ import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Categories/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Categories/UpdateValidator'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class CategoriesController {
   public async index ({request, response}: HttpContextContract) {
@@ -17,7 +17,7 @@ export default class CategoriesController {
 
       response.json(categories)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -37,7 +37,7 @@ export default class CategoriesController {
 
       response.json(category)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -48,7 +48,7 @@ export default class CategoriesController {
         .where('id', params.id).whereNull('deleted_at').firstOrFail()
       response.json({category})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -58,7 +58,7 @@ export default class CategoriesController {
       const categories = await Category.query().where('id', '<>', params.id).withScopes(scopes => scopes.root())
       response.json({category, categories})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -75,7 +75,7 @@ export default class CategoriesController {
 
       response.json(category)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 

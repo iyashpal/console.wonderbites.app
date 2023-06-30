@@ -1,6 +1,6 @@
 import {builder} from 'App/Helpers/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import { Category, Ingredient, Order, Product, Variant} from 'App/Models'
@@ -61,7 +61,7 @@ export default class OrdersController {
 
       response.status(200).json(orders)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -76,7 +76,7 @@ export default class OrdersController {
 
       response.status(200).json(await this.data(request, order))
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -97,7 +97,7 @@ export default class OrdersController {
 
       response.ok(canceledOrder)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

@@ -1,5 +1,5 @@
 import {User} from 'App/Models'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import RegisterValidator from 'App/Validators/API/Auth/RegisterValidator'
@@ -21,7 +21,7 @@ export default class RegisterController {
 
       response.status(200).json(user)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

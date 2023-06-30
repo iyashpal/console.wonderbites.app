@@ -4,7 +4,7 @@ type ErrorField = { [key: string]: string[] }
 type ResolvedErrorField = { [key: string]: string }
 type JsonErrorField = { errors: { field: string, message: string, rule: string }[] }
 
-export default class ExceptionJSON {
+export default class ErrorJSON {
   /**
    * Exception name
    *

@@ -1,6 +1,6 @@
 import {uniqueHash} from 'App/Helpers/Core'
 import {types} from '@ioc:Adonis/Core/Helpers'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
@@ -97,7 +97,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -120,7 +120,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

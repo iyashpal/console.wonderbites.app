@@ -4,7 +4,7 @@ import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Products/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Products/UpdateValidator'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class ProductsController {
   public async index ({ response, request }: HttpContextContract) {
@@ -25,7 +25,7 @@ export default class ProductsController {
 
       response.ok({ categories })
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -56,7 +56,7 @@ export default class ProductsController {
 
       response.json(product)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -80,7 +80,7 @@ export default class ProductsController {
 
       response.ok({ product, ingredients })
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -98,7 +98,7 @@ export default class ProductsController {
 
       response.ok({ product, categories, category })
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -133,7 +133,7 @@ export default class ProductsController {
 
       response.ok(product)
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 
@@ -145,7 +145,7 @@ export default class ProductsController {
 
       response.ok({ success: true })
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

@@ -6,7 +6,7 @@ import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Cuisines/UpdateValidator'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
@@ -121,7 +121,7 @@ export default class CuisinesController {
 
       return response.json({cuisine})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Ingredient, Variant } from 'App/Models'
-import ExceptionJSON from 'App/Helpers/ExceptionJSON'
+import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class IngredientVariantController {
@@ -24,7 +24,7 @@ export default class IngredientVariantController {
       await variant.related('ingredients').detach([params.ingredient_id])
       response.ok({success: true})
     } catch (error) {
-      response.status(error.status).json(new ExceptionJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }
