@@ -1,8 +1,8 @@
-import {Order} from 'App/Models'
 import {test} from '@japa/runner'
+import {Order} from 'App/Models/index'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
-import {IngredientFactory, OrderFactory, ReviewFactory, UserFactory} from 'Database/factories'
+import {IngredientFactory, OrderFactory, ProductFactory, ReviewFactory, UserFactory} from 'Database/factories'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -42,41 +42,29 @@ test.group('API [orders.index]', (group) => {
     })
   }).tags(['@api', '@api.orders', '@api.orders.index'])
 
-  test('it can list upcoming orders.', async ({client, route, assert}) => {
-    const user = await UserFactory.create()
+  test('it can filter {status} orders.')
+    .with([{count: 2, status: 'past'}, {count: 6, status: 'upcoming'}])
+    .run(async ({client, route, assert}, {count, status}) => {
+      const user = await UserFactory.create()
 
-    await OrderFactory.merge([
-      {userId: user.id, status: OrderStatus.PREPARING},
-      {userId: user.id, status: OrderStatus.IN_TRANSIT},
-      {userId: user.id, status: OrderStatus.PLACED},
-      {userId: user.id, status: OrderStatus.CONFIRMED},
-      {userId: user.id, status: OrderStatus.PREPARING},
-      {userId: user.id, status: OrderStatus.IN_TRANSIT},
-    ]).createMany(6)
+      await OrderFactory.merge([
+        {userId: user.id, status: OrderStatus.PREPARING},
+        {userId: user.id, status: OrderStatus.IN_TRANSIT},
+        {userId: user.id, status: OrderStatus.PLACED},
+        {userId: user.id, status: OrderStatus.CONFIRMED},
+        {userId: user.id, status: OrderStatus.PREPARING},
+        {userId: user.id, status: OrderStatus.IN_TRANSIT},
+        {userId: user.id, status: OrderStatus.DELIVERED},
+        {userId: user.id, status: OrderStatus.CANCELED},
+      ]).createMany(8)
 
-    const response = await client.get(route('api.orders.index', {}, {qs: {status: 'upcoming'}}))
-      .guard('api').loginAs(user)
+      const response = await client.get(route('api.orders.index', {}, {qs: {status}}))
+        .guard('api').loginAs(user)
 
-    response.assertStatus(200)
+      response.assertStatus(200)
 
-    assert.equal(response.body().data.length, 6)
-  }).tags(['@api', '@api.orders', '@api.orders.index'])
-
-  test('it can list past orders.', async ({client, route, assert}) => {
-    const user = await UserFactory.create()
-
-    await OrderFactory.merge([
-      {userId: user.id, status: OrderStatus.DELIVERED},
-      {userId: user.id, status: OrderStatus.CANCELED},
-    ]).createMany(2)
-
-    const response = await client.get(route('api.orders.index', {}, {qs: {status: 'past'}}))
-      .guard('api').loginAs(user)
-
-    response.assertStatus(200)
-
-    assert.equal(response.body().data.length, 2)
-  }).tags(['@api', '@api.orders', '@api.orders.index'])
+      assert.equal(response.body().data.length, count)
+    }).tags(['@api', '@api.orders', '@api.orders.index'])
 
   test('it can list the orders by status - "{name}".').with([
     {name: 'placed', status: OrderStatus.PLACED},
@@ -130,19 +118,20 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list the orders with products.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
-    const orders = await OrderFactory.with('products', 3)
-      .merge({userId: user.id}).createMany(10)
+    const products = await ProductFactory.createMany(5)
+    const orders = await OrderFactory.merge({
+      userId: user.id, data: products.map(product => ({id: product.id, quantity: 5})),
+    }).createMany(10)
 
     const request = await client.get(route('api.orders.index', {}, {qs: {with: ['orders.products']}}))
       .guard('api').loginAs(user)
 
     request.assertStatus(200)
     const {data} = request.body()
-
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, products}) => ({
+      data: orders.map(({id}) => ({
         id,
       })),
     })
@@ -150,9 +139,7 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list the orders with products and product images.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
-    const orders = await OrderFactory
-      .with('products', 3, product => product.with('media', 10))
-      .merge({userId: user.id}).createMany(10)
+    const orders = await OrderFactory.merge({userId: user.id}).createMany(10)
 
     const qs = {with: ['orders.products', 'orders.products.media']}
 
@@ -165,7 +152,7 @@ test.group('API [orders.index]', (group) => {
     assert.equal(data.length, 10)
 
     request.assertBodyContains({
-      data: orders.map(({id, products}) => ({
+      data: orders.map(({id}) => ({
         id,
       })),
     })
@@ -174,19 +161,13 @@ test.group('API [orders.index]', (group) => {
   test('it can list the orders with ingredients.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
     const ingredients = await IngredientFactory.createMany(5)
-    const orders = await OrderFactory.with('products', 1)
-      .with('ingredients', 3, builder => builder.pivotAttributes({product_id: 1}))
-      .merge({userId: user.id}).createMany(10)
+    const orders = await OrderFactory.merge({userId: user.id}).createMany(10)
 
     orders.map(async (order) => {
       let data = {}
       ingredients.map(({id}) => {
         data[id] = {product_id: 1}
       })
-
-      await order.related('ingredients').attach(data)
-
-      await order.load('ingredients')
     })
 
     const qs = {with: ['orders.ingredients']}
@@ -228,7 +209,7 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list orders with coupon.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
-    const orders = await OrderFactory.with('products', 1).with('coupon')
+    const orders = await OrderFactory.with('coupon')
       .merge({userId: user.id}).createMany(10)
 
     const qs = {with: ['orders.coupon']}
@@ -249,8 +230,7 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list orders with user.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
-    const orders = await OrderFactory.with('products', 1)
-      .merge({userId: user.id}).createMany(10)
+    const orders = await OrderFactory.merge({userId: user.id}).createMany(10)
 
     const qs = {with: ['orders.user']}
 
@@ -271,8 +251,7 @@ test.group('API [orders.index]', (group) => {
   test('it can list orders with review.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
 
-    const order = await OrderFactory.with('products', 1)
-      .merge({userId: user.id}).create()
+    const order = await OrderFactory.merge({userId: user.id}).create()
 
     const review = await ReviewFactory.merge({
       reviewable: 'Order', reviewableId: order.id, userId: user.id,
@@ -300,26 +279,11 @@ test.group('API [orders.index]', (group) => {
   test('it can list orders with products, address, coupon, user etc.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
 
-    const ingredients = await IngredientFactory.createMany(5)
-
-    const order = await OrderFactory.with('coupon')
-      .with('products', 3, product => product.with('media', 10))
-      .merge({userId: user.id}).create()
+    const order = await OrderFactory.with('coupon').merge({userId: user.id}).create()
 
     const review = await ReviewFactory.merge({
       reviewable: 'Order', reviewableId: order.id, userId: user.id,
     }).create()
-
-    const [product] = order.products
-
-    let ingredientData = {}
-    ingredients.map(({id}) => {
-      ingredientData[id] = {product_id: product.id, qty: 4}
-    })
-
-    await order.related('ingredients').attach(ingredientData)
-
-    await order.load('ingredients')
 
     const qs = {
       with: [

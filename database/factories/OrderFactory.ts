@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
 import Order from 'App/Models/Order'
-import Factory from '@ioc:Adonis/Lucid/Factory'
-import { CouponFactory, IngredientFactory, ProductFactory, ReviewFactory, UserFactory } from '.'
 import { uniqueHash } from 'App/Helpers/Core'
+import Factory from '@ioc:Adonis/Lucid/Factory'
+import {OrderStatus} from 'App/Models/Enums/Order'
+import { CouponFactory, ReviewFactory, UserFactory } from './index'
 
 export default Factory.define(Order, ({ faker }) => ({
   userId: 0,
@@ -17,13 +18,11 @@ export default Factory.define(Order, ({ faker }) => ({
   paymentMode: 'COD',
   note: faker.lorem.paragraph(),
   options: {},
-  status: 0,
+  status: OrderStatus.PLACED,
   createdAt: DateTime.now(),
   updatedAt: DateTime.now(),
 }))
   .relation('user', () => UserFactory)
   .relation('coupon', () => CouponFactory)
   .relation('review', () => ReviewFactory)
-  .relation('products', () => ProductFactory)
-  .relation('ingredients', () => IngredientFactory)
   .build()
