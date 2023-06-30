@@ -17,7 +17,6 @@ export default class CartsController {
   /**
    * Get cart of current logged-in/guest user.
    *
-   * @param request RequestContract
    * @param user User
    * @param id number
    * @param token string
