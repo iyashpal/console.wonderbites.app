@@ -4,7 +4,7 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { file } from '@ioc:Adonis/Core/Helpers'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { CategoryFactory, IngredientFactory, MediaFactory, ReviewFactory, UserFactory, VariantFactory } from '.'
+import { CategoryFactory, IngredientFactory, MediaFactory, ReviewFactory, UserFactory, VariantFactory } from './index'
 
 export default Factory.define(Product, async ({ faker }) => {
   // User profile attachment

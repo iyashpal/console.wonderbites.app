@@ -1822,7 +1822,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Orders'
-  /orders/{id}/cancel:
     put:
       tags:
         - User > Orders
@@ -1835,6 +1834,15 @@ paths:
           schema:
             type: string
           example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  example: "placed | confirmed | preparing | in-transit | delivered | canceled"
       responses:
         "200":
           description: Successful response
