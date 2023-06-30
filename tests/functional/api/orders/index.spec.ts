@@ -2,7 +2,7 @@ import {test} from '@japa/runner'
 import {Order} from 'App/Models/index'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {OrderStatus} from 'App/Models/Enums/Order'
-import {IngredientFactory, OrderFactory, ProductFactory, ReviewFactory, UserFactory} from 'Database/factories'
+import { OrderFactory, ProductFactory, ReviewFactory, UserFactory} from 'Database/factories'
 
 test.group('API [orders.index]', (group) => {
   group.each.setup(async () => {
@@ -160,15 +160,7 @@ test.group('API [orders.index]', (group) => {
 
   test('it can list the orders with ingredients.', async ({client, route, assert}) => {
     const user = await UserFactory.create()
-    const ingredients = await IngredientFactory.createMany(5)
     const orders = await OrderFactory.merge({userId: user.id}).createMany(10)
-
-    orders.map(async (order) => {
-      let data = {}
-      ingredients.map(({id}) => {
-        data[id] = {product_id: 1}
-      })
-    })
 
     const qs = {with: ['orders.ingredients']}
 
