@@ -1,6 +1,7 @@
 import {test} from '@japa/runner'
 import {UserFactory} from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
+import {string} from '@ioc:Adonis/Core/Helpers'
 
 test.group('Auth login', (group) => {
   /**
@@ -38,7 +39,7 @@ test.group('Auth login', (group) => {
 
   test('User cannot login with incorrect email', async ({client, route}) => {
     const response = await client.post(route('api.login'))
-      .json({email: 'info@example.com', password: 'Welcome@123!'})
+      .json({email: `${string.generateRandom(10)}@example.com`, password: 'Welcome@123!'})
 
     response.assertStatus(400)
     response.assertBodyContains({code: 'E_INVALID_AUTH_UID'})
@@ -61,4 +62,23 @@ test.group('Auth login', (group) => {
     response.assertStatus(200)
     response.assertBodyContains({type: 'bearer'})
   }).tags(['@api', '@auth', '@api.login'])
+
+  test('it supports login brute force protection.').run(async ({client, route}) => {
+    const email = `${string.generateRandom(5)}@example.com`
+    await UserFactory.merge({email}).create()
+
+    const body = {email, password: 'secret'}
+
+    const request = async (body: { [key: string]: string }) => {
+      return await client.post(route('api.login')).json(body)
+    }
+
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(400);
+    (await request(body)).assertStatus(429)
+  }).tags(['@api', '@auth', '@api.login', '@api.login.throttle'])
 })
