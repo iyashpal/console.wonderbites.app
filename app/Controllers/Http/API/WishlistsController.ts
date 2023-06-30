@@ -1,6 +1,6 @@
-import Wishlist from 'App/Models/Wishlist'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import {Wishlist} from 'App/Models/index'
+import {RequestContract} from '@ioc:Adonis/Core/Request'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class WishlistsController {
   /**
@@ -8,19 +8,15 @@ export default class WishlistsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({ auth, response, request }: HttpContextContract) {
+  public async show ({auth, response, request}: HttpContextContract) {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
-      { userId: user.id }, // Search payload
-      { ipAddress: request.ip() } // Save payload
+      {userId: user.id}, // Search payload
+      {ipAddress: request.ip()} // Save payload
     )
 
-    await wishlist.load('products', (queryBuilder) => {
-      queryBuilder.preload('media', (builder) => {
-        builder.select('id')
-      })
-    })
+    await wishlist.load('products')
 
     response.json(await this.wishlistWithRequestedData(request, wishlist.id))
   }
@@ -30,12 +26,12 @@ export default class WishlistsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({ auth, response, request }: HttpContextContract) {
+  public async update ({auth, response, request}: HttpContextContract) {
     const user = auth.use('api').user!
 
     const wishlist = await user.related('wishlist').firstOrCreate(
-      { userId: user.id }, // Search payload
-      { ipAddress: request.ip() } // Save payload
+      {userId: user.id}, // Search payload
+      {ipAddress: request.ip()} // Save payload
     )
 
     // Add products to wishlist.
@@ -52,21 +48,20 @@ export default class WishlistsController {
   }
 
   /**
-   * Remove everything from wishlist.
-   * 
+   * Remove everything from the wishlist.
+   *
    * @param param0 HttpContextContract
    */
-  public async clean ({ auth, request, response }: HttpContextContract) {
+  public async clean ({auth, request, response}: HttpContextContract) {
     const user = auth.use('api').user!
 
     try {
       const wishlist = await user.related('wishlist').firstOrCreate(
-        { userId: user.id }, // Search payload
-        { ipAddress: request.ip() } // Save payload
+        {userId: user.id}, // Search payload
+        {ipAddress: request.ip()} // Save payload
       )
 
       await wishlist.related('products').sync([])
-      await wishlist.related('ingredients').sync([])
 
       response.json(await this.wishlistWithRequestedData(request, wishlist.id))
     } catch (error) {
@@ -76,7 +71,7 @@ export default class WishlistsController {
 
   /**
    * Get the wishlist requested data.
-   * 
+   *
    * @param request RequestContract
    * @param id number
    * @returns Wishlist
@@ -85,12 +80,6 @@ export default class WishlistsController {
     return await Wishlist.query().match([
       request.input('with', []).includes('wishlist.products'),
       query => query.preload('products', builder => builder
-        // Load product media if requested.
-        .match([
-          request.input('with', []).includes('wishlist.products.media'),
-          query => query.preload('media'),
-        ])
-
         // Load product ingredients if requested.
         .match([
           request.input('with', []).includes('wishlist.products.ingredients'),
@@ -115,9 +104,6 @@ export default class WishlistsController {
           query => query.withAggregate('reviews', reviews => reviews.avg('rating').as('reviews_avg')),
         ])
       ),
-    ]).match([
-      request.input('with', []).includes('wishlist.ingredients'),
-      query => query.preload('ingredients'),
     ]).where('id', id).first()
   }
 
@@ -132,11 +118,6 @@ export default class WishlistsController {
     if (request.input('products')) {
       await wishlist.related('products').sync(request.input('products'), false)
     }
-
-    // Add ingredients to wishlist
-    if (request.input('ingredients')) {
-      await wishlist.related('ingredients').sync(request.input('ingredients'), false)
-    }
   }
 
   /**
@@ -149,11 +130,6 @@ export default class WishlistsController {
     // Remove products from wishlist.
     if (request.input('products')) {
       await wishlist.related('products').detach(request.input('products'))
-    }
-
-    // Remove products from wishlist.
-    if (request.input('ingredients')) {
-      await wishlist.related('ingredients').detach(request.input('ingredients'))
     }
   }
 }
