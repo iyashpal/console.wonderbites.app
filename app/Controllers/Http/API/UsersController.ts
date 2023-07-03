@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+import { User } from 'App/Models'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -46,6 +48,28 @@ export default class UsersController {
       response.status(200).ok(user)
     } catch (error) {
       response.status(error.status).json(new ErrorJSON(error))
+    }
+  }
+
+  public async destroy ({ auth, params, bouncer, response }: HttpContextContract) {
+    try {
+      const user = await User.query().whereNull('deleted_at').where('id', params.id).firstOrFail()
+
+      try {
+        await bouncer.with('API.User').forUser(auth.use('api').user).authorize('delete', user)
+      } catch (error) {
+        return response.unauthorized(error)
+      }
+
+      try {
+        await user.merge({ deletedAt: DateTime.now() }).save()
+
+        response.ok({success: true})
+      } catch (error) {
+        response.badRequest(error)
+      }
+    } catch (error) {
+      response.notFound(error)
     }
   }
 

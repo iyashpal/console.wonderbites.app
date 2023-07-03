@@ -26,12 +26,9 @@ Route.group(() => {
    */
   Route.group(() => {
     Route.post('/logout', 'Auth/LogoutController').as('logout')
-
     Route.get('users/auth', 'UsersController.auth').as('users.auth')
-
     Route.put('users/avatar', 'UsersController.avatar').as('users.avatar')
-
-    Route.resource('users', 'UsersController').apiOnly().only(['update', 'show'])
+    Route.resource('users', 'UsersController').apiOnly().only(['update', 'show', 'destroy'])
 
     Route.resource('notifications', 'NotificationsController').apiOnly().only(['index', 'update'])
 
