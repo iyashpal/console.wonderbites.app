@@ -6,7 +6,6 @@ coverage
 .fleet
 .DS_STORE
 .env
-tmp
 public/assets/*
 package-lock.json
 .logs
