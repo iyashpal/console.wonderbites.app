@@ -1,5 +1,5 @@
-import { User, VerificationCode } from 'App/Models'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
+import { User, VerificationCode } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import RegisterValidator from 'App/Validators/API/Auth/OTP/RegisterValidator'
 
@@ -23,6 +23,8 @@ export default class RegisterController {
         email: payload.email,
         password: payload.password,
       })
+
+      await verificationCode.delete()
 
       const authToken = await auth.use('api').generate(user)
 

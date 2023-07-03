@@ -7,6 +7,7 @@ export default class LoginController {
   public async handle ({ auth, request, response }: HttpContextContract) {
     try {
       const { token } = await request.validate(LoginValidator)
+
       const verificationCode = await VerificationCode.query()
         .preload('user').where('token', token).where('state', 'Login').whereNotNull('verified_at').first()
 
@@ -15,6 +16,8 @@ export default class LoginController {
       }
 
       const authToken = await auth.use('api').generate(verificationCode.user)
+
+      await verificationCode.delete()
 
       response.status(200).json(authToken)
     } catch (error) {
