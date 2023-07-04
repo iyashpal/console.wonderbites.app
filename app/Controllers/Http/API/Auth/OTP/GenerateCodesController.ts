@@ -10,7 +10,7 @@ import GenerateValidator from 'App/Validators/API/Auth/OTP/GenerateValidator'
 export default class GenerateCodesController {
   public async handle ({ request, response }: HttpContextContract) {
     try {
-      const { source, identifier } = await request.validate(GenerateValidator)
+      const { source, identifier = '' } = await request.validate(GenerateValidator)
 
       const user = await User.query().where('mobile', source).orWhere('email', source).first()
 
@@ -25,7 +25,7 @@ export default class GenerateCodesController {
 
       if (code && ['production'].includes(Env.get('NODE_ENV'))) {
         await (new OTP()).viaMail(source, code.code)
-        await (new OTP()).viaSMS(source, code.code, identifier ?? '')
+        await (new OTP()).viaSMS(source, code.code, identifier)
       }
 
       response.ok({ success: !!code.id, token: code.token, source, ...(user ? { user: user.id } : {}) })
