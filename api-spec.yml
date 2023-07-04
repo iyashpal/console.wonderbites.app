@@ -815,6 +815,36 @@ paths:
                 $ref: "#/components/schemas/Users"
         "401":
           $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - User > Profile
+      security:
+        - BearerAuth:
+            - auth:view
+      summary: Delete
+      description: Get the authenticated user data based on the authentication token.
+      operationId: deleteUserById
+      parameters:
+        - name: id
+          in: path
+          description: Unique ID of the user.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "401":
+          $ref: "#/components/responses/Unauthorized"
   /addresses:
     get:
       tags:
