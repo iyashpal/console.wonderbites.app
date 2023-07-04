@@ -1,5 +1,3 @@
-import { User } from 'App/Models'
-import Hash from '@ioc:Adonis/Core/Hash'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
@@ -13,25 +11,13 @@ export default class LoginController {
    */
   public async handle ({auth, request, response}: HttpContextContract) {
     try {
-      const {email, password} = await request.validate(LoginValidator)
+      const { email, mobile = '', password } = await request.validate(LoginValidator)
 
-      try {
-        // lookup user
-        const user = await User.query().where('email', email).whereNull('deleted_at').firstOrFail()
+      const token = await auth.use('api').attempt(email ?? mobile, password)
 
-        // Verify password
-        if (!(await Hash.verify(user.password, password))) {
-          return response.unauthorized('Invalid credentials')
-        }
-
-        const token = await auth.use('api').generate(user)
-
-        response.status(200).json(token)
-      } catch (error) {
-        return response.status(error.status).json(new ErrorJSON(error))
-      }
+      response.ok(token)
     } catch (error) {
-      response.unprocessableEntity(new ErrorJSON(error))
+      response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }
