@@ -13,8 +13,8 @@ Route.group(() => {
       Route.post('register', 'Auth/OTP/RegisterController').as('register')
       Route.post('generate', 'Auth/OTP/GenerateCodesController').as('generate')
       Route.post('verify/:token', 'Auth/OTP/VerifyCodesController').as('verify')
-      Route.post('forgot-password', 'Auth/OTP/ResetPasswordController.store').as('forgot-password.store')
-      Route.post('reset-password/:token', 'Auth/OTP/ResetPasswordController.update').as('reset-password.update')
+      Route.post('forgot-password', 'Auth/OTP/ForgotPasswordController').as('forgot-password')
+      Route.post('reset-password/:token', 'Auth/OTP/ResetPasswordController').as('reset-password')
     }).as('otp').prefix('otp')
 
     Route.post('/login', 'Auth/LoginController').as('login')
