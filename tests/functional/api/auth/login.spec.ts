@@ -18,7 +18,11 @@ test.group('Auth login', (group) => {
     response.assertStatus(422)
 
     response.assertBodyContains({
-      errors: {email: 'Email address is required to login.', password: 'Enter password to login.'},
+      errors: {
+        email: 'requiredIfNotExists validation failed',
+        mobile: 'requiredIfNotExists validation failed',
+        password: 'Enter password to login.',
+      },
     })
   }).tags(['@api', '@auth', '@api.login'])
 
@@ -34,13 +38,19 @@ test.group('Auth login', (group) => {
     const response = await client.post(route('api.login')).accept('json').fields({password: 'Welcome@123!'})
 
     response.assertStatus(422)
-    response.assertBodyContains({errors: {email: 'Email address is required to login.'}})
+    response.assertBodyContains({
+      errors: {
+        email: 'requiredIfNotExists validation failed',
+        mobile: 'requiredIfNotExists validation failed',
+      },
+    })
   }).tags(['@api', '@auth', '@api.login'])
 
-  test('User cannot login with incorrect email', async ({client, route}) => {
+  test('User cannot login with incorrect email', async ({client, route, assert}) => {
     const response = await client.post(route('api.login'))
       .json({email: `${string.generateRandom(10)}@example.com`, password: 'Welcome@123!'})
-    response.assertStatus(404)
+    response.assertStatus(422)
+    response.assertBodyContains({ errors: { email: 'exists validation failure'} })
   }).tags(['@api', '@auth', '@api.login'])
 
   test('User cannot login with incorrect password', async ({client, route}) => {
@@ -48,7 +58,7 @@ test.group('Auth login', (group) => {
 
     const response = await client.post(route('api.login'))
       .json({email: user.email, password: 'wrong-password'})
-    response.assertStatus(401)
+    response.assertStatus(400)
   }).tags(['@api', '@auth', '@api.login'])
 
   test('User can login with valid credentials', async ({client, route}) => {
