@@ -1,5 +1,6 @@
+import { User } from 'App/Models'
+import Hash from '@ioc:Adonis/Core/Hash'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
-// import {Limiter} from '@adonisjs/limiter/build/services'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
 
@@ -14,27 +15,21 @@ export default class LoginController {
     try {
       const {email, password} = await request.validate(LoginValidator)
 
-      // const throttleKey = `login_${email}_${request.ip()}`
-
-      // const limiter = Limiter.use({
-      //   requests: 5,
-      //   duration: '15 mins',
-      //   blockDuration: '1 min',
-      // })
-
-      // if (await limiter.isBlocked(throttleKey)) {
-      //   return response.tooManyRequests('Login attempts exhausted. Please try after some time')
-      // }
-
       try {
-        const token = await auth.use('api').attempt(email, password)
+        // lookup user
+        const user = await User.query().where('email', email).whereNull('deleted_at').firstOrFail()
+
+        // Verify password
+        if (!(await Hash.verify(user.password, password))) {
+          return response.unauthorized('Invalid credentials')
+        }
+
+        const token = await auth.use('api').generate(user)
+
         response.status(200).json(token)
       } catch (error) {
-        // await limiter.increment(throttleKey)
         return response.status(error.status).json(new ErrorJSON(error))
       }
-
-      // await limiter.delete(throttleKey)
     } catch (error) {
       response.unprocessableEntity(new ErrorJSON(error))
     }
