@@ -218,10 +218,10 @@ paths:
                 properties:
                   type:
                     type: string
-                    example: 'bearer'
+                    example: "bearer"
                   token:
                     type: string
-                    example: 'Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT'
+                    example: "Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT"
 
         422:
           description: Validation Error
@@ -286,7 +286,7 @@ paths:
                   description: Last name of the user.
                 area_code:
                   type: string
-                  example: '+355'
+                  example: "+355"
                   description: Country area code.
                 mobile:
                   type: string
@@ -313,10 +313,10 @@ paths:
                 properties:
                   type:
                     type: string
-                    example: 'bearer'
+                    example: "bearer"
                   token:
                     type: string
-                    example: 'Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT'
+                    example: "Mg.6C4XDuPmZu4kGscTD5VBztzjPAaiuXqbpPnonoLcsIZUE_41ixpxm7hLHdUT"
 
         422:
           description: Validation Error
@@ -351,6 +351,153 @@ paths:
                       email:
                         type: string
                         example: required validation failed.
+                      password:
+                        type: string
+                        example: required validation failed.
+                      password_confirmation:
+                        type: string
+                        example: required validation failed.
+  /otp/forgot-password:
+    post:
+      tags:
+        - Auth > OTP
+      security: []
+      summary: OTP / Forgot Password
+      description: Forgot password.
+      operationId: forgotPasswordViaOTP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john@example.com
+                  description: Registered email address.
+                mobile:
+                  type: string
+                  example: +91-0123456789
+                  description: Registered mobile no of the user.
+                identifier:
+                  type: string
+                  example: lijods
+                  description: Device ID or a random string.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    example: "f4ec6310c5bb448a8e69ecbb7af3f5326663036955b77b7d704dd360643eea7b"
+                  source:
+                    type: string
+                    example: +91-012345679
+                  user:
+                    type: number
+                    example: 1
+
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: required validation failed.
+                      mobile:
+                        type: string
+                        example: required validation failed.
+
+  /otp/reset-password/{token}:
+    post:
+      tags:
+        - Auth > OTP
+      security: []
+      summary: OTP / Reset Password
+      description: Reset password.
+      operationId: resetPasswordViaOTP
+      parameters:
+        - name: token
+          in: path
+          schema:
+            type: string
+            example: f4ec6310c5bb448a8e69ecbb7af3f5326663036955b77b7d704dd360643eea7b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: 6598
+                  description: Token received on email or mobile.
+                password:
+                  type: string
+                  example: Welcome
+                  description: New user password.
+                password_confirmation:
+                  type: string
+                  example: Welcome
+                  description: Verify user password.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: ValidationException
+                  code:
+                    type: string
+                    example: E_VALIDATION_FAILURE
+                  status:
+                    type: integer
+                    example: 422
+                  message:
+                    type: string
+                    example: "E_VALIDATION_FAILURE: Validation Exception"
+                  errors:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 5698
                       password:
                         type: string
                         example: required validation failed.
@@ -627,7 +774,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Users'
+                $ref: "#/components/schemas/Users"
         "401":
           $ref: "#/components/responses/Unauthorized"
     get:
@@ -1178,7 +1325,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Products"
         404:
-          $ref: '#/components/responses/NotFound'
+          $ref: "#/components/responses/NotFound"
 
   /cart:
     put:
@@ -1211,7 +1358,7 @@ paths:
                 data:
                   type: array
                   required:
-                    -  id
+                    - id
                     - quantity
                   properties:
                     id:
@@ -1221,19 +1368,19 @@ paths:
                     quantity:
                       type: number
                     variant:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                          ingredients:
-                            type: array
-                            properties:
-                              id:
-                                type: number
-                              quantity:
-                                type: number
-                              category:
-                                type: number
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        ingredients:
+                          type: array
+                          properties:
+                            id:
+                              type: number
+                            quantity:
+                              type: number
+                            category:
+                              type: number
                     ingredients:
                       type: array
                       properties:
@@ -1308,7 +1455,7 @@ paths:
                 data:
                   type: array
                   required:
-                    -  id
+                    - id
                     - quantity
                   properties:
                     id:
@@ -1318,19 +1465,19 @@ paths:
                     category:
                       type: number
                     variant:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                          ingredients:
-                            type: array
-                            properties:
-                              id:
-                                type: number
-                              quantity:
-                                type: number
-                              category:
-                                type: number
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        ingredients:
+                          type: array
+                          properties:
+                            id:
+                              type: number
+                            quantity:
+                              type: number
+                            category:
+                              type: number
                     ingredients:
                       type: array
                       properties:
@@ -1438,7 +1585,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WonderPoints'
+                  $ref: "#/components/schemas/WonderPoints"
   /wonder-points/avail:
     get:
       tags:
@@ -1490,7 +1637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Wishlists'
+                $ref: "#/components/schemas/Wishlists"
     put:
       tags:
         - User > Wishlist
@@ -1528,7 +1675,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Wishlists'
+                $ref: "#/components/schemas/Wishlists"
 
   /wishlists/clean:
     post:
@@ -1541,7 +1688,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Wishlists'
+                $ref: "#/components/schemas/Wishlists"
   /feedbacks:
     get:
       tags:
@@ -1555,7 +1702,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Feedbacks'
+                  $ref: "#/components/schemas/Feedbacks"
     post:
       tags:
         - User > Feedbacks
@@ -1581,7 +1728,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feedbacks'
+                $ref: "#/components/schemas/Feedbacks"
   /feedbacks/{id}:
     get:
       tags:
@@ -1600,7 +1747,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feedbacks'
+                $ref: "#/components/schemas/Feedbacks"
     put:
       tags:
         - User > Feedbacks
@@ -1633,7 +1780,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feedbacks'
+                $ref: "#/components/schemas/Feedbacks"
     patch:
       tags:
         - User > Feedbacks
@@ -1666,7 +1813,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Feedbacks'
+                $ref: "#/components/schemas/Feedbacks"
 
     delete:
       tags:
@@ -1735,7 +1882,6 @@ paths:
               schema:
                 type: object
 
-
   /coupons/remove:
     post:
       tags:
@@ -1756,7 +1902,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cart'
+                $ref: "#/components/schemas/Cart"
         422:
           description: Validation
           content:
@@ -1796,7 +1942,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Orders'
+                  $ref: "#/components/schemas/Orders"
   /orders/{id}:
     get:
       tags:
@@ -1821,7 +1967,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Orders'
+                $ref: "#/components/schemas/Orders"
     put:
       tags:
         - User > Orders
@@ -1849,7 +1995,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Orders'
+                $ref: "#/components/schemas/Orders"
   /reviews:
     get:
       tags:
@@ -1886,20 +2032,20 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref : '#/components/schemas/Reviews'
+                  $ref: "#/components/schemas/Reviews"
     post:
       tags:
         - User > Reviews
       summary: Store
       requestBody:
-        $ref: '#/components/requestBodies/CreateReview'
+        $ref: "#/components/requestBodies/CreateReview"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref : '#/components/schemas/Reviews'
+                $ref: "#/components/schemas/Reviews"
   /reviews/{id}:
     get:
       tags:
@@ -1928,7 +2074,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref : '#/components/schemas/Reviews'
+                $ref: "#/components/schemas/Reviews"
     put:
       tags:
         - User > Reviews
@@ -1961,7 +2107,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref : '#/components/schemas/Reviews'
+                $ref: "#/components/schemas/Reviews"
   /banners:
     get:
       tags:
@@ -2007,7 +2153,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Banners'
+                  $ref: "#/components/schemas/Banners"
   /banners/{id}:
     get:
       tags:
@@ -2036,9 +2182,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Banners'
+                $ref: "#/components/schemas/Banners"
         404:
-          $ref: '#/components/responses/NotFound'
+          $ref: "#/components/responses/NotFound"
   /cuisines:
     get:
       tags:
@@ -2078,7 +2224,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Cuisines'
+                  $ref: "#/components/schemas/Cuisines"
   /cuisines/{id}:
     get:
       tags:
@@ -2109,7 +2255,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cuisines'
+                $ref: "#/components/schemas/Cuisines"
 
   /checkouts:
     post:
@@ -2118,7 +2264,7 @@ paths:
       summary: Process
       operationId: processTheCheckout
       requestBody:
-        $ref: '#/components/requestBodies/Checkout'
+        $ref: "#/components/requestBodies/Checkout"
       responses:
         422:
           $ref: "#/components/responses/CheckoutValidationErrors"
@@ -2127,7 +2273,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Orders'
+                $ref: "#/components/schemas/Orders"
   /static/about:
     get:
       tags:
@@ -2216,7 +2362,7 @@ components:
                 description: Last name of the user.
               area_code:
                 type: string
-                example: '+355'
+                example: "+355"
                 description: Country area code for the entered mobile no.
               mobile:
                 type: string
@@ -2478,7 +2624,7 @@ components:
           example: 1
         description:
           type: string
-          example: 'Description...'
+          example: "Description..."
         attachment:
           type: object
           example:
@@ -2489,7 +2635,7 @@ components:
         options:
           type: object
           example:
-            link: ''
+            link: ""
             page: home
             type: image
             section: todayspick
@@ -2531,10 +2677,10 @@ components:
                 properties:
                   id:
                     type: string
-                    example: 'bread'
+                    example: "bread"
                   title:
                     type: string
-                    example: 'Bread'
+                    example: "Bread"
                   type:
                     type: string
                     example: Freebies | Utensils
@@ -2732,7 +2878,7 @@ components:
         type:
           type: string
           description: Set the product type.
-          example: '`General` | `Variable` etc.'
+          example: "`General` | `Variable` etc."
         status:
           type: integer
           description: Product status.
