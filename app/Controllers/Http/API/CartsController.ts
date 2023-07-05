@@ -1,19 +1,12 @@
 import {uniqueHash} from 'App/Helpers/Core'
-import {types} from '@ioc:Adonis/Core/Helpers'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
+import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import UpdateValidator from 'App/Validators/API/Carts/UpdateValidator'
-import {User, Cart, Product, Ingredient, Variant, Category} from 'App/Models'
+import {Cart, Product, Ingredient, Variant, Category } from 'App/Models'
 
 export default class CartsController {
-  protected cartHeaders (request: RequestContract) {
-    return {
-      id: request.header('X-Cart-ID', 0) as number,
-      token: request.header('X-Cart-Token', uniqueHash()),
-    }
-  }
-
   /**
    * Get cart of current logged-in/guest user.
    *
@@ -23,22 +16,37 @@ export default class CartsController {
    *
    * @returns Cart
    */
-  protected async cart (user: User | undefined, id: number, token: string): Promise<Cart> {
-    if (types.isNull(user) || types.isUndefined(user)) {
-      try {
-        return await Cart.query().withScopes(scopes => scopes.asGuest(id, token)).firstOrFail()
-      } catch (error) {
-        return await Cart.create({token})
-      }
+  protected async cart (auth: AuthContract, params: Record<string, any>): Promise<Cart> {
+    const { id, token } = params as { id: number, token: string }
+
+    const create = (query) => query.create({token: uniqueHash()})
+
+    if (auth.use('api').isLoggedIn) {
+      const relatedCart = (auth.use('api').user!).related('cart')
+
+      const query = relatedCart.query().match([
+        id && token, query => query.where('id', id).where('token', token),
+      ]).first()
+
+      return (await query) ?? await create(relatedCart)
     }
 
-    try {
-      return await user.related('cart').query().firstOrFail()
-    } catch (error) {
-      return await user.related('cart').create({token})
+    if (id && token) {
+      const query = Cart.query().withScopes(scopes => scopes.asGuest(id, token)).first()
+
+      return (await query) ?? await create(Cart)
     }
+
+    return await create(Cart)
   }
 
+  /**
+   * Get the preloaded data based on user request.
+   *
+   * @param request Http Request
+   * @param cart Cart
+   * @returns object
+   */
   protected async data (request: RequestContract, cart: Cart) {
     const products = () => {
       if (request.input('with', []).includes('products')) {
@@ -86,13 +94,9 @@ export default class CartsController {
    *
    * @param param0 HttpContextContract Request payload
    */
-  public async show ({request, auth, response}: HttpContextContract) {
+  public async show ({request, auth, params, response}: HttpContextContract) {
     try {
-      const user = auth.use('api').user!
-
-      const {id, token} = this.cartHeaders(request)
-
-      const cart = await this.cart(user, id, token)
+      const cart = await this.cart(auth, params)
 
       response.ok(await this.data(request, cart))
     } catch (error) {
@@ -105,13 +109,9 @@ export default class CartsController {
    *
    * @param param0 {HttpContextContract} Request payload.
    */
-  public async update ({auth, request, response}: HttpContextContract) {
+  public async update ({auth, params, request, response}: HttpContextContract) {
     try {
-      const user = auth.use('api').user!
-
-      const {id, token} = this.cartHeaders(request)
-
-      let cart = await this.cart(user, id, token)
+      let cart = await this.cart(auth, params)
 
       const payload = await request.validate(UpdateValidator)
 

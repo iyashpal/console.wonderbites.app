@@ -72,8 +72,8 @@ Route.group(() => {
 
     Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutController').as('checkouts.process')
 
-    Route.get('cart', 'CartsController.show').as('carts.show')
-    Route.route('cart', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
+    Route.get('carts/:token?/:id?', 'CartsController.show').as('carts.show')
+    Route.route('carts/:token?/:id?', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
 
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
     Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
