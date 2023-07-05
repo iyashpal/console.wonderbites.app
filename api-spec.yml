@@ -1357,13 +1357,23 @@ paths:
         404:
           $ref: "#/components/responses/NotFound"
 
-  /cart:
+  /carts/{token}/{id}:
     put:
       tags:
         - User > Cart
       summary: Update
       operationId: addToCartEndpoint
       parameters:
+        - name: token
+          in: path
+          schema:
+            type: string
+          example: 67fffe3001680747df2f36b23c914234ec37ccc7f6e468dcbe240aa85d663720
+        - name: id
+          in: path
+          schema:
+            type: number
+          example: 1
         - name: with[]
           in: query
           schema:
@@ -1461,6 +1471,16 @@ paths:
       summary: Update
       operationId: updateCartEndpoint
       parameters:
+        - name: token
+          in: path
+          schema:
+            type: string
+          example: 67fffe3001680747df2f36b23c914234ec37ccc7f6e468dcbe240aa85d663720
+        - name: id
+          in: path
+          schema:
+            type: number
+          example: 1
         - name: with[]
           in: query
           schema:
@@ -1560,6 +1580,16 @@ paths:
       summary: Get Detail
       operationId: getCartDetails
       parameters:
+        - name: token
+          in: path
+          schema:
+            type: string
+          example: 67fffe3001680747df2f36b23c914234ec37ccc7f6e468dcbe240aa85d663720
+        - name: id
+          in: path
+          schema:
+            type: number
+          example: 1
         - name: with[]
           in: query
           schema:
