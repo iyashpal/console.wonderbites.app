@@ -11,17 +11,15 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 const columns = [
   { name: 'Order #', options: { className: 'text-center' } },
   { name: 'Date/Time', options: { className: 'text-left' } },
-  { name: 'Customer', options: { className: 'text-center' } },
-  { name: 'Type', options: { className: 'text-center' } },
-  { name: 'Session', options: { className: 'text-center' } },
-  { name: 'Created By', options: { className: 'text-center' } },
+  { name: 'Customer', options: { className: 'text-left' } },
+  { name: 'Type', options: { className: 'text-left' } },
   { name: 'Total', options: { className: 'text-center' } },
-  { name: 'Status', options: { className: 'text-center' } },
+  { name: 'Status', options: { className: 'text-left' } },
 ]
 const sortByFilters = [
-  { label: 'ID', value: 'id', icon: <Icons.Outline.Hashtag className="h-5 w-5" aria-hidden="true" /> },
-  { label: 'Date', value: 'date', icon: <Icons.Outline.CalendarDays className="h-5 w-5" aria-hidden="true" /> },
-  { label: 'Email', value: 'email', icon: <Icons.Outline.Envelope className="h-5 w-5" aria-hidden="true" /> },
+  { label: 'ID', value: 'id' },
+  { label: 'Date', value: 'date' },
+  { label: 'Email', value: 'email' },
 ]
 
 export default function ListOrders() {
@@ -54,30 +52,13 @@ export default function ListOrders() {
             </> : <>
               <span>-</span>
             </>),
+            <span className="uppercase">{order.order_type}</span>,
             `-`,
-            `-`,
-            `-`,
-            `-`,
-            <>
-              {order.status === 0 && <span>Placed</span>}
-              {order.status === 1 && <span>Confirmed</span>}
-              {order.status === 2 && <span>Preparing</span>}
-              {order.status === 3 && <span>In-Transit</span>}
-              {order.status === 4 && <span>Delivered</span>}
-              {order.status === 5 && <span>Canceled</span>}
-            </>,
+            <span className="uppercase">{order.status}</span>,
             <div className="flex item-center justify-center gap-x-1">
-              <Link to={`/app/users/${order.id}/edit`} className={'hidden bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-blue-700 hover:bg-blue-100 hover:text-blue-700 transition-colors ease-in-out duration-300'}>
-                <Icons.Outline.PencilSquare className={'w-5 h-5'} />
-              </Link>
-
               <Link to={`/app/orders/${order.id}`} className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-green-700 hover:bg-green-100 hover:text-green-700 transition-colors ease-in-out duration-300'}>
                 <Icons.Outline.Eye className={'w-5 h-5'} />
               </Link>
-
-              <button className={'bg-gray-100 border border-gray-400 text-gray-500 rounded-lg p-1 hover:border-red-700 hover:bg-red-100 hover:text-red-700 transition-colors ease-in-out duration-300'}>
-                <Icons.Outline.Trash className={'w-5 h-5'} />
-              </button>
             </div>
           ]))}
         </Resources.List>
