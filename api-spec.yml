@@ -2317,12 +2317,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/Cuisines"
 
-  /checkouts:
+  /checkouts/{token}/{id}:
     post:
       tags:
         - Checkouts
       summary: Process
       operationId: processTheCheckout
+      parameters:
+        - name: token
+          in: path
+          schema:
+            type: string
+          example: 67fffe3001680747df2f36b23c914234ec37ccc7f6e468dcbe240aa85d663720
+        - name: id
+          in: path
+          schema:
+            type: number
+          example: 1
       requestBody:
         $ref: "#/components/requestBodies/Checkout"
       responses:
