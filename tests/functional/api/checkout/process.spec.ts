@@ -13,7 +13,7 @@ test.group('API [checkout.process]', (group) => {
     const cart = await CartFactory.create()
     const address = await AddressFactory.with('user').create()
 
-    const $response = await client.post(route('api.checkouts.process')).json({
+    const $response = await client.post(route('api.checkouts.process', cart)).json({
       orderType: 'delivery',
       firstName: address.firstName,
       lastName: address.lastName,
@@ -24,7 +24,7 @@ test.group('API [checkout.process]', (group) => {
       location: address.location,
       paymentMode: 'COD',
       options: {},
-    }).headers({'X-Cart-ID': cart.id.toString(), 'X-Cart-Token': cart.token})
+    })
 
     $response.assertStatus(200)
     $response.assertBodyContains({id: cart.id})
@@ -35,19 +35,11 @@ test.group('API [checkout.process]', (group) => {
 
     const [address] = user.addresses
 
-    const product = await ProductFactory.with('ingredients', 3).create()
-
     const coupon = await CouponFactory.create()
 
     await user.cart.merge({couponId: coupon.id}).save()
 
-    const cartIngredients = {}
-
-    product.ingredients.map(({id}) => {
-      cartIngredients[id] = {product_id: product.id}
-    })
-
-    const $response = await client.post(route('api.checkouts.process'))
+    const $response = await client.post(route('api.checkouts.process', user.cart))
       .guard('api').loginAs(user).json({
         cart: user.cart.id,
         orderType: 'delivery',
@@ -80,7 +72,6 @@ test.group('API [checkout.process]', (group) => {
   test('it reads {statusCode} status code {situation}.')
     .with([
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "firstName" is missing in payload',
         fields: {firstName: null},
@@ -91,7 +82,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "lastName" is missing in payload',
         fields: {lastName: null},
@@ -102,7 +92,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "OrderType" is "delivery" and "street" is missing in payload',
         fields: {street: null},
@@ -113,7 +102,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "OrderType" is "delivery" and "city" is missing in payload',
         fields: {city: null},
@@ -124,7 +112,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "OrderType" is "delivery" and "city" and "street" both are missing in payload',
         fields: {city: null, street: null},
@@ -136,7 +123,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "phone" is missing in payload',
         fields: {phone: null},
@@ -147,7 +133,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "email" is missing in payload',
         fields: {email: null},
@@ -158,28 +143,24 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when "location" is missing in payload',
         fields: {location: undefined},
         assert: {location: undefined},
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when "location" lat and lng is empty in payload',
         fields: {location: {lat: null, lng: null}},
         assert: {location: {}},
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when "location" lat and lng is missing in payload',
         fields: {location: {}},
         assert: {location: {}},
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when "paymentMode" is missing in payload',
         fields: {paymentMode: null},
@@ -190,7 +171,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when orderType is missing in payload',
         fields: {orderType: ''},
@@ -201,7 +181,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when orderType is not "dine-in", "take-away" or "delivery"',
         fields: {orderType: 'demo'},
@@ -212,7 +191,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when orderType is "delivery"',
         fields: {orderType: 'delivery'},
@@ -221,7 +199,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when orderType is "take-away"',
         fields: {orderType: 'take-away', eatOrPickupTime: '5:00'},
@@ -230,7 +207,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when orderType is "take-away" and "eatOrPickupTime" is missing',
         fields: {orderType: 'take-away'},
@@ -239,7 +215,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when orderType is "dine-in" and "reservedSeats" is missing',
         fields: {orderType: 'dine-in', eatOrPickupTime: '5:00'},
@@ -248,7 +223,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 422,
         situation: 'when orderType is "dine-in" and "reservedSeats" and "eatOrPickupTime" both is missing',
         fields: {orderType: 'dine-in'},
@@ -260,7 +234,6 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when orderType is "dine-in" and "reservedSeats" and "eatOrPickupTime" is not missing',
         fields: {orderType: 'dine-in', reservedSeats: 5, eatOrPickupTime: '5:00'},
@@ -269,21 +242,18 @@ test.group('API [checkout.process]', (group) => {
         },
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when note is empty or null in payload',
         fields: {note: null},
         assert: {note: undefined},
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when note is having some data in payload',
         fields: {note: 'This is the demo testing of note field.'},
         assert: {note: 'This is the demo testing of note field.'},
       },
       {
-        headers: {},
         statusCode: 200,
         situation: 'when the order data is accurate in the payload',
         fields: {},
@@ -293,7 +263,7 @@ test.group('API [checkout.process]', (group) => {
         },
       },
     ])
-    .run(async ({client, route}, {statusCode, fields, assert, headers}) => {
+    .run(async ({client, route}, {statusCode, fields, assert }) => {
       const user = await UserFactory.with('cart').with('addresses').create()
 
       const [address] = user.addresses
@@ -331,11 +301,10 @@ test.group('API [checkout.process]', (group) => {
         options: {},
       }
 
-      const $response = await client.post(route('api.checkouts.process'))
-        .guard('api').loginAs(user).json(Object.assign(payload, fields)).headers(headers)
+      const $response = await client.post(route('api.checkouts.process', user.cart))
+        .guard('api').loginAs(user).json(Object.assign(payload, fields))
 
       if (statusCode !== $response.status()) {
-        console.log(Object.assign(payload, fields))
         $response.dumpBody()
       }
 
@@ -355,11 +324,8 @@ test.group('API [checkout.process]', (group) => {
 
     const qs = {with: ['checkout.products', 'checkout.user']}
 
-    const $response = await client.post(route('api.checkouts.process', {}, {qs}))
-      .guard('api').loginAs(user).headers({
-        'X-Cart-Token': user.cart.token,
-        'X-Cart-ID': user.cart.id.toString(),
-      }).json({
+    const $response = await client.post(route('api.checkouts.process', user.cart, {qs}))
+      .guard('api').loginAs(user).json({
         orderType: 'delivery',
         firstName: address.firstName,
         lastName: address.lastName,
