@@ -10,9 +10,8 @@ export default class CartsController {
   /**
    * Get cart of current logged-in/guest user.
    *
-   * @param user User
-   * @param id number
-   * @param token string
+   * @param auth AuthContract
+   * @param params Record<string, any>
    *
    * @returns Cart
    */
