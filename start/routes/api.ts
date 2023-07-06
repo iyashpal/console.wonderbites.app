@@ -70,10 +70,9 @@ Route.group(() => {
 
     Route.resource('banners', 'BannersController').apiOnly().only(['index', 'show'])
 
-    Route.route('checkouts', ['POST', 'PUT', 'PATCH'], 'CheckoutController').as('checkouts.process')
-
     Route.get('carts/:token?/:id?', 'CartsController.show').as('carts.show')
     Route.route('carts/:token?/:id?', ['PUT', 'PATCH'], 'CartsController.update').as('carts.update')
+    Route.route('checkouts/:token?/:id?', ['POST', 'PUT', 'PATCH'], 'CheckoutController').as('checkouts.process')
 
     Route.post('coupons/apply', 'CouponsController.apply').as('coupons.apply')
     Route.post('coupons/remove', 'CouponsController.remove').as('coupons.remove')
