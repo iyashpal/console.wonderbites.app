@@ -65,6 +65,7 @@ export default class ProcessValidator {
       rules.requiredWhen('orderType', 'in', ['take-away', 'dine-in']),
     ]),
     options: schema.object.optional().anyMembers(),
+    channel: schema.enum(['app', 'web', 'console'] as const),
     note: schema.string.optional({ trim: true, escape: true }),
   })
 
