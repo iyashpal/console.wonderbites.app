@@ -23,6 +23,7 @@ test.group('API [checkout.process]', (group) => {
       city: address.city,
       location: address.location,
       paymentMode: 'COD',
+      channel: 'console',
       options: {},
     })
 
@@ -52,6 +53,7 @@ test.group('API [checkout.process]', (group) => {
         note: 'Test note for the order',
         location: address.location,
         paymentMode: 'COD',
+        channel: 'console',
       })
 
     $response.assertStatus(200)
@@ -263,7 +265,7 @@ test.group('API [checkout.process]', (group) => {
         },
       },
     ])
-    .run(async ({client, route}, {statusCode, fields, assert }) => {
+    .run(async ({client, route}, {statusCode, fields, assert}) => {
       const user = await UserFactory.with('cart').with('addresses').create()
 
       const [address] = user.addresses
@@ -298,6 +300,7 @@ test.group('API [checkout.process]', (group) => {
         city: address.city,
         location: address.location,
         paymentMode: 'COD',
+        channel: 'console',
         options: {},
       }
 
@@ -335,6 +338,7 @@ test.group('API [checkout.process]', (group) => {
         city: address.city,
         location: address.location,
         paymentMode: 'COD',
+        channel: 'console',
         options: {},
       })
 
