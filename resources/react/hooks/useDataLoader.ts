@@ -38,7 +38,7 @@ export default function useDataLoader<T>(url: string, config = {}) {
   return {
     sync,
     response: data,
-    isProcessed: () => isProcessed && isFailed === false,
     isProcessing: () => isProcessing,
+    isProcessed: () => isProcessed && !isFailed,
   }
 }
