@@ -62,6 +62,9 @@ export default class Order extends BaseModel {
   public options: any
 
   @column()
+  public channel: string
+
+  @column()
   public status: string
 
   @column.dateTime({autoCreate: true})
