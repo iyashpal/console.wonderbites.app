@@ -18,7 +18,15 @@ export default class OrdersController {
 
   public async store ({}: HttpContextContract) {}
 
-  public async show ({}: HttpContextContract) {}
+  public async show ({params, response}: HttpContextContract) {
+    try {
+      const order = await Order.query().preload('user').firstOrFail()
+
+      response.ok(order)
+    } catch (e) {
+      response.status(e.status).json(new ErrorJSON(e))
+    }
+  }
 
   public async edit ({}: HttpContextContract) {}
 
