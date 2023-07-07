@@ -20,7 +20,7 @@ export default class OrdersController {
 
   public async show ({params, response}: HttpContextContract) {
     try {
-      const order = await Order.query().preload('user').firstOrFail()
+      const order = await Order.query().where('id', params.id).preload('user').firstOrFail()
 
       response.ok(order)
     } catch (e) {
