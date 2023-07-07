@@ -2518,6 +2518,7 @@ components:
               - email
               - phone
               - paymentMode
+              - channel
             properties:
               cart:
                 type: number
@@ -2577,6 +2578,9 @@ components:
                 description: This field is requiredwhen user select the orderType dine-in OR take-away.
               options:
                 type: object
+              channel:
+                type: string
+                example: 'app | web | console'
               note:
                 type: string
                 example: Extra note from the customer side.
