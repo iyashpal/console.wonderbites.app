@@ -1,15 +1,17 @@
+import {DateTime} from "luxon";
 import Icons from '~/helpers/icons'
 import { useDataLoader } from "@/hooks";
 import { Banner } from "~/contracts/schema";
 import { useEffect, useState } from "react";
+import Resources from '@/components/resources';
 import TrashModal from "@/components/TrashModal";
 import { MetaData } from "@/contracts/pagination";
-import Resources from '@/components/resources';
 import Breadcrumb from "~/layouts/AuthLayout/Breadcrumb";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const columns = [
   { name: 'id', options: { className: 'text-center' } },
+  { name: 'Image', options: { className: 'text-left' } },
   { name: 'Name', options: { className: 'text-left' } },
   { name: 'Group', options: { className: 'text-left' } },
   { name: 'Type', options: { className: 'text-left' } },
@@ -36,7 +38,7 @@ export default function ListBanners() {
   }, [location, searchParams])
 
 
-  function toggleTrash(payload) {
+  function toggleTrash(payload: Banner) {
     setBanner(payload);
     setIsTrashing(!isTrashing);
   }
@@ -69,10 +71,11 @@ export default function ListBanners() {
 
             {({ data }) => data.map(banner => ([
               banner.id,
+              <img alt={banner.title} className={'h-6 aspect-video bg-gray-100 rounded overflow-hidden ring-2 ring-offset-1 ring-red-300'} src={banner.attachment_url}/>,
               banner.title,
-              banner.options.page,
-              banner.options.type,
-              banner.updated_at,
+              banner.options?.page,
+              banner.options?.type,
+              DateTime.fromISO(banner.updated_at).toISODate(),
               banner.status === 'active' ? <span className={`font-semibold uppercase text-red-primary`}>Active</span> : <span className={`font-semibold uppercase`}>In-Active</span>,
               <div className="flex item-center justify-center gap-x-1">
 
