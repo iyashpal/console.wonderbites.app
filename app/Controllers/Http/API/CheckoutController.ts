@@ -17,7 +17,7 @@ export default class CheckoutController {
         .match([id && token, query => query.where('id', id).where('token', token)]).firstOrFail()
 
       // Create order from cart details.
-      let order = await Order.create({ ...attrs, data: cart.data, userId: user?.id})
+      let order = await Order.create({ ...attrs, data: cart.data, userId: user?.id, couponId: cart.couponId })
 
       if (order?.id) {
         // Delete the cart if the order created.
