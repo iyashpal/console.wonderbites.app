@@ -29,8 +29,8 @@ export default class BannersController {
         userId: user.id,
         title: payload.title,
         status: payload.status,
-        options: payload.options,
         attachment: Attachment.fromFile(request.file('attachment')!),
+        options: {page: payload.page, section: payload.section, type: payload.type, link: payload.link},
       })
 
       response.ok(banner)
@@ -67,7 +67,7 @@ export default class BannersController {
       await banner.merge({
         title: payload.title,
         status: payload.status,
-        options: payload.options,
+        options: {page: payload.page, section: payload.section, type: payload.type, link: payload.link},
         attachment: payload.attachment ? Attachment.fromFile(request.file('attachment')!) : banner.attachment,
       })
 

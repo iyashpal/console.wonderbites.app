@@ -30,13 +30,10 @@ export default class UpdateValidator {
       size: '1024kb',
       extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
     }),
-    options: schema.object([rules.required()])
-      .members({
-        page: schema.string({trim: true}),
-        section: schema.string({trim: true}),
-        type: schema.string({trim: true}),
-        link: schema.string.nullableAndOptional({trim: true}),
-      }),
+    page: schema.string({trim: true}),
+    section: schema.string({trim: true}),
+    type: schema.string({trim: true}),
+    link: schema.string.nullableAndOptional({trim: true}),
     status: schema.string({trim: true}, [rules.required()]),
   })
 
