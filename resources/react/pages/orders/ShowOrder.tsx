@@ -94,7 +94,7 @@ export default function ShowOrder() {
                           <th scope="col" className="uppercase py-3 bg-gray-100 px-3 text-left text-sm font-semibold text-gray-900">
                             Product Name
                           </th>
-                          <th scope="col" className="uppercase py-3 bg-gray-100 px-3 text-left text-sm font-semibold text-gray-900">
+                          <th scope="col" className="uppercase py-3 bg-gray-100 px-3 text-center text-sm font-semibold text-gray-900">
                             Quantity
                           </th>
                           <th scope="col" className="uppercase py-3 bg-gray-100 px-3 text-left text-sm font-semibold text-gray-900">
@@ -113,7 +113,7 @@ export default function ShowOrder() {
                               <td className="whitespace-nowrap py-2 px-3 text-sm text-gray-500">
                                 {product?.name}
                               </td>
-                              <td className="whitespace-nowrap py-2 px-3 text-sm text-gray-500">
+                              <td className="whitespace-nowrap py-2 px-3 text-sm text-gray-500 text-center">
                                 {dataProduct.quantity}
                               </td>
                               <td className="whitespace-nowrap py-2 px-3 text-sm text-gray-500">
