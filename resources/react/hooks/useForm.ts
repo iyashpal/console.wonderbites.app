@@ -98,6 +98,8 @@ export default function useForm<T>(initialState: T = {} as T) {
           formData.append(key, value)
         } else if (typeof value === 'number') {
           formData.append(key, `${value}`)
+        } else if (typeof value === 'object') {
+          formData.append(key, JSON.stringify(value))
         } else if (value === null || value === undefined) {
           formData.append(key, '')
         }
@@ -197,6 +199,11 @@ export default function useForm<T>(initialState: T = {} as T) {
       return request({ url, method: 'delete', ...config })
     },
 
+    /**
+     * Reset the form data.
+     *
+     * @returns void
+     */
     reset: () => {
       resetForm()
       resetErrors()
