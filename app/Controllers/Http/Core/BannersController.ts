@@ -69,7 +69,7 @@ export default class BannersController {
         status: payload.status,
         options: {page: payload.page, section: payload.section, type: payload.type, link: payload.link},
         attachment: payload.attachment ? Attachment.fromFile(request.file('attachment')!) : banner.attachment,
-      })
+      }).save()
 
       response.ok(banner)
     } catch (error) {
