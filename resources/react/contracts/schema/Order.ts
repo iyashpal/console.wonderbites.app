@@ -1,5 +1,5 @@
 import User from "@/contracts/schema/User";
-import {Coupon} from "@/contracts/schema/index";
+import {Coupon, Product} from "@/contracts/schema/index";
 
 export default interface Order {
     id: number,
@@ -50,4 +50,5 @@ export default interface Order {
 
     user?: User
     coupon?: Coupon
+    products: Product[]
 }
