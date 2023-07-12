@@ -1,4 +1,5 @@
-import {Cart, Order} from 'App/Models'
+import { Cart, Order } from 'App/Models'
+import Event from '@ioc:Adonis/Core/Event'
 import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
@@ -17,12 +18,14 @@ export default class CheckoutController {
         .match([id && token, query => query.where('id', id).where('token', token)]).firstOrFail()
 
       // Create order from cart details.
-      let order = await Order.create({ ...attrs, data: cart.data, userId: user?.id, couponId: cart.couponId })
+      let order = await Order.create({ ...attrs, data: cart.data ?? [], userId: user?.id, couponId: cart.couponId })
 
       if (order?.id) {
         // Delete the cart if the order created.
         await Cart.query().where('id', id).delete()
       }
+
+      Event.emit('new:order', order)
 
       // Send order in response with all associated data.
       response.ok(order)

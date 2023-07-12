@@ -5,6 +5,8 @@
  * file.
  */
 
+import { Order } from 'App/Models'
+
 declare module '@ioc:Adonis/Core/Event' {
   /*
   |--------------------------------------------------------------------------
@@ -26,5 +28,6 @@ declare module '@ioc:Adonis/Core/Event' {
   |
   */
   interface EventsList {
+    'new:order': Order
   }
 }
