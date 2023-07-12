@@ -25,7 +25,7 @@ export default class CheckoutController {
         await Cart.query().where('id', id).delete()
       }
 
-      Event.emit('new:order', order)
+      await Event.emit('new:order', order)
 
       // Send order in response with all associated data.
       response.ok(order)

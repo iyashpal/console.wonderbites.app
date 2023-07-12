@@ -1,5 +1,5 @@
+import { Order, Product } from 'App/Models'
 import type { EventsList } from '@ioc:Adonis/Core/Event'
-import { Product } from 'App/Models'
 
 export default class Checkout {
   public async calculatePrice (order: EventsList['new:order']) {
@@ -10,24 +10,22 @@ export default class Checkout {
     let data = typeof order.data === 'string' ? JSON.parse(order.data) : order.data
 
     let products = await Product.query()
-      .whereIn('id', data.map(({id}) => id))
+      .whereIn('id', data.map(({ id }) => id))
       .preload('categories').preload('ingredients')
       .preload('variants', query => query.preload('categories').preload('ingredients'))
 
-    let overwritten = data.map(dataProduct => {
+    let overwriteData = data.map(dataProduct => {
       const product = products.find(({ id }) => dataProduct.id === id)
-      const variant = product?.variants.find(({id}) => dataProduct?.variant.id === id)
-
+      const variant = product?.variants.find(({ id }) => dataProduct?.variant.id === id)
       return {
-        id: dataProduct.id,
-        quantity: dataProduct.quantity,
+        ...dataProduct,
         price: Number(product?.price),
         ...(variant?.id ? {
           variant: {
-            id: variant.id,
+            ...dataProduct.variant,
             price: Number(variant.price),
             ingredients: dataProduct.variant.ingredients.map(dataIngredient => {
-              let ingredient = variant.ingredients.find(({id}) => id === dataIngredient.id)
+              let ingredient = variant.ingredients.find(({ id }) => id === dataIngredient.id)
               return {
                 ...dataIngredient,
                 price: ingredient?.$extras.pivot_price,
@@ -35,9 +33,18 @@ export default class Checkout {
             }),
           },
         } : {}),
+        ...(dataProduct.ingredients ? {
+          ingredients: dataProduct.ingredients.map(dataIngredient => {
+            const ingredient = product?.ingredients.find(({id}) => id === dataIngredient.id)
+            return {
+              ...dataIngredient,
+              price: Number(ingredient?.$extras.pivot_price),
+            }
+          }),
+        } : {}),
       }
     })
 
-    console.log(overwritten)
+    await Order.query().where('id', order.id).update({ data: JSON.stringify(overwriteData) })
   }
 }

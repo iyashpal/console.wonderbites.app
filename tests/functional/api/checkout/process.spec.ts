@@ -1,4 +1,4 @@
-import {Cart} from 'App/Models'
+import {Cart, Order, Product} from 'App/Models'
 import {test} from '@japa/runner'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {AddressFactory, CartFactory, CouponFactory, ProductFactory, UserFactory} from 'Database/factories'
@@ -398,5 +398,5 @@ test.group('API [checkout.process]', (group) => {
       first_name: address.firstName,
       data: JSON.stringify(user.cart.data),
     })
-  }).tags(['@api', '@api.checkout', '@api.checkouts.process', '@api.checkouts.debug'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 })
