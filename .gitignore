@@ -17,4 +17,3 @@ thunder-tests
 .flaskenv*
 !.env.project
 !.env.vault
-schema
