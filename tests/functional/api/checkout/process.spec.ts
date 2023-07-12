@@ -314,14 +314,51 @@ test.group('API [checkout.process]', (group) => {
       $response.assertStatus(statusCode)
 
       $response.assertBodyContains(assert)
-    }).tags(['@api', '@api.checkout', '@api.checkouts.process', '@api.checkouts.debug'])
+    }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
   test('it can delete the cart on order creation from the referenced cart.', async ({client, route, assert}) => {
     const user = await UserFactory.with('cart').with('addresses').create()
 
     const coupon = await CouponFactory.create()
 
-    await user.cart.merge({couponId: coupon.id}).save()
+    const product = await ProductFactory.create()
+    const variantProduct = await ProductFactory
+      .with('variants', 2, query => {
+        query.with('categories').with('ingredients', 3)
+      }).create()
+
+    const productWithIngredients = await ProductFactory
+      .with('ingredients', 5, query => query.with('categories', 1)).create()
+
+    await user.cart.merge({
+      couponId: coupon.id, data: [
+        { id: product.id, quantity: 2 },
+        {
+          id: variantProduct.id,
+          quantity: 3,
+          variant: {
+            id: variantProduct.variants[0].id,
+            ingredients: variantProduct.variants[0].ingredients.map(ingredient => {
+              return {
+                id: ingredient.id,
+                quantity: 3,
+                category: variantProduct.variants[0].categories[0].id,
+              }
+            }),
+          },
+        },
+        {
+          id: productWithIngredients.id,
+          quantity: 1,
+          ingredients: productWithIngredients.ingredients.map(ingredient => {
+            return {
+              id: ingredient.id,
+              quantity: 2,
+              category: ingredient.categories[0].id,
+            }
+          }),
+        },
+      ] }).save()
 
     const [address] = user.addresses
 
@@ -361,5 +398,5 @@ test.group('API [checkout.process]', (group) => {
       first_name: address.firstName,
       data: JSON.stringify(user.cart.data),
     })
-  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process', '@api.checkouts.debug'])
 })
