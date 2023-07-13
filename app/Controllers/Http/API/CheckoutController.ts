@@ -1,6 +1,5 @@
 import { Cart, Order } from 'App/Models'
 import Event from '@ioc:Adonis/Core/Event'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import ProcessValidator from 'App/Validators/API/Checkouts/ProcessValidator'
 
@@ -31,7 +30,6 @@ export default class CheckoutController {
       response.ok(order)
     } catch (error) {
       throw error
-      // response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }
