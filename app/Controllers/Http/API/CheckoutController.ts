@@ -30,7 +30,8 @@ export default class CheckoutController {
       // Send order in response with all associated data.
       response.ok(order)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
+      // response.status(error.status).json(new ErrorJSON(error))
     }
   }
 }
