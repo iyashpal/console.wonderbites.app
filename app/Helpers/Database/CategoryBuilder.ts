@@ -23,6 +23,7 @@ export default class CategoryBuilder extends Builder<ModelQueryBuilderContract<t
       this._includes('with', 'products'),
       query => query.preload('products', productQuery => {
         productQuery.select(this.selectColumnsOf('products'))
+          .whereNotNull('published_at')
         this._whereProductsLike(productQuery)
         this._preloadProductMedia(productQuery)
         this._preloadProductReviews(productQuery)
