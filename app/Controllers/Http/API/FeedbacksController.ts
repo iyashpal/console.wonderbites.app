@@ -2,8 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateValidator from 'App/Validators/API/Feedback/CreateValidator'
 
 export default class FeedbacksController {
-  public async index ({ }: HttpContextContract) { }
-
   public async store ({ auth, request, response }: HttpContextContract) {
     const user = auth.use('api').user!
 
@@ -14,13 +12,7 @@ export default class FeedbacksController {
 
       response.json(feedback)
     } catch (error) {
-      response.unprocessableEntity(error)
+      throw error
     }
   }
-
-  public async show ({ }: HttpContextContract) { }
-
-  public async update ({ }: HttpContextContract) { }
-
-  public async destroy ({ }: HttpContextContract) { }
 }
