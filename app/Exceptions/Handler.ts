@@ -40,14 +40,16 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     return super.handle(error, ctx)
   }
 
-  protected handleAPI (error: any, ctx: HttpContextContract) {
+  protected handleAPI (error: any, { response }: HttpContextContract) {
     switch (error.code) {
       case 'E_VALIDATION_FAILURE':
-        return ctx.response.status(422).send(new ValidationErrors(error.messages))
+        return response.status(422).send(new ValidationErrors(error.messages))
       case 'E_AUTHORIZATION_FAILURE':
-        return ctx.response.status(403).send({name: 'AuthorizationException', message: 'Unauthorized access'})
+        return response.status(error.code).send({name: 'AuthorizationException', message: 'Unauthorized access'})
+      case 'E_INVALID_AUTH_PASSWORD':
+        return response.status(error.status).send({code: 'E_INVALID_AUTH_PASSWORD', message: 'Password mis-match'})
       default:
-        return super.handle(error, ctx)
+        return response.status(error.status).send(error)
     }
   }
 }
