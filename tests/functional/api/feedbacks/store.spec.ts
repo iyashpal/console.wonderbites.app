@@ -42,7 +42,7 @@ test.group('API [feedbacks.store]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { experience: ['Experience is required.'] } })
+    $response.assertBodyContains({ errors: { experience: 'Experience is required.' } })
   }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 
   test('it denies to create feedback if body is missing.', async ({ client, route }) => {
@@ -55,7 +55,7 @@ test.group('API [feedbacks.store]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { body: ['Body is required.'] } })
+    $response.assertBodyContains({ errors: { body: 'Body is required.' } })
   }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 
   test('it denies to create feedback if source is missing.', async ({ client, route }) => {
@@ -68,6 +68,6 @@ test.group('API [feedbacks.store]', (group) => {
 
     $response.assertStatus(422)
 
-    $response.assertBodyContains({ messages: { source: ['Source is required.'] } })
+    $response.assertBodyContains({ errors: { source: 'Source is required.' } })
   }).tags(['@api', '@api.feedback', '@api.feedback.store'])
 })
