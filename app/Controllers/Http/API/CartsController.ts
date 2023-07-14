@@ -1,5 +1,4 @@
 import {uniqueHash} from 'App/Helpers/Core'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
@@ -99,7 +98,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -118,7 +117,7 @@ export default class CartsController {
 
       response.ok(await this.data(request, cart))
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
