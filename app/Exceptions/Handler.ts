@@ -41,7 +41,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   protected handleAPI (error: any, httpContext: HttpContextContract) {
-    const response = httpContext.response.status(error.code)
+    const response = httpContext.response.status(error.status)
 
     switch (error.code) {
       case 'E_VALIDATION_FAILURE':
