@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { VerificationCode } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ResetPasswordValidator from 'App/Validators/API/Auth/OTP/ResetPasswordValidator'
@@ -23,7 +22,7 @@ export default class ResetPasswordController {
 
       response.ok({ success: true})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
