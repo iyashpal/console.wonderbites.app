@@ -1,4 +1,3 @@
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import LoginValidator from 'App/Validators/API/Auth/LoginValidator'
 
@@ -17,7 +16,7 @@ export default class LoginController {
 
       response.ok(token)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
