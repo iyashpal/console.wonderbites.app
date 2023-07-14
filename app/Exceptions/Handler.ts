@@ -29,27 +29,29 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     super(Logger)
   }
 
-  public async handle (error: any, ctx: HttpContextContract) {
+  public async handle (error: any, httpContext: HttpContextContract) {
     /**
      * Handle the validation exception for APIs.
      */
-    if (ctx.request.url().startsWith('/api')) {
-      return this.handleAPI(error, ctx)
+    if (httpContext.request.url().startsWith('/api')) {
+      return this.handleAPI(error, httpContext)
     }
 
-    return super.handle(error, ctx)
+    return super.handle(error, httpContext)
   }
 
-  protected handleAPI (error: any, { response }: HttpContextContract) {
+  protected handleAPI (error: any, httpContext: HttpContextContract) {
+    const response = httpContext.response.status(error.code)
+
     switch (error.code) {
       case 'E_VALIDATION_FAILURE':
-        return response.status(422).send(new ValidationErrors(error.messages))
+        return response.send(new ValidationErrors(error.messages))
       case 'E_AUTHORIZATION_FAILURE':
-        return response.status(error.code).send({name: 'AuthorizationException', message: 'Unauthorized access'})
+        return response.send({name: 'AuthorizationException', message: 'Unauthorized access'})
       case 'E_INVALID_AUTH_PASSWORD':
-        return response.status(error.status).send({code: 'E_INVALID_AUTH_PASSWORD', message: 'Password mis-match'})
+        return response.send({code: 'E_INVALID_AUTH_PASSWORD', message: 'Password mis-match'})
       default:
-        return response.status(error.status).send(error)
+        return super.handle(error, httpContext)
     }
   }
 }
