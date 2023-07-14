@@ -40,7 +40,7 @@ test.group('API [coupons.apply]', (group) => {
 
     response.assertStatus(422)
 
-    response.assertBodyContains({messages: {coupon: ['Coupon code is expired.']}})
+    response.assertBodyContains({errors: {coupon: 'Coupon code is expired.'}})
   }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 
   test('it throws validation errors when coupon and cart is missing', async ({client, route, assert}) => {
@@ -51,7 +51,7 @@ test.group('API [coupons.apply]', (group) => {
 
     response.assertStatus(422)
 
-    assert.properties(response.body().messages, ['coupon', 'cart'])
+    assert.properties(response.body().errors, ['coupon', 'cart'])
   }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 
   test('unknown coupon can not apply to cart.', async ({client, route}) => {
@@ -65,6 +65,6 @@ test.group('API [coupons.apply]', (group) => {
       .json({coupon: 'MONDAY_MORNING', cart: cart.id})
 
     response.assertStatus(422)
-    response.assertBodyContains({messages: {coupon: ['Invalid coupon code.']}})
+    response.assertBodyContains({errors: {coupon: 'Invalid coupon code.'}})
   }).tags(['@api', '@api.coupons', '@api.coupons.apply'])
 })

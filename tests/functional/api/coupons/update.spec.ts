@@ -50,6 +50,6 @@ test.group('API [coupons.update]', (group) => {
 
       .loginAs(user)
 
-    response.assertStatus(400)
+    response.assertStatus(404)
   }).tags(['@api', '@api.coupons', '@api.coupons.update'])
 })

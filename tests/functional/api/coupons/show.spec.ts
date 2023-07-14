@@ -32,7 +32,7 @@ test.group('API [coupons.show]', (group) => {
     const response = await client.get(route('api.coupons.show', { id: 15 })).guard('api')
       .loginAs(user)
 
-    response.assertStatus(400)
+    response.assertStatus(404)
   }).tags(['@api', '@api.coupons', '@api.coupons.show'])
 
   test('un-authenticated user can not see the coupon resource.', async ({ client, route }) => {
