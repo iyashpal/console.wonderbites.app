@@ -3,7 +3,7 @@ import {UserFactory} from 'Database/factories'
 import Database from '@ioc:Adonis/Lucid/Database'
 import {string} from '@ioc:Adonis/Core/Helpers'
 
-test.group('Auth login', (group) => {
+test.group('API [login]', (group) => {
   /**
    * 🚀 Setup Global transaction for every test in this group.
    */
