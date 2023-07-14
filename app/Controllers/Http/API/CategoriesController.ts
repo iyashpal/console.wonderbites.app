@@ -14,7 +14,7 @@ export default class CategoriesController {
       const category = await builder('Category', request, 'category').auth(user).run().where('status', 'public')
       response.status(200).json(category)
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
@@ -32,7 +32,7 @@ export default class CategoriesController {
 
       response.status(200).json(category)
     } catch (error) {
-      response.notFound({message: 'Category Not Found'})
+      throw error
     }
   }
 }
