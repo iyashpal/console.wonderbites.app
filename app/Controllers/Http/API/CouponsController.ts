@@ -8,7 +8,7 @@ import RemoveCouponValidator from 'App/Validators/API/Coupon/RemoveValidator'
 export default class CouponsController {
   /**
    * List the specified resources.
-   * 
+   *
    * @param param0 {HttpContextContract}
    */
   public async index ({ response }: HttpContextContract) {
@@ -17,13 +17,13 @@ export default class CouponsController {
 
       response.json(coupons)
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
   /**
    * Store a coupon to database.
-   * 
+   *
    * @param param0 {HttpcontextContract}
    */
   public async store ({ request, response }: HttpContextContract) {
@@ -34,13 +34,13 @@ export default class CouponsController {
 
       response.json(coupon)
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
   /**
    * Get the resource details.
-   * 
+   *
    * @returns {JSON}
    */
   public async show ({ params, response }: HttpContextContract) {
@@ -49,13 +49,13 @@ export default class CouponsController {
 
       response.status(200).json(coupon)
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
   /**
    * Update the resource data.
-   * 
+   *
    * @returns {JSON}
    */
   public async update ({ request, response, params }: HttpContextContract) {
@@ -70,13 +70,13 @@ export default class CouponsController {
 
       response.status(200).json(coupon)
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
   /**
    * Delete the resource from database.
-   * 
+   *
    * @returns {JSON}
    */
   public async destroy ({ params, response }: HttpContextContract) {
@@ -87,7 +87,7 @@ export default class CouponsController {
         deleted: await coupon.delete(),
       })
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 
@@ -116,10 +116,10 @@ export default class CouponsController {
       }
 
       if (coupon && coupon.is_expired) {
-        response.status(422).json({ messages: { coupon: ['Coupon code is expired.'] } })
+        response.status(422).json({ errors: { coupon: 'Coupon code is expired.' } })
       }
     } catch (error) {
-      response.status(422).json(error)
+      throw error
     }
   }
 
@@ -133,7 +133,7 @@ export default class CouponsController {
 
       response.status(200).json(cart)
     } catch (error) {
-      response.status(422).json(error)
+      throw error
     }
   }
 }
