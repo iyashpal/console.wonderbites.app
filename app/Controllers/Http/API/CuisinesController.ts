@@ -4,8 +4,8 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class CuisinesController {
   /**
    * Display a listing of the resource.
-   * 
-   * @param param0 HttpContextContract 
+   *
+   * @param param0 HttpContextContract
    */
   public async index ({ request, response }: HttpContextContract) {
     try {
@@ -24,7 +24,7 @@ export default class CuisinesController {
 
       response.status(200).json(cuisines)
     } catch (error) {
-      response.badRequest(error.messages)
+      throw error
     }
   }
 
@@ -39,7 +39,7 @@ export default class CuisinesController {
 
       response.status(200).json(cuisine)
     } catch (error) {
-      response.badRequest(error.messages)
+      throw error
     }
   }
 }
