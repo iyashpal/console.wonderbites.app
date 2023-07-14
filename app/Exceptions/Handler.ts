@@ -14,6 +14,8 @@
 */
 
 import Logger from '@ioc:Adonis/Core/Logger'
+import { ValidationErrors } from 'App/Helpers/Validation'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
@@ -25,5 +27,16 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   constructor () {
     super(Logger)
+  }
+
+  public async handle (error: any, ctx: HttpContextContract) {
+    /**
+     * Handle the validation exception for APIs.
+     */
+    if (error.code === 'E_VALIDATION_FAILURE' && ctx.request.url().startsWith('/api')) {
+      return ctx.response.status(422).send(new ValidationErrors(error.messages))
+    }
+
+    return super.handle(error, ctx)
   }
 }
