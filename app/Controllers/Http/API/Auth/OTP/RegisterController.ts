@@ -1,4 +1,3 @@
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { User, VerificationCode } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import RegisterValidator from 'App/Validators/API/Auth/OTP/RegisterValidator'
@@ -30,7 +29,7 @@ export default class RegisterController {
 
       response.ok(authToken)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
