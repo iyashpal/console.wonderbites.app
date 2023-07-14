@@ -18,14 +18,14 @@ test.group('API > Auth [otp.register]', (group) => {
       const response = await client.post(route('api.otp.register')).guard('api').loginAs(user)
 
       response.assertStatus(401)
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 
   test('it reads 422 status code when request payload is empty.')
     .run(async ({ client, route }) => {
       const response = await client.post(route('api.otp.register')).json({})
 
       response.assertStatus(422)
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 
   test('it reads 422 status code when the token is invalid.')
     .run(async ({ client, route }) => {
@@ -34,7 +34,7 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { token: 'exists validation failure' } })
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 
   test('it reads {code} status code when {situation}')
     .with([
@@ -142,7 +142,7 @@ test.group('API > Auth [otp.register]', (group) => {
       if (field.assert) {
         response.assertBodyContains(field.assert)
       }
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 
   test('it reads 422 status code when state is not set to Register.')
     .run(async ({ client, route }) => {
@@ -161,7 +161,7 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(422)
       response.assertBodyContains({ errors: { token: 'Invalid token state' } })
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 
   test('it reads 200 status code when token and form data is valid with correct token state.')
     .run(async ({ client, route, assert }) => {
@@ -181,5 +181,5 @@ test.group('API > Auth [otp.register]', (group) => {
 
       response.assertStatus(200)
       assert.properties(response.body(), ['type', 'token'])
-    }).tags(['@api', '@auth', '@api.auth.otp', '@api.otp.register'])
+    }).tags(['@api', '@auth', '@api.otp', '@api.otp.register'])
 })
