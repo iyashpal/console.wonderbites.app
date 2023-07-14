@@ -1,5 +1,3 @@
-
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 
 export default class LogoutController {
@@ -16,7 +14,7 @@ export default class LogoutController {
 
       response.status(200).json({revoked: true})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
