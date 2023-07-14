@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import OTP from 'App/Helpers/OTP'
 import Env from '@ioc:Adonis/Core/Env'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import { User, VerificationCode } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -39,7 +38,7 @@ export default class ForgotPasswordController {
 
       response.ok({ success: !!code.id, token: code.token, source: email ?? mobile, user: user.id })
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
