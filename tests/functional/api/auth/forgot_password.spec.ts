@@ -2,7 +2,7 @@ import { test } from '@japa/runner'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { UserFactory } from 'Database/factories'
 
-test.group('Auth forgot password', () => {
+test.group('Auth [forgot.password]', () => {
   test('Logged in users can not request the password reset link.', async ({ client, route }) => {
     const user = await UserFactory.create()
     const response = await client.post(route('api.password.email'))
@@ -15,9 +15,7 @@ test.group('Auth forgot password', () => {
     const response = await client.post(route('api.password.email')).json({}).accept('json')
 
     response.assertBodyContains({
-      errors: [
-        { rule: 'required', field: 'email', message: 'Email address is required.' },
-      ],
+      errors: { email: 'Email address is required.' },
     })
   }).tags(['@api', '@auth', '@api.password.forgot'])
 
@@ -25,9 +23,7 @@ test.group('Auth forgot password', () => {
     const response = await client.post(route('api.password.email')).json({ email: 'test' }).accept('json')
 
     response.assertBodyContains({
-      errors: [
-        { rule: 'email', field: 'email', message: 'Enter a valid email address.' },
-      ],
+      errors: { email: 'Email does not exists.' },
     })
   }).tags(['@api', '@auth', '@api.password.forgot'])
 
@@ -35,9 +31,7 @@ test.group('Auth forgot password', () => {
     const response = await client.post(route('api.password.email')).json({ email: 'info@example.com' }).accept('json')
 
     response.assertBodyContains({
-      errors: [
-        { rule: 'exists', field: 'email', message: 'Email does not exists.' },
-      ],
+      errors: { email: 'Email does not exists.' },
     })
   }).tags(['@api', '@auth', '@api.password.forgot'])
 
