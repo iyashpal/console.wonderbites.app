@@ -33,10 +33,21 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     /**
      * Handle the validation exception for APIs.
      */
-    if (error.code === 'E_VALIDATION_FAILURE' && ctx.request.url().startsWith('/api')) {
-      return ctx.response.status(422).send(new ValidationErrors(error.messages))
+    if (ctx.request.url().startsWith('/api')) {
+      return this.handleAPI(error, ctx)
     }
 
     return super.handle(error, ctx)
+  }
+
+  protected handleAPI (error: any, ctx: HttpContextContract) {
+    switch (error.code) {
+      case 'E_VALIDATION_FAILURE':
+        return ctx.response.status(422).send(new ValidationErrors(error.messages))
+      case 'E_AUTHORIZATION_FAILURE':
+        return ctx.response.status(403).send({name: 'AuthorizationException', message: 'Unauthorized access'})
+      default:
+        return super.handle(error, ctx)
+    }
   }
 }
