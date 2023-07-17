@@ -5,22 +5,26 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ReviewsController {
   public async index ({ request, response }: HttpContextContract) {
-    const reviews = await Review.query()
-      .match([request.input('with', []).includes('review.user'), query => query.preload('user')])
-      .match([
-        request.input('with', []).includes('review.product'),
-        query => query.preload('product', builder => builder.match([
-          request.input('with', []).includes('review.product.media'),
-          query => query.preload('media'),
-        ])),
-      ])
-      .match([
-        request.input('product', null),
-        query => query.where('reviewable_id', request.input('product')).where('reviewable', 'Product'),
-      ])
-      .paginate(request.input('page', 1), request.input('limit', 10))
+    try {
+      const reviews = await Review.query()
+        .match([request.input('with', []).includes('review.user'), query => query.preload('user')])
+        .match([
+          request.input('with', []).includes('review.product'),
+          query => query.preload('product', builder => builder.match([
+            request.input('with', []).includes('review.product.media'),
+            query => query.preload('media'),
+          ])),
+        ])
+        .match([
+          request.input('product', null),
+          query => query.where('reviewable_id', request.input('product')).where('reviewable', 'Product'),
+        ])
+        .paginate(request.input('page', 1), request.input('limit', 10))
 
-    response.json(reviews)
+      response.json(reviews)
+    } catch (error) {
+      throw error
+    }
   }
 
   public async store ({ request, auth, response }: HttpContextContract) {
@@ -33,7 +37,7 @@ export default class ReviewsController {
 
       response.json(review)
     } catch (error) {
-      response.unprocessableEntity(error)
+      throw error
     }
   }
 
@@ -63,10 +67,7 @@ export default class ReviewsController {
 
       response.json(review)
     } catch (error) {
-      response.unprocessableEntity(error)
+      throw error
     }
-  }
-
-  public async destroy ({ }: HttpContextContract) {
   }
 }

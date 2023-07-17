@@ -18,7 +18,7 @@ export default class ProductsController {
 
       response.status(200).json(products)
     } catch (error) {
-      response.badRequest(error.messages)
+      throw error
     }
   }
 
@@ -38,7 +38,7 @@ export default class ProductsController {
 
       response.status(200).json(product)
     } catch (error) {
-      response.unauthorized({message: error.message})
+      throw error
     }
   }
 

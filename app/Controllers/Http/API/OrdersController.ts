@@ -1,5 +1,4 @@
 import {builder} from 'App/Helpers/Database'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {OrderStatus} from 'App/Models/Enums/Order'
 import {RequestContract} from '@ioc:Adonis/Core/Request'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
@@ -63,7 +62,7 @@ export default class OrdersController {
 
       response.status(200).json(orders)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -78,7 +77,7 @@ export default class OrdersController {
 
       response.status(200).json(await this.data(request, order))
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -103,7 +102,7 @@ export default class OrdersController {
 
       response.ok(canceledOrder)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }

@@ -9,16 +9,20 @@ export default class WishlistsController {
    * @param param0 HttpContextContract Request payload
    */
   public async show ({auth, response, request}: HttpContextContract) {
-    const user = auth.use('api').user!
+    try {
+      const user = auth.use('api').user!
 
-    const wishlist = await user.related('wishlist').firstOrCreate(
-      {userId: user.id}, // Search payload
-      {ipAddress: request.ip()} // Save payload
-    )
+      const wishlist = await user.related('wishlist').firstOrCreate(
+        {userId: user.id}, // Search payload
+        {ipAddress: request.ip()} // Save payload
+      )
 
-    await wishlist.load('products')
+      await wishlist.load('products')
 
-    response.json(await this.wishlistWithRequestedData(request, wishlist.id))
+      response.json(await this.wishlistWithRequestedData(request, wishlist.id))
+    } catch (error) {
+      throw error
+    }
   }
 
   /**
@@ -27,24 +31,28 @@ export default class WishlistsController {
    * @param param0 {HttpContextContract} Request payload.
    */
   public async update ({auth, response, request}: HttpContextContract) {
-    const user = auth.use('api').user!
+    try {
+      const user = auth.use('api').user!
 
-    const wishlist = await user.related('wishlist').firstOrCreate(
-      {userId: user.id}, // Search payload
-      {ipAddress: request.ip()} // Save payload
-    )
+      const wishlist = await user.related('wishlist').firstOrCreate(
+        {userId: user.id}, // Search payload
+        {ipAddress: request.ip()} // Save payload
+      )
 
-    // Add products to wishlist.
-    if (request.input('action') === 'ADD') {
-      await this.syncToWishlist(request, wishlist)
+      // Add products to wishlist.
+      if (request.input('action') === 'ADD') {
+        await this.syncToWishlist(request, wishlist)
+      }
+
+      // Remove products from wishlist.
+      if (request.input('action') === 'REMOVE') {
+        await this.detachFromWishlist(request, wishlist)
+      }
+
+      response.json(await this.wishlistWithRequestedData(request, wishlist.id))
+    } catch (error) {
+      throw error
     }
-
-    // Remove products from wishlist.
-    if (request.input('action') === 'REMOVE') {
-      await this.detachFromWishlist(request, wishlist)
-    }
-
-    response.json(await this.wishlistWithRequestedData(request, wishlist.id))
   }
 
   /**
@@ -65,7 +73,7 @@ export default class WishlistsController {
 
       response.json(await this.wishlistWithRequestedData(request, wishlist.id))
     } catch (error) {
-      response.badRequest(error)
+      throw error
     }
   }
 

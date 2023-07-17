@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { User } from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AvatarValidator from 'App/Validators/API/User/AvatarValidator'
@@ -22,7 +21,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -47,7 +46,7 @@ export default class UsersController {
 
       response.status(200).ok(user)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -66,7 +65,7 @@ export default class UsersController {
 
         response.ok({success: true})
       } catch (error) {
-        response.badRequest(error)
+        throw error
       }
     } catch (error) {
       response.notFound(error)
@@ -88,7 +87,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -109,7 +108,7 @@ export default class UsersController {
 
       response.status(200).json(user)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }

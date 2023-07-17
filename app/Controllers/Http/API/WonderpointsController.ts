@@ -5,58 +5,70 @@ import StoreValidator from 'App/Validators/API/WonderPoints/StoreValidator'
 export default class WonderPointsController {
   /**
    * Show the list of all wonderPoints.
-   * 
+   *
    * @param param0 {HttpContextContract}
    */
   public async index ({ auth, request, response }: HttpContextContract) {
+    try {
     // Authenticate user
-    const user = await auth.use('api').authenticate()
+      const user = await auth.use('api').authenticate()
 
-    // Query user wonderPoints.
-    const wonderPoints = await user.related('wonderPoints').query()
-      .match(
-        [request.input('type', 'all') === 'all', query => query],
-        [request.input('type') === 'earned', query => query.where('action', 'earn')],
-        [request.input('type') === 'redeemed', query => query.where('action', 'redeem')],
-      )
-      .paginate(request.input('page', 1), request.input('limit', 10))
+      // Query user wonderPoints.
+      const wonderPoints = await user.related('wonderPoints').query()
+        .match(
+          [request.input('type', 'all') === 'all', query => query],
+          [request.input('type') === 'earned', query => query.where('action', 'earn')],
+          [request.input('type') === 'redeemed', query => query.where('action', 'redeem')],
+        )
+        .paginate(request.input('page', 1), request.input('limit', 10))
 
-    // Send the json response
-    response.json(wonderPoints)
+      // Send the json response
+      response.json(wonderPoints)
+    } catch (error) {
+      throw error
+    }
   }
 
   public async store ({ auth, request, response }: HttpContextContract) {
-    const user = await auth.use('api').authenticate()
+    try {
+      const user = await auth.use('api').authenticate()
 
-    const attributes = await request.validate(StoreValidator)
+      const attributes = await request.validate(StoreValidator)
 
-    const wonderPoint = await user.related('wonderPoints').create(attributes)
+      const wonderPoint = await user.related('wonderPoints').create(attributes)
 
-    response.json(wonderPoint)
+      response.json(wonderPoint)
+    } catch (error) {
+      throw error
+    }
   }
 
   /**
    * Avail user's available wonderPoints.
-   * 
-   * @param param0 
+   *
+   * @param param0
    */
   public async availWonderPoints ({ auth, response }: HttpContextContract) {
-    // Get authenticated user
-    const user = await auth.use('api').authenticate()
+    try {
+      // Get authenticated user
+      const user = await auth.use('api').authenticate()
 
-    // Get total user wonderPoints
-    const [wonderPoints] = await Database.from('wonder_points').sum('points as total')
-      .where('user_id', user.id).where('action', 'earn')
+      // Get total user wonderPoints
+      const [wonderPoints] = await Database.from('wonder_points').sum('points as total')
+        .where('user_id', user.id).where('action', 'earn')
 
-    const total = (wonderPoints.total ? wonderPoints.total : 0)
+      const total = (wonderPoints.total ? wonderPoints.total : 0)
 
-    // Get total redeemed wonderPoints
-    const [redeemedWonderPoints] = await Database.from('wonder_points').sum('points as total')
-      .where('user_id', user.id).where('action', 'redeem')
+      // Get total redeemed wonderPoints
+      const [redeemedWonderPoints] = await Database.from('wonder_points').sum('points as total')
+        .where('user_id', user.id).where('action', 'redeem')
 
-    const redeemed = (redeemedWonderPoints.total ? redeemedWonderPoints.total : 0)
+      const redeemed = (redeemedWonderPoints.total ? redeemedWonderPoints.total : 0)
 
-    // Return total available wonderPoints.
-    response.json({ wonder_points: total - redeemed })
+      // Return total available wonderPoints.
+      response.json({ wonder_points: total - redeemed })
+    } catch (error) {
+      throw error
+    }
   }
 }
