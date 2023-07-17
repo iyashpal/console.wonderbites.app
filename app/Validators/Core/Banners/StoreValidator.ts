@@ -31,9 +31,9 @@ export default class StoreValidator {
       size: '1024kb',
       extnames: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'],
     }, [rules.required()]),
-    page: schema.string({trim: true}),
-    section: schema.string({trim: true}),
-    type: schema.string({trim: true}),
+    page: schema.string({trim: true}, [rules.required()]),
+    section: schema.string({trim: true}, [rules.required()]),
+    type: schema.string({trim: true}, [rules.required()]),
     link: schema.string.nullableAndOptional({trim: true}),
     status: schema.string({trim: true}, [rules.required()]),
   })
