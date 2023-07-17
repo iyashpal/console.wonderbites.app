@@ -316,6 +316,89 @@ test.group('API [checkout.process]', (group) => {
       $response.assertBodyContains(assert)
     }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
 
+  test('It checks the order data prices after creation of the order.', async ({client, route, assert}) => {
+    const user = await UserFactory.with('cart').with('addresses').create()
+    const product = await ProductFactory.create()
+    const productWithIngredients = await ProductFactory
+      .with('ingredients', 5, query => query.with('categories', 1)).create()
+    const productWithVariants = await ProductFactory
+      .with('variants', 3).create()
+    const productWithVariantsAndIngredients = await ProductFactory
+      .with('variants', 3, query => {
+        query.with('ingredients', 5, categoryQuery => categoryQuery.with('categories'))
+      }).create()
+
+    const [address] = user.addresses
+
+    const coupon = await CouponFactory.create()
+
+    const data = [
+      { id: product.id, quantity: 1 },
+      {
+        id: productWithIngredients.id,
+        quantity: 1,
+        ingredients: productWithIngredients.ingredients.map(ingredient => {
+          return {id: ingredient.id, category: ingredient.categories[0].id, quantity: 1}
+        }),
+      },
+      {
+        id: productWithVariants.id,
+        quantity: 1,
+        variant: {
+          id: productWithVariants.variants[0].id,
+        },
+      },
+      {
+        id: productWithVariantsAndIngredients.id,
+        quantity: 1,
+        variant: {
+          id: productWithVariantsAndIngredients.variants[0].id,
+          ingredients: productWithVariantsAndIngredients.variants[0].ingredients.map(ingredient => {
+            return {id: ingredient.id, category: ingredient.categories[0].id, quantity: 1}
+          }),
+        },
+      },
+    ]
+
+    await user.cart.merge({couponId: coupon.id, data }).save()
+
+    const $response = await client.post(route('api.checkouts.process', user.cart))
+      .guard('api').loginAs(user).json({
+        ...address,
+        channel: 'console',
+        paymentMode: 'COD',
+        orderType: 'delivery',
+        note: 'Test note for the order',
+      })
+
+    $response.assertStatus(200)
+
+    $response.assertBodyContains({ data: JSON.stringify(data) })
+
+    const $orderResponse = await client.get(route('api.orders.show', { id: $response.body().id }))
+      .guard('api').loginAs(user)
+
+    $orderResponse.assertStatus(200)
+
+    JSON.parse($orderResponse.body().data).map($product => {
+      assert.properties($product, ['id', 'price', 'quantity'])
+
+      if ($product.variant) {
+        assert.properties($product.variant, ['id', 'price'])
+
+        $product.variant.ingredients?.map($ingredient => {
+          assert.properties($ingredient, ['id', 'category', 'price'])
+        })
+      }
+
+      if ($product.ingredients) {
+        $product.ingredients?.map($ingredient => {
+          assert.properties($ingredient, ['id', 'category', 'price'])
+        })
+      }
+    })
+  }).tags(['@api', '@api.checkout', '@api.checkouts.process'])
+
   test('it can delete the cart on order creation from the referenced cart.', async ({client, route, assert}) => {
     const user = await UserFactory.with('cart').with('addresses').create()
 
