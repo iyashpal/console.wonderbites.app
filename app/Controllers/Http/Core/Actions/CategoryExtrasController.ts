@@ -1,5 +1,4 @@
 import { Category } from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CategoryExtrasController {
@@ -10,7 +9,7 @@ export default class CategoryExtrasController {
 
       response.ok({category})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
