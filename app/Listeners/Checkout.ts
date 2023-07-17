@@ -24,13 +24,15 @@ export default class Checkout {
           variant: {
             ...dataProduct.variant,
             price: Number(variant.price),
-            ingredients: dataProduct.variant.ingredients.map(dataIngredient => {
-              let ingredient = variant.ingredients.find(({ id }) => id === dataIngredient.id)
-              return {
-                ...dataIngredient,
-                price: ingredient?.$extras.pivot_price,
-              }
-            }),
+            ...(dataProduct.variant.ingredients ? {
+              ingredients: dataProduct.variant.ingredients?.map(dataIngredient => {
+                let ingredient = variant.ingredients.find(({ id }) => id === dataIngredient.id)
+                return {
+                  ...dataIngredient,
+                  price: ingredient?.$extras.pivot_price,
+                }
+              }),
+            } : {}),
           },
         } : {}),
         ...(dataProduct.ingredients ? {
