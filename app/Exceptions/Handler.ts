@@ -30,10 +30,11 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   public async handle (error: any, httpContext: HttpContextContract) {
+    const { request } = httpContext
     /**
      * Handle the validation exception for APIs.
      */
-    if (httpContext.request.url().startsWith('/api')) {
+    if (['/api', '/core'].some(url => request.url().startsWith(url))) {
       return this.handleAPI(error, httpContext)
     }
 
