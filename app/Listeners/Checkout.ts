@@ -2,7 +2,7 @@ import { Order, Product } from 'App/Models'
 import type { EventsList } from '@ioc:Adonis/Core/Event'
 
 export default class Checkout {
-  public async calculatePrice (order: EventsList['new:order']) {
+  public async orderCreated (order: EventsList['Checkout:OrderCreated']) {
     if (order.data === null) {
       return
     }

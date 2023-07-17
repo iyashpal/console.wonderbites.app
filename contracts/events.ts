@@ -28,6 +28,6 @@ declare module '@ioc:Adonis/Core/Event' {
   |
   */
   interface EventsList {
-    'new:order': Order
+    'Checkout:OrderCreated': Order
   }
 }

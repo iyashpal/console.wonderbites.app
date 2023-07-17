@@ -9,4 +9,4 @@
 */
 import Event from '@ioc:Adonis/Core/Event'
 
-Event.on('new:order', 'Checkout.calculatePrice')
+Event.on('Checkout:OrderCreated', 'Checkout.orderCreated')
