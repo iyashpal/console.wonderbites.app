@@ -49,7 +49,7 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertStatus(422)
 
-    request.assertBodyContains({ messages: { reviewableId: ['Reviewable ID field is required.'] } })
+    request.assertBodyContains({ errors: { reviewableId: 'Reviewable ID field is required.' } })
   }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can validate the review title before submitting the review.', async ({ client, route }) => {
@@ -64,7 +64,7 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertStatus(422)
 
-    request.assertBodyContains({ messages: { title: ['Title is required.'] } })
+    request.assertBodyContains({ errors: { title: 'Title is required.' } })
   }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 
   test('it can validate the review body before submitting the review.', async ({ client, route }) => {
@@ -79,6 +79,6 @@ test.group('Api [reviews.store]', (group) => {
 
     request.assertStatus(422)
 
-    request.assertBodyContains({ messages: { body: ['Body is required.'] } })
+    request.assertBodyContains({ errors: { body: 'Body is required.' } })
   }).tags(['@api', '@api.reviews', '@api.reviews.store'])
 })
