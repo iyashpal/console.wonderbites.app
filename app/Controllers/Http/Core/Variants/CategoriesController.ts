@@ -1,5 +1,4 @@
 import { Category } from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Variants/Categories/StoreValidator'
 
@@ -19,7 +18,7 @@ export default class CategoriesController {
 
       response.ok(category)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 

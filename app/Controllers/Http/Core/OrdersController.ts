@@ -1,6 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Order, Product } from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class OrdersController {
   public async index ({ request, response }: HttpContextContract) {
@@ -10,7 +9,7 @@ export default class OrdersController {
 
       response.ok(orders)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -27,7 +26,7 @@ export default class OrdersController {
         products: await Product.query().whereIn('id', order.ProductIDs()),
       })
     } catch (e) {
-      response.status(e.status).json(new ErrorJSON(e))
+      throw e
     }
   }
 

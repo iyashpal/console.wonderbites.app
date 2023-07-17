@@ -1,5 +1,4 @@
 import {Category, Ingredient} from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Ingredients/StoreValidator'
@@ -17,7 +16,7 @@ export default class IngredientsController {
 
       response.status(200).json(ingredients)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -28,7 +27,7 @@ export default class IngredientsController {
 
       response.ok({categories})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -65,7 +64,7 @@ export default class IngredientsController {
 
       response.ok(ingredient)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -79,7 +78,7 @@ export default class IngredientsController {
 
       response.ok({ingredient})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -97,7 +96,7 @@ export default class IngredientsController {
 
       response.ok({categories, ingredient, category})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -133,7 +132,7 @@ export default class IngredientsController {
 
       response.ok(ingredient)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -145,7 +144,7 @@ export default class IngredientsController {
 
       response.ok({success: true})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }

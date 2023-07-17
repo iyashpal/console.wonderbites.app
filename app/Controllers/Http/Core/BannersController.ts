@@ -1,5 +1,4 @@
 import {Banner} from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Banners/StoreValidator'
@@ -13,7 +12,7 @@ export default class BannersController {
 
       response.ok(banners)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -35,7 +34,7 @@ export default class BannersController {
 
       response.ok(banner)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -45,7 +44,7 @@ export default class BannersController {
 
       response.ok({banner})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -55,7 +54,7 @@ export default class BannersController {
 
       response.ok({banner})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -73,7 +72,7 @@ export default class BannersController {
 
       response.ok(banner)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -83,7 +82,7 @@ export default class BannersController {
       await banner.delete()
       response.ok({success: true})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }

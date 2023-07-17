@@ -2,11 +2,9 @@ import {DateTime} from 'luxon'
 import {Category, Cuisine} from 'App/Models'
 import {types} from '@ioc:Adonis/Core/Helpers'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
-import ExceptionResponse from 'App/Helpers/ExceptionResponse'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Cuisines/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Cuisines/UpdateValidator'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class CuisinesController {
   public async index ({request, response}: HttpContextContract) {
@@ -16,8 +14,8 @@ export default class CuisinesController {
       const cuisines = await Cuisine.query().preload('user').whereNull('deleted_at').paginate(page, limit)
 
       response.json(cuisines)
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -33,8 +31,8 @@ export default class CuisinesController {
       })
 
       response.ok(cuisine)
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -42,8 +40,8 @@ export default class CuisinesController {
     try {
       const cuisine = await Cuisine.query().where('id', params.id).whereNull('deleted_at').firstOrFail()
       response.ok({cuisine})
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -58,8 +56,8 @@ export default class CuisinesController {
       const categories = await Category.query().select('id', 'name').whereNull('deleted_at')
 
       response.ok({cuisine, categories})
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -76,8 +74,8 @@ export default class CuisinesController {
       }).save()
 
       response.ok(cuisine)
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -96,8 +94,8 @@ export default class CuisinesController {
 
         response.ok({deleted: !types.isNull(cuisine.deletedAt)})
       }
-    } catch (errors) {
-      ExceptionResponse.use(errors).resolve(response)
+    } catch (error) {
+      throw error
     }
   }
 
@@ -121,7 +119,7 @@ export default class CuisinesController {
 
       return response.json({cuisine})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }

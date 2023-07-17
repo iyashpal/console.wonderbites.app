@@ -2,7 +2,6 @@ import { Variant } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Variants/StoreValidator'
 import UpdateValidator from 'App/Validators/Core/Variants/UpdateValidator'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 
 export default class VariantsController {
   public async index ({ }: HttpContextContract) { }
@@ -30,7 +29,7 @@ export default class VariantsController {
 
       response.ok($variant)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -52,7 +51,7 @@ export default class VariantsController {
 
       response.ok($variant)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -64,7 +63,7 @@ export default class VariantsController {
 
       response.ok({ success: true })
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
