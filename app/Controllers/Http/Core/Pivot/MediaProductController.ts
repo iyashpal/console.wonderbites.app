@@ -1,5 +1,4 @@
 import {Product, Media} from 'App/Models'
-import ErrorJSON from 'App/Helpers/ErrorJSON'
 import {Attachment} from '@ioc:Adonis/Addons/AttachmentLite'
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import StoreValidator from 'App/Validators/Core/Pivot/MediaProduct/StoreValidator'
@@ -23,7 +22,7 @@ export default class MediaProductController {
 
       response.ok(media)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -42,7 +41,7 @@ export default class MediaProductController {
 
       response.ok(media)
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 
@@ -56,7 +55,7 @@ export default class MediaProductController {
       await media.delete()
       response.ok({success: true})
     } catch (error) {
-      response.status(error.status).json(new ErrorJSON(error))
+      throw error
     }
   }
 }
