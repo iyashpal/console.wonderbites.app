@@ -29,8 +29,7 @@ test.group('API [users.destroy]', (group) => {
   test('It throws 404 when the user is not exists.', async ({ route, client }) => {
     const user = await UserFactory.create()
 
-    const $response = await client.delete(route('api.users.destroy', {id: 5})).guard('api').loginAs(user)
-
+    const $response = await client.delete(route('api.users.destroy', {id: 550})).guard('api').loginAs(user)
     $response.assertStatus(404)
   }).tags(['@api', '@api.users', '@api.users.destroy'])
 
