@@ -69,40 +69,40 @@ test.group('Core [banners.store]', (group) => {
       },
       {
         situation: 'option page is empty',
-        field: 'options[page]',
+        field: 'page',
         value: '',
         code: 422,
         assert: {
           errors: {
-            'options.page': 'required validation failed',
+            page: 'required validation failed',
           },
         },
       },
       {
         situation: 'option section is empty',
-        field: 'options[section]',
+        field: 'section',
         value: '',
         code: 422,
         assert: {
           errors: {
-            'options.section': 'required validation failed',
+            section: 'required validation failed',
           },
         },
       },
       {
         situation: 'option type is empty',
-        field: 'options[type]',
+        field: 'type',
         value: '',
         code: 422,
         assert: {
           errors: {
-            'options.type': 'required validation failed',
+            type: 'required validation failed',
           },
         },
       },
       {
         situation: 'option link is empty',
-        field: 'options[link]',
+        field: 'link',
         value: '',
         code: 200,
         assert: {},
@@ -122,10 +122,10 @@ test.group('Core [banners.store]', (group) => {
         .fields({
           title: 'Today\'s pick',
           status: 'active',
-          'options[page]': 'home',
-          'options[section]': 'todayspick',
-          'options[type]': 'slide',
-          'options[link]': '',
+          page: 'home',
+          section: 'todayspick',
+          type: 'slide',
+          link: '',
           ...((field.field !== 'attachment' && field.field) && {[field.field]: field.value}),
         })
 
