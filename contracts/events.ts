@@ -5,7 +5,7 @@
  * file.
  */
 
-import { Order, User } from 'App/Models'
+import {Order, User} from 'App/Models'
 
 declare module '@ioc:Adonis/Core/Event' {
   /*
@@ -30,5 +30,7 @@ declare module '@ioc:Adonis/Core/Event' {
   interface EventsList {
     'User:OnBoard': User,
     'Checkout:OrderCreated': Order,
+    'OneTimePassword:SMS': { source: string, code: string, identifier: string },
+    'OneTimePassword:EMAIL': { source: string, code: string },
   }
 }
