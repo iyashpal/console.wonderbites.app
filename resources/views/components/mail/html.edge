@@ -1,0 +1,25 @@
+<mjml color="#55575d" >
+
+    <mj-head>
+        <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" />
+    </mj-head>
+
+    <mj-body background-color="#F4F4F4" font-family="Inter">
+
+        @component('components/mail/html/header')
+        {{{ await $slots.header() }}}
+        @end
+
+        @component('components/mail/html/content')
+        {{{ await $slots.content() }}}
+        @end
+
+        @component('components/mail/html/footer')
+        {{{ await $slots.footer() }}}
+        @end
+
+        @!component('components/mail/html/copyright')
+
+    </mj-body>
+
+</mjml>

@@ -1,0 +1,13 @@
+@component('components/mail/html')
+    @slot('header')
+        <mj-text font-size="25px" font-weight="bold" font-family="inter" align="center" color="#fff">WONDERBITES</mj-text>
+    @end
+
+    @slot('content')
+        {{{ await $slots.content() }}}
+    @end
+
+    @slot('footer')
+        {{{ await $slots.footer() }}}
+    @end
+@end
