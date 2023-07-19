@@ -1,6 +1,7 @@
 import { Axios } from '@/helpers'
-import Views from '@/routes/views'
+import AppViews from '~/routes/app'
 import { AuthLayout } from '~/layouts'
+import DeveloperViews from '~/routes/developer'
 import { Root, Errors } from '@/components/app'
 import { createBrowserRouter, Outlet, redirect } from 'react-router-dom'
 
@@ -12,7 +13,7 @@ export default createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Views.Auth.Login />,
+        element: <AppViews.Auth.Login />,
       },
       {
         path: 'app',
@@ -29,7 +30,7 @@ export default createBrowserRouter([
         children: [
           {
             path: 'dashboard',
-            element: <Views.Dashboard />
+            element: <AppViews.Dashboard />
           },
 
           /**
@@ -41,20 +42,20 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Users.List />,
+                element: <AppViews.Users.List />,
               },
               {
                 path: 'create',
-                element: <Views.Users.Create />,
+                element: <AppViews.Users.Create />,
               },
               {
                 path: ':id/edit',
-                element: <Views.Users.Edit />,
+                element: <AppViews.Users.Edit />,
                 loader: async ({ params }) => Axios().get(`/users/${params.id}/edit`).then(({ data }) => data).catch(({ response }) => response)
               },
               {
                 path: ':id',
-                element: <Views.Users.Show />,
+                element: <AppViews.Users.Show />,
               },
             ]
           },
@@ -68,23 +69,23 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Categories.List />,
+                element: <AppViews.Categories.List />,
               },
 
               {
                 path: 'create',
-                element: <Views.Categories.Create />,
+                element: <AppViews.Categories.Create />,
                 loader: async () => Axios().get('categories/create').then(({ data }) => data),
               },
 
               {
                 path: ':id',
-                element: <Views.Categories.Show />,
+                element: <AppViews.Categories.Show />,
                 loader: async ({ params }) => Axios().get(`categories/${params.id}`).then(({ data }) => data),
               },
               {
                 path: ':id/edit',
-                element: <Views.Categories.Edit />,
+                element: <AppViews.Categories.Edit />,
                 loader: async ({ params }) => Axios().get(`categories/${params.id}/edit`).then(({ data }) => data)
               }
             ]
@@ -99,7 +100,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Reviews.List />
+                element: <AppViews.Reviews.List />
               }
             ]
           },
@@ -113,21 +114,21 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Ingredients.List />
+                element: <AppViews.Ingredients.List />
               },
               {
                 path: 'create',
-                element: <Views.Ingredients.Create />,
+                element: <AppViews.Ingredients.Create />,
                 loader: async () => Axios().get(`/ingredients/create`).then(({ data }) => data)
               },
               {
                 path: ':id',
-                element: <Views.Ingredients.Show />,
+                element: <AppViews.Ingredients.Show />,
                 loader: async ({ params }) => Axios().get(`/ingredients/${params.id}`).then(({ data }) => data)
               },
               {
                 path: ':id/edit',
-                element: <Views.Ingredients.Edit />,
+                element: <AppViews.Ingredients.Edit />,
                 loader: async ({ params }) => Axios().get(`/ingredients/${params.id}/edit`).then(({ data }) => data)
               },
             ]
@@ -142,20 +143,20 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Cuisines.List />
+                element: <AppViews.Cuisines.List />
               },
               {
                 path: 'create',
-                element: <Views.Cuisines.Create />
+                element: <AppViews.Cuisines.Create />
               },
               {
                 path: ':id',
-                element: <Views.Cuisines.Show />,
+                element: <AppViews.Cuisines.Show />,
                 loader: async ({ params }) => Axios().get(`/cuisines/${params.id}`).then(({ data }) => data)
               },
               {
                 path: ':id/edit',
-                element: <Views.Cuisines.Edit />,
+                element: <AppViews.Cuisines.Edit />,
                 loader: async ({ params }) => Axios().get(`/cuisines/${params.id}/edit`).then(({ data }) => data)
               }
             ]
@@ -170,7 +171,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Subscriptions.List />
+                element: <AppViews.Subscriptions.List />
               }
             ]
           },
@@ -184,19 +185,19 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Orders.List />,
+                element: <AppViews.Orders.List />,
               },
               {
                 path: 'create',
-                element: <Views.Orders.Create />,
+                element: <AppViews.Orders.Create />,
               },
               {
                 path: ':id/edit',
-                element: <Views.Orders.Edit />,
+                element: <AppViews.Orders.Edit />,
               },
               {
                 path: ':id',
-                element: <Views.Orders.Show />,
+                element: <AppViews.Orders.Show />,
               }
             ]
           },
@@ -210,7 +211,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Chat.List />
+                element: <AppViews.Chat.List />
               }
             ]
           },
@@ -224,21 +225,21 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Products.List />
+                element: <AppViews.Products.List />
               },
               {
                 path: ':id',
-                element: <Views.Products.Show />,
-                loader: async ({ params }) => Axios().get(`/products/${params.id}`).then(({ data }) => data).catch(({response}) => { throw new Response(response)})
+                element: <AppViews.Products.Show />,
+                loader: async ({ params }) => Axios().get(`/products/${params.id}`).then(({ data }) => data).catch(({ response }) => { throw new Response(response) })
               },
               {
                 path: ':id/edit',
-                element: <Views.Products.Edit />,
+                element: <AppViews.Products.Edit />,
                 loader: async ({ params }) => Axios().get(`/products/${params.id}/edit`).then(({ data }) => data)
               },
               {
                 path: 'create',
-                element: <Views.Products.Create />,
+                element: <AppViews.Products.Create />,
                 loader: async () => Axios().get(`/products/create`).then(({ data }) => data)
               }
             ]
@@ -253,7 +254,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Clients.List />
+                element: <AppViews.Clients.List />
               }
             ]
           },
@@ -267,19 +268,19 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Banners.List />
+                element: <AppViews.Banners.List />
               },
               {
                 path: 'create',
-                element: <Views.Banners.Create />
+                element: <AppViews.Banners.Create />
               },
               {
                 path: ':id/edit',
-                element: <Views.Banners.Edit />
+                element: <AppViews.Banners.Edit />
               },
               {
                 path: ':id',
-                element: <Views.Banners.Show />
+                element: <AppViews.Banners.Show />
               }
             ]
           },
@@ -293,7 +294,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Pages.List />
+                element: <AppViews.Pages.List />
               }
             ]
           },
@@ -307,7 +308,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Feedbacks.List />
+                element: <AppViews.Feedbacks.List />
               }
             ]
           },
@@ -321,7 +322,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.WonderPoints.List />
+                element: <AppViews.WonderPoints.List />
               }
             ]
           },
@@ -335,7 +336,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Coupons.List />
+                element: <AppViews.Coupons.List />
               }
             ]
           },
@@ -349,7 +350,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Reservations.List />
+                element: <AppViews.Reservations.List />
               }
             ]
           },
@@ -363,7 +364,7 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.WaitList.List />
+                element: <AppViews.WaitList.List />
               }
             ]
           },
@@ -377,10 +378,28 @@ export default createBrowserRouter([
             children: [
               {
                 path: '',
-                element: <Views.Settings.List />
+                element: <AppViews.Settings.List />
               }
             ]
           },
+        ]
+      },
+      {
+        path: 'developer',
+        element: <AuthLayout />,
+        shouldRevalidate: () => true,
+        loader: async () => {
+
+          const { data } = await Axios().get('auth')
+
+          return data?.id === undefined ? redirect('/') : data
+
+        },
+        children: [
+          {
+            path: 'dashboard',
+            element: <DeveloperViews.Dashboard />
+          }
         ]
       }
     ]
