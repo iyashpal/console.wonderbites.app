@@ -1,8 +1,9 @@
 import {DateTime} from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
+import Event from '@ioc:Adonis/Core/Event'
 import VerificationCode from 'App/Models/VerificationCode'
 import Notifiable from 'App/Services/Notification/Notifiable'
-import {BelongsTo, HasMany, HasOne} from '@ioc:Adonis/Lucid/Orm'
+import {BelongsTo, HasMany, HasOne, afterCreate} from '@ioc:Adonis/Lucid/Orm'
 import {attachment, AttachmentContract} from '@ioc:Adonis/Addons/AttachmentLite'
 import {beforeSave, belongsTo, column, computed, hasMany, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import {Cart, Address, Product, Wishlist, WonderPoint, Order, Review, Feedback, Role} from './index'
@@ -69,6 +70,11 @@ export default class User extends Notifiable {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
+  }
+
+  @afterCreate()
+  public static async dispatchEvents (user: User) {
+    await Event.emit('User:OnBoard', user)
   }
 
   /**
