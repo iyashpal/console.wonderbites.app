@@ -1,6 +1,4 @@
-import { User } from 'App/Models'
 import Route from '@ioc:Adonis/Core/Route'
-import UserOnBoard from 'App/Mailers/UserOnBoard'
 
 /**
  * Root group for Core API Routes
@@ -48,9 +46,3 @@ Route.group(() => {
   // General Routes
   Route.get('auth', 'AuthController').as('auth')
 }).prefix('/core').as('core').namespace('App/Controllers/Http/Core')
-
-Route.get('mail/preview', async ({view}) => {
-  const user = await User.findOrFail(1)
-  const mail = await new UserOnBoard(user).preview()
-  return view.renderRaw(`<a href="${mail.url}" target="_blank">Preview email</a>`)
-})
