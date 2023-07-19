@@ -1,8 +1,8 @@
 import renderHTML from 'mjml'
-import { User } from 'App/Models'
-import Env from '@ioc:Adonis/Core/Env'
+import {User} from 'App/Models'
 import View from '@ioc:Adonis/Core/View'
-import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
+import Config from '@ioc:Adonis/Core/Config'
+import {BaseMailer, MessageContract} from '@ioc:Adonis/Addons/Mail'
 
 export default class UserOnBoard extends BaseMailer {
   constructor (private user: User) {
@@ -20,7 +20,7 @@ export default class UserOnBoard extends BaseMailer {
     message
       .to(this.user.email)
       .subject('Welcome to Wonderbites!')
-      .from(Env.get('SMTP_FROM_ADDRESS', 'info@wonderbites.app'), Env.get('SMTP_FROM_NAME', 'Wonderbites'))
+      .from(Config.get('mail.from.email'), Config.get('mail.from.name'))
       .html(renderHTML(await View.render('emails/user-on-board', this)).html)
   }
 }
