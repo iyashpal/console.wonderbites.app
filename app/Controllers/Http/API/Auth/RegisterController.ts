@@ -8,7 +8,6 @@ export default class RegisterController {
    * Register users.
    *
    * @param param0 {HttpContextContract}
-   * @param {JSON}
    */
   public async handle ({ request, response }: HttpContextContract) {
     try {
