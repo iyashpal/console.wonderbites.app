@@ -6,9 +6,9 @@
  */
 
 import Env from '@ioc:Adonis/Core/Env'
-import { MailConfig } from '@ioc:Adonis/Addons/Mail'
+import {MailConfig, FromAddress} from '@ioc:Adonis/Addons/Mail'
 
-const mailConfig: MailConfig = {
+const mailConfig: MailConfig & FromAddress = {
   /*
   |--------------------------------------------------------------------------
   | Default mailer
@@ -19,6 +19,11 @@ const mailConfig: MailConfig = {
   |
   */
   mailer: 'smtp',
+
+  from: {
+    name: Env.get('SMTP_FROM_NAME', 'Wonderbites'),
+    email: Env.get('SMTP_FROM_ADDRESS', 'info@wonderbites.app'),
+  },
 
   /*
   |--------------------------------------------------------------------------
@@ -48,8 +53,7 @@ const mailConfig: MailConfig = {
       port: Env.get('SMTP_PORT'),
       auth: {
         user: Env.get('SMTP_USERNAME'),
-        // @ts-ignore
-        pass: Env.get('SMTP_PASSWORD'),
+        pass: Env.get('SMTP_PASSWORD', ''),
         type: 'login',
       },
     },
