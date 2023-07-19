@@ -1,0 +1,36 @@
+@component('components/mail/message')
+    @slot('content')
+        <mj-text align="left" color="#55575d" font-size="16px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Dear <b>{{ user.name }}</b>,
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Thank you for signing up for an account with Wonderbites! We're excited to have you join our community, and we can't wait to start serving you.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            With your new account, you'll be able to easily place orders for food delivery, catering, meal plans, and even restaurant reservations. Plus, you'll have access to exclusive discounts and promotions for all of our services.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            At Wonderbites, we're always working to expand our offerings and provide you with the best possible service. Keep an eye out for even more services coming soon!
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            If you have any questions or concerns about your account or our services, please don't hesitate to reach out to our customer support team. We're here to help you every step of the way.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Thank you again for choosing Wonderbites. We look forward to serving you soon!
+        </mj-text>
+    @end
+
+    @slot('footer')
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+        Best regards,
+      </mj-text>
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="14px" padding="0px 15px" font-family="Inter" font-weight="bold">
+        Wonderbites Team
+      </mj-text>
+    @end
+@end
