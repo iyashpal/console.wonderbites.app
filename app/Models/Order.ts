@@ -1,7 +1,9 @@
 import {DateTime} from 'luxon'
 import {User, Coupon, Review} from '.'
+import Event from '@ioc:Adonis/Core/Event'
 import {BelongsTo, BaseModel, scope} from '@ioc:Adonis/Lucid/Orm'
 import {column, belongsTo, hasOne, HasOne} from '@ioc:Adonis/Lucid/Orm'
+import {afterUpdate} from '@adonisjs/lucid/build/src/Orm/Decorators'
 
 export default class Order extends BaseModel {
   @column({isPrimary: true})
@@ -84,6 +86,11 @@ export default class Order extends BaseModel {
     onQuery: query => query.where('reviewable', 'Order'),
   })
   public review: HasOne<typeof Review>
+
+  @afterUpdate()
+  public static async sendCancellationConfirmationMails (order: Order) {
+    await Event.emit('Order:Update', order)
+  }
 
   public static asGuest = scope((query, id: number, token: string) => {
     query.whereNull('user_id').where('token', token).where('id', id)
