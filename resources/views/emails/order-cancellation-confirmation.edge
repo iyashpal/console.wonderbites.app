@@ -1,0 +1,28 @@
+@component('components/mail/message')
+    @slot('content')
+        <mj-text align="left" color="#55575d" font-size="16px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Dear <b>{{ order.firstName }} {{ order.lastName }}</b>,
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            We have received your request to cancel your order with us, and we have processed your request accordingly. We are sorry to see you go, but we understand that circumstances change.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            If you have any questions or concerns, please don't hesitate to reach out to us. We are always here to help you.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Thank you for considering our services, and we hope to have the opportunity to serve you in the future.
+        </mj-text>
+    @end
+
+    @slot('footer')
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+        Best regards,
+      </mj-text>
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="14px" padding="0px 15px" font-family="Inter" font-weight="bold">
+        Wonderbites Team
+      </mj-text>
+    @end
+@end

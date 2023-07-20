@@ -1,0 +1,24 @@
+@component('components/mail/message')
+    @slot('content')
+        <mj-text align="left" color="#55575d" font-size="16px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Dear <b>{{ order.firstName }} {{ order.lastName }}</b>,
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            We wanted to inform you that one of our customers has cancelled their order with us.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Here are the details of the cancelled order:
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Order Number: <b>{{ order.id }}</b><br/>
+            Customer Name: <b>{{ order.firstName }} {{ order.lastName }}</b><br />
+            Reason for Cancellation: <b>[Insert Reason for Cancellation]</b>
+        </mj-text>
+    @end
+
+    @slot('footer')
+    @end
+@end

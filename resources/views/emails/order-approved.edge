@@ -1,0 +1,40 @@
+@component('components/mail/message')
+    @slot('content')
+        <mj-text align="left" color="#55575d" font-size="16px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Dear <b>{{ order.firstName }} {{ order.lastName }}</b>,
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Thank you for placing an order with Wonderbites. We are excited to inform you that your order has been approved and is now being processed. We appreciate your business and are committed to providing you with the best possible service.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Here are the details of your order:
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Order Number: <b>{{ order.id }}</b><br/>
+            Date of Order: <b>{{ order.createdAt.toLocaleString({year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'}) }}</b><br/>
+            Order Total: <b>00.0 L</b><br/>
+            Delivery Address: <b>{{ order.street }}, {{ order.city }}</b><br/>
+            Delivery Contact: <b>{{ order.phone }}</b><br/>
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Please note that we will send you another confirmation email once your order has been dispatched for delivery. If you have any questions or concerns regarding your order, please don't hesitate to contact us.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Thank you again for choosing Wonderbites. We look forward to serving you again in the future.
+        </mj-text>
+    @end
+
+    @slot('footer')
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+        Best regards,
+      </mj-text>
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="14px" padding="0px 15px" font-family="Inter" font-weight="bold">
+        Wonderbites Team
+      </mj-text>
+    @end
+@end
