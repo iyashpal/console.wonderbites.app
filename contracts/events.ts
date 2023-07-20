@@ -29,8 +29,9 @@ declare module '@ioc:Adonis/Core/Event' {
   */
   interface EventsList {
     'User:OnBoard': User,
-    'Checkout:OrderCreated': Order,
-    'OneTimePassword:SMS': { source: string, code: string, identifier: string },
+    'Order:Update': Order,
+    'Checkout:Processed': Order,
     'OneTimePassword:EMAIL': { source: string, code: string },
+    'OneTimePassword:SMS': { source: string, code: string, identifier: string },
   }
 }
