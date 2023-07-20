@@ -1,0 +1,33 @@
+@component('components/mail/message')
+    @slot('content')
+        <mj-text align="left" color="#55575d" font-size="16px" line-height="28px" padding="0px 15px" font-family="Inter">
+            Dear <b>[Custom Name]</b>,
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            We wanted to take a moment to thank you for taking the time to provide us with your feedback. Your input is valuable to us and helps us to improve our services.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            We appreciate your honesty and insights and will take your comments into consideration as we continue to develop and refine our offerings.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            If you have any further feedback or suggestions, please don't hesitate to reach out to us. We are always looking for ways to improve our services and provide the best possible experience for our customers.
+        </mj-text>
+
+        <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="15px" font-family="Inter">
+            Thank you again for your feedback and for choosing our services.
+        </mj-text>
+    @end
+
+    @slot('footer')
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="28px" padding="0px 15px" font-family="Inter">
+        Best regards,
+      </mj-text>
+      <mj-text align="left" color="#55575d" font-size="14px" line-height="14px" padding="0px 15px" font-family="Inter" font-weight="bold">
+        [Your Name]<br />
+        [Your Company Name]
+      </mj-text>
+    @end
+@end
