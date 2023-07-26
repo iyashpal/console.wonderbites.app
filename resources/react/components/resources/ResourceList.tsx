@@ -22,7 +22,7 @@ export default function ResourceList(props: ResourceProps) {
             <div className="px-4 py-5 sm:px-6">
                 <ActionBar createLink={props.createLink} sorting={props.sorting} />
             </div>
-            <div className="">
+            <div className="overflow-x-auto">
                 <Table>
                     <TableHead className={`shadow-inner`}>
                         <TableRow>
