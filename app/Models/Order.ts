@@ -88,8 +88,8 @@ export default class Order extends BaseModel {
   public review: HasOne<typeof Review>
 
   @afterUpdate()
-  public static async sendCancellationConfirmationMails (order: Order) {
-    await Event.emit('Order:Update', order)
+  public static sendCancellationConfirmationMails (order: Order) {
+    Event.emit('Order:Update', order)
   }
 
   public static asGuest = scope((query, id: number, token: string) => {

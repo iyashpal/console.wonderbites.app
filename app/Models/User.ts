@@ -73,8 +73,8 @@ export default class User extends Notifiable {
   }
 
   @afterCreate()
-  public static async dispatchEvents (user: User) {
-    await Event.emit('User:OnBoard', user)
+  public static dispatchEvents (user: User) {
+    Event.emit('User:OnBoard', user)
   }
 
   /**

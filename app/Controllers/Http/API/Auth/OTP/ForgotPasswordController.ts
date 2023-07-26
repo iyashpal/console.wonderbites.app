@@ -29,8 +29,8 @@ export default class ForgotPasswordController {
 
       if (code && ['production'].includes(Env.get('NODE_ENV'))) {
         try {
-          await Event.emit('OneTimePassword:EMAIL', {source: code.source, code: code.code})
-          await Event.emit('OneTimePassword:SMS', {source: code.source, identifier, code: code.code})
+          Event.emit('OneTimePassword:EMAIL', {source: code.source, code: code.code})
+          Event.emit('OneTimePassword:SMS', {source: code.source, identifier, code: code.code})
         } catch (error) {
           throw error
         }
