@@ -6,7 +6,7 @@ type ModalProps = {
   show: boolean,
   className?: string,
   onClose?: () => void,
-  children: JSX.Element | JSX.Element[] | React.ReactElement | React.ReactElement[],
+  children: React.ReactNode,
 }
 
 export default function Modal({show = false, onClose, children, className = ''}: ModalProps) {
