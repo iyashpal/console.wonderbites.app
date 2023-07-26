@@ -1,5 +1,6 @@
 import { Order, Product } from 'App/Models'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import UpdateValidator from 'App/Validators/Core/Orders/UpdateValidator'
 
 export default class OrdersController {
   public async index ({ request, response }: HttpContextContract) {
@@ -32,7 +33,19 @@ export default class OrdersController {
 
   public async edit ({ }: HttpContextContract) { }
 
-  public async update ({ }: HttpContextContract) { }
+  public async update ({params, request, response}: HttpContextContract) {
+    try {
+      const order = await Order.query().where('id', params.id).firstOrFail()
+
+      const { status } = await request.validate(UpdateValidator)
+
+      await order.merge({ status }).save()
+
+      response.json(order)
+    } catch (error) {
+      throw error
+    }
+  }
 
   public async destroy ({ }: HttpContextContract) { }
 }
