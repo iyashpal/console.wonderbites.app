@@ -10,6 +10,6 @@ export enum OrderStatus {
 
   DELIVERED = 'delivered',
 
-  CANCELED = 'canceled',
+  CANCELLED = 'cancelled',
 
 }

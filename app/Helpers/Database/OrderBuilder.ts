@@ -59,7 +59,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
     this.$builder.match(
       // Filter all past orders.
       [this.input('status') === 'past', query => query.whereIn('status', [
-        OrderStatus.DELIVERED, OrderStatus.CANCELED,
+        OrderStatus.DELIVERED, OrderStatus.CANCELLED,
       ])],
 
       // Filter all upcoming orders.
@@ -71,7 +71,7 @@ export default class OrderBuilder extends Builder<ModelQueryBuilderContract<type
       [this.input('status') === 'preparing', query => query.where('status', OrderStatus.PREPARING)],
       [this.input('status') === 'in-transit', query => query.where('status', OrderStatus.IN_TRANSIT)],
       [this.input('status') === 'delivered', query => query.where('status', OrderStatus.DELIVERED)],
-      [this.input('status') === 'canceled', query => query.where('status', OrderStatus.CANCELED)],
+      [this.input('status') === 'canceled', query => query.where('status', OrderStatus.CANCELLED)],
     )
     return this
   }

@@ -55,7 +55,7 @@ test.group('API [orders.index]', (group) => {
         {userId: user.id, status: OrderStatus.PREPARING},
         {userId: user.id, status: OrderStatus.IN_TRANSIT},
         {userId: user.id, status: OrderStatus.DELIVERED},
-        {userId: user.id, status: OrderStatus.CANCELED},
+        {userId: user.id, status: OrderStatus.CANCELLED},
       ]).createMany(8)
 
       const response = await client.get(route('api.orders.index', {}, {qs: {status}}))
@@ -72,7 +72,7 @@ test.group('API [orders.index]', (group) => {
     {name: 'preparing', status: OrderStatus.PREPARING},
     {name: 'in-transit', status: OrderStatus.IN_TRANSIT},
     {name: 'delivered', status: OrderStatus.DELIVERED},
-    {name: 'canceled', status: OrderStatus.CANCELED},
+    {name: 'canceled', status: OrderStatus.CANCELLED},
   ]).run(async ({client, route, assert}, order) => {
     const user = await UserFactory.create()
     await OrderFactory.merge({userId: user.id}).createMany(6)

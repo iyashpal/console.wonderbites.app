@@ -97,7 +97,7 @@ export default class OrdersController {
       await bouncer.forUser(user).with('OrderPolicy').authorize('update', order)
 
       const canceledOrder = await order.merge({
-        ...(action === 'cancel' ? {status: OrderStatus.CANCELED} : {}),
+        ...(action === 'cancel' ? {status: OrderStatus.CANCELLED} : {}),
       }).save()
 
       response.ok(canceledOrder)

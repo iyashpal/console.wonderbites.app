@@ -63,6 +63,6 @@ test.group('API [orders.update]', (group) => {
 
     $response.assertStatus(200)
 
-    $response.assertBodyContains({id: order.id, status: OrderStatus.CANCELED})
+    $response.assertBodyContains({id: order.id, status: OrderStatus.CANCELLED})
   }).tags(['@api', '@api.orders', '@api.orders.update', '@api.orders.update'])
 })

@@ -10,7 +10,7 @@ export default class Order {
       case OrderStatus.CONFIRMED:
         await new OrderApproved(order).send()
         break
-      case OrderStatus.CANCELED:
+      case OrderStatus.CANCELLED:
         // await new OrderCancellationReceived(order)
         await new OrderCancellationConfirmation(order).send()
         break
