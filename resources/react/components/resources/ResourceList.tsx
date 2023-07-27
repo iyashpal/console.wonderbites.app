@@ -70,9 +70,8 @@ export default function ResourceList(props: ResourceProps) {
                     </TableBody>
 
                 </Table>
-
-                {!!props.metadata && <Pagination meta={props.metadata} />}
             </div>
+            {!!props.metadata && <Pagination meta={props.metadata} />}
         </div>
     )
 }
